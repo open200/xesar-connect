@@ -17,6 +17,7 @@ plugins {
     // Apply the java-library plugin for API and implementation separation.
     `java-library`
     `maven-publish`
+    signing
 }
 
 repositories {
@@ -74,11 +75,44 @@ java {
 publishing {
     publications {
         create<MavenPublication>("library") {
+            pom {
+                name.set(project.name)
+                url.set("https://github.com/open200/xesar-connect/")
+                description.set(
+                    "The Xesar-Connect library is an open-source Kotlin wrapper designed to simplify MQTT communication for seamless integration of the EVVA Xesar access control system with other software applications.")
+                scm {
+                    url.set("https://github.com/open200/xesar-connect")
+                    connection.set("scm:git:git://github.com/open200/xesar-connect")
+                    developerConnection.set("scm:git:ssh:git@github.com/open200/xesar-connect")
+                }
+                developers {
+                    developer {
+                        name.set("open200")
+                        email.set("maven@open200.com")
+                    }
+                }
+                licenses {
+                    license {
+                        name.set("Apache License, Version 2.0")
+                        url.set("http://www.apache.org/licenses/LICENSE-2.0.html")
+                    }
+                }
+            }
             groupId = "com.open200"
+            artifactId = "xesar-connect"
             from(components["java"])
         }
     }
+    repositories {
+        maven {
+            name = "Sonatype"
+            url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
+            credentials(PasswordCredentials::class)
+        }
+    }
 }
+
+signing { sign(publishing.publications["library"]) }
 
 spotless {
     // optional: limit format enforcement to just the files changed by this feature branch
