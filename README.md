@@ -25,7 +25,7 @@ You can add Xesar-Connect to your project by including it as a dependency in you
 
 ```kotlin
 dependencies {
-    implementation("com.open200:xesar-connect:1.0.0")
+    implementation("com.open200:xesar-connect:0.5.0")
 }
 ```
 
@@ -35,10 +35,36 @@ dependencies {
 Integrating Xesar-Connect into your Kotlin project is straightforward. Here's a basic example to help you get started:
 
 ```kotlin
-// TODO add the example as soon as the renaming is done
+fun main() {
+
+    Security.addProvider(BouncyCastleProvider())
+
+    runBlocking {
+        launch {
+            val pathToZip = Path("<path-to-zip>")
+            val personCreatedTopic = "xs3/1/ces/PersonCreated"
+
+            XesarConnect.connectAndLoginAsync(Config.configureFromZip(pathToZip)).await()
+                .use {api ->
+                    // we are now connected to the MQTT broker and already logged in
+
+                    // Subscribe to topics we are interested
+                    api.subscribeAsync(Topics(personCreatedTopic), 2).await()
+                    
+                    // Create listeners to react on emitted events
+                    api.on({ topic, _ -> topic.startsWith(personCreatedTopic) }) {
+                        log.info { "Message received on topic ${it.topic}" }
+                    }
+
+                    api.delayUntilClose()
+                }
+        }
+    }
+}
 ```
 
 For more comprehensive information and advanced usage, please refer to the [documentation](https://github.com/open200/xesar-connect/blob/main/docs/usage.md).
+Also see our [Xesar-Connect-Kotlin-Demo](https://github.com/open200/xesar-connect-kotlin-demo) app 
 
 ## Building From Source
 
