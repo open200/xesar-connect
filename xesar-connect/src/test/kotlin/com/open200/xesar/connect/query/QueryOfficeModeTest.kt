@@ -4,8 +4,8 @@ import com.open200.xesar.connect.Topics
 import com.open200.xesar.connect.XesarMqttClient
 import com.open200.xesar.connect.messages.query.*
 import com.open200.xesar.connect.testutils.MosquittoContainer
+import com.open200.xesar.connect.testutils.OfficeModeFixture
 import com.open200.xesar.connect.testutils.QueryTestHelper
-import com.open200.xesar.connect.testutils.UserFixture.userFixture
 import com.open200.xesar.connect.testutils.XesarConnectTestHelper
 import io.kotest.common.runBlocking
 import io.kotest.core.spec.style.FunSpec
@@ -16,13 +16,13 @@ import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.launch
 import java.util.*
 
-class QueryUserTest :
+class QueryOfficeModeTest :
     FunSpec({
         val container = MosquittoContainer.container()
         val config = MosquittoContainer.config(container)
         listener(container.perProject())
 
-        test("queryUserList without params") {
+        test("queryOfficeModeList without params") {
             val requestId = UUID.fromString("00000000-1281-40ae-89d7-5c541d77a757")
             coEvery { config.requestIdGenerator.generateId() }.returns(requestId)
             runBlocking {
@@ -45,27 +45,29 @@ class QueryUserTest :
                         val queryContent = queryReceived.await()
 
                         queryContent.shouldBeEqual(
-                            QueryTestHelper.createQueryRequest(User.QUERY_RESOURCE, requestId))
+                            QueryTestHelper.createQueryRequest(
+                                OfficeMode.QUERY_RESOURCE, requestId))
 
-                        val person =
+                        val officeModes =
                             encodeQueryList(
                                 QueryList(
                                     requestId,
                                     QueryList.Response(
                                         listOf(
-                                            userFixture,
-                                            userFixture.copy(
+                                            OfficeModeFixture.officeModeFixture,
+                                            OfficeModeFixture.officeModeFixture.copy(
                                                 id =
                                                     UUID.fromString(
-                                                        "4509ca29-9fd3-454f-9c98-fc0967fe3f66"),
-                                                name = "lastname 2 String",
+                                                        "894852cf-ca33-4734-a4a9-008eeeaeb005"),
+                                                timeProfileName = "timeProfileName2",
                                             )),
                                         2,
                                         2,
                                     )))
 
                         client
-                            .publishAsync(Topics.Query.result(config.apiProperties.userId), person)
+                            .publishAsync(
+                                Topics.Query.result(config.apiProperties.userId), officeModes)
                             .await()
                     }
                 }
@@ -75,16 +77,16 @@ class QueryUserTest :
                     XesarConnectTestHelper.connect(config).use { api ->
                         api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
                             .await()
-                        val result = api.queryUserListAsync().await()
+                        val result = api.queryOfficeModeListAsync().await()
                         result.totalCount.shouldBeEqual(2)
-                        result.data[0].name?.shouldBeEqual("lastname String")
-                        result.data[1].name?.shouldBeEqual("lastname 2 String")
+                        result.data[0].timeProfileName?.shouldBeEqual("timeProfileName")
+                        result.data[1].timeProfileName?.shouldBeEqual("timeProfileName2")
                     }
                 }
             }
         }
 
-        test("queryUserById") {
+        test("queryOfficeModeById") {
             val requestId = UUID.fromString("00000000-1281-42c0-9a15-c5844850c748")
             coEvery { config.requestIdGenerator.generateId() }.returns(requestId)
 
@@ -109,12 +111,19 @@ class QueryUserTest :
 
                         queryContent.shouldBeEqual(
                             QueryTestHelper.createQueryRequest(
-                                User.QUERY_RESOURCE, requestId, userFixture.id))
+                                OfficeMode.QUERY_RESOURCE,
+                                requestId,
+                                OfficeModeFixture.officeModeFixture.id))
 
-                        val person = encodeQueryElement(QueryElement(requestId, userFixture))
+                        val officeMode =
+                            encodeQueryElement(
+                                QueryElement(
+                                    requestId,
+                                    OfficeModeFixture.officeModeFixture))
 
                         client
-                            .publishAsync(Topics.Query.result(config.apiProperties.userId), person)
+                            .publishAsync(
+                                Topics.Query.result(config.apiProperties.userId), officeMode)
                             .await()
                     }
                 }
@@ -123,9 +132,12 @@ class QueryUserTest :
                     XesarConnectTestHelper.connect(config).use { api ->
                         api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
                             .await()
-                        val result = api.queryUserByIdAsync(userFixture.id).await()
-                        result.id.shouldBeEqual(userFixture.id)
-                        result.name?.shouldBeEqual("lastname String")
+                        val result =
+                            api.queryOfficeModeByIdAsync(OfficeModeFixture.officeModeFixture.id)
+                                .await()
+                        result.id.shouldBeEqual(OfficeModeFixture.officeModeFixture.id)
+                        result.installationPointId.shouldBeEqual(
+                            UUID.fromString("39b25462-2580-44dc-b0a8-22fd6c03a023"))
                     }
                 }
             }

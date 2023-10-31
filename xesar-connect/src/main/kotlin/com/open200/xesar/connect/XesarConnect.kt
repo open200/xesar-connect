@@ -12,13 +12,14 @@ import com.open200.xesar.connect.filters.QueryIdFilter
 import com.open200.xesar.connect.filters.TopicFilter
 import com.open200.xesar.connect.messages.command.*
 import com.open200.xesar.connect.messages.query.*
+import com.open200.xesar.connect.messages.query.Calendar
 import com.open200.xesar.connect.messages.session.*
-import java.util.UUID
-import java.util.concurrent.CopyOnWriteArrayList
-import java.util.concurrent.CopyOnWriteArraySet
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import mu.KotlinLogging
+import java.util.*
+import java.util.concurrent.CopyOnWriteArrayList
+import java.util.concurrent.CopyOnWriteArraySet
 
 val logger = KotlinLogging.logger {}
 
@@ -333,6 +334,47 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) : A
         return queryListAsync(IdentificationMedium.QUERY_RESOURCE, params, requestConfig)
     }
 
+    suspend fun queryCalendarListAsync(
+        params: Query.Params? = null,
+        requestConfig: RequestConfig = buildRequestConfig()
+    ): Deferred<QueryList.Response<Calendar>> {
+        return queryListAsync(Calendar.QUERY_RESOURCE, params, requestConfig)
+    }
+    suspend fun queryCodingStationListAsync(
+        params: Query.Params? = null,
+        requestConfig: RequestConfig = buildRequestConfig()
+    ): Deferred<QueryList.Response<CodingStation>> {
+        return queryListAsync(CodingStation.QUERY_RESOURCE, params, requestConfig)
+    }
+
+    suspend fun queryEvvaComponentListAsync(
+        params: Query.Params? = null,
+        requestConfig: RequestConfig = buildRequestConfig()
+    ): Deferred<QueryList.Response<EvvaComponent>> {
+        return queryListAsync(EvvaComponent.QUERY_RESOURCE, params, requestConfig)
+    }
+
+    suspend fun queryOfficeModeListAsync(
+        params: Query.Params? = null,
+        requestConfig: RequestConfig = buildRequestConfig()
+    ): Deferred<QueryList.Response<OfficeMode>> {
+        return queryListAsync(OfficeMode.QUERY_RESOURCE, params, requestConfig)
+    }
+
+    suspend fun queryTimeProfileListAsync(
+        params: Query.Params? = null,
+        requestConfig: RequestConfig = buildRequestConfig()
+    ): Deferred<QueryList.Response<TimeProfile>> {
+        return queryListAsync(TimeProfile.QUERY_RESOURCE, params, requestConfig)
+    }
+
+    suspend fun queryZoneListAsync(
+        params: Query.Params? = null,
+        requestConfig: RequestConfig = buildRequestConfig()
+    ): Deferred<QueryList.Response<Zone>> {
+        return queryListAsync(Zone.QUERY_RESOURCE, params, requestConfig)
+    }
+
     /**
      * Queries the list of access protocols asynchronously.
      *
@@ -392,6 +434,13 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) : A
         return queryElementAsync(Person.QUERY_RESOURCE, id, requestConfig)
     }
 
+    suspend fun queryUserByIdAsync(
+        id: UUID,
+        requestConfig: RequestConfig = buildRequestConfig()
+    ): Deferred<User> {
+        return queryElementAsync(User.QUERY_RESOURCE, id, requestConfig)
+    }
+
     /**
      * Queries an installation point by ID asynchronously.
      *
@@ -432,6 +481,45 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) : A
         requestConfig: RequestConfig = buildRequestConfig()
     ): Deferred<IdentificationMedium> {
         return queryElementAsync(IdentificationMedium.QUERY_RESOURCE, id, requestConfig)
+    }
+
+    suspend fun queryCalendarByIdAsync(
+        id: UUID,
+        requestConfig: RequestConfig = buildRequestConfig()
+    ): Deferred<Calendar> {
+        return queryElementAsync(Calendar.QUERY_RESOURCE, id, requestConfig)
+    }
+
+    suspend fun queryCodingStationByIdAsync(
+        id: UUID,
+        requestConfig: RequestConfig = buildRequestConfig()
+    ): Deferred<CodingStation> {
+        return queryElementAsync(CodingStation.QUERY_RESOURCE, id, requestConfig)
+    }
+    suspend fun queryEvvaComponentByIdAsync(
+        id: UUID,
+        requestConfig: RequestConfig = buildRequestConfig()
+    ): Deferred<EvvaComponent> {
+        return queryElementAsync(EvvaComponent.QUERY_RESOURCE, id, requestConfig)
+    }
+
+    suspend fun queryOfficeModeByIdAsync(
+        id: UUID,
+        requestConfig: RequestConfig = buildRequestConfig()
+    ): Deferred<OfficeMode> {
+        return queryElementAsync(OfficeMode.QUERY_RESOURCE, id, requestConfig)
+    }
+    suspend fun queryTimeProfileByIdAsync(
+        id: UUID,
+        requestConfig: RequestConfig = buildRequestConfig()
+    ): Deferred<TimeProfile> {
+        return queryElementAsync(TimeProfile.QUERY_RESOURCE, id, requestConfig)
+    }
+    suspend fun queryZoneByIdAsync(
+        id: UUID,
+        requestConfig: RequestConfig = buildRequestConfig()
+    ): Deferred<Zone> {
+        return queryElementAsync(Zone.QUERY_RESOURCE, id, requestConfig)
     }
 
     suspend fun queryIdentificationMediumByMediumIdentifierAsync(

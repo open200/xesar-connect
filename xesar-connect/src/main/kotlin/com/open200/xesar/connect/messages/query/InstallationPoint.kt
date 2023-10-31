@@ -3,8 +3,8 @@ package com.open200.xesar.connect.messages.query
 import QueryElementResource
 import QueryListResource
 import com.open200.xesar.connect.utils.UUIDSerializer
-import java.util.*
 import kotlinx.serialization.Serializable
+import java.util.*
 
 /**
  * Represents an installation point in the system.
@@ -39,7 +39,7 @@ data class InstallationPoint(
     val installationType: String? = null,
     val linkedInstallationPoints: List<@Serializable(with = UUIDSerializer::class) UUID>? = null,
     val onlineStatus: String? = null,
-    val componentType: String? = null,
+    val componentType: ComponentType? = null,
     val releaseDurationShort: Int? = null,
     val releaseDurationLong: Int? = null,
     val logMode: String? = null,

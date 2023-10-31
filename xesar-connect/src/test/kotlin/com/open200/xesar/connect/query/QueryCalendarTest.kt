@@ -3,9 +3,10 @@ package com.open200.xesar.connect.query
 import com.open200.xesar.connect.Topics
 import com.open200.xesar.connect.XesarMqttClient
 import com.open200.xesar.connect.messages.query.*
+import com.open200.xesar.connect.messages.query.Calendar
+import com.open200.xesar.connect.testutils.CalendarFixture
 import com.open200.xesar.connect.testutils.MosquittoContainer
 import com.open200.xesar.connect.testutils.QueryTestHelper
-import com.open200.xesar.connect.testutils.UserFixture.userFixture
 import com.open200.xesar.connect.testutils.XesarConnectTestHelper
 import io.kotest.common.runBlocking
 import io.kotest.core.spec.style.FunSpec
@@ -16,14 +17,15 @@ import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.launch
 import java.util.*
 
-class QueryUserTest :
+class QueryCalendarTest :
     FunSpec({
         val container = MosquittoContainer.container()
         val config = MosquittoContainer.config(container)
         listener(container.perProject())
 
-        test("queryUserList without params") {
+        test("queryCalendarList without params") {
             val requestId = UUID.fromString("00000000-1281-40ae-89d7-5c541d77a757")
+
             coEvery { config.requestIdGenerator.generateId() }.returns(requestId)
             runBlocking {
                 val simulatedBackendReady = CompletableDeferred<Unit>()
@@ -43,29 +45,30 @@ class QueryUserTest :
                         simulatedBackendReady.complete(Unit)
 
                         val queryContent = queryReceived.await()
-
                         queryContent.shouldBeEqual(
-                            QueryTestHelper.createQueryRequest(User.QUERY_RESOURCE, requestId))
+                            QueryTestHelper.createQueryRequest(Calendar.QUERY_RESOURCE, requestId))
 
-                        val person =
+                        val calendar =
                             encodeQueryList(
                                 QueryList(
                                     requestId,
                                     QueryList.Response(
                                         listOf(
-                                            userFixture,
-                                            userFixture.copy(
+                                            CalendarFixture.calendarFixture,
+                                            CalendarFixture.calendarFixture.copy(
                                                 id =
                                                     UUID.fromString(
                                                         "4509ca29-9fd3-454f-9c98-fc0967fe3f66"),
-                                                name = "lastname 2 String",
-                                            )),
+                                                partitionId =
+                                                    UUID.fromString(
+                                                        "6b4399a0-21ce-4bee-ba43-e06e291248d2"))),
                                         2,
                                         2,
                                     )))
 
                         client
-                            .publishAsync(Topics.Query.result(config.apiProperties.userId), person)
+                            .publishAsync(
+                                Topics.Query.result(config.apiProperties.userId), calendar)
                             .await()
                     }
                 }
@@ -75,16 +78,20 @@ class QueryUserTest :
                     XesarConnectTestHelper.connect(config).use { api ->
                         api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
                             .await()
-                        val result = api.queryUserListAsync().await()
+                        val result = api.queryCalendarListAsync().await()
                         result.totalCount.shouldBeEqual(2)
-                        result.data[0].name?.shouldBeEqual("lastname String")
-                        result.data[1].name?.shouldBeEqual("lastname 2 String")
+                        result.data[0]
+                            .partitionId
+                            ?.shouldBeEqual(UUID.fromString("7b4399a0-21ce-4bee-ba43-e06e291248d2"))
+                        result.data[1]
+                            .partitionId
+                            ?.shouldBeEqual(UUID.fromString("6b4399a0-21ce-4bee-ba43-e06e291248d2"))
                     }
                 }
             }
         }
 
-        test("queryUserById") {
+        test("queryCalendarById") {
             val requestId = UUID.fromString("00000000-1281-42c0-9a15-c5844850c748")
             coEvery { config.requestIdGenerator.generateId() }.returns(requestId)
 
@@ -106,15 +113,21 @@ class QueryUserTest :
                         simulatedBackendReady.complete(Unit)
 
                         val queryContent = queryReceived.await()
-
                         queryContent.shouldBeEqual(
                             QueryTestHelper.createQueryRequest(
-                                User.QUERY_RESOURCE, requestId, userFixture.id))
+                                Calendar.QUERY_RESOURCE,
+                                requestId,
+                                CalendarFixture.calendarFixture.id))
 
-                        val person = encodeQueryElement(QueryElement(requestId, userFixture))
+                        val calendar =
+                            encodeQueryElement(
+                                QueryElement(
+                                    requestId,
+                                    CalendarFixture.calendarFixture))
 
                         client
-                            .publishAsync(Topics.Query.result(config.apiProperties.userId), person)
+                            .publishAsync(
+                                Topics.Query.result(config.apiProperties.userId), calendar)
                             .await()
                     }
                 }
@@ -123,9 +136,10 @@ class QueryUserTest :
                     XesarConnectTestHelper.connect(config).use { api ->
                         api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
                             .await()
-                        val result = api.queryUserByIdAsync(userFixture.id).await()
-                        result.id.shouldBeEqual(userFixture.id)
-                        result.name?.shouldBeEqual("lastname String")
+                        val result =
+                            api.queryCalendarByIdAsync(CalendarFixture.calendarFixture.id).await()
+                        result.id.shouldBeEqual(CalendarFixture.calendarFixture.id)
+                        result.name?.shouldBeEqual("string")
                     }
                 }
             }

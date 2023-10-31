@@ -3,8 +3,8 @@ package com.open200.xesar.connect.messages.query
 import QueryElementResource
 import QueryListResource
 import com.open200.xesar.connect.utils.UUIDSerializer
-import java.util.*
 import kotlinx.serialization.Serializable
+import java.util.*
 
 /**
  * Represents an authorization profile in the system.
@@ -29,7 +29,7 @@ data class AuthorizationProfile(
     val zones: List<Zone>? = null,
     val manualOfficeMode: Boolean? = null,
     val anyAuthorizations: Boolean? = null,
-    val standardTimeProfile: String? = null,
+    @Serializable(with = UUIDSerializer::class) val standardTimeProfile: UUID,
 ) : QueryListResource, QueryElementResource {
 
     /**
