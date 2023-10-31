@@ -1,11 +1,12 @@
 package com.open200.xesar.connect.messages.query
 
+import QueryElementResource
 import QueryListResource
 import com.open200.xesar.connect.utils.LocalDateTimeSerializer
 import com.open200.xesar.connect.utils.UUIDSerializer
+import kotlinx.serialization.Serializable
 import java.time.LocalDateTime
 import java.util.*
-import kotlinx.serialization.Serializable
 
 /**
  * Represents a user.
@@ -29,7 +30,7 @@ data class User(
     @Serializable(with = LocalDateTimeSerializer::class) val lastLogin: LocalDateTime? = null,
     val loginIp: String? = null,
     val loginType: String? = null,
-) : QueryListResource {
+) : QueryListResource, QueryElementResource {
     companion object {
         const val QUERY_RESOURCE = "users"
     }

@@ -26,7 +26,7 @@ class InstallationPointElementTest :
                 "\"installationType\":\"door 1\"," +
                 "\"linkedInstallationPoints\":[\"ed6236d0-a47c-46be-8495-d4755c38f103\"," +
                 "\"7cbcddaa-50c3-48fb-8e5a-56bab47d8f81\"]," +
-                "\"onlineStatus\":\"offline\"," +
+                "\"onlineStatus\":\"connected\"," +
                 "\"componentType\":\"Cylinder\"," +
                 "\"releaseDurationShort\":5," +
                 "\"releaseDurationLong\":20," +

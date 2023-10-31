@@ -1,6 +1,9 @@
 package com.open200.xesar.connect.encodingDecoding
 
-import com.open200.xesar.connect.messages.query.*
+import com.open200.xesar.connect.messages.query.AuthorizationProfile
+import com.open200.xesar.connect.messages.query.QueryList
+import com.open200.xesar.connect.messages.query.decodeQueryList
+import com.open200.xesar.connect.messages.query.encodeQueryList
 import com.open200.xesar.connect.testutils.AuthorizationProfileFixture.authorizationProfileFixture
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.equals.shouldBeEqual
@@ -40,7 +43,7 @@ class AuthorizationProfileListTest :
                 "\"timeProfileId\":\"532534ef-d5aa-4cca-acfb-e558c623b00a\"}]," +
                 "\"manualOfficeMode\":true," +
                 "\"anyAuthorizations\":true," +
-                "\"standardTimeProfile\":null}," +
+                "\"standardTimeProfile\":\"a58e45f8-7bff-4b3a-bd0e-a831b3fa8053\"}," +
                 "{\"id\":\"555e7d1a-54f1-432a-ade7-80d20a63ee2d\"," +
                 "\"name\":\"authorization profile 2 String\"," +
                 "\"description\":\"description profile 2 String\"," +
@@ -48,13 +51,12 @@ class AuthorizationProfileListTest :
                 "\"zones\":[]," +
                 "\"manualOfficeMode\":true," +
                 "\"anyAuthorizations\":true," +
-                "\"standardTimeProfile\":null}]," +
+                "\"standardTimeProfile\":\"a58e45f8-7bff-4b3a-bd0e-a831b3fa8053\"}]," +
                 "\"totalCount\":2," +
                 "\"filterCount\":2}}"
 
         test("encoding QueryListElement for a list of authorization profiles") {
             val authorizationProfileEncoded = encodeQueryList(authorizationProfileTest)
-
             authorizationProfileEncoded.shouldBeEqual(authorizationProfileString)
         }
 

@@ -3,9 +3,9 @@ package com.open200.xesar.connect.query
 import com.open200.xesar.connect.Topics
 import com.open200.xesar.connect.XesarMqttClient
 import com.open200.xesar.connect.messages.query.*
+import com.open200.xesar.connect.testutils.CodingStationFixture
 import com.open200.xesar.connect.testutils.MosquittoContainer
 import com.open200.xesar.connect.testutils.QueryTestHelper
-import com.open200.xesar.connect.testutils.UserFixture.userFixture
 import com.open200.xesar.connect.testutils.XesarConnectTestHelper
 import io.kotest.common.runBlocking
 import io.kotest.core.spec.style.FunSpec
@@ -16,14 +16,15 @@ import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.launch
 import java.util.*
 
-class QueryUserTest :
+class QueryCodingStationTest :
     FunSpec({
         val container = MosquittoContainer.container()
         val config = MosquittoContainer.config(container)
         listener(container.perProject())
 
-        test("queryUserList without params") {
+        test("queryCodingStationList without params") {
             val requestId = UUID.fromString("00000000-1281-40ae-89d7-5c541d77a757")
+
             coEvery { config.requestIdGenerator.generateId() }.returns(requestId)
             runBlocking {
                 val simulatedBackendReady = CompletableDeferred<Unit>()
@@ -43,29 +44,32 @@ class QueryUserTest :
                         simulatedBackendReady.complete(Unit)
 
                         val queryContent = queryReceived.await()
-
                         queryContent.shouldBeEqual(
-                            QueryTestHelper.createQueryRequest(User.QUERY_RESOURCE, requestId))
+                            QueryTestHelper.createQueryRequest(
+                                CodingStation.QUERY_RESOURCE, requestId))
 
-                        val person =
+                        val codingStation =
                             encodeQueryList(
                                 QueryList(
                                     requestId,
                                     QueryList.Response(
                                         listOf(
-                                            userFixture,
-                                            userFixture.copy(
+                                            CodingStationFixture.codingStationFixture,
+                                            CodingStationFixture.codingStationFixture.copy(
                                                 id =
                                                     UUID.fromString(
                                                         "4509ca29-9fd3-454f-9c98-fc0967fe3f66"),
-                                                name = "lastname 2 String",
-                                            )),
+                                                partitionId =
+                                                    UUID.fromString(
+                                                        "6b4399a0-21ce-4bee-ba43-e06e291248d2"),
+                                                online = false)),
                                         2,
                                         2,
                                     )))
 
                         client
-                            .publishAsync(Topics.Query.result(config.apiProperties.userId), person)
+                            .publishAsync(
+                                Topics.Query.result(config.apiProperties.userId), codingStation)
                             .await()
                     }
                 }
@@ -75,16 +79,16 @@ class QueryUserTest :
                     XesarConnectTestHelper.connect(config).use { api ->
                         api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
                             .await()
-                        val result = api.queryUserListAsync().await()
+                        val result = api.queryCodingStationListAsync().await()
                         result.totalCount.shouldBeEqual(2)
-                        result.data[0].name?.shouldBeEqual("lastname String")
-                        result.data[1].name?.shouldBeEqual("lastname 2 String")
+                        result.data[0].online?.shouldBeEqual(true)
+                        result.data[1].online?.shouldBeEqual(false)
                     }
                 }
             }
         }
 
-        test("queryUserById") {
+        test("queryCodingStationById") {
             val requestId = UUID.fromString("00000000-1281-42c0-9a15-c5844850c748")
             coEvery { config.requestIdGenerator.generateId() }.returns(requestId)
 
@@ -106,15 +110,21 @@ class QueryUserTest :
                         simulatedBackendReady.complete(Unit)
 
                         val queryContent = queryReceived.await()
-
                         queryContent.shouldBeEqual(
                             QueryTestHelper.createQueryRequest(
-                                User.QUERY_RESOURCE, requestId, userFixture.id))
+                                CodingStation.QUERY_RESOURCE,
+                                requestId,
+                                CodingStationFixture.codingStationFixture.id))
 
-                        val person = encodeQueryElement(QueryElement(requestId, userFixture))
+                        val codingStation =
+                            encodeQueryElement(
+                                QueryElement(
+                                    requestId,
+                                    CodingStationFixture.codingStationFixture))
 
                         client
-                            .publishAsync(Topics.Query.result(config.apiProperties.userId), person)
+                            .publishAsync(
+                                Topics.Query.result(config.apiProperties.userId), codingStation)
                             .await()
                     }
                 }
@@ -123,9 +133,12 @@ class QueryUserTest :
                     XesarConnectTestHelper.connect(config).use { api ->
                         api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
                             .await()
-                        val result = api.queryUserByIdAsync(userFixture.id).await()
-                        result.id.shouldBeEqual(userFixture.id)
-                        result.name?.shouldBeEqual("lastname String")
+                        val result =
+                            api.queryCodingStationByIdAsync(
+                                    CodingStationFixture.codingStationFixture.id)
+                                .await()
+                        result.id.shouldBeEqual(CodingStationFixture.codingStationFixture.id)
+                        result.online?.shouldBeEqual(true)
                     }
                 }
             }

@@ -3,9 +3,9 @@ package com.open200.xesar.connect.query
 import com.open200.xesar.connect.Topics
 import com.open200.xesar.connect.XesarMqttClient
 import com.open200.xesar.connect.messages.query.*
+import com.open200.xesar.connect.testutils.EvvaComponentFixture
 import com.open200.xesar.connect.testutils.MosquittoContainer
 import com.open200.xesar.connect.testutils.QueryTestHelper
-import com.open200.xesar.connect.testutils.UserFixture.userFixture
 import com.open200.xesar.connect.testutils.XesarConnectTestHelper
 import io.kotest.common.runBlocking
 import io.kotest.core.spec.style.FunSpec
@@ -16,13 +16,13 @@ import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.launch
 import java.util.*
 
-class QueryUserTest :
+class QueryEvvaComponentTest :
     FunSpec({
         val container = MosquittoContainer.container()
         val config = MosquittoContainer.config(container)
         listener(container.perProject())
 
-        test("queryUserList without params") {
+        test("queryEvvaComponentList with params") {
             val requestId = UUID.fromString("00000000-1281-40ae-89d7-5c541d77a757")
             coEvery { config.requestIdGenerator.generateId() }.returns(requestId)
             runBlocking {
@@ -45,27 +45,29 @@ class QueryUserTest :
                         val queryContent = queryReceived.await()
 
                         queryContent.shouldBeEqual(
-                            QueryTestHelper.createQueryRequest(User.QUERY_RESOURCE, requestId))
+                            QueryTestHelper.createQueryRequest(
+                                EvvaComponent.QUERY_RESOURCE, requestId))
 
-                        val person =
+                        val evvaComponentList =
                             encodeQueryList(
                                 QueryList(
                                     requestId,
                                     QueryList.Response(
                                         listOf(
-                                            userFixture,
-                                            userFixture.copy(
+                                            EvvaComponentFixture.evvaComponentFixture,
+                                            EvvaComponentFixture.evvaComponentFixture.copy(
                                                 id =
                                                     UUID.fromString(
-                                                        "4509ca29-9fd3-454f-9c98-fc0967fe3f66"),
-                                                name = "lastname 2 String",
+                                                        "f7019248-f7f9-4138-9af7-119e2e251408"),
+                                                status = OnlineStatus.disconnected,
                                             )),
                                         2,
                                         2,
                                     )))
 
                         client
-                            .publishAsync(Topics.Query.result(config.apiProperties.userId), person)
+                            .publishAsync(
+                                Topics.Query.result(config.apiProperties.userId), evvaComponentList)
                             .await()
                     }
                 }
@@ -75,17 +77,18 @@ class QueryUserTest :
                     XesarConnectTestHelper.connect(config).use { api ->
                         api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
                             .await()
-                        val result = api.queryUserListAsync().await()
+                        val result = api.queryEvvaComponentListAsync().await()
                         result.totalCount.shouldBeEqual(2)
-                        result.data[0].name?.shouldBeEqual("lastname String")
-                        result.data[1].name?.shouldBeEqual("lastname 2 String")
+                        result.data[0].status?.shouldBeEqual(OnlineStatus.connected)
+                        result.data[1].status?.shouldBeEqual(OnlineStatus.disconnected)
                     }
                 }
             }
         }
 
-        test("queryUserById") {
+        test("queryEvvaComponentById") {
             val requestId = UUID.fromString("00000000-1281-42c0-9a15-c5844850c748")
+
             coEvery { config.requestIdGenerator.generateId() }.returns(requestId)
 
             runBlocking {
@@ -109,12 +112,17 @@ class QueryUserTest :
 
                         queryContent.shouldBeEqual(
                             QueryTestHelper.createQueryRequest(
-                                User.QUERY_RESOURCE, requestId, userFixture.id))
+                                EvvaComponent.QUERY_RESOURCE,
+                                requestId,
+                                EvvaComponentFixture.evvaComponentFixture.id))
 
-                        val person = encodeQueryElement(QueryElement(requestId, userFixture))
+                        val evvaComponent =
+                            encodeQueryElement(
+                                QueryElement(requestId, EvvaComponentFixture.evvaComponentFixture))
 
                         client
-                            .publishAsync(Topics.Query.result(config.apiProperties.userId), person)
+                            .publishAsync(
+                                Topics.Query.result(config.apiProperties.userId), evvaComponent)
                             .await()
                     }
                 }
@@ -123,9 +131,12 @@ class QueryUserTest :
                     XesarConnectTestHelper.connect(config).use { api ->
                         api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
                             .await()
-                        val result = api.queryUserByIdAsync(userFixture.id).await()
-                        result.id.shouldBeEqual(userFixture.id)
-                        result.name?.shouldBeEqual("lastname String")
+                        val result =
+                            api.queryEvvaComponentByIdAsync(
+                                    EvvaComponentFixture.evvaComponentFixture.id)
+                                .await()
+                        result.id.shouldBeEqual(EvvaComponentFixture.evvaComponentFixture.id)
+                        result.status?.shouldBeEqual(OnlineStatus.connected)
                     }
                 }
             }

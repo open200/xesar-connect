@@ -1,6 +1,9 @@
 package com.open200.xesar.connect.encodingDecoding
 
-import com.open200.xesar.connect.messages.query.*
+import com.open200.xesar.connect.messages.query.InstallationPoint
+import com.open200.xesar.connect.messages.query.QueryList
+import com.open200.xesar.connect.messages.query.decodeQueryList
+import com.open200.xesar.connect.messages.query.encodeQueryList
 import com.open200.xesar.connect.testutils.InstallationPointFixture.installationPointFixture
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.equals.shouldBeEqual
@@ -36,7 +39,7 @@ class InstallationPointListTest :
                 "\"installationType\":\"door 1\"," +
                 "\"linkedInstallationPoints\":[\"ed6236d0-a47c-46be-8495-d4755c38f103\"," +
                 "\"7cbcddaa-50c3-48fb-8e5a-56bab47d8f81\"]," +
-                "\"onlineStatus\":\"offline\"," +
+                "\"onlineStatus\":\"connected\"," +
                 "\"componentType\":\"Cylinder\"," +
                 "\"releaseDurationShort\":5," +
                 "\"releaseDurationLong\":20," +
@@ -55,7 +58,7 @@ class InstallationPointListTest :
                 "\"installationType\":\"door 2\"," +
                 "\"linkedInstallationPoints\":[\"ed6236d0-a47c-46be-8495-d4755c38f103\"," +
                 "\"7cbcddaa-50c3-48fb-8e5a-56bab47d8f81\"]," +
-                "\"onlineStatus\":\"offline\"," +
+                "\"onlineStatus\":\"connected\"," +
                 "\"componentType\":\"Cylinder\"," +
                 "\"releaseDurationShort\":5," +
                 "\"releaseDurationLong\":20," +

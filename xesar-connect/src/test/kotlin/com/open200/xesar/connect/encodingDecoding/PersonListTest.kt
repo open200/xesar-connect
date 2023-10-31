@@ -62,7 +62,6 @@ class PersonsListTest :
 
         test("encoding QueryListElement for a list of persons") {
             val personsEncoded = encodeQueryList(personsList)
-
             personsEncoded.shouldBeEqual(personsString)
         }
 
