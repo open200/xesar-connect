@@ -12,9 +12,9 @@ import io.kotest.core.spec.style.FunSpec
 import io.kotest.extensions.testcontainers.perProject
 import io.kotest.matchers.equals.shouldBeEqual
 import io.mockk.coEvery
+import java.util.*
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.launch
-import java.util.*
 
 class QueryCodingStationTest :
     FunSpec({
@@ -118,9 +118,7 @@ class QueryCodingStationTest :
 
                         val codingStation =
                             encodeQueryElement(
-                                QueryElement(
-                                    requestId,
-                                    CodingStationFixture.codingStationFixture))
+                                QueryElement(requestId, CodingStationFixture.codingStationFixture))
 
                         client
                             .publishAsync(

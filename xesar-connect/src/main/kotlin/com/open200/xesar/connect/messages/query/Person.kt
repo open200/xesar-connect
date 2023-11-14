@@ -16,20 +16,21 @@ import kotlinx.serialization.Serializable
  * @param identifier The identifier of the person (optional).
  * @param personalReferenceDuration The personal reference duration of the person.
  * @param disengagePeriod The disengage period of the person.
- * @param identificationMediaCount The count of identification media associated with the person.
- * @param outdatedMedia Indicates if the person has outdated media.
+ * @param identificationMediaCount The count of identification media associated with the person
+ *   (optional).
+ * @param outdatedMedia Indicates if the person has outdated media (optional).
  * @param externalId The external ID of the person (optional).
- * @param external Indicates if the person is external.
+ * @param external Indicates if the person is external (optional).
  */
 @Serializable
 data class Person(
     @Serializable(with = UUIDSerializer::class) val id: UUID,
-    @Serializable(with = UUIDSerializer::class) val partitionId: UUID? = null,
-    val firstName: String? = null,
-    val lastName: String? = null,
+    @Serializable(with = UUIDSerializer::class) val partitionId: UUID,
+    val firstName: String,
+    val lastName: String,
     val identifier: String? = null,
-    val personalReferenceDuration: PersonalReferenceDuration? = null,
-    val disengagePeriod: String? = null,
+    val personalReferenceDuration: PersonalReferenceDuration,
+    val disengagePeriod: DisengagePeriod,
     val identificationMediaCount: Int? = null,
     val outdatedMedia: Boolean? = null,
     val externalId: String? = null,

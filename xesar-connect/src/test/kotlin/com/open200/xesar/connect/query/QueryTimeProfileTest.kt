@@ -12,9 +12,9 @@ import io.kotest.core.spec.style.FunSpec
 import io.kotest.extensions.testcontainers.perProject
 import io.kotest.matchers.equals.shouldBeEqual
 import io.mockk.coEvery
+import java.util.*
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.launch
-import java.util.*
 
 class QueryTimeProfileTest :
     FunSpec({
@@ -78,8 +78,8 @@ class QueryTimeProfileTest :
                             .await()
                         val result = api.queryTimeProfileListAsync().await()
                         result.totalCount.shouldBeEqual(2)
-                        result.data[0].name?.shouldBeEqual("name")
-                        result.data[1].name?.shouldBeEqual("name 2")
+                        result.data[0].name.shouldBeEqual("name")
+                        result.data[1].name.shouldBeEqual("name 2")
                     }
                 }
             }
@@ -132,7 +132,7 @@ class QueryTimeProfileTest :
                             api.queryTimeProfileByIdAsync(TimeProfileFixture.timeProfileFixture.id)
                                 .await()
                         result.id.shouldBeEqual(TimeProfileFixture.timeProfileFixture.id)
-                        result.name?.shouldBeEqual("name")
+                        result.name.shouldBeEqual("name")
                     }
                 }
             }

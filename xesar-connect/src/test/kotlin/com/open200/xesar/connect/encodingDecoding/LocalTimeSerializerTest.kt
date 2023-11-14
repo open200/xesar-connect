@@ -3,10 +3,10 @@ package com.open200.xesar.connect.encodingDecoding
 import com.open200.xesar.connect.utils.LocalTimeSerializer
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.equals.shouldBeEqual
-import kotlinx.serialization.json.Json
-import org.junit.jupiter.api.assertThrows
 import java.time.LocalTime
 import java.time.format.DateTimeParseException
+import kotlinx.serialization.json.Json
+import org.junit.jupiter.api.assertThrows
 
 class LocalTimeSerializerTest :
     FunSpec({

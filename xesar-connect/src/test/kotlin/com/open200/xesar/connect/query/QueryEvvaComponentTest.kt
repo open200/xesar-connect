@@ -12,9 +12,9 @@ import io.kotest.core.spec.style.FunSpec
 import io.kotest.extensions.testcontainers.perProject
 import io.kotest.matchers.equals.shouldBeEqual
 import io.mockk.coEvery
+import java.util.*
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.launch
-import java.util.*
 
 class QueryEvvaComponentTest :
     FunSpec({

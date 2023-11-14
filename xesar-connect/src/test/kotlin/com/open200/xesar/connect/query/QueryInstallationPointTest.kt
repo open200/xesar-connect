@@ -12,9 +12,9 @@ import io.kotest.core.spec.style.FunSpec
 import io.kotest.extensions.testcontainers.perProject
 import io.kotest.matchers.equals.shouldBeEqual
 import io.mockk.coEvery
+import java.util.*
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.launch
-import java.util.*
 
 class QueryInstallationPointTest :
     FunSpec({
@@ -83,8 +83,8 @@ class QueryInstallationPointTest :
                             .await()
                         val result = api.queryInstallationPointListAsync().await()
                         result.totalCount.shouldBeEqual(2)
-                        result.data[0].name?.shouldBeEqual("door 1 entry point")
-                        result.data[1].name?.shouldBeEqual("door 2 entry point")
+                        result.data[0].name.shouldBeEqual("door 1 entry point")
+                        result.data[1].name.shouldBeEqual("door 2 entry point")
                     }
                 }
             }
@@ -136,7 +136,7 @@ class QueryInstallationPointTest :
                         val result =
                             api.queryInstallationPointByIdAsync(installationPointFixture.id).await()
                         result.id.shouldBeEqual(installationPointFixture.id)
-                        result.name?.shouldBeEqual("door 1 entry point")
+                        result.name.shouldBeEqual("door 1 entry point")
                     }
                 }
             }

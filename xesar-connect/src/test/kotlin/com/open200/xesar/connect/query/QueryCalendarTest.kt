@@ -13,9 +13,9 @@ import io.kotest.core.spec.style.FunSpec
 import io.kotest.extensions.testcontainers.perProject
 import io.kotest.matchers.equals.shouldBeEqual
 import io.mockk.coEvery
+import java.util.*
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.launch
-import java.util.*
 
 class QueryCalendarTest :
     FunSpec({
@@ -82,10 +82,10 @@ class QueryCalendarTest :
                         result.totalCount.shouldBeEqual(2)
                         result.data[0]
                             .partitionId
-                            ?.shouldBeEqual(UUID.fromString("7b4399a0-21ce-4bee-ba43-e06e291248d2"))
+                            .shouldBeEqual(UUID.fromString("7b4399a0-21ce-4bee-ba43-e06e291248d2"))
                         result.data[1]
                             .partitionId
-                            ?.shouldBeEqual(UUID.fromString("6b4399a0-21ce-4bee-ba43-e06e291248d2"))
+                            .shouldBeEqual(UUID.fromString("6b4399a0-21ce-4bee-ba43-e06e291248d2"))
                     }
                 }
             }
@@ -121,9 +121,7 @@ class QueryCalendarTest :
 
                         val calendar =
                             encodeQueryElement(
-                                QueryElement(
-                                    requestId,
-                                    CalendarFixture.calendarFixture))
+                                QueryElement(requestId, CalendarFixture.calendarFixture))
 
                         client
                             .publishAsync(
@@ -139,7 +137,7 @@ class QueryCalendarTest :
                         val result =
                             api.queryCalendarByIdAsync(CalendarFixture.calendarFixture.id).await()
                         result.id.shouldBeEqual(CalendarFixture.calendarFixture.id)
-                        result.name?.shouldBeEqual("string")
+                        result.name.shouldBeEqual("string")
                     }
                 }
             }

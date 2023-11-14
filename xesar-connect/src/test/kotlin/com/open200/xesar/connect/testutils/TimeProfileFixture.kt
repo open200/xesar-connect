@@ -7,8 +7,7 @@ import java.util.*
 object TimeProfileFixture {
 
     val localTime = LocalTime.parse("14:15")
-    val timeRange =
-        TimeSerie.TimeRange(start = localTime, end = localTime)
+    val timeRange = TimeSerie.TimeRange(start = localTime, end = localTime)
 
     val exceptionTimeSerie =
         ExceptionTimeSerie(
@@ -18,13 +17,10 @@ object TimeProfileFixture {
     val exceptionTimepointSerie =
         TimeProfile.ExceptionTimepointSerie(
             calendars = listOf(UUID.fromString("497f6eca-6276-4993-bfeb-53cbbbba6f08")),
-            points = listOf(localTime)
-        )
+            points = listOf(localTime))
 
     val timePointSerie =
-        TimeProfile.TimePointSerie(
-            days = listOf(Weekday.MONDAY), points = listOf(localTime)
-        )
+        TimeProfile.TimePointSerie(days = listOf(Weekday.MONDAY), points = listOf(localTime))
 
     val timeProfileFixture =
         TimeProfile(

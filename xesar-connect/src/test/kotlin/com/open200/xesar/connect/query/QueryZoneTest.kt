@@ -12,9 +12,9 @@ import io.kotest.core.spec.style.FunSpec
 import io.kotest.extensions.testcontainers.perProject
 import io.kotest.matchers.equals.shouldBeEqual
 import io.mockk.coEvery
+import java.util.*
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.launch
-import java.util.*
 
 class QueryZoneTest :
     FunSpec({
@@ -77,8 +77,8 @@ class QueryZoneTest :
                             .await()
                         val result = api.queryZoneListAsync().await()
                         result.totalCount.shouldBeEqual(2)
-                        result.data[0].name?.shouldBeEqual("zone name")
-                        result.data[1].name?.shouldBeEqual("zone name2")
+                        result.data[0].name.shouldBeEqual("zone name")
+                        result.data[1].name.shouldBeEqual("zone name2")
                     }
                 }
             }
@@ -126,7 +126,7 @@ class QueryZoneTest :
                             .await()
                         val result = api.queryZoneByIdAsync(ZoneFixture.zoneFixture.id).await()
                         result.id.shouldBeEqual(ZoneFixture.zoneFixture.id)
-                        result.name?.shouldBeEqual("zone name")
+                        result.name.shouldBeEqual("zone name")
                     }
                 }
             }

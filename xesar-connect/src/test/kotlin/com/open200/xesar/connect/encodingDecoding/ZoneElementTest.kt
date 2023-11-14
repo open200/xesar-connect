@@ -22,7 +22,6 @@ class ZoneElementTest :
             zoneEncoded.shouldBeEqual(zoneString)
         }
 
-
         test("decoding QueryElement for a zone") {
             val zoneDecoded = decodeQueryElement<Zone>(zoneString)
             logger.info(zoneDecoded.toString())

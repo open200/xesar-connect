@@ -4,18 +4,18 @@ import QueryElementResource
 import QueryListResource
 import com.open200.xesar.connect.utils.LocalTimeSerializer
 import com.open200.xesar.connect.utils.UUIDSerializer
-import kotlinx.serialization.Serializable
 import java.time.LocalTime
 import java.util.*
+import kotlinx.serialization.Serializable
 
 @Serializable
 data class TimeProfile(
-    val timeSeries: List<TimeSerie>? = null,
-    val exceptionTimeSeries: List<ExceptionTimeSerie>? = null,
-    val exceptionTimePointSeries: List<ExceptionTimepointSerie>? = null,
-    val name: String? = null,
+    val timeSeries: List<TimeSerie>,
+    val exceptionTimeSeries: List<ExceptionTimeSerie>,
+    val exceptionTimePointSeries: List<ExceptionTimepointSerie>? = emptyList(),
+    val name: String,
     val description: String? = null,
-    val timePointSeries: List<TimePointSerie>? = null,
+    val timePointSeries: List<TimePointSerie>? = emptyList(),
     @Serializable(with = UUIDSerializer::class) val id: UUID,
     val type: TimeProfileType? = null,
     val validStandardTimeProfile: Boolean? = null
@@ -23,7 +23,6 @@ data class TimeProfile(
     companion object {
         const val QUERY_RESOURCE = "time-profiles"
     }
-
 
     @Serializable
     data class ExceptionTimepointSerie(

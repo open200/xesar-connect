@@ -3,8 +3,8 @@ package com.open200.xesar.connect.messages.query
 import QueryElementResource
 import QueryListResource
 import com.open200.xesar.connect.utils.UUIDSerializer
-import kotlinx.serialization.Serializable
 import java.util.*
+import kotlinx.serialization.Serializable
 
 /**
  * Represents an authorization profile in the system.
@@ -17,19 +17,19 @@ import java.util.*
  * @param zones The list of zones associated with the authorization profile.
  * @param manualOfficeMode Indicates if manual office mode is enabled for the authorization profile.
  * @param anyAuthorizations Indicates if the authorization profile allows any authorizations.
- * @param standardTimeProfile The standard time profile associated with the authorization profile
+ * @param standardTimeProfile The used standard time profile id or null for an all-day time profile.
  *   (optional).
  */
 @Serializable
 data class AuthorizationProfile(
     @Serializable(with = UUIDSerializer::class) val id: UUID,
-    val name: String? = null,
+    val name: String,
     val description: String? = null,
-    val installationPoints: List<InstallationPoint>? = null,
-    val zones: List<Zone>? = null,
-    val manualOfficeMode: Boolean? = null,
-    val anyAuthorizations: Boolean? = null,
-    @Serializable(with = UUIDSerializer::class) val standardTimeProfile: UUID,
+    val installationPoints: List<InstallationPoint>,
+    val zones: List<Zone>,
+    val manualOfficeMode: Boolean,
+    val anyAuthorizations: Boolean,
+    @Serializable(with = UUIDSerializer::class) val standardTimeProfile: UUID? = null,
 ) : QueryListResource, QueryElementResource {
 
     /**

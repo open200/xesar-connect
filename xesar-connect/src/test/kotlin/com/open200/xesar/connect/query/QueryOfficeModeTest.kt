@@ -12,9 +12,9 @@ import io.kotest.core.spec.style.FunSpec
 import io.kotest.extensions.testcontainers.perProject
 import io.kotest.matchers.equals.shouldBeEqual
 import io.mockk.coEvery
+import java.util.*
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.launch
-import java.util.*
 
 class QueryOfficeModeTest :
     FunSpec({
@@ -79,8 +79,8 @@ class QueryOfficeModeTest :
                             .await()
                         val result = api.queryOfficeModeListAsync().await()
                         result.totalCount.shouldBeEqual(2)
-                        result.data[0].timeProfileName?.shouldBeEqual("timeProfileName")
-                        result.data[1].timeProfileName?.shouldBeEqual("timeProfileName2")
+                        result.data[0].timeProfileName.shouldBeEqual("timeProfileName")
+                        result.data[1].timeProfileName.shouldBeEqual("timeProfileName2")
                     }
                 }
             }
@@ -117,9 +117,7 @@ class QueryOfficeModeTest :
 
                         val officeMode =
                             encodeQueryElement(
-                                QueryElement(
-                                    requestId,
-                                    OfficeModeFixture.officeModeFixture))
+                                QueryElement(requestId, OfficeModeFixture.officeModeFixture))
 
                         client
                             .publishAsync(

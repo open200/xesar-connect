@@ -18,7 +18,7 @@ class CalendarElementTest :
                 CalendarFixture.calendarFixture)
 
         val calendarString =
-            "{\"requestId\":\"d385ab22-0f51-4b97-9ecd-b8ff3fd4fcb6\",\"response\":{\"serialVersionUID\":0,\"partitionId\":\"7b4399a0-21ce-4bee-ba43-e06e291248d2\",\"name\":\"string\",\"specialDays\":[\"2019-08-24\"],\"id\":\"497f6eca-6276-4993-bfeb-53cbbbba6f08\"}}"
+            "{\"requestId\":\"d385ab22-0f51-4b97-9ecd-b8ff3fd4fcb6\",\"response\":{\"partitionId\":\"7b4399a0-21ce-4bee-ba43-e06e291248d2\",\"name\":\"string\",\"specialDays\":[\"2019-08-24\"],\"id\":\"497f6eca-6276-4993-bfeb-53cbbbba6f08\"}}"
 
         test("encoding QueryElement for a calendar") {
             val calendarEncoded = encodeQueryElement(calendar)

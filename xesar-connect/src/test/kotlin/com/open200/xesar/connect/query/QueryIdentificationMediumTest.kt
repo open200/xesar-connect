@@ -15,9 +15,9 @@ import io.kotest.extensions.testcontainers.perProject
 import io.kotest.matchers.equals.shouldBeEqual
 import io.kotest.matchers.nulls.shouldBeNull
 import io.mockk.coEvery
+import java.util.*
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.launch
-import java.util.*
 
 class QueryIdentificationMediumTest :
     FunSpec({
@@ -27,8 +27,7 @@ class QueryIdentificationMediumTest :
 
         test("queryIdentificationMediaList without params") {
             val requestId = UUID.fromString("00000000-1281-40ae-89d7-5c541d77a757")
-            coEvery { config.requestIdGenerator.generateId() }
-                .returns(requestId)
+            coEvery { config.requestIdGenerator.generateId() }.returns(requestId)
             runBlocking {
                 val simulatedBackendReady = CompletableDeferred<Unit>()
                 val queryReceived = CompletableDeferred<String>()
@@ -47,7 +46,9 @@ class QueryIdentificationMediumTest :
                         simulatedBackendReady.complete(Unit)
 
                         val queryContent = queryReceived.await()
-                        queryContent.shouldBeEqual(QueryTestHelper.createQueryRequest(IdentificationMedium.QUERY_RESOURCE, requestId))
+                        queryContent.shouldBeEqual(
+                            QueryTestHelper.createQueryRequest(
+                                IdentificationMedium.QUERY_RESOURCE, requestId))
 
                         val identificationMedium =
                             encodeQueryList(
@@ -91,10 +92,9 @@ class QueryIdentificationMediumTest :
 
         test(
             "queryIdentificationMediumByMediumIdentifierAsync without params should return an element") {
-            val requestId = UUID.fromString("00000000-1281-40ae-89d7-5c541d77a757")
+                val requestId = UUID.fromString("00000000-1281-40ae-89d7-5c541d77a757")
 
-            coEvery { config.requestIdGenerator.generateId() }
-                    .returns(requestId)
+                coEvery { config.requestIdGenerator.generateId() }.returns(requestId)
                 runBlocking {
                     val simulatedBackendReady = CompletableDeferred<Unit>()
                     val queryReceived = CompletableDeferred<String>()
@@ -156,9 +156,8 @@ class QueryIdentificationMediumTest :
 
         test(
             "queryIdentificationMediumByMediumIdentifierAsync without params should return null when no result") {
-            val requestId =     UUID.fromString("00000000-1281-40ae-89d7-5c541d77a757")
-            coEvery { config.requestIdGenerator.generateId() }
-                    .returns(requestId)
+                val requestId = UUID.fromString("00000000-1281-40ae-89d7-5c541d77a757")
+                coEvery { config.requestIdGenerator.generateId() }.returns(requestId)
                 runBlocking {
                     val simulatedBackendReady = CompletableDeferred<Unit>()
                     val queryReceived = CompletableDeferred<String?>()
@@ -217,9 +216,8 @@ class QueryIdentificationMediumTest :
 
         test(
             "queryIdentificationMediumByMediumIdentifierAsync should throw an exception if the results is returning 2 values") {
-            val requestId = UUID.fromString("00000000-1281-40ae-89d7-5c541d77a757")
-            coEvery { config.requestIdGenerator.generateId() }
-                    .returns(requestId)
+                val requestId = UUID.fromString("00000000-1281-40ae-89d7-5c541d77a757")
+                coEvery { config.requestIdGenerator.generateId() }.returns(requestId)
                 runBlocking {
                     val simulatedBackendReady = CompletableDeferred<Unit>()
                     val queryReceived = CompletableDeferred<String>()
@@ -293,8 +291,7 @@ class QueryIdentificationMediumTest :
 
         test("queryIdentificationMediumById") {
             val requestId = UUID.fromString("00000000-1281-42c0-9a15-c5844850c748")
-            coEvery { config.requestIdGenerator.generateId() }
-                .returns(requestId)
+            coEvery { config.requestIdGenerator.generateId() }.returns(requestId)
 
             val id = IdentificationMediumFixture.identificationMediumFixture.id
 
@@ -317,7 +314,9 @@ class QueryIdentificationMediumTest :
 
                         val queryContent = queryReceived.await()
 
-queryContent.shouldBeEqual(QueryTestHelper.createQueryRequest(IdentificationMedium.QUERY_RESOURCE,requestId,id))
+                        queryContent.shouldBeEqual(
+                            QueryTestHelper.createQueryRequest(
+                                IdentificationMedium.QUERY_RESOURCE, requestId, id))
 
                         val identificationMedium =
                             encodeQueryElement(

@@ -14,12 +14,12 @@ import com.open200.xesar.connect.messages.command.*
 import com.open200.xesar.connect.messages.query.*
 import com.open200.xesar.connect.messages.query.Calendar
 import com.open200.xesar.connect.messages.session.*
-import kotlinx.coroutines.*
-import kotlinx.coroutines.channels.Channel
-import mu.KotlinLogging
 import java.util.*
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.CopyOnWriteArraySet
+import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.Channel
+import mu.KotlinLogging
 
 val logger = KotlinLogging.logger {}
 
@@ -334,12 +334,27 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) : A
         return queryListAsync(IdentificationMedium.QUERY_RESOURCE, params, requestConfig)
     }
 
+    /**
+     * Queries the list of calendars asynchronously.
+     *
+     * @param params The query parameters (optional).
+     * @param requestConfig The request configuration (optional).
+     * @return A deferred object that resolves to a response containing a list of calendars.
+     */
     suspend fun queryCalendarListAsync(
         params: Query.Params? = null,
         requestConfig: RequestConfig = buildRequestConfig()
     ): Deferred<QueryList.Response<Calendar>> {
         return queryListAsync(Calendar.QUERY_RESOURCE, params, requestConfig)
     }
+
+    /**
+     * Queries the list of coding stations asynchronously.
+     *
+     * @param params The query parameters (optional).
+     * @param requestConfig The request configuration (optional).
+     * @return A deferred object that resolves to a response containing a list of coding stations.
+     */
     suspend fun queryCodingStationListAsync(
         params: Query.Params? = null,
         requestConfig: RequestConfig = buildRequestConfig()
@@ -347,6 +362,13 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) : A
         return queryListAsync(CodingStation.QUERY_RESOURCE, params, requestConfig)
     }
 
+    /**
+     * Queries the list of evva components asynchronously.
+     *
+     * @param params The query parameters (optional).
+     * @param requestConfig The request configuration (optional).
+     * @return A deferred object that resolves to a response containing a list of evva components.
+     */
     suspend fun queryEvvaComponentListAsync(
         params: Query.Params? = null,
         requestConfig: RequestConfig = buildRequestConfig()
@@ -354,6 +376,13 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) : A
         return queryListAsync(EvvaComponent.QUERY_RESOURCE, params, requestConfig)
     }
 
+    /**
+     * Queries the list of office modes asynchronously.
+     *
+     * @param params The query parameters (optional).
+     * @param requestConfig The request configuration (optional).
+     * @return A deferred object that resolves to a response containing a list of office modes.
+     */
     suspend fun queryOfficeModeListAsync(
         params: Query.Params? = null,
         requestConfig: RequestConfig = buildRequestConfig()
@@ -361,6 +390,13 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) : A
         return queryListAsync(OfficeMode.QUERY_RESOURCE, params, requestConfig)
     }
 
+    /**
+     * Queries the list of time profiles asynchronously.
+     *
+     * @param params The query parameters (optional).
+     * @param requestConfig The request configuration (optional).
+     * @return A deferred object that resolves to a response containing a list of time profiles.
+     */
     suspend fun queryTimeProfileListAsync(
         params: Query.Params? = null,
         requestConfig: RequestConfig = buildRequestConfig()
@@ -368,6 +404,13 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) : A
         return queryListAsync(TimeProfile.QUERY_RESOURCE, params, requestConfig)
     }
 
+    /**
+     * Queries the list of zones asynchronously.
+     *
+     * @param params The query parameters (optional).
+     * @param requestConfig The request configuration (optional).
+     * @return A deferred object that resolves a response containing a list of zones.
+     */
     suspend fun queryZoneListAsync(
         params: Query.Params? = null,
         requestConfig: RequestConfig = buildRequestConfig()
@@ -434,13 +477,6 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) : A
         return queryElementAsync(Person.QUERY_RESOURCE, id, requestConfig)
     }
 
-    suspend fun queryUserByIdAsync(
-        id: UUID,
-        requestConfig: RequestConfig = buildRequestConfig()
-    ): Deferred<User> {
-        return queryElementAsync(User.QUERY_RESOURCE, id, requestConfig)
-    }
-
     /**
      * Queries an installation point by ID asynchronously.
      *
@@ -483,6 +519,13 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) : A
         return queryElementAsync(IdentificationMedium.QUERY_RESOURCE, id, requestConfig)
     }
 
+    /**
+     * Queries a calendar by ID asynchronously.
+     *
+     * @param id The ID of the calendar to query.
+     * @param requestConfig The request configuration (optional).
+     * @return A deferred object that resolves to the queried calendar.
+     */
     suspend fun queryCalendarByIdAsync(
         id: UUID,
         requestConfig: RequestConfig = buildRequestConfig()
@@ -490,12 +533,27 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) : A
         return queryElementAsync(Calendar.QUERY_RESOURCE, id, requestConfig)
     }
 
+    /**
+     * Queries a coding station by ID asynchronously.
+     *
+     * @param id The ID of the coding station to query.
+     * @param requestConfig The request configuration (optional).
+     * @return A deferred object that resolves to the queried coding station.
+     */
     suspend fun queryCodingStationByIdAsync(
         id: UUID,
         requestConfig: RequestConfig = buildRequestConfig()
     ): Deferred<CodingStation> {
         return queryElementAsync(CodingStation.QUERY_RESOURCE, id, requestConfig)
     }
+
+    /**
+     * Queries an evva component by ID asynchronously.
+     *
+     * @param id The ID of the evva component to query.
+     * @param requestConfig The request configuration (optional).
+     * @return A deferred object that resolves to the queried evva component.
+     */
     suspend fun queryEvvaComponentByIdAsync(
         id: UUID,
         requestConfig: RequestConfig = buildRequestConfig()
@@ -503,18 +561,39 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) : A
         return queryElementAsync(EvvaComponent.QUERY_RESOURCE, id, requestConfig)
     }
 
+    /**
+     * Queries an office mode by ID asynchronously.
+     *
+     * @param id The ID of the office mode to query.
+     * @param requestConfig The request configuration (optional).
+     * @return A deferred object that resolves to the queried office mode.
+     */
     suspend fun queryOfficeModeByIdAsync(
         id: UUID,
         requestConfig: RequestConfig = buildRequestConfig()
     ): Deferred<OfficeMode> {
         return queryElementAsync(OfficeMode.QUERY_RESOURCE, id, requestConfig)
     }
+    /**
+     * Queries a time profile by ID asynchronously.
+     *
+     * @param id The ID of the time profile to query.
+     * @param requestConfig The request configuration (optional).
+     * @return A deferred object that resolves to the queried time profile.
+     */
     suspend fun queryTimeProfileByIdAsync(
         id: UUID,
         requestConfig: RequestConfig = buildRequestConfig()
     ): Deferred<TimeProfile> {
         return queryElementAsync(TimeProfile.QUERY_RESOURCE, id, requestConfig)
     }
+    /**
+     * Queries a zone by ID asynchronously.
+     *
+     * @param id The ID of the zone to query.
+     * @param requestConfig The request configuration (optional).
+     * @return A deferred object that resolves to the queried zone.
+     */
     suspend fun queryZoneByIdAsync(
         id: UUID,
         requestConfig: RequestConfig = buildRequestConfig()
@@ -522,6 +601,13 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) : A
         return queryElementAsync(Zone.QUERY_RESOURCE, id, requestConfig)
     }
 
+    /**
+     * Queries an access protocol event by ID asynchronously.
+     *
+     * @param id The ID of the access protocol event to query.
+     * @param requestConfig The request configuration (optional).
+     * @return A deferred object that resolves to the queried access protocol event.
+     */
     suspend fun queryIdentificationMediumByMediumIdentifierAsync(
         mediumIdentifierValue: Int,
         params: Query.Params? = null,

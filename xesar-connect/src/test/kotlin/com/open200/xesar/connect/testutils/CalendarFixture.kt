@@ -8,7 +8,6 @@ object CalendarFixture {
 
     val calendarFixture =
         Calendar(
-            serialVersionUID = 0,
             partitionId = UUID.fromString("7b4399a0-21ce-4bee-ba43-e06e291248d2"),
             name = "string",
             specialDays = listOf(LocalDate.parse("2019-08-24")),

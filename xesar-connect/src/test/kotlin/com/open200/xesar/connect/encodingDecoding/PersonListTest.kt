@@ -40,7 +40,7 @@ class PersonsListTest :
                 "\"lastName\":\"lastname String\"," +
                 "\"identifier\":\"1234\"," +
                 "\"personalReferenceDuration\":{\"logMode\":\"log String\",\"days\":0}," +
-                "\"disengagePeriod\":\"string\"," +
+                "\"disengagePeriod\":\"SHORT\"," +
                 "\"identificationMediaCount\":0," +
                 "\"outdatedMedia\":true," +
                 "\"externalId\":\"123\"," +
@@ -52,7 +52,7 @@ class PersonsListTest :
                 "\"identifier\":\"1234\"," +
                 "\"personalReferenceDuration\":" +
                 "{\"logMode\":\"log String\",\"days\":0}," +
-                "\"disengagePeriod\":\"string\"," +
+                "\"disengagePeriod\":\"SHORT\"," +
                 "\"identificationMediaCount\":0," +
                 "\"outdatedMedia\":true," +
                 "\"externalId\":\"1234\"," +
@@ -80,7 +80,7 @@ class PersonsListTest :
                     "\"lastName\":\"lastname String\"," +
                     "\"identifier\":\"1234\"," +
                     "\"personalReferenceDuration\":{\"logMode\":\"log String\",\"days\":0}," +
-                    "\"disengagePeriod\":\"string\"," +
+                    "\"disengagePeriod\":\"SHORT\"," +
                     "\"identificationMediaCount\":0," +
                     "\"outdatedMedia\":true," +
                     "\"externalId\":\"123\"," +
@@ -93,7 +93,7 @@ class PersonsListTest :
                     "\"additionalProperties\":\"additional Information\"," +
                     "\"personalReferenceDuration\":" +
                     "{\"logMode\":\"log String\",\"days\":0}," +
-                    "\"disengagePeriod\":\"string\"," +
+                    "\"disengagePeriod\":\"SHORT\"," +
                     "\"identificationMediaCount\":0," +
                     "\"outdatedMedia\":true," +
                     "\"externalId\":\"1234\"," +

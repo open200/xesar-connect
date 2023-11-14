@@ -12,9 +12,9 @@ import io.kotest.core.spec.style.FunSpec
 import io.kotest.extensions.testcontainers.perProject
 import io.kotest.matchers.equals.shouldBeEqual
 import io.mockk.coEvery
+import java.util.*
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.launch
-import java.util.*
 
 class QueryAuthorizationProfileTest :
     FunSpec({
@@ -80,8 +80,8 @@ class QueryAuthorizationProfileTest :
                             .await()
                         val result = api.queryAuthorizationProfilesListAsync().await()
                         result.totalCount.shouldBeEqual(2)
-                        result.data[0].name?.shouldBeEqual("authorization profile 1 String")
-                        result.data[1].name?.shouldBeEqual("authorization profile 2")
+                        result.data[0].name.shouldBeEqual("authorization profile 1 String")
+                        result.data[1].name.shouldBeEqual("authorization profile 2")
                     }
                 }
             }
@@ -136,7 +136,7 @@ class QueryAuthorizationProfileTest :
                             api.queryAuthorizationProfilesByIdAsync(authorizationProfileFixture.id)
                                 .await()
                         result.id.shouldBeEqual(authorizationProfileFixture.id)
-                        result.name?.shouldBeEqual("authorization profile 1 String")
+                        result.name.shouldBeEqual("authorization profile 1 String")
                     }
                 }
             }

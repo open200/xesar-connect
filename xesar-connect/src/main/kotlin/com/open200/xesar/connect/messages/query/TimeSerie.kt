@@ -1,8 +1,8 @@
 package com.open200.xesar.connect.messages.query
 
 import com.open200.xesar.connect.utils.LocalTimeSerializer
-import kotlinx.serialization.Serializable
 import java.time.LocalTime
+import kotlinx.serialization.Serializable
 
 @Serializable
 data class TimeSerie(val times: List<TimeRange>, val days: List<Weekday>) {

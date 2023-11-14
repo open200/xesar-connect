@@ -5,7 +5,7 @@ import com.open200.xesar.connect.exception.ParsingException
 import com.open200.xesar.connect.utils.LocalDateTimeSerializer
 import com.open200.xesar.connect.utils.UUIDSerializer
 import java.time.LocalDateTime
-import java.util.UUID
+import java.util.*
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
@@ -44,22 +44,22 @@ import kotlinx.serialization.encodeToString
 @Serializable
 data class AccessProtocolEvent(
     @Serializable(with = UUIDSerializer::class) val id: UUID,
-    val entryIdentificator: Int? = null,
+    val entryIdentificator: Int,
     @Serializable(with = LocalDateTimeSerializer::class)
     val timestampComponentLocal: LocalDateTime? = null,
     @Serializable(with = LocalDateTimeSerializer::class) val timestampUtc: LocalDateTime? = null,
     @Serializable(with = LocalDateTimeSerializer::class) val receivedAt: LocalDateTime? = null,
-    val eventType: EventType? = null,
-    val eventValue: EventValue? = null,
-    val rawValue: String? = null,
-    val parameterMap: ParameterMap? = null,
+    val eventType: EventType,
+    val eventValue: EventValue,
+    val rawValue: String,
+    val parameterMap: ParameterMap,
     @Serializable(with = UUIDSerializer::class) val installationPointId: UUID? = null,
     val installationPointName: String? = null,
     val installationPointIdentifier: String? = null,
-    val zoneIds: List<@Serializable(with = UUIDSerializer::class) UUID>? = null,
-    val accessId: Int? = null,
-    val groupOfEvent: String? = null,
-    val eventNumber: Int? = null,
+    val zoneIds: List<@Serializable(with = UUIDSerializer::class) UUID> = emptyList(),
+    val accessId: Int,
+    val groupOfEvent: GroupOfEvent,
+    val eventNumber: Int,
     @Serializable(with = UUIDSerializer::class) val identificationMediumId: UUID? = null,
     val mediumIdentifier: Int? = null,
     val identificationMediumLabel: String? = null,

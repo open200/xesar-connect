@@ -1,5 +1,6 @@
 package com.open200.xesar.connect.testutils
 
+import com.open200.xesar.connect.messages.query.DisengagePeriod
 import com.open200.xesar.connect.messages.query.IdentificationMedium
 import java.time.LocalDateTime
 import java.util.*
@@ -27,7 +28,7 @@ object IdentificationMediumFixture {
             validityBeginAtInHardware = LocalDateTime.parse("2021-01-01T00:00:00"),
             validityEndAtInHardware = LocalDateTime.parse("2021-01-01T00:00:00"),
             external = false,
-            disengagePeriod = "SHORT",
+            disengagePeriod = DisengagePeriod.SHORT,
             mediumIdentifier = 1,
             outdated = true,
             personId = UUID.fromString("82a8a2cc-5d39-4cfa-b04e-49111a0bcdf7"),
