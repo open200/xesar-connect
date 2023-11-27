@@ -4,7 +4,6 @@ import com.open200.xesar.connect.messages.command.FilterType
 import com.open200.xesar.connect.utils.FilterTypeSerializer
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.equals.shouldBeEqual
-import java.lang.IllegalArgumentException
 import kotlinx.serialization.json.Json
 import org.junit.jupiter.api.assertThrows
 

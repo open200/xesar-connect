@@ -5,6 +5,7 @@ import com.open200.xesar.connect.testutils.XesarConnectTestHelper
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.extensions.testcontainers.perProject
 import io.kotest.matchers.shouldBe
+import java.util.*
 
 class SubscribedTopicsTest :
     FunSpec({
@@ -20,9 +21,10 @@ class SubscribedTopicsTest :
                     .getSubscribedTopics()
                     .shouldBe(
                         listOf(
-                            "xs3/1/faf3d0c4-1281-40ae-89d7-5c541d77a757/LoggedIn",
-                            "xs3/1/ces/UnauthorizedLoginAttempt",
-                            "xs3/1/ces/LoggedOut",
+                            Topics.Event.loggedIn(
+                                UUID.fromString("faf3d0c4-1281-40ae-89d7-5c541d77a757")),
+                            Topics.Event.UNAUTHORIZED_LOGIN_ATTEMPT,
+                            Topics.Event.LOGGED_OUT,
                             "new Topic"))
             }
         }
@@ -35,9 +37,10 @@ class SubscribedTopicsTest :
                     .getSubscribedTopics()
                     .shouldBe(
                         listOf(
-                            "xs3/1/faf3d0c4-1281-40ae-89d7-5c541d77a757/LoggedIn",
-                            "xs3/1/ces/UnauthorizedLoginAttempt",
-                            "xs3/1/ces/LoggedOut"))
+                            Topics.Event.loggedIn(
+                                UUID.fromString("faf3d0c4-1281-40ae-89d7-5c541d77a757")),
+                            Topics.Event.UNAUTHORIZED_LOGIN_ATTEMPT,
+                            Topics.Event.LOGGED_OUT))
             }
         }
 
@@ -47,9 +50,10 @@ class SubscribedTopicsTest :
                     .getSubscribedTopics()
                     .shouldBe(
                         listOf(
-                            "xs3/1/faf3d0c4-1281-40ae-89d7-5c541d77a757/LoggedIn",
-                            "xs3/1/ces/UnauthorizedLoginAttempt",
-                            "xs3/1/ces/LoggedOut"))
+                            Topics.Event.loggedIn(
+                                UUID.fromString("faf3d0c4-1281-40ae-89d7-5c541d77a757")),
+                            Topics.Event.UNAUTHORIZED_LOGIN_ATTEMPT,
+                            Topics.Event.LOGGED_OUT))
 
                 client.unsubscribeTopics(
                     Topics(Topics.Event.LOGGED_OUT, Topics.Event.UNAUTHORIZED_LOGIN_ATTEMPT))
@@ -58,7 +62,10 @@ class SubscribedTopicsTest :
 
                 client
                     .getSubscribedTopics()
-                    .shouldBe(listOf("xs3/1/faf3d0c4-1281-40ae-89d7-5c541d77a757/LoggedIn"))
+                    .shouldBe(
+                        listOf(
+                            Topics.Event.loggedIn(
+                                UUID.fromString("faf3d0c4-1281-40ae-89d7-5c541d77a757"))))
             }
         }
     })

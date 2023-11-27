@@ -1,7 +1,6 @@
 package com.open200.xesar.connect
 
 import com.open200.xesar.connect.exception.UnauthorizedLoginAttemptException
-import com.open200.xesar.connect.messages.session.UserCredentials
 import com.open200.xesar.connect.testutils.MosquittoContainer
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.common.runBlocking
@@ -75,10 +74,10 @@ class ConnectAndLoginTest :
                         it.getSubscribedTopics()
                             .shouldBe(
                                 listOf(
-                                    "xs3/1/faf3d0c4-1281-40ae-89d7-5c541d77a757/LoggedIn",
-                                    "xs3/1/ces/UnauthorizedLoginAttempt",
-                                    "xs3/1/ces/LoggedOut",
-                                ))
+                                    Topics.Event.loggedIn(
+                                        UUID.fromString("faf3d0c4-1281-40ae-89d7-5c541d77a757")),
+                                    Topics.Event.UNAUTHORIZED_LOGIN_ATTEMPT,
+                                    Topics.Event.LOGGED_OUT))
 
                         it.shouldBeInstanceOf<XesarConnect>()
                         it.logoutAsync().await()
@@ -109,7 +108,7 @@ class ConnectAndLoginTest :
                             client
                                 .publishAsync(
                                     Topics.Event.UNAUTHORIZED_LOGIN_ATTEMPT,
-                                    "{\"event\":{\"username\":\"Unauthorized\", \"channel\":\"channel\"}}")
+                                    "{\"event\":{\"username\":\"Unauthorized\", \"channel\":\"API\"}}")
                                 .await()
                         }
                     }
