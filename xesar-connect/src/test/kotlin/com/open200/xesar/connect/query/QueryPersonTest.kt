@@ -4,7 +4,10 @@ import com.open200.xesar.connect.Topics
 import com.open200.xesar.connect.XesarMqttClient
 import com.open200.xesar.connect.messages.command.FilterType
 import com.open200.xesar.connect.messages.command.Query
-import com.open200.xesar.connect.messages.query.*
+import com.open200.xesar.connect.messages.query.QueryElement
+import com.open200.xesar.connect.messages.query.QueryList
+import com.open200.xesar.connect.messages.query.encodeQueryElement
+import com.open200.xesar.connect.messages.query.encodeQueryList
 import com.open200.xesar.connect.testutils.MosquittoContainer
 import com.open200.xesar.connect.testutils.PersonFixture.personFixture
 import com.open200.xesar.connect.testutils.XesarConnectTestHelper
@@ -90,8 +93,8 @@ class QueryPersonTest :
                             .await()
                         val result = api.queryPersonListAsync(params).await()
                         result.totalCount.shouldBeEqual(2)
-                        result.data[0].firstName?.shouldBeEqual("firstname String")
-                        result.data[1].firstName?.shouldBeEqual("firstname 2 String")
+                        result.data[0].firstName.shouldBeEqual("firstname String")
+                        result.data[1].firstName.shouldBeEqual("firstname 2 String")
                     }
                 }
             }
@@ -141,7 +144,7 @@ class QueryPersonTest :
                             .await()
                         val result = api.queryPersonByIdAsync(personFixture.id).await()
                         result.id.shouldBeEqual(personFixture.id)
-                        result.firstName?.shouldBeEqual("firstname String")
+                        result.firstName.shouldBeEqual("firstname String")
                     }
                 }
             }

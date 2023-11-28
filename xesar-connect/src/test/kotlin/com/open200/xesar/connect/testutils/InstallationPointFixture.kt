@@ -1,6 +1,8 @@
 package com.open200.xesar.connect.testutils
 
+import com.open200.xesar.connect.messages.query.ComponentType
 import com.open200.xesar.connect.messages.query.InstallationPoint
+import com.open200.xesar.connect.messages.query.OnlineStatus
 import java.util.*
 
 object InstallationPointFixture {
@@ -15,8 +17,8 @@ object InstallationPointFixture {
                 listOf(
                     UUID.fromString("ed6236d0-a47c-46be-8495-d4755c38f103"),
                     UUID.fromString("7cbcddaa-50c3-48fb-8e5a-56bab47d8f81")),
-            onlineStatus = "offline",
-            componentType = "Cylinder",
+            onlineStatus = OnlineStatus.connected,
+            componentType = ComponentType.Cylinder,
             releaseDurationShort = 5,
             releaseDurationLong = 20,
             logMode = "dontSave",

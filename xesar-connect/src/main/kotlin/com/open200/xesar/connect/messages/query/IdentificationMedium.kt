@@ -68,7 +68,7 @@ data class IdentificationMedium(
     val validityBeginAtInHardware: LocalDateTime,
     @Serializable(with = LocalDateTimeSerializer::class) val validityEndAtInHardware: LocalDateTime,
     val external: Boolean,
-    val disengagePeriod: String,
+    val disengagePeriod: DisengagePeriod,
     val mediumIdentifier: Int,
     val outdated: Boolean,
     @Serializable(with = UUIDSerializer::class) val personId: UUID? = null,

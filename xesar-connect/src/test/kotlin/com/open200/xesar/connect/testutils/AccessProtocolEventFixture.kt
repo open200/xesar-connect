@@ -3,6 +3,7 @@ package com.open200.xesar.connect.testutils
 import com.open200.xesar.connect.messages.query.AccessProtocolEvent
 import com.open200.xesar.connect.messages.query.ComponentType
 import com.open200.xesar.connect.messages.query.EventType
+import com.open200.xesar.connect.messages.query.GroupOfEvent
 import java.time.LocalDateTime
 import java.util.*
 
@@ -67,7 +68,7 @@ object AccessProtocolEventFixture {
             installationPointIdentifier = "A01",
             zoneIds = listOf(zone, UUID.fromString("37afba11-94ad-41ed-a812-a05fb8239708")),
             accessId = 1,
-            groupOfEvent = "MaintenanceComponent",
+            groupOfEvent = GroupOfEvent.MaintenanceComponent,
             eventNumber = 3074,
             identificationMediumId = UUID.fromString("ffcf5e00-83ad-40cb-b37b-e91abb6f75cd"),
             identificationMediumLabel = "new Label",

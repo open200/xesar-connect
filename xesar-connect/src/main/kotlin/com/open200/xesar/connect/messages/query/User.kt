@@ -22,8 +22,8 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class User(
     @Serializable(with = UUIDSerializer::class) val id: UUID,
-    val name: String? = null,
-    val active: Boolean? = null,
+    val name: String,
+    val active: Boolean,
     val description: String? = null,
     @Serializable(with = LocalDateTimeSerializer::class) val lastActive: LocalDateTime? = null,
     @Serializable(with = LocalDateTimeSerializer::class) val lastLogin: LocalDateTime? = null,

@@ -3,8 +3,10 @@ package com.open200.xesar.connect.query
 import com.open200.xesar.connect.Topics
 import com.open200.xesar.connect.XesarMqttClient
 import com.open200.xesar.connect.messages.query.QueryList
+import com.open200.xesar.connect.messages.query.User
 import com.open200.xesar.connect.messages.query.encodeQueryList
 import com.open200.xesar.connect.testutils.MosquittoContainer
+import com.open200.xesar.connect.testutils.QueryTestHelper
 import com.open200.xesar.connect.testutils.UserFixture.userFixture
 import com.open200.xesar.connect.testutils.XesarConnectTestHelper
 import io.kotest.common.runBlocking
@@ -23,8 +25,8 @@ class QueryUserTest :
         listener(container.perProject())
 
         test("queryUserList without params") {
-            coEvery { config.requestIdGenerator.generateId() }
-                .returns(UUID.fromString("00000000-1281-40ae-89d7-5c541d77a757"))
+            val requestId = UUID.fromString("00000000-1281-40ae-89d7-5c541d77a757")
+            coEvery { config.requestIdGenerator.generateId() }.returns(requestId)
             runBlocking {
                 val simulatedBackendReady = CompletableDeferred<Unit>()
                 val queryReceived = CompletableDeferred<String>()
@@ -45,12 +47,12 @@ class QueryUserTest :
                         val queryContent = queryReceived.await()
 
                         queryContent.shouldBeEqual(
-                            "{\"resource\":\"users\",\"requestId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"token\":\"${XesarConnectTestHelper.TOKEN}\",\"id\":null,\"params\":null}")
+                            QueryTestHelper.createQueryRequest(User.QUERY_RESOURCE, requestId))
 
                         val person =
                             encodeQueryList(
                                 QueryList(
-                                    UUID.fromString("00000000-1281-40ae-89d7-5c541d77a757"),
+                                    requestId,
                                     QueryList.Response(
                                         listOf(
                                             userFixture,
@@ -77,8 +79,8 @@ class QueryUserTest :
                             .await()
                         val result = api.queryUserListAsync().await()
                         result.totalCount.shouldBeEqual(2)
-                        result.data[0].name?.shouldBeEqual("lastname String")
-                        result.data[1].name?.shouldBeEqual("lastname 2 String")
+                        result.data[0].name.shouldBeEqual("lastname String")
+                        result.data[1].name.shouldBeEqual("lastname 2 String")
                     }
                 }
             }

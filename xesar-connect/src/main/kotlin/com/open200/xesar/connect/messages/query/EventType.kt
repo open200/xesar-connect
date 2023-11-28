@@ -2,6 +2,7 @@ package com.open200.xesar.connect.messages.query
 
 import kotlinx.serialization.Serializable
 
+/** Represents the type of event. */
 @Serializable
 enum class EventType {
     NORMAL_OPENING,

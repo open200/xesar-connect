@@ -1,6 +1,9 @@
 package com.open200.xesar.connect.encodingDecoding
 
-import com.open200.xesar.connect.messages.query.*
+import com.open200.xesar.connect.messages.query.AuthorizationProfile
+import com.open200.xesar.connect.messages.query.QueryElement
+import com.open200.xesar.connect.messages.query.decodeQueryElement
+import com.open200.xesar.connect.messages.query.encodeQueryElement
 import com.open200.xesar.connect.testutils.AuthorizationProfileFixture.authorizationProfileFixture
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.equals.shouldBeEqual
@@ -28,7 +31,7 @@ class AuthorizationProfileElementTest :
                 "\"timeProfileId\":\"532534ef-d5aa-4cca-acfb-e558c623b00a\"}]," +
                 "\"manualOfficeMode\":true," +
                 "\"anyAuthorizations\":true," +
-                "\"standardTimeProfile\":null}}"
+                "\"standardTimeProfile\":\"a58e45f8-7bff-4b3a-bd0e-a831b3fa8053\"}}"
 
         test("encoding QueryListElement for an authorization profile") {
             val authorizationProfileEncoded = encodeQueryElement(authorizationProfileTest)

@@ -16,7 +16,7 @@ class DelayUntilCloseTest :
     FunSpec({
         val container = MosquittoContainer.container()
         val config = MosquittoContainer.config(container)
-        listener(container.perProject(container.containerName))
+        listener(container.perProject())
 
         test("test the delayUntilClose method") {
             val waitingForMessage = CompletableDeferred<Unit>()

@@ -5,6 +5,7 @@ import com.open200.xesar.connect.XesarMqttClient
 import com.open200.xesar.connect.messages.query.*
 import com.open200.xesar.connect.testutils.AuthorizationProfileFixture.authorizationProfileFixture
 import com.open200.xesar.connect.testutils.MosquittoContainer
+import com.open200.xesar.connect.testutils.QueryTestHelper
 import com.open200.xesar.connect.testutils.XesarConnectTestHelper
 import io.kotest.common.runBlocking
 import io.kotest.core.spec.style.FunSpec
@@ -22,8 +23,8 @@ class QueryAuthorizationProfileTest :
         listener(container.perProject())
 
         test("queryAuthorizationProfileList without params") {
-            coEvery { config.requestIdGenerator.generateId() }
-                .returns(UUID.fromString("00000000-1281-40ae-89d7-5c541d77a757"))
+            val requestId = UUID.fromString("00000000-1281-40ae-89d7-5c541d77a757")
+            coEvery { config.requestIdGenerator.generateId() }.returns(requestId)
             runBlocking {
                 val simulatedBackendReady = CompletableDeferred<Unit>()
                 val queryReceived = CompletableDeferred<String>()
@@ -44,9 +45,10 @@ class QueryAuthorizationProfileTest :
                         val queryContent = queryReceived.await()
 
                         queryContent.shouldBeEqual(
-                            "{\"resource\":\"authorization-profiles\",\"requestId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"token\":\"${XesarConnectTestHelper.TOKEN}\",\"id\":null,\"params\":null}")
+                            QueryTestHelper.createQueryRequest(
+                                AuthorizationProfile.QUERY_RESOURCE, requestId))
 
-                        val person =
+                        val authorizationProfiles =
                             encodeQueryList(
                                 QueryList(
                                     UUID.fromString("00000000-1281-40ae-89d7-5c541d77a757"),
@@ -64,7 +66,9 @@ class QueryAuthorizationProfileTest :
                                     )))
 
                         client
-                            .publishAsync(Topics.Query.result(config.apiProperties.userId), person)
+                            .publishAsync(
+                                Topics.Query.result(config.apiProperties.userId),
+                                authorizationProfiles)
                             .await()
                     }
                 }
@@ -76,16 +80,16 @@ class QueryAuthorizationProfileTest :
                             .await()
                         val result = api.queryAuthorizationProfilesListAsync().await()
                         result.totalCount.shouldBeEqual(2)
-                        result.data[0].name?.shouldBeEqual("authorization profile 1 String")
-                        result.data[1].name?.shouldBeEqual("authorization profile 2")
+                        result.data[0].name.shouldBeEqual("authorization profile 1 String")
+                        result.data[1].name.shouldBeEqual("authorization profile 2")
                     }
                 }
             }
         }
 
         test("queryAuthorizationProfileById") {
-            coEvery { config.requestIdGenerator.generateId() }
-                .returns(UUID.fromString("00000000-1281-42c0-9a15-c5844850c748"))
+            val requestId = UUID.fromString("00000000-1281-42c0-9a15-c5844850c748")
+            coEvery { config.requestIdGenerator.generateId() }.returns(requestId)
 
             runBlocking {
                 val simulatedBackendReady = CompletableDeferred<Unit>()
@@ -107,7 +111,10 @@ class QueryAuthorizationProfileTest :
                         val queryContent = queryReceived.await()
 
                         queryContent.shouldBeEqual(
-                            "{\"resource\":\"authorization-profiles\",\"requestId\":\"00000000-1281-42c0-9a15-c5844850c748\",\"token\":\"${XesarConnectTestHelper.TOKEN}\",\"id\":\"${authorizationProfileFixture.id}\",\"params\":null}")
+                            QueryTestHelper.createQueryRequest(
+                                AuthorizationProfile.QUERY_RESOURCE,
+                                requestId,
+                                authorizationProfileFixture.id))
 
                         val person =
                             encodeQueryElement(
@@ -129,7 +136,7 @@ class QueryAuthorizationProfileTest :
                             api.queryAuthorizationProfilesByIdAsync(authorizationProfileFixture.id)
                                 .await()
                         result.id.shouldBeEqual(authorizationProfileFixture.id)
-                        result.name?.shouldBeEqual("authorization profile 1 String")
+                        result.name.shouldBeEqual("authorization profile 1 String")
                     }
                 }
             }

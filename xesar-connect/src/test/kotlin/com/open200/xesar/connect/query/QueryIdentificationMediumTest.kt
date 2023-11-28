@@ -6,6 +6,7 @@ import com.open200.xesar.connect.exception.MediumListSizeException
 import com.open200.xesar.connect.messages.query.*
 import com.open200.xesar.connect.testutils.IdentificationMediumFixture
 import com.open200.xesar.connect.testutils.MosquittoContainer
+import com.open200.xesar.connect.testutils.QueryTestHelper
 import com.open200.xesar.connect.testutils.XesarConnectTestHelper
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.common.runBlocking
@@ -25,8 +26,8 @@ class QueryIdentificationMediumTest :
         listener(container.perProject())
 
         test("queryIdentificationMediaList without params") {
-            coEvery { config.requestIdGenerator.generateId() }
-                .returns(UUID.fromString("00000000-1281-40ae-89d7-5c541d77a757"))
+            val requestId = UUID.fromString("00000000-1281-40ae-89d7-5c541d77a757")
+            coEvery { config.requestIdGenerator.generateId() }.returns(requestId)
             runBlocking {
                 val simulatedBackendReady = CompletableDeferred<Unit>()
                 val queryReceived = CompletableDeferred<String>()
@@ -45,16 +46,14 @@ class QueryIdentificationMediumTest :
                         simulatedBackendReady.complete(Unit)
 
                         val queryContent = queryReceived.await()
-
-                        logger.info("queryContent: $queryContent")
-
                         queryContent.shouldBeEqual(
-                            "{\"resource\":\"identification-media\",\"requestId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"token\":\"${XesarConnectTestHelper.TOKEN}\",\"id\":null,\"params\":null}")
+                            QueryTestHelper.createQueryRequest(
+                                IdentificationMedium.QUERY_RESOURCE, requestId))
 
                         val identificationMedium =
                             encodeQueryList(
                                 QueryList(
-                                    UUID.fromString("00000000-1281-40ae-89d7-5c541d77a757"),
+                                    requestId,
                                     QueryList.Response(
                                         listOf(
                                             IdentificationMediumFixture.identificationMediumFixture,
@@ -93,8 +92,9 @@ class QueryIdentificationMediumTest :
 
         test(
             "queryIdentificationMediumByMediumIdentifierAsync without params should return an element") {
-                coEvery { config.requestIdGenerator.generateId() }
-                    .returns(UUID.fromString("00000000-1281-40ae-89d7-5c541d77a757"))
+                val requestId = UUID.fromString("00000000-1281-40ae-89d7-5c541d77a757")
+
+                coEvery { config.requestIdGenerator.generateId() }.returns(requestId)
                 runBlocking {
                     val simulatedBackendReady = CompletableDeferred<Unit>()
                     val queryReceived = CompletableDeferred<String>()
@@ -114,15 +114,13 @@ class QueryIdentificationMediumTest :
 
                             val queryContent = queryReceived.await()
 
-                            logger.info("queryContent: $queryContent")
-
                             queryContent.shouldBeEqual(
                                 "{\"resource\":\"identification-media\",\"requestId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"token\":\"${XesarConnectTestHelper.TOKEN}\",\"id\":null,\"params\":{\"pageOffset\":null,\"pageLimit\":null,\"sort\":null,\"language\":null,\"filters\":[{\"field\":\"mediumIdentifier\",\"type\":\"eq\",\"value\":\"1\"}]}}")
 
                             val identificationMedium =
                                 encodeQueryList(
                                     QueryList(
-                                        UUID.fromString("00000000-1281-40ae-89d7-5c541d77a757"),
+                                        requestId,
                                         QueryList.Response(
                                             listOf(
                                                 IdentificationMediumFixture
@@ -158,8 +156,8 @@ class QueryIdentificationMediumTest :
 
         test(
             "queryIdentificationMediumByMediumIdentifierAsync without params should return null when no result") {
-                coEvery { config.requestIdGenerator.generateId() }
-                    .returns(UUID.fromString("00000000-1281-40ae-89d7-5c541d77a757"))
+                val requestId = UUID.fromString("00000000-1281-40ae-89d7-5c541d77a757")
+                coEvery { config.requestIdGenerator.generateId() }.returns(requestId)
                 runBlocking {
                     val simulatedBackendReady = CompletableDeferred<Unit>()
                     val queryReceived = CompletableDeferred<String?>()
@@ -179,14 +177,12 @@ class QueryIdentificationMediumTest :
 
                             val queryContent = queryReceived.await()
 
-                            logger.info("queryContent: $queryContent")
-
                             queryContent.shouldBeNull()
 
                             val identificationMedium =
                                 encodeQueryList(
                                     QueryList(
-                                        UUID.fromString("00000000-1281-40ae-89d7-5c541d77a757"),
+                                        requestId,
                                         QueryList.Response(
                                             listOf(),
                                             1,
@@ -220,8 +216,8 @@ class QueryIdentificationMediumTest :
 
         test(
             "queryIdentificationMediumByMediumIdentifierAsync should throw an exception if the results is returning 2 values") {
-                coEvery { config.requestIdGenerator.generateId() }
-                    .returns(UUID.fromString("00000000-1281-40ae-89d7-5c541d77a757"))
+                val requestId = UUID.fromString("00000000-1281-40ae-89d7-5c541d77a757")
+                coEvery { config.requestIdGenerator.generateId() }.returns(requestId)
                 runBlocking {
                     val simulatedBackendReady = CompletableDeferred<Unit>()
                     val queryReceived = CompletableDeferred<String>()
@@ -241,15 +237,13 @@ class QueryIdentificationMediumTest :
 
                             val queryContent = queryReceived.await()
 
-                            logger.info("queryContent: $queryContent")
-
                             queryContent.shouldBeEqual(
                                 "{\"resource\":\"identification-media\",\"requestId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"token\":\"${XesarConnectTestHelper.TOKEN}\",\"id\":null,\"params\":{\"pageOffset\":null,\"pageLimit\":null,\"sort\":null,\"language\":null,\"filters\":[{\"field\":\"mediumIdentifier\",\"type\":\"eq\",\"value\":\"1\"}]}}")
 
                             val identificationMedium =
                                 encodeQueryList(
                                     QueryList(
-                                        UUID.fromString("00000000-1281-40ae-89d7-5c541d77a757"),
+                                        requestId,
                                         QueryList.Response(
                                             listOf(
                                                 IdentificationMediumFixture
@@ -296,8 +290,8 @@ class QueryIdentificationMediumTest :
             }
 
         test("queryIdentificationMediumById") {
-            coEvery { config.requestIdGenerator.generateId() }
-                .returns(UUID.fromString("00000000-1281-42c0-9a15-c5844850c748"))
+            val requestId = UUID.fromString("00000000-1281-42c0-9a15-c5844850c748")
+            coEvery { config.requestIdGenerator.generateId() }.returns(requestId)
 
             val id = IdentificationMediumFixture.identificationMediumFixture.id
 
@@ -321,12 +315,13 @@ class QueryIdentificationMediumTest :
                         val queryContent = queryReceived.await()
 
                         queryContent.shouldBeEqual(
-                            "{\"resource\":\"identification-media\",\"requestId\":\"00000000-1281-42c0-9a15-c5844850c748\",\"token\":\"${XesarConnectTestHelper.TOKEN}\",\"id\":\"$id\",\"params\":null}")
+                            QueryTestHelper.createQueryRequest(
+                                IdentificationMedium.QUERY_RESOURCE, requestId, id))
 
                         val identificationMedium =
                             encodeQueryElement(
                                 QueryElement(
-                                    UUID.fromString("00000000-1281-42c0-9a15-c5844850c748"),
+                                    requestId,
                                     IdentificationMediumFixture.identificationMediumFixture))
 
                         client
