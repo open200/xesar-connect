@@ -11,9 +11,12 @@ import com.open200.xesar.connect.filters.MessageFilter
 import com.open200.xesar.connect.filters.QueryIdFilter
 import com.open200.xesar.connect.filters.TopicFilter
 import com.open200.xesar.connect.messages.command.*
+import com.open200.xesar.connect.messages.event.LoggedIn
+import com.open200.xesar.connect.messages.event.LoggedOut
+import com.open200.xesar.connect.messages.event.UnauthorizedLoginAttempt
+import com.open200.xesar.connect.messages.event.decodeEvent
 import com.open200.xesar.connect.messages.query.*
 import com.open200.xesar.connect.messages.query.Calendar
-import com.open200.xesar.connect.messages.session.*
 import java.util.*
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.CopyOnWriteArraySet
@@ -153,7 +156,7 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) : A
                 val successListener =
                     on(CommandIdFilter(commandId)) {
                         try {
-                            val loggedIn = decodeSession<LoggedIn>(it.message)
+                            val loggedIn = decodeEvent<LoggedIn>(it.message)
                             token.complete(loggedIn.event.token)
                         } catch (e: Exception) {
                             token.completeExceptionally(
@@ -162,7 +165,7 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) : A
                     }
                 val unauthorizedListener =
                     on(TopicFilter(Topics.Event.UNAUTHORIZED_LOGIN_ATTEMPT)) {
-                        val loggedIn = decodeUnauthorizedLoginAttempt(it.message)
+                        val loggedIn = decodeEvent<UnauthorizedLoginAttempt>(it.message)
                         if (loggedIn.event.username == username) {
                             logger.warn("Login failed.")
                             token.completeExceptionally(
@@ -212,7 +215,7 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) : A
             withTimeout(requestConfig.timeout) {
                 on(TopicFilter(Topics.Event.LOGGED_OUT)) {
                     try {
-                        val loggedOut = decodeLogout(it.message)
+                        val loggedOut = decodeEvent<LoggedOut>(it.message)
                         val tokenOut = loggedOut.event.token
 
                         if (tokenOut == requestConfig.token) {
