@@ -26,7 +26,7 @@ class QueryUserTest :
 
         test("queryUserList without params") {
             val requestId = UUID.fromString("00000000-1281-40ae-89d7-5c541d77a757")
-            coEvery { config.requestIdGenerator.generateId() }.returns(requestId)
+            coEvery { config.uuidGenerator.generateId() }.returns(requestId)
             runBlocking {
                 val simulatedBackendReady = CompletableDeferred<Unit>()
                 val queryReceived = CompletableDeferred<String>()
