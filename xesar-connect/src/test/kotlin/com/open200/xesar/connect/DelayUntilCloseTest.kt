@@ -23,7 +23,7 @@ class DelayUntilCloseTest :
             val messageSend = CompletableDeferred<Boolean>()
             val firstConnectionClosed = CompletableDeferred<Boolean>()
 
-            coEvery { config.requestIdGenerator.generateId() }
+            coEvery { config.uuidGenerator.generateId() }
                 .returns(UUID.fromString("00000000-1281-42c0-9a15-c5844850c748"))
 
             withTimeout(5000) {

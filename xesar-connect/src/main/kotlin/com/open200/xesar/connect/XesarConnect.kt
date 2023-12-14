@@ -2,19 +2,14 @@ package com.open200.xesar.connect
 
 import QueryElementResource
 import QueryListResource
-import com.open200.xesar.connect.exception.ConnectionFailedException
-import com.open200.xesar.connect.exception.LoggedOutException
-import com.open200.xesar.connect.exception.MediumListSizeException
-import com.open200.xesar.connect.exception.UnauthorizedLoginAttemptException
+import com.open200.xesar.connect.exception.*
 import com.open200.xesar.connect.filters.CommandIdFilter
 import com.open200.xesar.connect.filters.MessageFilter
 import com.open200.xesar.connect.filters.QueryIdFilter
 import com.open200.xesar.connect.filters.TopicFilter
 import com.open200.xesar.connect.messages.command.*
-import com.open200.xesar.connect.messages.event.LoggedIn
-import com.open200.xesar.connect.messages.event.LoggedOut
-import com.open200.xesar.connect.messages.event.UnauthorizedLoginAttempt
-import com.open200.xesar.connect.messages.event.decodeEvent
+import com.open200.xesar.connect.messages.event.*
+import com.open200.xesar.connect.messages.event.ErrorEvent
 import com.open200.xesar.connect.messages.query.*
 import com.open200.xesar.connect.messages.query.Calendar
 import java.util.*
@@ -149,7 +144,7 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) : A
         requestConfig: RequestConfig = buildRequestConfig(),
     ): Deferred<Token> {
         val token = CompletableDeferred<Token>()
-        val commandId = config.requestIdGenerator.generateId()
+        val commandId = config.uuidGenerator.generateId()
 
         try {
             withTimeout(requestConfig.timeout) {
@@ -176,7 +171,7 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) : A
                 try {
                     client
                         .publishAsync(
-                            Topics.Request.LOGIN,
+                            Topics.Command.LOGIN,
                             encodeCommand(
                                 Login(
                                     commandId = commandId,
@@ -227,7 +222,7 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) : A
                 }
 
                 client
-                    .publishAsync(Topics.Request.LOGOUT, encodeCommand(Logout(requestConfig.token)))
+                    .publishAsync(Topics.Command.LOGOUT, encodeCommand(Logout(requestConfig.token)))
                     .await()
                 token.await()
             }
@@ -441,7 +436,7 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) : A
         requestConfig: RequestConfig = buildRequestConfig()
     ): Deferred<QueryList.Response<T>> {
         val deferred = CompletableDeferred<QueryList.Response<T>>()
-        val requestId = config.requestIdGenerator.generateId()
+        val requestId = config.uuidGenerator.generateId()
         val query = Query(resource, requestId, requestConfig.token, id = null, params = params)
 
         try {
@@ -658,10 +653,9 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) : A
         requestConfig: RequestConfig = buildRequestConfig()
     ): Deferred<T> {
         val deferred = CompletableDeferred<T>()
-        val requestId = config.requestIdGenerator.generateId()
+        val requestId = config.uuidGenerator.generateId()
 
         try {
-
             withTimeout(requestConfig.timeout) {
                 on(QueryIdFilter(requestId)) {
                         val decoded = decodeQueryElement<T>(it.message)
@@ -694,6 +688,112 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) : A
         }
 
         return deferred
+    }
+
+    private suspend inline fun <reified K : Command, reified T : Event> sendCommand(
+        topic: String,
+        cmd: K,
+        requestConfig: RequestConfig
+    ): Deferred<T> {
+        val deferred = CompletableDeferred<T>()
+        val commandId = config.uuidGenerator.generateId()
+
+        try {
+            withTimeout(requestConfig.timeout) {
+                on(CommandIdFilter(commandId)) {
+                    try {
+                        val apiEvent = decodeEvent<T>(it.message)
+                        deferred.complete(apiEvent.event)
+                    } catch (e: Exception) {
+                        deferred.completeExceptionally(ParsingException())
+                    }
+                }
+
+                on(TopicFilter(Topics.Event.error(config.apiProperties.userId))) {
+                    try {
+                        val apiEvent = decodeEvent<ErrorEvent>(it.message)
+                        deferred.completeExceptionally(
+                            HttpErrorException("${apiEvent.event.error}"))
+                    } catch (e: Exception) {
+                        deferred.completeExceptionally(ParsingException())
+                    }
+                }
+
+                client.publishAsync(topic, encodeCommand(cmd)).await()
+            }
+        } catch (e: TimeoutCancellationException) {
+            logger.error("Timeout while waiting for Command response", e)
+            deferred.completeExceptionally(
+                ConnectionFailedException("Command Response timed out", e))
+        }
+
+        return deferred
+    }
+
+    /**
+     * Remotely disengage an online component.
+     *
+     * @param installationPointId The ID of the installation point
+     * @param extended false for SHORT / true for LONG disengage
+     * @param requestConfig The request configuration (optional).
+     */
+    suspend fun executeRemoteDisengage(
+        installationPointId: UUID,
+        extended: Boolean? = null,
+        requestConfig: RequestConfig = buildRequestConfig()
+    ): Deferred<RemoteDisengagePerformed> {
+        return sendCommand<RemoteDisengage, RemoteDisengagePerformed>(
+            Topics.Command.REMOTE_DISENGAGE,
+            RemoteDisengage(
+                config.uuidGenerator.generateId(),
+                installationPointId,
+                extended,
+                requestConfig.token),
+            requestConfig)
+    }
+
+    /**
+     * Remotely disengage an online component permanently.
+     *
+     * @param installationPointId The ID of the installation point
+     * @param enable Enable or disable the permanent disengage
+     * @param requestConfig The request configuration (optional).
+     */
+    suspend fun executeRemoteDisengagePermanent(
+        installationPointId: UUID,
+        enable: Boolean? = null,
+        requestConfig: RequestConfig = buildRequestConfig()
+    ): Deferred<RemoteDisengagePermanentPerformed> {
+        return sendCommand<RemoteDisengagePermanent, RemoteDisengagePermanentPerformed>(
+            Topics.Command.REMOTE_DISENGAGE_PERMANENT,
+            RemoteDisengagePermanent(
+                config.uuidGenerator.generateId(),
+                installationPointId,
+                enable,
+                requestConfig.token),
+            requestConfig)
+    }
+
+    /**
+     * Enable/disable the beeping signal to find the component.
+     *
+     * @param installationPointId The ID of the installation point
+     * @param enable Enable or disable the beeping signal
+     * @param requestConfig The request configuration (optional).
+     */
+    suspend fun findComponent(
+        installationPointId: UUID,
+        enable: Boolean? = null,
+        requestConfig: RequestConfig = buildRequestConfig()
+    ): Deferred<FindComponentPerformed> {
+        return sendCommand<FindComponent, FindComponentPerformed>(
+            Topics.Command.FIND_COMPONENT,
+            FindComponent(
+                config.uuidGenerator.generateId(),
+                installationPointId,
+                enable,
+                requestConfig.token),
+            requestConfig)
     }
 
     companion object {
@@ -729,7 +829,8 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) : A
                             Topics(
                                 Topics.Event.loggedIn(config.apiProperties.userId),
                                 Topics.Event.UNAUTHORIZED_LOGIN_ATTEMPT,
-                                Topics.Event.LOGGED_OUT))
+                                Topics.Event.LOGGED_OUT,
+                                Topics.Event.error(config.apiProperties.userId)))
                         .await()
                     api.token =
                         api.loginAsync(userCredentials.username, userCredentials.password).await()

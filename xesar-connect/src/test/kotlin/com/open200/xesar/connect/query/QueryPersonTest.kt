@@ -27,7 +27,7 @@ class QueryPersonTest :
         listener(container.perProject())
 
         test("queryPersonList with params") {
-            coEvery { config.requestIdGenerator.generateId() }
+            coEvery { config.uuidGenerator.generateId() }
                 .returns(UUID.fromString("00000000-1281-40ae-89d7-5c541d77a757"))
             runBlocking {
                 val simulatedBackendReady = CompletableDeferred<Unit>()
@@ -101,7 +101,7 @@ class QueryPersonTest :
         }
 
         test("queryPersonById") {
-            coEvery { config.requestIdGenerator.generateId() }
+            coEvery { config.uuidGenerator.generateId() }
                 .returns(UUID.fromString("00000000-1281-42c0-9a15-c5844850c748"))
 
             runBlocking {

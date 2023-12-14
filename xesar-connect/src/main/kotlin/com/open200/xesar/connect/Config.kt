@@ -19,14 +19,14 @@ import kotlinx.serialization.Serializable
  *
  * @property apiProperties The API properties containing hostname, port, userId, and token.
  * @property mqttCertificates The MQTT certificates used for secure communication (optional).
- * @property requestIdGenerator The generator for request IDs.
+ * @property uuidGenerator The generator for request IDs.
  * @property mqttConnectOptions The MQTT connect options.
  * @property logoutOnClose Whether the logout is set up on close of the connection (optional).
  */
 data class Config(
     val apiProperties: ApiProperties,
     val mqttCertificates: MqttCertificates? = null,
-    val requestIdGenerator: IRequestIdGenerator = DefaultRequestIdGenerator(),
+    val uuidGenerator: IRequestIdGenerator = DefaultRequestIdGenerator(),
     val mqttConnectOptions: MqttConnectOptions = MqttConnectOptions(),
     val logoutOnClose: Boolean? = null,
 ) {
@@ -118,7 +118,7 @@ data class Config(
                     clientCertificate =
                         readX509CertificateFromZip(archiveOptions.clientCertificateName, zipFile),
                     clientKey = readKeyPairWithZip(archiveOptions.clientKeyName, zipFile)),
-                requestIdGenerator = requestIdGenerator,
+                uuidGenerator = requestIdGenerator,
                 MqttConnectOptions(
                     isCleanSession = mqttConnectOptions.isCleanSession,
                     connectionTimeout = mqttConnectOptions.connectionTimeout,

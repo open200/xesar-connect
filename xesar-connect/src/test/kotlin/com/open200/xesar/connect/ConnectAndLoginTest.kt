@@ -21,7 +21,7 @@ class ConnectAndLoginTest :
         listener(container.perProject())
 
         test("connect and login as well as logout with testcontainers work") {
-            coEvery { config.requestIdGenerator.generateId() }
+            coEvery { config.uuidGenerator.generateId() }
                 .returns(UUID.fromString("a7d184b6-dd9d-4bb8-acb7-0b51ada3e3b7"))
             runBlocking {
                 val simulatedBackendReady = CompletableDeferred<Unit>()
@@ -33,10 +33,10 @@ class ConnectAndLoginTest :
 
                         client.onMessage = { topic, payload ->
                             when (topic) {
-                                Topics.Request.LOGIN -> {
+                                Topics.Command.LOGIN -> {
                                     loginReceived.complete(payload.decodeToString())
                                 }
-                                Topics.Request.LOGOUT -> {
+                                Topics.Command.LOGOUT -> {
                                     logoutReceived.complete(payload.decodeToString())
                                 }
                             }
@@ -45,7 +45,6 @@ class ConnectAndLoginTest :
                         simulatedBackendReady.complete(Unit)
 
                         val loginContent = loginReceived.await()
-
                         loginContent.shouldBeEqual(
                             "{\"commandId\":\"a7d184b6-dd9d-4bb8-acb7-0b51ada3e3b7\",\"username\":\"fordprefect\",\"password\":\"foobar\"}")
                         client
@@ -77,7 +76,8 @@ class ConnectAndLoginTest :
                                     Topics.Event.loggedIn(
                                         UUID.fromString("faf3d0c4-1281-40ae-89d7-5c541d77a757")),
                                     Topics.Event.UNAUTHORIZED_LOGIN_ATTEMPT,
-                                    Topics.Event.LOGGED_OUT))
+                                    Topics.Event.LOGGED_OUT,
+                                    Topics.Event.error(config.apiProperties.userId)))
 
                         it.shouldBeInstanceOf<XesarConnect>()
                         it.logoutAsync().await()
@@ -88,7 +88,7 @@ class ConnectAndLoginTest :
 
         test(
             "connect and login with testcontainers should throw Exception when wrong username, password") {
-                coEvery { config.requestIdGenerator.generateId() }
+                coEvery { config.uuidGenerator.generateId() }
                     .returns(UUID.fromString("a7d184b6-dd9d-4bb8-acb7-0b51ada3e3b7"))
                 runBlocking {
                     val simulatedBackendReady = CompletableDeferred<Unit>()

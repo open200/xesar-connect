@@ -25,6 +25,7 @@ class SubscribedTopicsTest :
                                 UUID.fromString("faf3d0c4-1281-40ae-89d7-5c541d77a757")),
                             Topics.Event.UNAUTHORIZED_LOGIN_ATTEMPT,
                             Topics.Event.LOGGED_OUT,
+                            Topics.Event.error(config.apiProperties.userId),
                             "new Topic"))
             }
         }
@@ -40,7 +41,8 @@ class SubscribedTopicsTest :
                             Topics.Event.loggedIn(
                                 UUID.fromString("faf3d0c4-1281-40ae-89d7-5c541d77a757")),
                             Topics.Event.UNAUTHORIZED_LOGIN_ATTEMPT,
-                            Topics.Event.LOGGED_OUT))
+                            Topics.Event.LOGGED_OUT,
+                            Topics.Event.error(config.apiProperties.userId)))
             }
         }
 
@@ -53,7 +55,8 @@ class SubscribedTopicsTest :
                             Topics.Event.loggedIn(
                                 UUID.fromString("faf3d0c4-1281-40ae-89d7-5c541d77a757")),
                             Topics.Event.UNAUTHORIZED_LOGIN_ATTEMPT,
-                            Topics.Event.LOGGED_OUT))
+                            Topics.Event.LOGGED_OUT,
+                            Topics.Event.error(config.apiProperties.userId)))
 
                 client.unsubscribeTopics(
                     Topics(Topics.Event.LOGGED_OUT, Topics.Event.UNAUTHORIZED_LOGIN_ATTEMPT))
@@ -65,7 +68,8 @@ class SubscribedTopicsTest :
                     .shouldBe(
                         listOf(
                             Topics.Event.loggedIn(
-                                UUID.fromString("faf3d0c4-1281-40ae-89d7-5c541d77a757"))))
+                                UUID.fromString("faf3d0c4-1281-40ae-89d7-5c541d77a757")),
+                            Topics.Event.error(config.apiProperties.userId)))
             }
         }
     })

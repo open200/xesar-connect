@@ -32,7 +32,7 @@ val logger = KotlinLogging.logger {}
 /**
  * Marker interface for an event. Implementing this interface indicates that a class is an event.
  */
-interface Event
+interface Event : Message
 
 /**
  * Encodes an ApiEvent into its JSON representation.
@@ -45,7 +45,7 @@ inline fun <reified T : Event> encodeEvent(message: ApiEvent<T>): String {
     try {
         return jsonFormat.encodeToString(message)
     } catch (e: Exception) {
-        logger.warn("Couldn't parse $message", e)
+        logger.warn("Couldn't encode $message", e)
         throw ParsingException()
     }
 }
@@ -61,7 +61,7 @@ inline fun <reified T : Event> decodeEvent(text: String): ApiEvent<T> {
     try {
         return jsonFormat.decodeFromString(text)
     } catch (e: Exception) {
-        logger.warn("Couldn't parse $text", e)
+        logger.warn("Couldn't decode $text", e)
         throw ParsingException()
     }
 }

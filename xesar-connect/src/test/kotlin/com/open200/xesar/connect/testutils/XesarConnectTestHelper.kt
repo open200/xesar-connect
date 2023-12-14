@@ -14,7 +14,8 @@ object XesarConnectTestHelper {
                 Topics(
                     Topics.Event.loggedIn(config.apiProperties.userId),
                     Topics.Event.UNAUTHORIZED_LOGIN_ATTEMPT,
-                    Topics.Event.LOGGED_OUT))
+                    Topics.Event.LOGGED_OUT,
+                    Topics.Event.error(config.apiProperties.userId)))
             .await()
         api.token = TOKEN
 
