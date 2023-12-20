@@ -2,6 +2,8 @@ package com.open200.xesar.connect.query
 
 import com.open200.xesar.connect.Topics
 import com.open200.xesar.connect.XesarMqttClient
+import com.open200.xesar.connect.extension.queryEvvaComponentByIdAsync
+import com.open200.xesar.connect.extension.queryEvvaComponentListAsync
 import com.open200.xesar.connect.messages.query.*
 import com.open200.xesar.connect.testutils.EvvaComponentFixture
 import com.open200.xesar.connect.testutils.MosquittoContainer

@@ -1,8 +1,10 @@
 package com.open200.xesar.connect.query
 
-import com.open200.xesar.connect.Topics
-import com.open200.xesar.connect.XesarMqttClient
+import com.open200.xesar.connect.*
 import com.open200.xesar.connect.exception.MediumListSizeException
+import com.open200.xesar.connect.extension.queryIdentificationMediumByIdAsync
+import com.open200.xesar.connect.extension.queryIdentificationMediumByMediumIdentifierAsync
+import com.open200.xesar.connect.extension.queryIdentificationMediumListAsync
 import com.open200.xesar.connect.messages.query.*
 import com.open200.xesar.connect.testutils.IdentificationMediumFixture
 import com.open200.xesar.connect.testutils.MosquittoContainer

@@ -11,7 +11,6 @@ import com.open200.xesar.connect.messages.command.*
 import com.open200.xesar.connect.messages.event.*
 import com.open200.xesar.connect.messages.event.ErrorEvent
 import com.open200.xesar.connect.messages.query.*
-import com.open200.xesar.connect.messages.query.Calendar
 import java.util.*
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.CopyOnWriteArraySet
@@ -41,7 +40,7 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) : A
      * @property token The token to be included in the request.
      */
     data class RequestConfig(val timeout: Long = 5000L, val token: Token) {}
-    private fun buildRequestConfig(): RequestConfig {
+    internal fun buildRequestConfig(): RequestConfig {
         return RequestConfig(token = token)
     }
 
@@ -54,16 +53,6 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) : A
                 .filter { it.filter.filter(topic, decodedMessage) }
                 .forEach { it.messageHandler.handle(MessageHandler.Message(topic, decodedMessage)) }
         }
-    }
-
-    override fun close() {
-        if (connectionChannel.isClosedForSend) {
-            return
-        }
-        if (config.logoutOnClose == true && token.isNotEmpty()) {
-            runBlocking { launch { logoutAsync().await() } }
-        }
-        client.close()
     }
 
     /**
@@ -81,7 +70,6 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) : A
      * @return A deferred object that resolves to [Unit] when the subscription is successful.
      */
     fun subscribeAsync(topics: Topics, qos: Int = 0): Deferred<Unit> {
-
         return client.subscribeAsync(topics.topics, qos).apply {
             subscribedTopics.addAll(topics.topics)
         }
@@ -238,185 +226,6 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) : A
     }
 
     /**
-     * Suspends the execution of the current coroutine until a disconnection event occurs in the
-     * specified channel.
-     *
-     * This function monitors the `connectionChannel` for the `ConnectionEvent.DISCONNECTED` event.
-     * It suspends the coroutine until the disconnection event is received, at which point it sets
-     * `connected` to `false` and closes the `connectionChannel`.
-     *
-     * @throws CancellationException if the coroutine is canceled while waiting.
-     */
-    suspend fun delayUntilClose() {
-        var connected = true
-
-        while (connected) {
-            // Wait for a disconnection event in the channel.
-            if (connectionChannel.receive() == ConnectionEvent.DISCONNECTED) {
-                connected = false
-                connectionChannel.close()
-            }
-        }
-    }
-
-    /**
-     * Queries the list of persons asynchronously.
-     *
-     * @param params The query parameters (optional).
-     * @param requestConfig The request configuration (optional).
-     * @return A deferred object that resolves to a response containing a list of persons.
-     */
-    suspend fun queryPersonListAsync(
-        params: Query.Params? = null,
-        requestConfig: RequestConfig = buildRequestConfig()
-    ): Deferred<QueryList.Response<Person>> {
-        return queryListAsync(Person.QUERY_RESOURCE, params, requestConfig)
-    }
-
-    /**
-     * Queries the list of users asynchronously.
-     *
-     * @param params The query parameters (optional).
-     * @param requestConfig The request configuration (optional).
-     * @return A deferred object that resolves to a response containing a list of users.
-     */
-    suspend fun queryUserListAsync(
-        params: Query.Params? = null,
-        requestConfig: RequestConfig = buildRequestConfig()
-    ): Deferred<QueryList.Response<User>> {
-        return queryListAsync(User.QUERY_RESOURCE, params, requestConfig)
-    }
-
-    /**
-     * Queries the list of installation points asynchronously.
-     *
-     * @param params The query parameters (optional).
-     * @param requestConfig The request configuration (optional).
-     * @return A deferred object that resolves to a response containing a list of installation
-     *   points.
-     */
-    suspend fun queryInstallationPointListAsync(
-        params: Query.Params? = null,
-        requestConfig: RequestConfig = buildRequestConfig()
-    ): Deferred<QueryList.Response<InstallationPoint>> {
-        return queryListAsync(InstallationPoint.QUERY_RESOURCE, params, requestConfig)
-    }
-
-    /**
-     * Queries the list of authorization profiles asynchronously.
-     *
-     * @param params The query parameters (optional).
-     * @param requestConfig The request configuration (optional).
-     * @return A deferred object that resolves to a response containing a list of authorization
-     *   profiles.
-     */
-    suspend fun queryAuthorizationProfilesListAsync(
-        params: Query.Params? = null,
-        requestConfig: RequestConfig = buildRequestConfig()
-    ): Deferred<QueryList.Response<AuthorizationProfile>> {
-        return queryListAsync(AuthorizationProfile.QUERY_RESOURCE, params, requestConfig)
-    }
-
-    /**
-     * Queries the list of identification media asynchronously.
-     *
-     * @param params The query parameters (optional).
-     * @param requestConfig The request configuration (optional).
-     * @return A deferred object that resolves to a response containing a list of identification
-     *   media.
-     */
-    suspend fun queryIdentificationMediumListAsync(
-        params: Query.Params? = null,
-        requestConfig: RequestConfig = buildRequestConfig()
-    ): Deferred<QueryList.Response<IdentificationMedium>> {
-        return queryListAsync(IdentificationMedium.QUERY_RESOURCE, params, requestConfig)
-    }
-
-    /**
-     * Queries the list of calendars asynchronously.
-     *
-     * @param params The query parameters (optional).
-     * @param requestConfig The request configuration (optional).
-     * @return A deferred object that resolves to a response containing a list of calendars.
-     */
-    suspend fun queryCalendarListAsync(
-        params: Query.Params? = null,
-        requestConfig: RequestConfig = buildRequestConfig()
-    ): Deferred<QueryList.Response<Calendar>> {
-        return queryListAsync(Calendar.QUERY_RESOURCE, params, requestConfig)
-    }
-
-    /**
-     * Queries the list of coding stations asynchronously.
-     *
-     * @param params The query parameters (optional).
-     * @param requestConfig The request configuration (optional).
-     * @return A deferred object that resolves to a response containing a list of coding stations.
-     */
-    suspend fun queryCodingStationListAsync(
-        params: Query.Params? = null,
-        requestConfig: RequestConfig = buildRequestConfig()
-    ): Deferred<QueryList.Response<CodingStation>> {
-        return queryListAsync(CodingStation.QUERY_RESOURCE, params, requestConfig)
-    }
-
-    /**
-     * Queries the list of evva components asynchronously.
-     *
-     * @param params The query parameters (optional).
-     * @param requestConfig The request configuration (optional).
-     * @return A deferred object that resolves to a response containing a list of evva components.
-     */
-    suspend fun queryEvvaComponentListAsync(
-        params: Query.Params? = null,
-        requestConfig: RequestConfig = buildRequestConfig()
-    ): Deferred<QueryList.Response<EvvaComponent>> {
-        return queryListAsync(EvvaComponent.QUERY_RESOURCE, params, requestConfig)
-    }
-
-    /**
-     * Queries the list of office modes asynchronously.
-     *
-     * @param params The query parameters (optional).
-     * @param requestConfig The request configuration (optional).
-     * @return A deferred object that resolves to a response containing a list of office modes.
-     */
-    suspend fun queryOfficeModeListAsync(
-        params: Query.Params? = null,
-        requestConfig: RequestConfig = buildRequestConfig()
-    ): Deferred<QueryList.Response<OfficeMode>> {
-        return queryListAsync(OfficeMode.QUERY_RESOURCE, params, requestConfig)
-    }
-
-    /**
-     * Queries the list of time profiles asynchronously.
-     *
-     * @param params The query parameters (optional).
-     * @param requestConfig The request configuration (optional).
-     * @return A deferred object that resolves to a response containing a list of time profiles.
-     */
-    suspend fun queryTimeProfileListAsync(
-        params: Query.Params? = null,
-        requestConfig: RequestConfig = buildRequestConfig()
-    ): Deferred<QueryList.Response<TimeProfile>> {
-        return queryListAsync(TimeProfile.QUERY_RESOURCE, params, requestConfig)
-    }
-
-    /**
-     * Queries the list of zones asynchronously.
-     *
-     * @param params The query parameters (optional).
-     * @param requestConfig The request configuration (optional).
-     * @return A deferred object that resolves a response containing a list of zones.
-     */
-    suspend fun queryZoneListAsync(
-        params: Query.Params? = null,
-        requestConfig: RequestConfig = buildRequestConfig()
-    ): Deferred<QueryList.Response<Zone>> {
-        return queryListAsync(Zone.QUERY_RESOURCE, params, requestConfig)
-    }
-
-    /**
      * Queries the list of access protocols asynchronously.
      *
      * @param params The query parameters (optional).
@@ -430,7 +239,7 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) : A
         return queryListAsync(AccessProtocolEvent.QUERY_RESOURCE, params, requestConfig)
     }
 
-    private suspend inline fun <reified T : QueryListResource> queryListAsync(
+    internal suspend inline fun <reified T : QueryListResource> queryListAsync(
         resource: String,
         params: Query.Params? = null,
         requestConfig: RequestConfig = buildRequestConfig()
@@ -461,193 +270,7 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) : A
         return deferred
     }
 
-    /**
-     * Queries a person by ID asynchronously.
-     *
-     * @param id The ID of the person to query.
-     * @param requestConfig The request configuration (optional).
-     * @return A deferred object that resolves to the queried person.
-     */
-    suspend fun queryPersonByIdAsync(
-        id: UUID,
-        requestConfig: RequestConfig = buildRequestConfig()
-    ): Deferred<Person> {
-        return queryElementAsync(Person.QUERY_RESOURCE, id, requestConfig)
-    }
-
-    /**
-     * Queries an installation point by ID asynchronously.
-     *
-     * @param id The ID of the installation point to query.
-     * @param requestConfig The request configuration (optional).
-     * @return A deferred object that resolves to the queried installation point.
-     */
-    suspend fun queryInstallationPointByIdAsync(
-        id: UUID,
-        requestConfig: RequestConfig = buildRequestConfig()
-    ): Deferred<InstallationPoint> {
-        return queryElementAsync(InstallationPoint.QUERY_RESOURCE, id, requestConfig)
-    }
-
-    /**
-     * Queries an authorization profile by ID asynchronously.
-     *
-     * @param id The ID of the authorization profile to query.
-     * @param requestConfig The request configuration (optional).
-     * @return A deferred object that resolves to the queried authorization profile.
-     */
-    suspend fun queryAuthorizationProfilesByIdAsync(
-        id: UUID,
-        requestConfig: RequestConfig = buildRequestConfig()
-    ): Deferred<AuthorizationProfile> {
-        return queryElementAsync(AuthorizationProfile.QUERY_RESOURCE, id, requestConfig)
-    }
-
-    /**
-     * Queries an identification media by ID asynchronously.
-     *
-     * @param id The ID of the identification media to query.
-     * @param requestConfig The request configuration (optional).
-     * @return A deferred object that resolves to the queried identification media.
-     */
-    suspend fun queryIdentificationMediumByIdAsync(
-        id: UUID,
-        requestConfig: RequestConfig = buildRequestConfig()
-    ): Deferred<IdentificationMedium> {
-        return queryElementAsync(IdentificationMedium.QUERY_RESOURCE, id, requestConfig)
-    }
-
-    /**
-     * Queries a calendar by ID asynchronously.
-     *
-     * @param id The ID of the calendar to query.
-     * @param requestConfig The request configuration (optional).
-     * @return A deferred object that resolves to the queried calendar.
-     */
-    suspend fun queryCalendarByIdAsync(
-        id: UUID,
-        requestConfig: RequestConfig = buildRequestConfig()
-    ): Deferred<Calendar> {
-        return queryElementAsync(Calendar.QUERY_RESOURCE, id, requestConfig)
-    }
-
-    /**
-     * Queries a coding station by ID asynchronously.
-     *
-     * @param id The ID of the coding station to query.
-     * @param requestConfig The request configuration (optional).
-     * @return A deferred object that resolves to the queried coding station.
-     */
-    suspend fun queryCodingStationByIdAsync(
-        id: UUID,
-        requestConfig: RequestConfig = buildRequestConfig()
-    ): Deferred<CodingStation> {
-        return queryElementAsync(CodingStation.QUERY_RESOURCE, id, requestConfig)
-    }
-
-    /**
-     * Queries an evva component by ID asynchronously.
-     *
-     * @param id The ID of the evva component to query.
-     * @param requestConfig The request configuration (optional).
-     * @return A deferred object that resolves to the queried evva component.
-     */
-    suspend fun queryEvvaComponentByIdAsync(
-        id: UUID,
-        requestConfig: RequestConfig = buildRequestConfig()
-    ): Deferred<EvvaComponent> {
-        return queryElementAsync(EvvaComponent.QUERY_RESOURCE, id, requestConfig)
-    }
-
-    /**
-     * Queries an office mode by ID asynchronously.
-     *
-     * @param id The ID of the office mode to query.
-     * @param requestConfig The request configuration (optional).
-     * @return A deferred object that resolves to the queried office mode.
-     */
-    suspend fun queryOfficeModeByIdAsync(
-        id: UUID,
-        requestConfig: RequestConfig = buildRequestConfig()
-    ): Deferred<OfficeMode> {
-        return queryElementAsync(OfficeMode.QUERY_RESOURCE, id, requestConfig)
-    }
-    /**
-     * Queries a time profile by ID asynchronously.
-     *
-     * @param id The ID of the time profile to query.
-     * @param requestConfig The request configuration (optional).
-     * @return A deferred object that resolves to the queried time profile.
-     */
-    suspend fun queryTimeProfileByIdAsync(
-        id: UUID,
-        requestConfig: RequestConfig = buildRequestConfig()
-    ): Deferred<TimeProfile> {
-        return queryElementAsync(TimeProfile.QUERY_RESOURCE, id, requestConfig)
-    }
-    /**
-     * Queries a zone by ID asynchronously.
-     *
-     * @param id The ID of the zone to query.
-     * @param requestConfig The request configuration (optional).
-     * @return A deferred object that resolves to the queried zone.
-     */
-    suspend fun queryZoneByIdAsync(
-        id: UUID,
-        requestConfig: RequestConfig = buildRequestConfig()
-    ): Deferred<Zone> {
-        return queryElementAsync(Zone.QUERY_RESOURCE, id, requestConfig)
-    }
-
-    /**
-     * Queries an access protocol event by ID asynchronously.
-     *
-     * @param id The ID of the access protocol event to query.
-     * @param requestConfig The request configuration (optional).
-     * @return A deferred object that resolves to the queried access protocol event.
-     */
-    suspend fun queryIdentificationMediumByMediumIdentifierAsync(
-        mediumIdentifierValue: Int,
-        params: Query.Params? = null,
-        requestConfig: RequestConfig = buildRequestConfig()
-    ): Deferred<IdentificationMedium?> {
-        val filters =
-            (params?.filters
-                ?: emptyList()) +
-                Query.Params.Filter(
-                    field = "mediumIdentifier",
-                    value = mediumIdentifierValue.toString(),
-                    type = FilterType.EQ)
-
-        val paramsMedium =
-            Query.Params(
-                pageLimit = params?.pageLimit,
-                pageOffset = params?.pageOffset,
-                language = params?.language,
-                sort = params?.sort,
-                filters = filters)
-
-        val queryListMedia =
-            queryListAsync<IdentificationMedium>(
-                    IdentificationMedium.QUERY_RESOURCE, paramsMedium, requestConfig)
-                .await()
-
-        return when {
-            queryListMedia.data.isEmpty() ->
-                CompletableDeferred<IdentificationMedium?>().apply { complete(null) }
-            queryListMedia.data.size > 1 ->
-                CompletableDeferred<IdentificationMedium?>().apply {
-                    completeExceptionally(
-                        MediumListSizeException(
-                            "Expected exactly one element in the list with mediumIdentifier $mediumIdentifierValue, but found ${queryListMedia.data.size} elements"))
-                }
-            else ->
-                CompletableDeferred<IdentificationMedium?>().apply {
-                    complete(queryListMedia.data.first())
-                }
-        }
-    }
-    private suspend inline fun <reified T : QueryElementResource> queryElementAsync(
+    internal suspend inline fun <reified T : QueryElementResource> queryElementAsync(
         resource: String,
         id: UUID,
         requestConfig: RequestConfig = buildRequestConfig()
@@ -690,7 +313,7 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) : A
         return deferred
     }
 
-    private suspend inline fun <reified K : Command, reified T : Event> sendCommand(
+    internal suspend inline fun <reified K : Command, reified T : Event> sendCommand(
         topic: String,
         cmd: K,
         requestConfig: RequestConfig
@@ -731,69 +354,35 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) : A
     }
 
     /**
-     * Remotely disengage an online component.
+     * Suspends the execution of the current coroutine until a disconnection event occurs in the
+     * specified channel.
      *
-     * @param installationPointId The ID of the installation point
-     * @param extended false for SHORT / true for LONG disengage
-     * @param requestConfig The request configuration (optional).
+     * This function monitors the `connectionChannel` for the `ConnectionEvent.DISCONNECTED` event.
+     * It suspends the coroutine until the disconnection event is received, at which point it sets
+     * `connected` to `false` and closes the `connectionChannel`.
+     *
+     * @throws CancellationException if the coroutine is canceled while waiting.
      */
-    suspend fun executeRemoteDisengage(
-        installationPointId: UUID,
-        extended: Boolean? = null,
-        requestConfig: RequestConfig = buildRequestConfig()
-    ): Deferred<RemoteDisengagePerformed> {
-        return sendCommand<RemoteDisengage, RemoteDisengagePerformed>(
-            Topics.Command.REMOTE_DISENGAGE,
-            RemoteDisengage(
-                config.uuidGenerator.generateId(),
-                installationPointId,
-                extended,
-                requestConfig.token),
-            requestConfig)
+    suspend fun delayUntilClose() {
+        var connected = true
+
+        while (connected) {
+            // Wait for a disconnection event in the channel.
+            if (connectionChannel.receive() == ConnectionEvent.DISCONNECTED) {
+                connected = false
+                connectionChannel.close()
+            }
+        }
     }
 
-    /**
-     * Remotely disengage an online component permanently.
-     *
-     * @param installationPointId The ID of the installation point
-     * @param enable Enable or disable the permanent disengage
-     * @param requestConfig The request configuration (optional).
-     */
-    suspend fun executeRemoteDisengagePermanent(
-        installationPointId: UUID,
-        enable: Boolean? = null,
-        requestConfig: RequestConfig = buildRequestConfig()
-    ): Deferred<RemoteDisengagePermanentPerformed> {
-        return sendCommand<RemoteDisengagePermanent, RemoteDisengagePermanentPerformed>(
-            Topics.Command.REMOTE_DISENGAGE_PERMANENT,
-            RemoteDisengagePermanent(
-                config.uuidGenerator.generateId(),
-                installationPointId,
-                enable,
-                requestConfig.token),
-            requestConfig)
-    }
-
-    /**
-     * Enable/disable the beeping signal to find the component.
-     *
-     * @param installationPointId The ID of the installation point
-     * @param enable Enable or disable the beeping signal
-     * @param requestConfig The request configuration (optional).
-     */
-    suspend fun findComponent(
-        installationPointId: UUID,
-        enable: Boolean? = null,
-        requestConfig: RequestConfig = buildRequestConfig()
-    ): Deferred<FindComponentPerformed> {
-        return sendCommand<FindComponent, FindComponentPerformed>(
-            Topics.Command.FIND_COMPONENT,
-            FindComponent(
-                config.uuidGenerator.generateId(),
-                installationPointId,
-                enable,
-                requestConfig.token),
-            requestConfig)
+    override fun close() {
+        if (connectionChannel.isClosedForSend) {
+            return
+        }
+        if (config.logoutOnClose == true && token.isNotEmpty()) {
+            runBlocking { launch { logoutAsync().await() } }
+        }
+        client.close()
     }
 
     companion object {
