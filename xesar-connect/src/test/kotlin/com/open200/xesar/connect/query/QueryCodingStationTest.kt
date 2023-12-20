@@ -2,6 +2,8 @@ package com.open200.xesar.connect.query
 
 import com.open200.xesar.connect.Topics
 import com.open200.xesar.connect.XesarMqttClient
+import com.open200.xesar.connect.extension.queryCodingStationByIdAsync
+import com.open200.xesar.connect.extension.queryCodingStationListAsync
 import com.open200.xesar.connect.messages.query.*
 import com.open200.xesar.connect.testutils.CodingStationFixture
 import com.open200.xesar.connect.testutils.MosquittoContainer

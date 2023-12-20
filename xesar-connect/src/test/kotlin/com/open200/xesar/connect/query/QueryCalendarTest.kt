@@ -2,6 +2,8 @@ package com.open200.xesar.connect.query
 
 import com.open200.xesar.connect.Topics
 import com.open200.xesar.connect.XesarMqttClient
+import com.open200.xesar.connect.extension.queryCalendarByIdAsync
+import com.open200.xesar.connect.extension.queryCalendarListAsync
 import com.open200.xesar.connect.messages.query.*
 import com.open200.xesar.connect.messages.query.Calendar
 import com.open200.xesar.connect.testutils.CalendarFixture

@@ -3,6 +3,7 @@ package com.open200.xesar.connect.command
 import com.open200.xesar.connect.Topics
 import com.open200.xesar.connect.XesarMqttClient
 import com.open200.xesar.connect.exception.HttpErrorException
+import com.open200.xesar.connect.extension.executeRemoteDisengagePermanent
 import com.open200.xesar.connect.messages.event.ApiEvent
 import com.open200.xesar.connect.messages.event.ErrorEvent
 import com.open200.xesar.connect.messages.event.RemoteDisengagePerformed

@@ -1,7 +1,6 @@
 package com.open200.xesar.connect.messages.event
 
 import com.open200.xesar.connect.utils.UUIDSerializer
-import io.ktor.http.*
 import java.util.*
 import kotlinx.serialization.Serializable
 

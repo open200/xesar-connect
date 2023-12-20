@@ -2,6 +2,8 @@ package com.open200.xesar.connect.query
 
 import com.open200.xesar.connect.Topics
 import com.open200.xesar.connect.XesarMqttClient
+import com.open200.xesar.connect.extension.queryPersonByIdAsync
+import com.open200.xesar.connect.extension.queryPersonListAsync
 import com.open200.xesar.connect.messages.command.FilterType
 import com.open200.xesar.connect.messages.command.Query
 import com.open200.xesar.connect.messages.query.QueryElement
