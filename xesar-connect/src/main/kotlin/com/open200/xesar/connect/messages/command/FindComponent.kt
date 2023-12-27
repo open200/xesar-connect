@@ -5,11 +5,11 @@ import java.util.*
 import kotlinx.serialization.Serializable
 
 /**
- * Represents a FindComponent command.
+ * Represents a command POJO to find a component.
  *
  * @param commandId The command id.
  * @param installationPointId The installation point id.
- * @param enable true for enable / false for disable.
+ * @param enable true for enable / false for disable the beep sound.
  * @param token The token used for authentication.
  */
 @Serializable

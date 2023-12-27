@@ -2,6 +2,8 @@ package com.open200.xesar.connect.messages.query
 
 import QueryElementResource
 import QueryListResource
+import com.open200.xesar.connect.messages.DisengagePeriod
+import com.open200.xesar.connect.messages.PersonalLog
 import com.open200.xesar.connect.utils.UUIDSerializer
 import java.util.*
 import kotlinx.serialization.Serializable
@@ -29,21 +31,13 @@ data class Person(
     val firstName: String,
     val lastName: String,
     val identifier: String? = null,
-    val personalReferenceDuration: PersonalReferenceDuration,
+    val personalReferenceDuration: PersonalLog,
     val disengagePeriod: DisengagePeriod,
     val identificationMediaCount: Int? = null,
     val outdatedMedia: Boolean? = null,
     val externalId: String? = null,
     val external: Boolean? = null,
 ) : QueryListResource, QueryElementResource {
-    /**
-     * Represents the personal reference duration of the person.
-     *
-     * @param logMode The log mode of the personal reference duration.
-     * @param days The number of days for the personal reference duration.
-     */
-    @Serializable
-    data class PersonalReferenceDuration(val logMode: String? = null, val days: Int? = null)
 
     companion object {
         const val QUERY_RESOURCE = "persons"

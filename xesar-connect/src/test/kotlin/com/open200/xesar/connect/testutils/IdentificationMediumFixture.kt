@@ -1,6 +1,6 @@
 package com.open200.xesar.connect.testutils
 
-import com.open200.xesar.connect.messages.query.DisengagePeriod
+import com.open200.xesar.connect.messages.DisengagePeriod
 import com.open200.xesar.connect.messages.query.IdentificationMedium
 import java.time.LocalDateTime
 import java.util.*

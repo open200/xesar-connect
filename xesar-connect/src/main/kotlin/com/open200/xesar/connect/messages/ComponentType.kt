@@ -1,6 +1,6 @@
-package com.open200.xesar.connect.messages.query
+package com.open200.xesar.connect.messages
 
-/** Represents the type of component. */
+/** Represents the type of component installed in the installation point. */
 enum class ComponentType {
     Handle,
     Escutcheon,

@@ -1,7 +1,7 @@
 package com.open200.xesar.connect.testutils
 
+import com.open200.xesar.connect.messages.ComponentType
 import com.open200.xesar.connect.messages.query.AccessProtocolEvent
-import com.open200.xesar.connect.messages.query.ComponentType
 import com.open200.xesar.connect.messages.query.EventType
 import com.open200.xesar.connect.messages.query.GroupOfEvent
 import java.time.LocalDateTime

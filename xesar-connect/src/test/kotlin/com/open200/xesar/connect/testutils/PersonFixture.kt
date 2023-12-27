@@ -1,6 +1,7 @@
 package com.open200.xesar.connect.testutils
 
-import com.open200.xesar.connect.messages.query.DisengagePeriod
+import com.open200.xesar.connect.messages.DisengagePeriod
+import com.open200.xesar.connect.messages.PersonalLog
 import com.open200.xesar.connect.messages.query.Person
 import java.util.*
 
@@ -13,8 +14,8 @@ object PersonFixture {
             firstName = "firstname String",
             lastName = "lastname String",
             identifier = "1234",
-            Person.PersonalReferenceDuration(
-                logMode = "log String",
+            PersonalLog(
+                logMode = PersonalLog.PersonalLogModes.dontSave,
                 days = 0,
             ),
             disengagePeriod = DisengagePeriod.SHORT,

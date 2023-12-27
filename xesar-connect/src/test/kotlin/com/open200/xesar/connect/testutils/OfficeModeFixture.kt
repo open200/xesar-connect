@@ -1,9 +1,11 @@
 package com.open200.xesar.connect.testutils
 
-import com.open200.xesar.connect.messages.query.ExceptionTimeSerie
+import com.open200.xesar.connect.messages.ExceptionTimeSerie
+import com.open200.xesar.connect.messages.ExceptionTimepointSerie
+import com.open200.xesar.connect.messages.TimePointSerie
+import com.open200.xesar.connect.messages.TimeSerie
+import com.open200.xesar.connect.messages.Weekday
 import com.open200.xesar.connect.messages.query.OfficeMode
-import com.open200.xesar.connect.messages.query.TimeSerie
-import com.open200.xesar.connect.messages.query.Weekday
 import java.time.LocalTime
 import java.util.*
 
@@ -12,14 +14,13 @@ object OfficeModeFixture {
     val localTime = LocalTime.parse("14:15")
 
     val exceptionTimepointSerie =
-        OfficeMode.ExceptionTimepointSerie(
+        ExceptionTimepointSerie(
             calendars = listOf(UUID.fromString("497f6eca-6276-4993-bfeb-53cbbbba6f08")),
             points = listOf(localTime))
 
     val timeRange = TimeSerie.TimeRange(start = localTime, end = localTime)
 
-    val timePointSerie =
-        OfficeMode.TimePointSerie(days = listOf(Weekday.MONDAY), points = listOf(localTime))
+    val timePointSerie = TimePointSerie(days = listOf(Weekday.MONDAY), points = listOf(localTime))
 
     val officeModeFixture =
         OfficeMode(
