@@ -11,6 +11,7 @@ import kotlinx.serialization.Serializable
 /**
  * Represents a command POJO to create an office mode time profile.
  *
+ * @param commandId The id of the command.
  * @param timeSeries The time intervals for allowing/disallowing entry.
  * @param exceptionTimeSeries The time intervals for allowing/disallowing entry at exceptional dates
  *   (holidays etc.).
@@ -20,11 +21,11 @@ import kotlinx.serialization.Serializable
  * @param description The description of the office mode time profile.
  * @param timePointSeries Time of a day in a specific weekday, used to end the allowed entry.
  * @param id The id of the time profile.
- * @param commandId The id of the command.
  * @param token The token of the command.
  */
 @Serializable
 data class CreateOfficeModeTimeProfileMapi(
+    @Serializable(with = UUIDSerializer::class) val commandId: UUID,
     val timeSeries: List<TimeSerie> = emptyList(),
     val exceptionTimeSeries: List<ExceptionTimeSerie> = emptyList(),
     val exceptionTimePointSeries: List<ExceptionTimepointSerie> = emptyList(),
@@ -32,6 +33,5 @@ data class CreateOfficeModeTimeProfileMapi(
     val description: String? = null,
     val timePointSeries: List<TimePointSerie> = emptyList(),
     @Serializable(with = UUIDSerializer::class) val id: UUID,
-    @Serializable(with = UUIDSerializer::class) val commandId: UUID,
     val token: String
 ) : Command

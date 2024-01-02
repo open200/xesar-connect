@@ -7,13 +7,13 @@ import kotlinx.serialization.Serializable
 /**
  * Represents a command POJO to delete a person.
  *
- * @param externalId The external id of the person to delete.
  * @param commandId The id of the command.
+ * @param externalId The external id of the person to delete.
  * @param token The token of the command.
  */
 @Serializable
 data class DeletePersonMapi(
-    val externalId: String? = null,
     @Serializable(with = UUIDSerializer::class) val commandId: UUID,
+    val externalId: String? = null,
     val token: String
 ) : Command
