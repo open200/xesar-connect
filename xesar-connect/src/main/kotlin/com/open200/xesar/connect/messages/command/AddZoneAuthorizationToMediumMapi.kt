@@ -9,13 +9,13 @@ import kotlinx.serialization.Serializable
  *
  * @param commandId The id of the command.
  * @param id The id of the medium.
- * @param token The token of the command.
  * @param authorization The authorization data.
+ * @param token The token of the command.
  */
 @Serializable
 data class AddZoneAuthorizationToMediumMapi(
     @Serializable(with = UUIDSerializer::class) val commandId: UUID,
     @Serializable(with = UUIDSerializer::class) val id: UUID,
-    val token: String,
-    val authorization: AuthorizationData? = null
+    val authorization: AuthorizationData,
+    val token: String
 ) : Command

@@ -11,6 +11,7 @@ import kotlinx.serialization.Serializable
  * @param description The description of the coding station.
  * @param id The id of the coding station.
  */
+@Serializable
 data class CodingStationChanged(
     val name: String? = null,
     val description: String? = null,

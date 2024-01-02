@@ -21,8 +21,8 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class PersonChanged(
-    val firstName: String? = null,
-    val lastName: String? = null,
+    val firstName: String,
+    val lastName: String,
     val identifier: String? = null,
     @Serializable(with = UUIDSerializer::class) val defaultAuthorizationProfileId: UUID? = null,
     @Serializable(with = UUIDSerializer::class) val oldDefaultAuthorizationProfileId: UUID? = null,

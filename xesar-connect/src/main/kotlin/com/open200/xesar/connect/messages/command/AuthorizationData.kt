@@ -8,7 +8,8 @@ import kotlinx.serialization.Serializable
  * Represents the authorization data which should be added to a medium.
  *
  * @param authorizationName The name of the installationPoint or zone.
- * @param authorizationProfileId The id of the (individual) authorization profile.
+ * @param authorizationProfileId The id of the (individual) authorization profile. May be NULL for
+ *   new (individual) authorization profiles.
  * @param timeProfileName The name of the time profile.
  * @param authorizationId The id of the target installation point or zone.
  * @param installationPoint Indicates whether the (individual) authorization targets an installation

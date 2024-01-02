@@ -4,7 +4,10 @@ import com.open200.xesar.connect.Topics
 import com.open200.xesar.connect.XesarMqttClient
 import com.open200.xesar.connect.exception.HttpErrorException
 import com.open200.xesar.connect.extension.findComponent
-import com.open200.xesar.connect.messages.event.*
+import com.open200.xesar.connect.messages.event.ApiEvent
+import com.open200.xesar.connect.messages.event.ErrorEvent
+import com.open200.xesar.connect.messages.event.FindComponentPerformed
+import com.open200.xesar.connect.messages.event.encodeEvent
 import com.open200.xesar.connect.testutils.InstallationPointFixture
 import com.open200.xesar.connect.testutils.MosquittoContainer
 import com.open200.xesar.connect.testutils.XesarConnectTestHelper
@@ -109,11 +112,10 @@ class FindComponentTest :
                             ApiEvent(
                                 UUID.fromString("00000000-1281-40ae-89d7-5c541d77a757"),
                                 FindComponentPerformed("ok"))
-                        val findComponentPerformed = encodeEvent(apiEvent)
 
                         client
                             .publishAsync(
-                                Topics.Event.FIND_COMPONENT_PERFORMED, findComponentPerformed)
+                                Topics.Event.FIND_COMPONENT_PERFORMED, encodeEvent(apiEvent))
                             .await()
                     }
                 }
