@@ -1,7 +1,7 @@
 package com.open200.xesar.connect.testutils
 
+import com.open200.xesar.connect.messages.ComponentType
 import com.open200.xesar.connect.messages.query.BatteryCondition
-import com.open200.xesar.connect.messages.query.ComponentType
 import com.open200.xesar.connect.messages.query.EvvaComponent
 import com.open200.xesar.connect.messages.query.OnlineStatus
 import java.time.LocalDateTime

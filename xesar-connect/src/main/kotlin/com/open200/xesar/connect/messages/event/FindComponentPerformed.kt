@@ -3,7 +3,7 @@ package com.open200.xesar.connect.messages.event
 import kotlinx.serialization.Serializable
 
 /**
- * This event is sent back to the client when the FindComponent command was performed.
+ * Represents an event POJO as a response of a command to find a component.
  *
  * @param ok The result of the command.
  */

@@ -2,9 +2,11 @@ package com.open200.xesar.connect.messages.query
 
 import QueryElementResource
 import QueryListResource
-import com.open200.xesar.connect.utils.LocalTimeSerializer
+import com.open200.xesar.connect.messages.ExceptionTimeSerie
+import com.open200.xesar.connect.messages.ExceptionTimepointSerie
+import com.open200.xesar.connect.messages.TimePointSerie
+import com.open200.xesar.connect.messages.TimeSerie
 import com.open200.xesar.connect.utils.UUIDSerializer
-import java.time.LocalTime
 import java.util.*
 import kotlinx.serialization.Serializable
 
@@ -45,16 +47,6 @@ data class OfficeMode(
     val timePointSeries: List<TimePointSerie>? = null,
     @Serializable(with = UUIDSerializer::class) val id: UUID
 ) : QueryListResource, QueryElementResource {
-    @Serializable
-    data class ExceptionTimepointSerie(
-        val calendars: List<@Serializable(with = UUIDSerializer::class) UUID>? = null,
-        val points: List<@Serializable(with = LocalTimeSerializer::class) LocalTime>? = null
-    )
-    @Serializable
-    data class TimePointSerie(
-        val days: List<Weekday>? = null,
-        val points: List<@Serializable(with = LocalTimeSerializer::class) LocalTime>? = null
-    )
 
     companion object {
         const val QUERY_RESOURCE = "office-modes"

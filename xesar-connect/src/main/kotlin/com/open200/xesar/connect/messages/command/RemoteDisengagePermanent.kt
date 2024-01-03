@@ -5,7 +5,7 @@ import java.util.*
 import kotlinx.serialization.Serializable
 
 /**
- * Represents a permanent remote disengage command.
+ * Represents a command POJO to remotely disengage an installation point permanently.
  *
  * @param commandId The command id.
  * @param installationPointId The installation point id.

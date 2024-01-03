@@ -1,5 +1,6 @@
 package com.open200.xesar.connect.testutils
 
+import com.open200.xesar.connect.messages.*
 import com.open200.xesar.connect.messages.query.*
 import java.time.LocalTime
 import java.util.*
@@ -15,12 +16,11 @@ object TimeProfileFixture {
             calendars = listOf(UUID.fromString("497f6eca-6276-4993-bfeb-53cbbbba6f08")))
 
     val exceptionTimepointSerie =
-        TimeProfile.ExceptionTimepointSerie(
+        ExceptionTimepointSerie(
             calendars = listOf(UUID.fromString("497f6eca-6276-4993-bfeb-53cbbbba6f08")),
             points = listOf(localTime))
 
-    val timePointSerie =
-        TimeProfile.TimePointSerie(days = listOf(Weekday.MONDAY), points = listOf(localTime))
+    val timePointSerie = TimePointSerie(days = listOf(Weekday.MONDAY), points = listOf(localTime))
 
     val timeProfileFixture =
         TimeProfile(

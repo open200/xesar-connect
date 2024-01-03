@@ -1,4 +1,4 @@
-package com.open200.xesar.connect.messages.query
+package com.open200.xesar.connect.messages
 
 import com.open200.xesar.connect.utils.UUIDSerializer
 import java.util.*

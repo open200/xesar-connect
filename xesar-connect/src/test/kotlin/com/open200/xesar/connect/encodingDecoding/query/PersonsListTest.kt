@@ -39,7 +39,7 @@ class PersonsListTest :
                 "\"firstName\":\"firstname String\"," +
                 "\"lastName\":\"lastname String\"," +
                 "\"identifier\":\"1234\"," +
-                "\"personalReferenceDuration\":{\"logMode\":\"log String\",\"days\":0}," +
+                "\"personalReferenceDuration\":{\"logMode\":\"dontSave\",\"days\":0}," +
                 "\"disengagePeriod\":\"SHORT\"," +
                 "\"identificationMediaCount\":0," +
                 "\"outdatedMedia\":true," +
@@ -51,7 +51,7 @@ class PersonsListTest :
                 "\"lastName\":\"lastname 2 String\"," +
                 "\"identifier\":\"1234\"," +
                 "\"personalReferenceDuration\":" +
-                "{\"logMode\":\"log String\",\"days\":0}," +
+                "{\"logMode\":\"dontSave\",\"days\":0}," +
                 "\"disengagePeriod\":\"SHORT\"," +
                 "\"identificationMediaCount\":0," +
                 "\"outdatedMedia\":true," +
@@ -79,7 +79,7 @@ class PersonsListTest :
                     "\"firstName\":\"firstname String\"," +
                     "\"lastName\":\"lastname String\"," +
                     "\"identifier\":\"1234\"," +
-                    "\"personalReferenceDuration\":{\"logMode\":\"log String\",\"days\":0}," +
+                    "\"personalReferenceDuration\":{\"logMode\":\"dontSave\",\"days\":0}," +
                     "\"disengagePeriod\":\"SHORT\"," +
                     "\"identificationMediaCount\":0," +
                     "\"outdatedMedia\":true," +
@@ -92,7 +92,7 @@ class PersonsListTest :
                     "\"identifier\":\"1234\"," +
                     "\"additionalProperties\":\"additional Information\"," +
                     "\"personalReferenceDuration\":" +
-                    "{\"logMode\":\"log String\",\"days\":0}," +
+                    "{\"logMode\":\"dontSave\",\"days\":0}," +
                     "\"disengagePeriod\":\"SHORT\"," +
                     "\"identificationMediaCount\":0," +
                     "\"outdatedMedia\":true," +

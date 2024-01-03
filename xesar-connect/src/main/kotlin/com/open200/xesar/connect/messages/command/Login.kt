@@ -5,7 +5,7 @@ import java.util.UUID
 import kotlinx.serialization.Serializable
 
 /**
- * Represents a login command in the system.
+ * Represents a command POJO to log into the system.
  *
  * @param commandId The unique identifier for the login command.
  * @param username The username for the login.

@@ -2,9 +2,8 @@ package com.open200.xesar.connect.messages.query
 
 import QueryElementResource
 import QueryListResource
-import com.open200.xesar.connect.utils.LocalTimeSerializer
+import com.open200.xesar.connect.messages.*
 import com.open200.xesar.connect.utils.UUIDSerializer
-import java.time.LocalTime
 import java.util.*
 import kotlinx.serialization.Serializable
 
@@ -23,16 +22,4 @@ data class TimeProfile(
     companion object {
         const val QUERY_RESOURCE = "time-profiles"
     }
-
-    @Serializable
-    data class ExceptionTimepointSerie(
-        val calendars: List<@Serializable(with = UUIDSerializer::class) UUID>? = null,
-        val points: List<@Serializable(with = LocalTimeSerializer::class) LocalTime>? = null
-    )
-
-    @Serializable
-    data class TimePointSerie(
-        val days: List<Weekday>? = null,
-        val points: List<@Serializable(with = LocalTimeSerializer::class) LocalTime>? = null
-    )
 }

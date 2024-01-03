@@ -24,7 +24,7 @@ class PersonElementTest :
                 "\"firstName\":\"firstname String\"," +
                 "\"lastName\":\"lastname String\"," +
                 "\"identifier\":\"1234\"," +
-                "\"personalReferenceDuration\":{\"logMode\":\"log String\",\"days\":0}," +
+                "\"personalReferenceDuration\":{\"logMode\":\"dontSave\",\"days\":0}," +
                 "\"disengagePeriod\":\"SHORT\"," +
                 "\"identificationMediaCount\":0," +
                 "\"outdatedMedia\":true," +
@@ -52,7 +52,7 @@ class PersonElementTest :
                     "\"firstName\":\"firstname String\"," +
                     "\"lastName\":\"lastname String\"," +
                     "\"identifier\":\"1234\"," +
-                    "\"personalReferenceDuration\":{\"logMode\":\"log String\",\"days\":0}," +
+                    "\"personalReferenceDuration\":{\"logMode\":\"dontSave\",\"days\":0}," +
                     "\"disengagePeriod\":\"SHORT\"," +
                     "\"identificationMediaCount\":0," +
                     "\"outdatedMedia\":true," +

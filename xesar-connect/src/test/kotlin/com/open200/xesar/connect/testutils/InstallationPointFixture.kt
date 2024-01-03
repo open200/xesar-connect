@@ -1,6 +1,6 @@
 package com.open200.xesar.connect.testutils
 
-import com.open200.xesar.connect.messages.query.ComponentType
+import com.open200.xesar.connect.messages.ComponentType
 import com.open200.xesar.connect.messages.query.InstallationPoint
 import com.open200.xesar.connect.messages.query.OnlineStatus
 import java.util.*
