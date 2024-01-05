@@ -7,17 +7,17 @@ import kotlinx.serialization.Serializable
 /**
  * Represents a command POJO to configure the manual office mode and shop mode.
  *
+ * @param commandId The id of the command
  * @param shopMode The shop mode.
  * @param manualOfficeMode The manual office mode.
  * @param id The installation point id.
- * @param commandId The id of the command
  * @param token The token of the command.
  */
 @Serializable
 data class ConfigureManualOfficeModeAndShopModeMapi(
+    @Serializable(with = UUIDSerializer::class) val commandId: UUID,
     val shopMode: Boolean? = null,
     val manualOfficeMode: Boolean? = null,
     @Serializable(with = UUIDSerializer::class) val id: UUID? = null,
-    @Serializable(with = UUIDSerializer::class) val commandId: UUID,
     val token: String
 ) : Command

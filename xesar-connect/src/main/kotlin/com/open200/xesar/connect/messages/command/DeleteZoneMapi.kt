@@ -7,13 +7,13 @@ import kotlinx.serialization.Serializable
 /**
  * Represents a command POJO to delete a zone.
  *
- * @param id The id of the zone to delete.
  * @param commandId The id of the command.
+ * @param id The id of the zone to delete.
  * @param token The token of the command.
  */
 @Serializable
 data class DeleteZoneMapi(
-    @Serializable(with = UUIDSerializer::class) val id: UUID,
     @Serializable(with = UUIDSerializer::class) val commandId: UUID,
+    @Serializable(with = UUIDSerializer::class) val id: UUID,
     val token: String
 ) : Command

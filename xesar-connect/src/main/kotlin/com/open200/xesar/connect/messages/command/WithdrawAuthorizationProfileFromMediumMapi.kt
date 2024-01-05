@@ -10,15 +10,15 @@ import kotlinx.serialization.Serializable
  * medium is updated, authorizations will be removed from the physical card. Most likely this will
  * happen at an online-wallreader.
  *
+ * @param commandId The id of the command.
  * @param authorizationProfileId The id of the authorization profile.
  * @param id The id of the medium.
- * @param commandId The id of the command.
  * @param token The token of the command.
  */
 @Serializable
 data class WithdrawAuthorizationProfileFromMediumMapi(
+    @Serializable(with = UUIDSerializer::class) val commandId: UUID,
     @Serializable(with = UUIDSerializer::class) val authorizationProfileId: UUID? = null,
     @Serializable(with = UUIDSerializer::class) val id: UUID,
-    @Serializable(with = UUIDSerializer::class) val commandId: UUID,
     val token: String
 ) : Command

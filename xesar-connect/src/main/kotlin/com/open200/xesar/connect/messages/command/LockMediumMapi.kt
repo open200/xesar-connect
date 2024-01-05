@@ -7,13 +7,13 @@ import kotlinx.serialization.Serializable
 /**
  * Represents a command POJO to lock a medium.
  *
- * @param id The id of a medium.
  * @param commandId The id of the command.
+ * @param id The id of a medium.
  * @param token The token of the command.
  */
 @Serializable
 data class LockMediumMapi(
-    @Serializable(with = UUIDSerializer::class) val id: UUID,
     @Serializable(with = UUIDSerializer::class) val commandId: UUID,
+    @Serializable(with = UUIDSerializer::class) val id: UUID,
     val token: String
 ) : Command

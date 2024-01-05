@@ -9,15 +9,15 @@ import kotlinx.serialization.Serializable
  *
  * @param commandId The id of the command.
  * @param id The id of the coding station.
- * @param token The token of the command.
  * @param name The name of the coding station.
  * @param description The description of the coding station.
+ * @param token The token of the command.
  */
 @Serializable
 data class ChangeCodingStationMapi(
+    @Serializable(with = UUIDSerializer::class) val commandId: UUID,
+    @Serializable(with = UUIDSerializer::class) val id: UUID,
     val name: String? = null,
     val description: String? = null,
-    @Serializable(with = UUIDSerializer::class) val id: UUID,
-    @Serializable(with = UUIDSerializer::class) val commandId: UUID,
     val token: String
 ) : Command
