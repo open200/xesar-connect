@@ -54,7 +54,7 @@ inline fun <reified T : Event> encodeEvent(message: ApiEvent<T>): String {
  * Decodes a JSON string into an ApiEvent.
  *
  * @param text The JSON string to decode.
- * @return The decoded unauthorized login attempt event.
+ * @return The decoded ApiEvent.
  * @throws ParsingException if the JSON string cannot be parsed.
  */
 inline fun <reified T : Event> decodeEvent(text: String): ApiEvent<T> {
