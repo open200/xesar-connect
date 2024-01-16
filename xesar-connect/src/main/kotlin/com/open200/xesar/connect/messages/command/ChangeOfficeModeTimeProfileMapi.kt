@@ -12,7 +12,6 @@ import kotlinx.serialization.Serializable
  *
  * @param commandId The id of the command.
  * @param id The id of the time profile.
- * @param token The token of the command.
  * @param name The name of the office mode time profile.
  * @param description The description of the office mode time profile.
  * @param timeSeries The time intervals for allowing/disallowing entry.
@@ -21,16 +20,17 @@ import kotlinx.serialization.Serializable
  * @param exceptionTimePointSeries Time of a day in a specific weekday, used to end the allowed
  *   entry at exceptional dates (holidays etc.).
  * @param timePointSeries Time of a day in a specific weekday, used to end the allowed entry.
+ * @param token The token of the command.
  */
 @Serializable
 data class ChangeOfficeModeTimeProfileMapi(
+    @Serializable(with = UUIDSerializer::class) val commandId: UUID,
+    @Serializable(with = UUIDSerializer::class) val id: UUID,
+    val name: String,
+    val description: String? = null,
     val timeSeries: List<TimeSerie>? = emptyList(),
     val exceptionTimeSeries: List<ExceptionTimeSerie>? = emptyList(),
     val exceptionTimePointSeries: List<ExceptionTimeSerie>? = emptyList(),
-    val name: String,
-    val description: String? = null,
     val timePointSeries: List<TimePointSerie>? = emptyList(),
-    @Serializable(with = UUIDSerializer::class) val id: UUID,
-    @Serializable(with = UUIDSerializer::class) val commandId: UUID,
     val token: String
 ) : Command

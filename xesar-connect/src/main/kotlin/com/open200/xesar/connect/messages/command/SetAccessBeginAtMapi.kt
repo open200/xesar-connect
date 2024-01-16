@@ -9,15 +9,15 @@ import kotlinx.serialization.Serializable
 /**
  * Represents a command POJO to set the access begin of an identification medium
  *
+ * @param commandId The id of the command.
  * @param accessBeginAt The access begin (Date and Time).
  * @param id The id of the medium.
- * @param commandId The id of the command.
  * @param token The token of the command.
  */
 @Serializable
 data class SetAccessBeginAtMapi(
+    @Serializable(with = UUIDSerializer::class) val commandId: UUID,
     @Serializable(with = LocalDateTimeSerializer::class) val accessBeginAt: LocalDateTime? = null,
     @Serializable(with = UUIDSerializer::class) val id: UUID,
-    @Serializable(with = UUIDSerializer::class) val commandId: UUID,
     val token: String,
 ) : Command

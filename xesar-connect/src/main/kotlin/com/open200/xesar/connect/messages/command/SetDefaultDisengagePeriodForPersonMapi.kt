@@ -8,17 +8,17 @@ import kotlinx.serialization.Serializable
 /**
  * Represents a command POJO to set the default disengage period for a person.
  *
+ * @param commandId The id of the command.
  * @param disengagePeriod The disengage period of the person. How long should the installation point
  *   be disengaged. The values for SHORT/LONG in seconds can be changed in the installation
  *   settings.
  * @param externalId The external id of the person.
- * @param commandId The id of the command.
  * @param token The token of the command.
  */
 @Serializable
 data class SetDefaultDisengagePeriodForPersonMapi(
+    @Serializable(with = UUIDSerializer::class) val commandId: UUID,
     val disengagePeriod: DisengagePeriod,
     val externalId: String,
-    @Serializable(with = UUIDSerializer::class) val commandId: UUID,
     val token: String
 ) : Command

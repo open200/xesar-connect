@@ -9,13 +9,13 @@ import kotlinx.serialization.Serializable
 /**
  * Represents a command POJO to set the daily scheduler execution time.
  *
- * @param dailySchedulerExecutionTime The time of day when the daily scheduler should be executed.
  * @param commandId The id of the command.
+ * @param dailySchedulerExecutionTime The time of day when the daily scheduler should be executed.
  * @param token The token of the command.
  */
 @Serializable
 data class SetDailySchedulerExecutionTimeMapi(
-    @Serializable(with = LocalTimeSerializer::class) val dailySchedulerExecutionTime: LocalTime,
     @Serializable(with = UUIDSerializer::class) val commandId: UUID,
+    @Serializable(with = LocalTimeSerializer::class) val dailySchedulerExecutionTime: LocalTime,
     val token: String
 ) : Command

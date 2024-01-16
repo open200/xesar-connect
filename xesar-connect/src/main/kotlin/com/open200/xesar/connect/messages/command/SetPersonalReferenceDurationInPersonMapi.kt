@@ -8,15 +8,15 @@ import kotlinx.serialization.Serializable
 /**
  * Represents a command POJO to set the personal reference duration for a person.
  *
+ * @param commandId The id of the command.
  * @param newValue The personal reference duration.
  * @param externalId The external id of the person.
- * @param commandId The id of the command.
  * @param token The token of the command.
  */
 @Serializable
 data class SetPersonalReferenceDurationInPersonMapi(
+    @Serializable(with = UUIDSerializer::class) val commandId: UUID,
     val newValue: PersonalLog,
     val externalId: String,
-    @Serializable(with = UUIDSerializer::class) val commandId: UUID,
     val token: String
 ) : Command

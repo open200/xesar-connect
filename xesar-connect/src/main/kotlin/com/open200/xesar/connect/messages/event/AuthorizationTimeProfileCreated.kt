@@ -20,10 +20,10 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class AuthorizationTimeProfileCreated(
-    val timeSeries: List<TimeSerie>,
-    val exceptionTimeSeries: List<ExceptionTimeSerie>,
+    val timeSeries: List<TimeSerie> = emptyList(),
+    val exceptionTimeSeries: List<ExceptionTimeSerie> = emptyList(),
     val name: String,
-    val description: String,
+    val description: String? = null,
     @Serializable(with = UUIDSerializer::class) val id: UUID,
     val type: TimeProfileType,
     val validStandardTimeProfile: Boolean

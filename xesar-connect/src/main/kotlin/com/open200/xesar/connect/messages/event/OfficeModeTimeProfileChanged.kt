@@ -21,11 +21,11 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class OfficeModeTimeProfileChanged(
-    val timeSeries: List<TimeSerie>,
-    val exceptionTimeSeries: List<ExceptionTimeSerie>,
-    val exceptionTimePointSeries: List<ExceptionTimepointSerie>,
+    val timeSeries: List<TimeSerie> = emptyList(),
+    val exceptionTimeSeries: List<ExceptionTimeSerie> = emptyList(),
+    val exceptionTimePointSeries: List<ExceptionTimepointSerie> = emptyList(),
     val name: String,
     val description: String? = null,
-    val timePointSeries: List<TimePointSerie>,
+    val timePointSeries: List<TimePointSerie> = emptyList(),
     @Serializable(with = UUIDSerializer::class) val id: UUID
 ) : Event

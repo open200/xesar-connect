@@ -1,7 +1,13 @@
 package com.open200.xesar.connect.extension
 
+import com.open200.xesar.connect.Topics
 import com.open200.xesar.connect.XesarConnect
-import com.open200.xesar.connect.messages.command.Query
+import com.open200.xesar.connect.messages.DisengagePeriod
+import com.open200.xesar.connect.messages.PersonalLog
+import com.open200.xesar.connect.messages.command.*
+import com.open200.xesar.connect.messages.event.PersonChanged
+import com.open200.xesar.connect.messages.event.PersonCreated
+import com.open200.xesar.connect.messages.event.PersonDeleted
 import com.open200.xesar.connect.messages.query.Person
 import com.open200.xesar.connect.messages.query.QueryList
 import java.util.*
@@ -33,4 +39,139 @@ suspend fun XesarConnect.queryPersonByIdAsync(
     requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
 ): Deferred<Person> {
     return queryElementAsync(Person.QUERY_RESOURCE, id, requestConfig)
+}
+
+/**
+ * Changes the information of a person asynchronously.
+ *
+ * @param firstName The first name of the person.
+ * @param lastName The last name of the person.
+ * @param identifier The identifier of the person.
+ * @param externalId The external ID of the person.
+ * @param requestConfig The request configuration (optional).
+ */
+suspend fun XesarConnect.changePersonInformation(
+    firstName: String? = null,
+    lastName: String? = null,
+    identifier: String? = null,
+    externalId: String,
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+): Deferred<PersonChanged> {
+    return sendCommand<ChangePersonInformationMapi, PersonChanged>(
+        Topics.Command.CHANGE_PERSON_INFORMATION,
+        ChangePersonInformationMapi(
+            config.uuidGenerator.generateId(),
+            firstName,
+            lastName,
+            identifier,
+            externalId,
+            requestConfig.token),
+        requestConfig)
+}
+/**
+ * Creates a person asynchronously.
+ *
+ * @param firstName The first name of the person.
+ * @param lastName The last name of the person.
+ * @param identifier The identifier of the person.
+ * @param externalId The external ID of the person.
+ * @param personId The ID of the person.
+ * @param requestConfig The request configuration (optional).
+ */
+suspend fun XesarConnect.createPerson(
+    firstName: String,
+    lastName: String,
+    identifier: String? = null,
+    externalId: String? = null,
+    personId: UUID,
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+): Deferred<PersonCreated> {
+    return sendCommand<CreatePersonMapi, PersonCreated>(
+        Topics.Command.CREATE_PERSON,
+        CreatePersonMapi(
+            config.uuidGenerator.generateId(),
+            firstName,
+            lastName,
+            identifier,
+            externalId,
+            personId,
+            requestConfig.token),
+        requestConfig)
+}
+/**
+ * Deletes a person asynchronously.
+ *
+ * @param externalId The external ID of the person.
+ * @param requestConfig The request configuration (optional).
+ */
+suspend fun XesarConnect.deletePerson(
+    externalId: String? = null,
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+): Deferred<PersonDeleted> {
+    return sendCommand<DeletePersonMapi, PersonDeleted>(
+        Topics.Command.DELETE_PERSON,
+        DeletePersonMapi(config.uuidGenerator.generateId(), externalId, requestConfig.token),
+        requestConfig)
+}
+
+/**
+ * Sets the default authorization profile for a person asynchronously.
+ *
+ * @param externalId The external ID of the person.
+ * @param defaultAuthorizationProfileName The name of the default authorization profile. Set null to
+ *   remove authorization profile from person. Empty string gets ignored.
+ * @param requestConfig The request configuration (optional).
+ */
+suspend fun XesarConnect.setDefaultAuthorizationProfileForPerson(
+    externalId: String,
+    defaultAuthorizationProfileName: String? = null,
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+): Deferred<PersonChanged> {
+    return sendCommand<SetDefaultAuthorizationProfileForPersonMapi, PersonChanged>(
+        Topics.Command.SET_DEFAULT_AUTHORIZATION_PROFILE_FOR_PERSON,
+        SetDefaultAuthorizationProfileForPersonMapi(
+            config.uuidGenerator.generateId(),
+            externalId,
+            defaultAuthorizationProfileName,
+            requestConfig.token),
+        requestConfig)
+}
+/**
+ * Sets the default disengage period for a person asynchronously.
+ *
+ * @param externalId The external ID of the person.
+ * @param disengagePeriod The disengage period.
+ * @param requestConfig The request configuration (optional).
+ */
+suspend fun XesarConnect.setDefaultDisengagePeriodForPerson(
+    externalId: String,
+    disengagePeriod: DisengagePeriod,
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+): Deferred<PersonChanged> {
+    return sendCommand<SetDefaultDisengagePeriodForPersonMapi, PersonChanged>(
+        Topics.Command.SET_DEFAULT_DISENGAGE_PERIOD_FOR_PERSON,
+        SetDefaultDisengagePeriodForPersonMapi(
+            config.uuidGenerator.generateId(), disengagePeriod, externalId, requestConfig.token),
+        requestConfig)
+}
+
+/**
+ * Sets the default logging of personal data for a person asynchronously.
+ *
+ * @param personalReferenceDuration The default personal reference duration
+ * @param requestConfig The request configuration (optional).
+ */
+suspend fun XesarConnect.setPersonalReferenceDurationInPerson(
+    externalId: String,
+    personalReferenceDuration: PersonalLog,
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+): Deferred<PersonChanged> {
+    return sendCommand<SetPersonalReferenceDurationInPersonMapi, PersonChanged>(
+        Topics.Command.SET_PERSONAL_REFERENCE_DURATION_IN_PERSON,
+        SetPersonalReferenceDurationInPersonMapi(
+            config.uuidGenerator.generateId(),
+            personalReferenceDuration,
+            externalId,
+            requestConfig.token),
+        requestConfig)
 }
