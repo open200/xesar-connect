@@ -4,6 +4,8 @@ import com.open200.xesar.connect.Topics
 import com.open200.xesar.connect.XesarMqttClient
 import com.open200.xesar.connect.exception.HttpErrorException
 import com.open200.xesar.connect.extension.executeRemoteDisengage
+import com.open200.xesar.connect.messages.ApiError
+import com.open200.xesar.connect.messages.encodeError
 import com.open200.xesar.connect.messages.event.*
 import com.open200.xesar.connect.testutils.InstallationPointFixture
 import com.open200.xesar.connect.testutils.MosquittoContainer
@@ -51,18 +53,16 @@ class RemoteDisengageTest :
                         commandContent.shouldBeEqual(
                             "{\"commandId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"installationPointId\":\"${InstallationPointFixture.installationPointFixture.id}\",\"extended\":true,\"token\":\"${XesarConnectTestHelper.TOKEN}\"}")
 
-                        val errorEvent =
-                            ApiEvent(
-                                UUID.fromString("faf3d0c4-1281-40ae-89d7-5c541d77a757"),
-                                ErrorEvent(
-                                    correlationId =
-                                        UUID.fromString("00000000-1281-40ae-89d7-5c541d77a757"),
-                                    error = HttpStatusCode.InternalServerError.value))
+                        val apiError =
+                            ApiError(
+                                correlationId =
+                                    UUID.fromString("00000000-1281-40ae-89d7-5c541d77a757"),
+                                error = HttpStatusCode.InternalServerError.value)
 
                         client
                             .publishAsync(
                                 Topics.Event.error(config.apiProperties.userId),
-                                encodeEvent(errorEvent))
+                                encodeError(apiError))
                             .await()
                     }
                 }

@@ -8,8 +8,8 @@ import com.open200.xesar.connect.filters.MessageFilter
 import com.open200.xesar.connect.filters.QueryIdFilter
 import com.open200.xesar.connect.filters.TopicFilter
 import com.open200.xesar.connect.messages.command.*
+import com.open200.xesar.connect.messages.decodeError
 import com.open200.xesar.connect.messages.event.*
-import com.open200.xesar.connect.messages.event.ErrorEvent
 import com.open200.xesar.connect.messages.query.*
 import java.util.*
 import java.util.concurrent.CopyOnWriteArrayList
@@ -334,9 +334,12 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) : A
 
                 on(TopicFilter(Topics.Event.error(config.apiProperties.userId))) {
                     try {
-                        val apiEvent = decodeEvent<ErrorEvent>(it.message)
+                        val apiError = decodeError(it.message)
+
                         deferred.completeExceptionally(
-                            HttpErrorException("${apiEvent.event.error}"))
+                            HttpErrorException(
+                                "HTTP error code: ${apiError.error} ${apiError.reason.orEmpty()}",
+                                apiError.error))
                     } catch (e: Exception) {
                         deferred.completeExceptionally(ParsingException())
                     }

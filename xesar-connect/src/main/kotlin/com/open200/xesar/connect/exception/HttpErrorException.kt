@@ -1,13 +1,13 @@
 package com.open200.xesar.connect.exception
 
+import io.ktor.http.*
+
 /** Exception thrown when an HTTP error occurs. */
 class HttpErrorException : XesarApiException {
 
-    constructor() : super()
+    var httpErrorCode: Int? = null
 
-    constructor(message: String) : super(message)
-
-    constructor(causeException: Throwable) : super(causeException)
-
-    constructor(message: String, causeException: Throwable) : super(message, causeException)
+    constructor(message: String, httpErrorCode: Int) : super(message) {
+        this.httpErrorCode = httpErrorCode
+    }
 }
