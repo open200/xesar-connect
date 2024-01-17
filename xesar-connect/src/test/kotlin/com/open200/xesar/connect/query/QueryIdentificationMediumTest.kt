@@ -9,7 +9,6 @@ import com.open200.xesar.connect.messages.query.*
 import com.open200.xesar.connect.testutils.IdentificationMediumFixture
 import com.open200.xesar.connect.testutils.MosquittoContainer
 import com.open200.xesar.connect.testutils.QueryTestHelper
-import com.open200.xesar.connect.testutils.XesarConnectTestHelper
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.common.runBlocking
 import io.kotest.core.spec.style.FunSpec
@@ -80,7 +79,7 @@ class QueryIdentificationMediumTest :
                 launch {
                     simulatedBackendReady.await()
 
-                    XesarConnectTestHelper.connect(config).use { api ->
+                    XesarConnect.connectAndLoginAsync(config).await().use { api ->
                         api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
                             .await()
                         val result = api.queryIdentificationMediumListAsync().await()
@@ -117,7 +116,7 @@ class QueryIdentificationMediumTest :
                             val queryContent = queryReceived.await()
 
                             queryContent.shouldBeEqual(
-                                "{\"resource\":\"identification-media\",\"requestId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"token\":\"${XesarConnectTestHelper.TOKEN}\",\"id\":null,\"params\":{\"pageOffset\":null,\"pageLimit\":null,\"sort\":null,\"language\":null,\"filters\":[{\"field\":\"mediumIdentifier\",\"type\":\"eq\",\"value\":\"1\"}]}}")
+                                "{\"resource\":\"identification-media\",\"requestId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"token\":\"${MosquittoContainer.TOKEN}\",\"id\":null,\"params\":{\"pageOffset\":null,\"pageLimit\":null,\"sort\":null,\"language\":null,\"filters\":[{\"field\":\"mediumIdentifier\",\"type\":\"eq\",\"value\":\"1\"}]}}")
 
                             val identificationMedium =
                                 encodeQueryList(
@@ -141,7 +140,7 @@ class QueryIdentificationMediumTest :
                     launch {
                         simulatedBackendReady.await()
 
-                        XesarConnectTestHelper.connect(config).use { api ->
+                        XesarConnect.connectAndLoginAsync(config).await().use { api ->
                             api.subscribeAsync(
                                     Topics(Topics.Query.result(config.apiProperties.userId)))
                                 .await()
@@ -201,7 +200,7 @@ class QueryIdentificationMediumTest :
                     launch {
                         simulatedBackendReady.await()
 
-                        XesarConnectTestHelper.connect(config).use { api ->
+                        XesarConnect.connectAndLoginAsync(config).await().use { api ->
                             api.subscribeAsync(
                                     Topics(Topics.Query.result(config.apiProperties.userId)))
                                 .await()
@@ -240,7 +239,7 @@ class QueryIdentificationMediumTest :
                             val queryContent = queryReceived.await()
 
                             queryContent.shouldBeEqual(
-                                "{\"resource\":\"identification-media\",\"requestId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"token\":\"${XesarConnectTestHelper.TOKEN}\",\"id\":null,\"params\":{\"pageOffset\":null,\"pageLimit\":null,\"sort\":null,\"language\":null,\"filters\":[{\"field\":\"mediumIdentifier\",\"type\":\"eq\",\"value\":\"1\"}]}}")
+                                "{\"resource\":\"identification-media\",\"requestId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"token\":\"${MosquittoContainer.TOKEN}\",\"id\":null,\"params\":{\"pageOffset\":null,\"pageLimit\":null,\"sort\":null,\"language\":null,\"filters\":[{\"field\":\"mediumIdentifier\",\"type\":\"eq\",\"value\":\"1\"}]}}")
 
                             val identificationMedium =
                                 encodeQueryList(
@@ -272,7 +271,7 @@ class QueryIdentificationMediumTest :
                     launch {
                         simulatedBackendReady.await()
 
-                        XesarConnectTestHelper.connect(config).use { api ->
+                        XesarConnect.connectAndLoginAsync(config).await().use { api ->
                             api.subscribeAsync(
                                     Topics(Topics.Query.result(config.apiProperties.userId)))
                                 .await()
@@ -335,7 +334,7 @@ class QueryIdentificationMediumTest :
                 }
                 launch {
                     simulatedBackendReady.await()
-                    XesarConnectTestHelper.connect(config).use { api ->
+                    XesarConnect.connectAndLoginAsync(config).await().use { api ->
                         api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
                             .await()
                         val result = api.queryIdentificationMediumByIdAsync(id).await()

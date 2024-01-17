@@ -2,7 +2,6 @@ package com.open200.xesar.connect
 
 import com.open200.xesar.connect.filters.AllTopicsFilter
 import com.open200.xesar.connect.testutils.MosquittoContainer
-import com.open200.xesar.connect.testutils.XesarConnectTestHelper
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.extensions.testcontainers.perProject
 import io.kotest.matchers.booleans.shouldBeFalse
@@ -22,7 +21,7 @@ class ListenerTest :
             withTimeout(5000) {
                 launch {
                     XesarMqttClient.connectAsync(config).await().use { client ->
-                        XesarConnectTestHelper.connect(config).use { it ->
+                        XesarConnect.connectAndLoginAsync(config).await().use { it ->
                             it.subscribeAsync(Topics("#")).await()
 
                             val firstEventReceived = CompletableDeferred<String>()

@@ -391,7 +391,8 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) : A
     companion object {
         /**
          * Asynchronously connects to the Xesar API, performs a login operation, and returns an
-         * instance of the XesarApi.
+         * instance of the XesarApi. Internally subscribes to the following topics:
+         * [Topics.Event.loggedIn],[Topics.Event.LOGGED_OUT],[Topics.Event.error],[Topics.Event.UNAUTHORIZED_LOGIN_ATTEMPT],
          *
          * @param config The configuration for connecting to the Xesar system.
          * @param userCredentials Optional user credentials for authentication, including a username
@@ -416,14 +417,14 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) : A
                 val client = XesarMqttClient.connectAsync(updatedConfig).await()
                 val api = XesarConnect(client, config)
 
+                api.subscribeAsync(
+                        Topics(
+                            Topics.Event.loggedIn(config.apiProperties.userId),
+                            Topics.Event.UNAUTHORIZED_LOGIN_ATTEMPT,
+                            Topics.Event.LOGGED_OUT,
+                            Topics.Event.error(config.apiProperties.userId)))
+                    .await()
                 if (userCredentials != null) {
-                    api.subscribeAsync(
-                            Topics(
-                                Topics.Event.loggedIn(config.apiProperties.userId),
-                                Topics.Event.UNAUTHORIZED_LOGIN_ATTEMPT,
-                                Topics.Event.LOGGED_OUT,
-                                Topics.Event.error(config.apiProperties.userId)))
-                        .await()
                     api.token =
                         api.loginAsync(userCredentials.username, userCredentials.password).await()
                     deferred.complete(api)

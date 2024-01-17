@@ -1,13 +1,13 @@
 package com.open200.xesar.connect.query
 
 import com.open200.xesar.connect.Topics
+import com.open200.xesar.connect.XesarConnect
 import com.open200.xesar.connect.XesarMqttClient
 import com.open200.xesar.connect.extension.queryZoneByIdAsync
 import com.open200.xesar.connect.extension.queryZoneListAsync
 import com.open200.xesar.connect.messages.query.*
 import com.open200.xesar.connect.testutils.MosquittoContainer
 import com.open200.xesar.connect.testutils.QueryTestHelper
-import com.open200.xesar.connect.testutils.XesarConnectTestHelper
 import com.open200.xesar.connect.testutils.ZoneFixture
 import io.kotest.common.runBlocking
 import io.kotest.core.spec.style.FunSpec
@@ -74,7 +74,7 @@ class QueryZoneTest :
                 launch {
                     simulatedBackendReady.await()
 
-                    XesarConnectTestHelper.connect(config).use { api ->
+                    XesarConnect.connectAndLoginAsync(config).await().use { api ->
                         api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
                             .await()
                         val result = api.queryZoneListAsync().await()
@@ -123,7 +123,7 @@ class QueryZoneTest :
                 }
                 launch {
                     simulatedBackendReady.await()
-                    XesarConnectTestHelper.connect(config).use { api ->
+                    XesarConnect.connectAndLoginAsync(config).await().use { api ->
                         api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
                             .await()
                         val result = api.queryZoneByIdAsync(ZoneFixture.zoneFixture.id).await()

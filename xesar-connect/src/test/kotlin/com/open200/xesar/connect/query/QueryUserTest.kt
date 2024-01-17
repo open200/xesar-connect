@@ -1,6 +1,7 @@
 package com.open200.xesar.connect.query
 
 import com.open200.xesar.connect.Topics
+import com.open200.xesar.connect.XesarConnect
 import com.open200.xesar.connect.XesarMqttClient
 import com.open200.xesar.connect.extension.queryUserListAsync
 import com.open200.xesar.connect.messages.query.QueryList
@@ -9,7 +10,6 @@ import com.open200.xesar.connect.messages.query.encodeQueryList
 import com.open200.xesar.connect.testutils.MosquittoContainer
 import com.open200.xesar.connect.testutils.QueryTestHelper
 import com.open200.xesar.connect.testutils.UserFixture.userFixture
-import com.open200.xesar.connect.testutils.XesarConnectTestHelper
 import io.kotest.common.runBlocking
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.extensions.testcontainers.perProject
@@ -75,7 +75,7 @@ class QueryUserTest :
                 launch {
                     simulatedBackendReady.await()
 
-                    XesarConnectTestHelper.connect(config).use { api ->
+                    XesarConnect.connectAndLoginAsync(config).await().use { api ->
                         api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
                             .await()
                         val result = api.queryUserListAsync().await()
