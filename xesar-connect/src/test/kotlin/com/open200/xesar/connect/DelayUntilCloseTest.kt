@@ -2,7 +2,6 @@ package com.open200.xesar.connect
 
 import com.open200.xesar.connect.filters.AllTopicsFilter
 import com.open200.xesar.connect.testutils.MosquittoContainer
-import com.open200.xesar.connect.testutils.XesarConnectTestHelper
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.extensions.testcontainers.perProject
 import io.kotest.matchers.booleans.shouldBeTrue
@@ -28,7 +27,7 @@ class DelayUntilCloseTest :
 
             withTimeout(5000) {
                 launch {
-                    XesarConnectTestHelper.connect(config).use { client ->
+                    XesarConnect.connectAndLoginAsync(config).await().use { client ->
                         client.subscribeAsync(Topics("#")).await()
 
                         client.on(AllTopicsFilter()) { client.close() }

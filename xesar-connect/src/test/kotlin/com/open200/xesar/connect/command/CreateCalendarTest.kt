@@ -1,13 +1,13 @@
 package com.open200.xesar.connect.command
 
 import com.open200.xesar.connect.Topics
+import com.open200.xesar.connect.XesarConnect
 import com.open200.xesar.connect.XesarMqttClient
 import com.open200.xesar.connect.extension.createCalendar
 import com.open200.xesar.connect.messages.event.ApiEvent
 import com.open200.xesar.connect.messages.event.CalendarCreated
 import com.open200.xesar.connect.messages.event.encodeEvent
 import com.open200.xesar.connect.testutils.MosquittoContainer
-import com.open200.xesar.connect.testutils.XesarConnectTestHelper
 import io.kotest.common.runBlocking
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.extensions.testcontainers.perProject
@@ -69,7 +69,7 @@ class CreateCalendarTest :
                 launch {
                     simulatedBackendReady.await()
 
-                    XesarConnectTestHelper.connect(config).use { api ->
+                    XesarConnect.connectAndLoginAsync(config).await().use { api ->
                         api.subscribeAsync(Topics(Topics.Event.CALENDAR_CREATED)).await()
                         val result =
                             api.createCalendar(

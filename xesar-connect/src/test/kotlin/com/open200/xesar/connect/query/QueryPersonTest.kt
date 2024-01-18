@@ -1,6 +1,7 @@
 package com.open200.xesar.connect.query
 
 import com.open200.xesar.connect.Topics
+import com.open200.xesar.connect.XesarConnect
 import com.open200.xesar.connect.XesarMqttClient
 import com.open200.xesar.connect.extension.queryPersonByIdAsync
 import com.open200.xesar.connect.extension.queryPersonListAsync
@@ -12,7 +13,6 @@ import com.open200.xesar.connect.messages.query.encodeQueryElement
 import com.open200.xesar.connect.messages.query.encodeQueryList
 import com.open200.xesar.connect.testutils.MosquittoContainer
 import com.open200.xesar.connect.testutils.PersonFixture.personFixture
-import com.open200.xesar.connect.testutils.XesarConnectTestHelper
 import io.kotest.common.runBlocking
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.extensions.testcontainers.perProject
@@ -51,7 +51,7 @@ class QueryPersonTest :
                         val queryContent = queryReceived.await()
 
                         queryContent.shouldBeEqual(
-                            "{\"resource\":\"persons\",\"requestId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"token\":\"${XesarConnectTestHelper.TOKEN}\",\"id\":null," +
+                            "{\"resource\":\"persons\",\"requestId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"token\":\"${MosquittoContainer.TOKEN}\",\"id\":null," +
                                 "\"params\":{\"pageOffset\":0,\"pageLimit\":3,\"sort\":\"firstName\",\"language\":null,\"filters\":[{\"field\":\"firstName\",\"type\":\"contains\",\"value\":\"filtered first name\"}]}}")
 
                         val person =
@@ -90,7 +90,7 @@ class QueryPersonTest :
                                     FilterType.CONTAINS,
                                     "filtered first name",
                                 )))
-                    XesarConnectTestHelper.connect(config).use { api ->
+                    XesarConnect.connectAndLoginAsync(config).await().use { api ->
                         api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
                             .await()
                         val result = api.queryPersonListAsync(params).await()
@@ -126,7 +126,7 @@ class QueryPersonTest :
                         val queryContent = queryReceived.await()
 
                         queryContent.shouldBeEqual(
-                            "{\"resource\":\"persons\",\"requestId\":\"00000000-1281-42c0-9a15-c5844850c748\",\"token\":\"${XesarConnectTestHelper.TOKEN}\",\"id\":\"${personFixture.id}\",\"params\":null}")
+                            "{\"resource\":\"persons\",\"requestId\":\"00000000-1281-42c0-9a15-c5844850c748\",\"token\":\"${MosquittoContainer.TOKEN}\",\"id\":\"${personFixture.id}\",\"params\":null}")
 
                         val person =
                             encodeQueryElement(
@@ -141,7 +141,7 @@ class QueryPersonTest :
                 }
                 launch {
                     simulatedBackendReady.await()
-                    XesarConnectTestHelper.connect(config).use { api ->
+                    XesarConnect.connectAndLoginAsync(config).await().use { api ->
                         api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
                             .await()
                         val result = api.queryPersonByIdAsync(personFixture.id).await()
