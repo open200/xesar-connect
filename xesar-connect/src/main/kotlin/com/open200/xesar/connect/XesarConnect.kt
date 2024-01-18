@@ -382,7 +382,7 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) : A
         if (connectionChannel.isClosedForSend) {
             return
         }
-        if (config.logoutOnClose == true && token.isNotEmpty()) {
+        if (config.logoutOnClose && token.isNotEmpty()) {
             runBlocking { launch { logoutAsync().await() } }
         }
         client.close()
@@ -408,13 +408,7 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) : A
             val deferred = CompletableDeferred<XesarConnect>()
 
             try {
-                val updatedConfig =
-                    if (config.logoutOnClose == null) {
-                        config.copy(logoutOnClose = true)
-                    } else {
-                        config
-                    }
-                val client = XesarMqttClient.connectAsync(updatedConfig).await()
+                val client = XesarMqttClient.connectAsync(config).await()
                 val api = XesarConnect(client, config)
 
                 api.subscribeAsync(

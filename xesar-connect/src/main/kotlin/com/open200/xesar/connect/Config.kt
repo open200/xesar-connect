@@ -28,7 +28,7 @@ data class Config(
     val mqttCertificates: MqttCertificates? = null,
     val uuidGenerator: IRequestIdGenerator = DefaultRequestIdGenerator(),
     val mqttConnectOptions: MqttConnectOptions = MqttConnectOptions(),
-    val logoutOnClose: Boolean? = null,
+    val logoutOnClose: Boolean = true,
 ) {
     /**
      * @property hostname The hostname of the API.
@@ -95,7 +95,7 @@ data class Config(
             port: String = "1883",
             mqttConnectOptions: MqttConnectOptions = MqttConnectOptions(),
             requestIdGenerator: IRequestIdGenerator = DefaultRequestIdGenerator(),
-            logoutOnClose: Boolean? = null,
+            logoutOnClose: Boolean = true,
         ): Config {
 
             val zipFile = extractZipFile(configurationZipFile)
