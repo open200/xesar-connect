@@ -61,8 +61,7 @@ suspend fun XesarConnect.createCalendar(
 ): Deferred<CalendarCreated> {
     return sendCommand<CreateCalendarMapi, CalendarCreated>(
         Topics.Command.CREATE_CALENDAR,
-        CreateCalendarMapi(
-            config.uuidGenerator.generateId(), name, specialDays, calendarId, requestConfig.token),
+        CreateCalendarMapi(config.uuidGenerator.generateId(), name, specialDays, calendarId, token),
         requestConfig)
 }
 
@@ -83,11 +82,7 @@ suspend fun XesarConnect.changeCalendar(
     return sendCommand<ChangeCalendarMapi, CalendarChanged>(
         Topics.Command.CHANGE_CALENDAR,
         ChangeCalendarMapi(
-            config.uuidGenerator.generateId(),
-            calendarName,
-            specialDays,
-            calendarId,
-            requestConfig.token),
+            config.uuidGenerator.generateId(), calendarName, specialDays, calendarId, token),
         requestConfig)
 }
 
@@ -103,6 +98,6 @@ suspend fun XesarConnect.deleteCalendar(
 ): Deferred<CalendarDeleted> {
     return sendCommand<DeleteCalendarMapi, CalendarDeleted>(
         Topics.Command.DELETE_CALENDAR,
-        DeleteCalendarMapi(config.uuidGenerator.generateId(), calendarId, requestConfig.token),
+        DeleteCalendarMapi(config.uuidGenerator.generateId(), calendarId, token),
         requestConfig)
 }

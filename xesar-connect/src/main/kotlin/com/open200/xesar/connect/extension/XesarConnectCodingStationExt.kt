@@ -59,11 +59,7 @@ suspend fun XesarConnect.createCodingStation(
     return sendCommand<CreateCodingStationMapi, CodingStationCreated>(
         Topics.Command.CREATE_CODING_STATION,
         CreateCodingStationMapi(
-            config.uuidGenerator.generateId(),
-            name,
-            description,
-            codingStationId,
-            requestConfig.token),
+            config.uuidGenerator.generateId(), name, description, codingStationId, token),
         requestConfig)
 }
 
@@ -84,11 +80,7 @@ suspend fun XesarConnect.changeCodingStation(
     return sendCommand<ChangeCodingStationMapi, CodingStationChanged>(
         Topics.Command.CHANGE_CODING_STATION,
         ChangeCodingStationMapi(
-            config.uuidGenerator.generateId(),
-            codingStationId,
-            name,
-            description,
-            requestConfig.token),
+            config.uuidGenerator.generateId(), codingStationId, name, description, token),
         requestConfig)
 }
 
@@ -104,7 +96,6 @@ suspend fun XesarConnect.deleteCodingStation(
 ): Deferred<CodingStationDeleted> {
     return sendCommand<DeleteCodingStationMapi, CodingStationDeleted>(
         Topics.Command.DELETE_CODING_STATION,
-        DeleteCodingStationMapi(
-            config.uuidGenerator.generateId(), codingStationId, requestConfig.token),
+        DeleteCodingStationMapi(config.uuidGenerator.generateId(), codingStationId, token),
         requestConfig)
 }

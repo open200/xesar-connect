@@ -21,7 +21,7 @@ suspend fun XesarConnect.setDailySchedulerExecutionTime(
     return sendCommand<SetDailySchedulerExecutionTimeMapi, PartitionChanged>(
         Topics.Command.SET_DAILY_SCHEDULER_EXECUTION_TIME,
         SetDailySchedulerExecutionTimeMapi(
-            config.uuidGenerator.generateId(), dailySchedulerExecutionTime, requestConfig.token),
+            config.uuidGenerator.generateId(), dailySchedulerExecutionTime, token),
         requestConfig)
 }
 /**
@@ -36,8 +36,7 @@ suspend fun XesarConnect.setDefaultValidityDuration(
 ): Deferred<PartitionChanged> {
     return sendCommand<SetDefaultValidityDurationMapi, PartitionChanged>(
         Topics.Command.SET_DEFAULT_VALIDITY_DURATION,
-        SetDefaultValidityDurationMapi(
-            config.uuidGenerator.generateId(), validityDuration, requestConfig.token),
+        SetDefaultValidityDurationMapi(config.uuidGenerator.generateId(), validityDuration, token),
         requestConfig)
 }
 
@@ -55,7 +54,7 @@ suspend fun XesarConnect.setInstallationPointPersonalReferenceDuration(
     return sendCommand<SetInstallationPointPersonalReferenceDurationMapi, PartitionChanged>(
         Topics.Command.SET_INSTALLATION_POINT_PERSONAL_REFERENCE_DURATION,
         SetInstallationPointPersonalReferenceDurationMapi(
-            config.uuidGenerator.generateId(), personalReferenceDuration, requestConfig.token),
+            config.uuidGenerator.generateId(), personalReferenceDuration, token),
         requestConfig)
 }
 
@@ -72,7 +71,7 @@ suspend fun XesarConnect.setPersonPersonalReferenceDuration(
     return sendCommand<SetPersonPersonalReferenceDurationMapi, PartitionChanged>(
         Topics.Command.SET_PERSON_PERSONAL_REFERENCE_DURATION,
         SetPersonPersonalReferenceDurationMapi(
-            config.uuidGenerator.generateId(), personalReferenceDuration, requestConfig.token),
+            config.uuidGenerator.generateId(), personalReferenceDuration, token),
         requestConfig)
 }
 
@@ -89,7 +88,7 @@ suspend fun XesarConnect.setReplacementMediumDuration(
     return sendCommand<SetReplacementMediumDurationMapi, PartitionChanged>(
         Topics.Command.SET_REPLACEMENT_MEDIUM_DURATION,
         SetReplacementMediumDurationMapi(
-            config.uuidGenerator.generateId(), replacementMediumDuration, requestConfig.token),
+            config.uuidGenerator.generateId(), replacementMediumDuration, token),
         requestConfig)
 }
 /**
@@ -104,7 +103,6 @@ suspend fun XesarConnect.setValidityThreshold(
 ): Deferred<PartitionChanged> {
     return sendCommand<SetValidityThresholdMapi, PartitionChanged>(
         Topics.Command.SET_VALIDITY_THRESHOLD,
-        SetValidityThresholdMapi(
-            config.uuidGenerator.generateId(), validityThreshold, requestConfig.token),
+        SetValidityThresholdMapi(config.uuidGenerator.generateId(), validityThreshold, token),
         requestConfig)
 }
