@@ -134,7 +134,7 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) : A
         val deferred = CompletableDeferred<Token>()
         val commandId = config.uuidGenerator.generateId()
 
-        try {
+        handleStandardExceptions(deferred, "Login") {
             withTimeout(requestConfig.timeout) {
                 val successListener =
                     on(CommandIdFilter(commandId)) {
@@ -171,12 +171,6 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) : A
                     }
                 }
             }
-        } catch (e: TimeoutCancellationException) {
-            logger.error("Timeout while waiting for Login response", e)
-            deferred.completeExceptionally(ConnectionFailedException("Login response timed out", e))
-        } catch (e: Exception) {
-            logger.error("Error while waiting for Login response", e)
-            deferred.completeExceptionally(ConnectionFailedException("Login failed", e))
         }
 
         return deferred
@@ -193,7 +187,7 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) : A
     suspend fun logoutAsync(requestConfig: RequestConfig = buildRequestConfig()): Deferred<Token> {
         val deferredToken = CompletableDeferred<Token>()
 
-        try {
+        handleStandardExceptions(deferredToken, "Logout") {
             withTimeout(requestConfig.timeout) {
                 val successfulListener =
                     on(TopicFilter(Topics.Event.LOGGED_OUT)) {
@@ -212,13 +206,6 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) : A
 
                 closeListenerOnCompletion(deferredToken, successfulListener)
             }
-        } catch (e: TimeoutCancellationException) {
-            logger.error("Timeout while waiting for Logout response", e)
-            deferredToken.completeExceptionally(
-                ConnectionFailedException("Logout response timed out", e))
-        } catch (e: Exception) {
-            logger.error("Error while waiting for Logout response", e)
-            deferredToken.completeExceptionally(ConnectionFailedException("Logout failed", e))
         }
 
         return deferredToken
@@ -247,7 +234,7 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) : A
         val requestId = config.uuidGenerator.generateId()
         val query = Query(resource, requestId, token, id = null, params = params)
 
-        try {
+        handleStandardExceptions(deferred, "Query") {
             withTimeout(requestConfig.timeout) {
                 val queryIdListener =
                     on(QueryIdFilter(requestId)) {
@@ -259,12 +246,6 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) : A
                 client.publishAsync(Topics.Query.REQUEST, encodeCommand(query)).await()
                 closeListenerOnCompletion(deferred, queryIdListener, apiErrorListener)
             }
-        } catch (e: TimeoutCancellationException) {
-            logger.error("Timeout while waiting for Query response", e)
-            deferred.completeExceptionally(ConnectionFailedException("Query Response timed out", e))
-        } catch (e: Exception) {
-            logger.error("Error while waiting for Query response", e)
-            deferred.completeExceptionally(ConnectionFailedException("Query response failed", e))
         }
 
         return deferred
@@ -278,7 +259,7 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) : A
         val deferred = CompletableDeferred<T>()
         val requestId = config.uuidGenerator.generateId()
 
-        try {
+        handleStandardExceptions(deferred, "Query") {
             withTimeout(requestConfig.timeout) {
                 val queryListener =
                     on(QueryIdFilter(requestId)) {
@@ -294,15 +275,6 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) : A
 
                 closeListenerOnCompletion(deferred, queryListener, errorListener)
             }
-        } catch (e: TimeoutCancellationException) {
-            logger.error("Timeout while waiting for Query response", e)
-            deferred.completeExceptionally(
-                ConnectionFailedException("Query request was invalid", e))
-        } catch (e: Exception) {
-            logger.error("Error while waiting for Query response", e)
-            deferred.completeExceptionally(
-                ConnectionFailedException(
-                    "Query request was invalid and Timeout was not catched", e))
         }
 
         return deferred
@@ -323,7 +295,7 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) : A
         val deferred = CompletableDeferred<T>()
         val commandId = config.uuidGenerator.generateId()
 
-        try {
+        handleStandardExceptions(deferred, "Command") {
             withTimeout(requestConfig.timeout) {
                 val commandIdListener =
                     on(CommandIdFilter(commandId)) {
@@ -339,16 +311,26 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) : A
                 client.publishAsync(topic, encodeCommand(cmd)).await()
                 closeListenerOnCompletion(deferred, commandIdListener, apiErrorListener)
             }
-        } catch (e: TimeoutCancellationException) {
-            logger.error("Timeout while waiting for Command response", e)
-            deferred.completeExceptionally(
-                ConnectionFailedException("Command Response timed out", e))
-        } catch (e: Exception) {
-            logger.error("Error while waiting for Command response", e)
-            deferred.completeExceptionally(ConnectionFailedException("Command response failed", e))
         }
 
         return deferred
+    }
+
+    private suspend fun <T> handleStandardExceptions(
+        deferred: CompletableDeferred<T>,
+        messageType: String,
+        block: suspend () -> (Unit)
+    ) {
+        try {
+            block.invoke()
+        } catch (e: TimeoutCancellationException) {
+            logger.error("Timeout while waiting for $messageType response", e)
+            deferred.completeExceptionally(
+                ConnectionFailedException("$messageType request timed out", e))
+        } catch (e: Exception) {
+            logger.error("Error while waiting for $messageType response", e)
+            deferred.completeExceptionally(ConnectionFailedException("$messageType failed", e))
+        }
     }
 
     private fun <T> registerDefaultApiErrorListener(deferred: CompletableDeferred<T>): Listener {
