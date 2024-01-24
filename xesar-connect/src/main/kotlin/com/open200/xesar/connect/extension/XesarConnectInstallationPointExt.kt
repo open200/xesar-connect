@@ -52,8 +52,7 @@ suspend fun XesarConnect.findComponent(
 ): Deferred<FindComponentPerformed> {
     return sendCommand<FindComponent, FindComponentPerformed>(
         Topics.Command.FIND_COMPONENT,
-        FindComponent(
-            config.uuidGenerator.generateId(), installationPointId, enable, requestConfig.token),
+        FindComponent(config.uuidGenerator.generateId(), installationPointId, enable, token),
         requestConfig)
 }
 
@@ -71,8 +70,7 @@ suspend fun XesarConnect.executeRemoteDisengage(
 ): Deferred<RemoteDisengagePerformed> {
     return sendCommand<RemoteDisengage, RemoteDisengagePerformed>(
         Topics.Command.REMOTE_DISENGAGE,
-        RemoteDisengage(
-            config.uuidGenerator.generateId(), installationPointId, extended, requestConfig.token),
+        RemoteDisengage(config.uuidGenerator.generateId(), installationPointId, extended, token),
         requestConfig)
 }
 
@@ -91,7 +89,7 @@ suspend fun XesarConnect.executeRemoteDisengagePermanent(
     return sendCommand<RemoteDisengagePermanent, RemoteDisengagePermanentPerformed>(
         Topics.Command.REMOTE_DISENGAGE_PERMANENT,
         RemoteDisengagePermanent(
-            config.uuidGenerator.generateId(), installationPointId, enable, requestConfig.token),
+            config.uuidGenerator.generateId(), installationPointId, enable, token),
         requestConfig)
 }
 
@@ -122,7 +120,7 @@ suspend fun XesarConnect.changeInstallationPoint(
             name,
             description,
             installationId,
-            requestConfig.token),
+            token),
         requestConfig)
 }
 
@@ -147,7 +145,7 @@ suspend fun XesarConnect.configureManualOfficeModeAndShopModeMapi(
             shopMode,
             manualOfficeMode,
             installationPointId,
-            requestConfig.token),
+            token),
         buildRequestConfig())
 }
 
@@ -166,10 +164,7 @@ suspend fun XesarConnect.configureMediaUpgradeMapi(
     return sendCommand<ConfigureMediaUpgradeMapi, InstallationPointChanged>(
         Topics.Command.CONFIGURE_MEDIA_UPGRADE,
         ConfigureMediaUpgradeMapi(
-            config.uuidGenerator.generateId(),
-            upgradeMedia,
-            installationPointId,
-            requestConfig.token),
+            config.uuidGenerator.generateId(), upgradeMedia, installationPointId, token),
         requestConfig)
 }
 /**
@@ -188,10 +183,7 @@ suspend fun XesarConnect.configureOfficeModeTimeProfile(
     return sendCommand<ConfigureOfficeModeTimeProfileMapi, InstallationPointChanged>(
         Topics.Command.CONFIGURE_OFFICE_MODE_TIME_PROFILE,
         ConfigureOfficeModeTimeProfileMapi(
-            config.uuidGenerator.generateId(),
-            installationPointId,
-            officeModeTimeProfileId,
-            requestConfig.token),
+            config.uuidGenerator.generateId(), installationPointId, officeModeTimeProfileId, token),
         requestConfig)
 }
 
@@ -218,7 +210,7 @@ suspend fun XesarConnect.configureReleaseDuration(
             releaseDurationShort,
             releaseDurationLong,
             installationPointId,
-            requestConfig.token),
+            token),
         requestConfig)
 }
 
@@ -234,8 +226,7 @@ suspend fun XesarConnect.deleteInstallationPoint(
 ): Deferred<InstallationPointDeleted> {
     return sendCommand<DeleteInstallationPointMapi, InstallationPointDeleted>(
         Topics.Command.DELETE_INSTALLATION_POINT,
-        DeleteInstallationPointMapi(
-            config.uuidGenerator.generateId(), installationPointId, requestConfig.token),
+        DeleteInstallationPointMapi(config.uuidGenerator.generateId(), installationPointId, token),
         requestConfig)
 }
 
@@ -251,8 +242,7 @@ suspend fun XesarConnect.forceRemoveEvvaComponent(
 ): Deferred<EvvaComponentRemoved> {
     return sendCommand<ForceRemoveEvvaComponentMapi, EvvaComponentRemoved>(
         Topics.Command.FORCE_REMOVE_EVVA_COMPONENT,
-        ForceRemoveEvvaComponentMapi(
-            config.uuidGenerator.generateId(), installationPointId, requestConfig.token),
+        ForceRemoveEvvaComponentMapi(config.uuidGenerator.generateId(), installationPointId, token),
         requestConfig)
 }
 /**
@@ -268,7 +258,7 @@ suspend fun XesarConnect.prepareRemovalOfEvvaComponent(
     return sendCommand<PrepareRemovalOfEvvaComponentMapi, EvvaComponentRemovalPrepared>(
         Topics.Command.PREPARE_REMOVAL_OF_EVVA_COMPONENT,
         PrepareRemovalOfEvvaComponentMapi(
-            config.uuidGenerator.generateId(), installationPointId, requestConfig.token),
+            config.uuidGenerator.generateId(), installationPointId, token),
         requestConfig)
 }
 
@@ -286,7 +276,7 @@ suspend fun XesarConnect.revertPrepareRemovalOfEvvaComponent(
         RevertPrepareRemovalOfEvvaComponentMapi, PrepareEvvaComponentRemovalReverted>(
         Topics.Command.REVERT_PREPARE_REMOVAL_OF_EVVA_COMPONENT,
         RevertPrepareRemovalOfEvvaComponentMapi(
-            config.uuidGenerator.generateId(), installationPointId, requestConfig.token),
+            config.uuidGenerator.generateId(), installationPointId, token),
         requestConfig)
 }
 /**
@@ -308,6 +298,6 @@ suspend fun XesarConnect.setPersonalReferenceDurationForInstallationPoint(
             config.uuidGenerator.generateId(),
             personalReferenceDuration,
             installationPointId,
-            requestConfig.token),
+            token),
         requestConfig)
 }

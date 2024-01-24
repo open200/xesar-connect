@@ -58,11 +58,7 @@ suspend fun XesarConnect.createAuthorizationProfile(
     return sendCommand<CreateAuthorizationProfileMapi, AuthorizationProfileCreated>(
         Topics.Command.CREATE_AUTHORIZATION_PROFILE,
         CreateAuthorizationProfileMapi(
-            config.uuidGenerator.generateId(),
-            name,
-            description,
-            authorizationProfileId,
-            requestConfig.token),
+            config.uuidGenerator.generateId(), name, description, authorizationProfileId, token),
         requestConfig)
 }
 
@@ -79,6 +75,6 @@ suspend fun XesarConnect.deleteAuthorizationProfile(
     return sendCommand<DeleteAuthorizationProfileMapi, AuthorizationProfileDeleted>(
         Topics.Command.DELETE_AUTHORIZATION_PROFILE,
         DeleteAuthorizationProfileMapi(
-            config.uuidGenerator.generateId(), authorizationProfileId, requestConfig.token),
+            config.uuidGenerator.generateId(), authorizationProfileId, token),
         requestConfig)
 }

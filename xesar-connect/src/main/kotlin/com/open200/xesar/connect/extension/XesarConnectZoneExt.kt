@@ -56,7 +56,7 @@ suspend fun XesarConnect.addInstallationPointToZone(
     return sendCommand<AddInstallationPointToZoneMapi, InstallationPointsInZoneChanged>(
         Topics.Command.ADD_INSTALLATION_POINT_TO_ZONE,
         AddInstallationPointToZoneMapi(
-            config.uuidGenerator.generateId(), installationPointId, zoneId, requestConfig.token),
+            config.uuidGenerator.generateId(), installationPointId, zoneId, token),
         requestConfig)
 }
 /**
@@ -75,8 +75,7 @@ suspend fun XesarConnect.changeZoneData(
 ): Deferred<ZoneChanged> {
     return sendCommand<ChangeZoneDataMapi, ZoneChanged>(
         Topics.Command.CHANGE_ZONE_DATA,
-        ChangeZoneDataMapi(
-            config.uuidGenerator.generateId(), name, description, zoneId, requestConfig.token),
+        ChangeZoneDataMapi(config.uuidGenerator.generateId(), name, description, zoneId, token),
         requestConfig)
 }
 /**
@@ -103,7 +102,7 @@ suspend fun XesarConnect.createZone(
             name,
             description,
             zoneId,
-            requestConfig.token),
+            token),
         requestConfig)
 }
 /**
@@ -118,7 +117,7 @@ suspend fun XesarConnect.deleteZone(
 ): Deferred<ZoneDeleted> {
     return sendCommand<DeleteZoneMapi, ZoneDeleted>(
         Topics.Command.DELETE_ZONE,
-        DeleteZoneMapi(config.uuidGenerator.generateId(), zoneId, requestConfig.token),
+        DeleteZoneMapi(config.uuidGenerator.generateId(), zoneId, token),
         requestConfig)
 }
 /**
@@ -136,6 +135,6 @@ suspend fun XesarConnect.removeInstallationPointFromZone(
     return sendCommand<RemoveInstallationPointFromZoneMapi, InstallationPointsInZoneChanged>(
         Topics.Command.REMOVE_INSTALLATION_POINT_FROM_ZONE,
         RemoveInstallationPointFromZoneMapi(
-            config.uuidGenerator.generateId(), installationPointId, zoneId, requestConfig.token),
+            config.uuidGenerator.generateId(), installationPointId, zoneId, token),
         requestConfig)
 }

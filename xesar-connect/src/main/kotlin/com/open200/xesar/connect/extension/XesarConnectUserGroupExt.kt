@@ -23,9 +23,6 @@ suspend fun XesarConnect.configureAssignableAuthorizationProfiles(
     return sendCommand<ConfigureAssignableAuthorizationProfilesMapi, UserGroupChanged>(
         Topics.Command.CONFIGURE_ASSIGNABLE_AUTHORIZATION_PROFILES,
         ConfigureAssignableAuthorizationProfilesMapi(
-            config.uuidGenerator.generateId(),
-            assignableAuthorizationProfiles,
-            userGroupId,
-            requestConfig.token),
+            config.uuidGenerator.generateId(), assignableAuthorizationProfiles, userGroupId, token),
         requestConfig)
 }

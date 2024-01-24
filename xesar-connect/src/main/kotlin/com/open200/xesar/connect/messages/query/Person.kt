@@ -32,7 +32,7 @@ data class Person(
     val lastName: String,
     val identifier: String? = null,
     val personalReferenceDuration: PersonalLog,
-    val disengagePeriod: DisengagePeriod,
+    val disengagePeriod: DisengagePeriod? = null,
     val identificationMediaCount: Int? = null,
     val outdatedMedia: Boolean? = null,
     val externalId: String? = null,

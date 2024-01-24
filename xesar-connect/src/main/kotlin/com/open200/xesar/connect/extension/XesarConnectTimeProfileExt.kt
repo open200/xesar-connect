@@ -68,7 +68,7 @@ suspend fun XesarConnect.changeAuthorizationTimeProfile(
             description,
             timeSeries,
             exceptionTimeSeries,
-            requestConfig.token),
+            token),
         requestConfig)
 }
 
@@ -105,7 +105,7 @@ suspend fun XesarConnect.changeOfficeModeTimeProfile(
             exceptionTimeSeries,
             exceptionTimePointSeries,
             timePointSeries,
-            requestConfig.token),
+            token),
         requestConfig)
 }
 /**
@@ -141,7 +141,7 @@ suspend fun XesarConnect.createOfficeModeTimeProfile(
             description,
             timePointSeries,
             timeProfileId,
-            requestConfig.token),
+            token),
         requestConfig)
 }
 
@@ -157,8 +157,7 @@ suspend fun XesarConnect.deleteOfficeModeTimeProfile(
 ): Deferred<OfficeModeTimeProfileDeleted> {
     return sendCommand<DeleteOfficeModeTimeProfileMapi, OfficeModeTimeProfileDeleted>(
         Topics.Command.DELETE_OFFICE_MODE_TIME_PROFILE,
-        DeleteOfficeModeTimeProfileMapi(
-            config.uuidGenerator.generateId(), timeProfileId, requestConfig.token),
+        DeleteOfficeModeTimeProfileMapi(config.uuidGenerator.generateId(), timeProfileId, token),
         requestConfig)
 }
 
@@ -189,7 +188,7 @@ suspend fun XesarConnect.createAuthorizationTimeProfile(
             name,
             description,
             timeProfileId,
-            requestConfig.token),
+            token),
         requestConfig)
 }
 /**
@@ -204,7 +203,6 @@ suspend fun XesarConnect.deleteAuthorizationTimeProfile(
 ): Deferred<AuthorizationTimeProfileDeleted> {
     return sendCommand<DeleteAuthorizationTimeProfileMapi, AuthorizationTimeProfileDeleted>(
         Topics.Command.DELETE_AUTHORIZATION_TIME_PROFILE,
-        DeleteAuthorizationTimeProfileMapi(
-            config.uuidGenerator.generateId(), timeProfileId, requestConfig.token),
+        DeleteAuthorizationTimeProfileMapi(config.uuidGenerator.generateId(), timeProfileId, token),
         requestConfig)
 }

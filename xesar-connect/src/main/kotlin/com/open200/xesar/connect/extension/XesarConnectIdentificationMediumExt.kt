@@ -106,7 +106,7 @@ suspend fun XesarConnect.addInstallationPointAuthorizationToMedium(
         AddInstallationPointAuthorizationToMediumMapi, IndividualAuthorizationsAddedToMedium>(
         Topics.Command.ADD_INSTALLATION_POINT_AUTHORIZATION_TO_MEDIUM,
         AddInstallationPointAuthorizationToMediumMapi(
-            config.uuidGenerator.generateId(), mediumId, authorization, requestConfig.token),
+            config.uuidGenerator.generateId(), mediumId, authorization, token),
         requestConfig)
 }
 
@@ -125,7 +125,7 @@ suspend fun XesarConnect.addZoneAuthorizationToMedium(
     return sendCommand<AddZoneAuthorizationToMediumMapi, IndividualAuthorizationsAddedToMedium>(
         Topics.Command.ADD_ZONE_AUTHORIZATION_TO_MEDIUM,
         AddZoneAuthorizationToMediumMapi(
-            config.uuidGenerator.generateId(), mediumId, authorizationData, requestConfig.token),
+            config.uuidGenerator.generateId(), mediumId, authorizationData, token),
         requestConfig)
 }
 /**
@@ -142,8 +142,7 @@ suspend fun XesarConnect.assignPersonToMedium(
 ): Deferred<MediumPersonChanged> {
     return sendCommand<AssignPersonToMediumMapi, MediumPersonChanged>(
         Topics.Command.ASSIGN_PERSON_TO_MEDIUM,
-        AssignPersonToMediumMapi(
-            config.uuidGenerator.generateId(), mediumId, personId, requestConfig.token),
+        AssignPersonToMediumMapi(config.uuidGenerator.generateId(), mediumId, personId, token),
         requestConfig)
 }
 
@@ -159,7 +158,7 @@ suspend fun XesarConnect.lockMedium(
 ): Deferred<MediumLocked> {
     return sendCommand<LockMediumMapi, MediumLocked>(
         Topics.Command.LOCK_MEDIUM,
-        LockMediumMapi(config.uuidGenerator.generateId(), mediumId, requestConfig.token),
+        LockMediumMapi(config.uuidGenerator.generateId(), mediumId, token),
         requestConfig)
 }
 
@@ -179,10 +178,7 @@ suspend fun XesarConnect.removeInstallationPointAuthorizationFromMedium(
         RemoveInstallationPointAuthorizationFromMediumMapi, IndividualAuthorizationsDeleted>(
         Topics.Command.REMOVE_INSTALLATION_POINT_AUTHORIZATION_FROM_MEDIUM,
         RemoveInstallationPointAuthorizationFromMediumMapi(
-            config.uuidGenerator.generateId(),
-            installationPointAuthorization,
-            mediumId,
-            requestConfig.token),
+            config.uuidGenerator.generateId(), installationPointAuthorization, mediumId, token),
         requestConfig)
 }
 /**
@@ -200,7 +196,7 @@ suspend fun XesarConnect.removeZoneAuthorizationFromMedium(
     return sendCommand<RemoveZoneAuthorizationFromMediumMapi, IndividualAuthorizationsDeleted>(
         Topics.Command.REMOVE_ZONE_AUTHORIZATION_FROM_MEDIUM,
         RemoveZoneAuthorizationFromMediumMapi(
-            config.uuidGenerator.generateId(), zoneAuthorization, mediumId, requestConfig.token),
+            config.uuidGenerator.generateId(), zoneAuthorization, mediumId, token),
         requestConfig)
 }
 
@@ -218,8 +214,7 @@ suspend fun XesarConnect.setAccessBeginAt(
 ): Deferred<MediumChanged> {
     return sendCommand<SetAccessBeginAtMapi, MediumChanged>(
         Topics.Command.SET_ACCESS_BEGIN_AT,
-        SetAccessBeginAtMapi(
-            config.uuidGenerator.generateId(), accessBeginAt, mediumId, requestConfig.token),
+        SetAccessBeginAtMapi(config.uuidGenerator.generateId(), accessBeginAt, mediumId, token),
         requestConfig)
 }
 /**
@@ -236,8 +231,7 @@ suspend fun XesarConnect.setAccessEndAt(
 ): Deferred<MediumChanged> {
     return sendCommand<SetAccessEndAtMapi, MediumChanged>(
         Topics.Command.SET_ACCESS_END_AT,
-        SetAccessEndAtMapi(
-            config.uuidGenerator.generateId(), accessEndAt, mediumId, requestConfig.token),
+        SetAccessEndAtMapi(config.uuidGenerator.generateId(), accessEndAt, mediumId, token),
         requestConfig)
 }
 
@@ -256,7 +250,7 @@ suspend fun XesarConnect.setDisengagePeriodOnMedium(
     return sendCommand<SetDisengagePeriodOnMediumMapi, MediumChanged>(
         Topics.Command.SET_DISENGAGE_PERIOD_ON_MEDIUM,
         SetDisengagePeriodOnMediumMapi(
-            config.uuidGenerator.generateId(), disengagePeriod, mediumId, requestConfig.token),
+            config.uuidGenerator.generateId(), disengagePeriod, mediumId, token),
         requestConfig)
 }
 /**
@@ -273,8 +267,7 @@ suspend fun XesarConnect.setLabelOnMedium(
 ): Deferred<MediumChanged> {
     return sendCommand<SetLabelOnMediumMapi, MediumChanged>(
         Topics.Command.SET_LABEL_ON_MEDIUM,
-        SetLabelOnMediumMapi(
-            config.uuidGenerator.generateId(), mediumId, label, requestConfig.token),
+        SetLabelOnMediumMapi(config.uuidGenerator.generateId(), mediumId, label, token),
         requestConfig)
 }
 /**
@@ -292,7 +285,7 @@ suspend fun XesarConnect.setValidityDuration(
     return sendCommand<SetValidityDurationMapi, MediumChanged>(
         Topics.Command.SET_VALIDITY_DURATION,
         SetValidityDurationMapi(
-            config.uuidGenerator.generateId(), validityDuration, mediumId, requestConfig.token),
+            config.uuidGenerator.generateId(), validityDuration, mediumId, token),
         requestConfig)
 }
 
@@ -315,9 +308,6 @@ suspend fun XesarConnect.withdrawAuthorizationProfileFromMedium(
         WithdrawAuthorizationProfileFromMediumMapi, AuthorizationProfileWithdrawnFromMedium>(
         Topics.Command.WITHDRAW_AUTHORIZATION_PROFILE_FROM_MEDIUM,
         WithdrawAuthorizationProfileFromMediumMapi(
-            config.uuidGenerator.generateId(),
-            authorizationProfileId,
-            mediumId,
-            requestConfig.token),
+            config.uuidGenerator.generateId(), authorizationProfileId, mediumId, token),
         requestConfig)
 }

@@ -60,12 +60,7 @@ suspend fun XesarConnect.changePersonInformation(
     return sendCommand<ChangePersonInformationMapi, PersonChanged>(
         Topics.Command.CHANGE_PERSON_INFORMATION,
         ChangePersonInformationMapi(
-            config.uuidGenerator.generateId(),
-            firstName,
-            lastName,
-            identifier,
-            externalId,
-            requestConfig.token),
+            config.uuidGenerator.generateId(), firstName, lastName, identifier, externalId, token),
         requestConfig)
 }
 /**
@@ -95,7 +90,7 @@ suspend fun XesarConnect.createPerson(
             identifier,
             externalId,
             personId,
-            requestConfig.token),
+            token),
         requestConfig)
 }
 /**
@@ -110,7 +105,7 @@ suspend fun XesarConnect.deletePerson(
 ): Deferred<PersonDeleted> {
     return sendCommand<DeletePersonMapi, PersonDeleted>(
         Topics.Command.DELETE_PERSON,
-        DeletePersonMapi(config.uuidGenerator.generateId(), externalId, requestConfig.token),
+        DeletePersonMapi(config.uuidGenerator.generateId(), externalId, token),
         requestConfig)
 }
 
@@ -130,10 +125,7 @@ suspend fun XesarConnect.setDefaultAuthorizationProfileForPerson(
     return sendCommand<SetDefaultAuthorizationProfileForPersonMapi, PersonChanged>(
         Topics.Command.SET_DEFAULT_AUTHORIZATION_PROFILE_FOR_PERSON,
         SetDefaultAuthorizationProfileForPersonMapi(
-            config.uuidGenerator.generateId(),
-            externalId,
-            defaultAuthorizationProfileName,
-            requestConfig.token),
+            config.uuidGenerator.generateId(), externalId, defaultAuthorizationProfileName, token),
         requestConfig)
 }
 /**
@@ -151,7 +143,7 @@ suspend fun XesarConnect.setDefaultDisengagePeriodForPerson(
     return sendCommand<SetDefaultDisengagePeriodForPersonMapi, PersonChanged>(
         Topics.Command.SET_DEFAULT_DISENGAGE_PERIOD_FOR_PERSON,
         SetDefaultDisengagePeriodForPersonMapi(
-            config.uuidGenerator.generateId(), disengagePeriod, externalId, requestConfig.token),
+            config.uuidGenerator.generateId(), disengagePeriod, externalId, token),
         requestConfig)
 }
 
@@ -169,9 +161,6 @@ suspend fun XesarConnect.setPersonalReferenceDurationInPerson(
     return sendCommand<SetPersonalReferenceDurationInPersonMapi, PersonChanged>(
         Topics.Command.SET_PERSONAL_REFERENCE_DURATION_IN_PERSON,
         SetPersonalReferenceDurationInPersonMapi(
-            config.uuidGenerator.generateId(),
-            personalReferenceDuration,
-            externalId,
-            requestConfig.token),
+            config.uuidGenerator.generateId(), personalReferenceDuration, externalId, token),
         requestConfig)
 }
