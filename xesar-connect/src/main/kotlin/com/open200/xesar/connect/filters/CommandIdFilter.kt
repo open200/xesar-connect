@@ -11,7 +11,7 @@ import java.util.UUID
 class CommandIdFilter(commandId: UUID) : MessageFilter {
 
     private val commandIdRegex =
-        Regex("\"commandId\":\\s*\"${Regex.fromLiteral(commandId.toString())}\"")
+        Regex("\"${UUIDJsonName.commandId}\":\\s*\"${Regex.fromLiteral(commandId.toString())}\"")
 
     /**
      * Filters the given topic and message based on the command ID.

@@ -12,10 +12,10 @@ data class TimeProfile(
     val timeSeries: List<TimeSerie>,
     val exceptionTimeSeries: List<ExceptionTimeSerie>,
     val exceptionTimePointSeries: List<ExceptionTimepointSerie>? = emptyList(),
-    val name: String,
+    val name: String? = null,
     val description: String? = null,
     val timePointSeries: List<TimePointSerie>? = emptyList(),
-    @Serializable(with = UUIDSerializer::class) val id: UUID,
+    @Serializable(with = UUIDSerializer::class) val id: UUID? = null,
     val type: TimeProfileType? = null,
     val validStandardTimeProfile: Boolean? = null
 ) : QueryListResource, QueryElementResource {

@@ -3,7 +3,7 @@ package com.open200.xesar.connect.command
 import com.open200.xesar.connect.Topics
 import com.open200.xesar.connect.XesarConnect
 import com.open200.xesar.connect.XesarMqttClient
-import com.open200.xesar.connect.extension.addInstallationPointAuthorizationToMedium
+import com.open200.xesar.connect.extension.addInstallationPointAuthorizationToMediumAsync
 import com.open200.xesar.connect.messages.command.AuthorizationData
 import com.open200.xesar.connect.messages.event.ApiEvent
 import com.open200.xesar.connect.messages.event.IndividualAuthorizationsAddedToMedium
@@ -78,12 +78,13 @@ class AddInstallationPointAuthorizationToMediumTest :
                                 true,
                                 UUID.fromString("e9b31e62-8969-4794-a219-8c81ff10c91d"))
                         val result =
-                            api.addInstallationPointAuthorizationToMedium(
-                                    UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
-                                    authorizationData)
-                                .await()
-                        result.id.shouldBeEqual(
-                            UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
+                            api.addInstallationPointAuthorizationToMediumAsync(
+                                UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
+                                authorizationData)
+                        result
+                            .await()
+                            .id
+                            .shouldBeEqual(UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
                     }
                 }
             }

@@ -3,7 +3,7 @@ package com.open200.xesar.connect.command
 import com.open200.xesar.connect.Topics
 import com.open200.xesar.connect.XesarConnect
 import com.open200.xesar.connect.XesarMqttClient
-import com.open200.xesar.connect.extension.setValidityDuration
+import com.open200.xesar.connect.extension.setValidityDurationAsync
 import com.open200.xesar.connect.messages.event.ApiEvent
 import com.open200.xesar.connect.messages.event.MediumChanged
 import com.open200.xesar.connect.messages.event.encodeEvent
@@ -69,7 +69,7 @@ class SetValidityDurationTest :
                     XesarConnect.connectAndLoginAsync(config).await().use { api ->
                         api.subscribeAsync(Topics(Topics.Event.MEDIUM_CHANGED)).await()
                         val result =
-                            api.setValidityDuration(
+                            api.setValidityDurationAsync(
                                     UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"), 123)
                                 .await()
                         result.id.shouldBeEqual(

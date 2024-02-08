@@ -15,7 +15,7 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class CreateCodingStationMapi(
-    @Serializable(with = UUIDSerializer::class) val commandId: UUID,
+    override val commandId: @Serializable(with = UUIDSerializer::class) UUID,
     val name: String,
     val description: String? = null,
     @Serializable(with = UUIDSerializer::class) val id: UUID,

@@ -3,7 +3,7 @@ package com.open200.xesar.connect.command
 import com.open200.xesar.connect.Topics
 import com.open200.xesar.connect.XesarConnect
 import com.open200.xesar.connect.XesarMqttClient
-import com.open200.xesar.connect.extension.lockMedium
+import com.open200.xesar.connect.extension.lockMediumAsync
 import com.open200.xesar.connect.messages.event.ApiEvent
 import com.open200.xesar.connect.messages.event.MediumLocked
 import com.open200.xesar.connect.messages.event.encodeEvent
@@ -69,7 +69,8 @@ class LockMediumTest :
                     XesarConnect.connectAndLoginAsync(config).await().use { api ->
                         api.subscribeAsync(Topics(Topics.Event.MEDIUM_LOCKED)).await()
                         val result =
-                            api.lockMedium(UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
+                            api.lockMediumAsync(
+                                    UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
                                 .await()
                         result.mediumIdentifier.shouldBeEqual(123L)
                         result.aggregateId.shouldBeEqual(

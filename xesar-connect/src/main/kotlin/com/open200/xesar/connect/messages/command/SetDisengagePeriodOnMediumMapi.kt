@@ -17,7 +17,7 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class SetDisengagePeriodOnMediumMapi(
-    @Serializable(with = UUIDSerializer::class) val commandId: UUID,
+    override val commandId: @Serializable(with = UUIDSerializer::class) UUID,
     val disengagePeriod: DisengagePeriod,
     @Serializable(with = UUIDSerializer::class) val id: UUID,
     val token: String

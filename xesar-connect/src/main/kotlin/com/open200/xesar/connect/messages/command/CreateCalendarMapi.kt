@@ -17,7 +17,7 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class CreateCalendarMapi(
-    @Serializable(with = UUIDSerializer::class) val commandId: UUID,
+    override val commandId: @Serializable(with = UUIDSerializer::class) UUID,
     val name: String,
     val specialDays: List<@Serializable(with = LocalDateSerializer::class) LocalDate> = emptyList(),
     @Serializable(with = UUIDSerializer::class) val id: UUID,

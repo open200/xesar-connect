@@ -17,7 +17,7 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class ConfigureReleaseDurationMapi(
-    @Serializable(with = UUIDSerializer::class) val commandId: UUID,
+    override val commandId: @Serializable(with = UUIDSerializer::class) UUID,
     val releaseDurationShort: Int? = null,
     val releaseDurationLong: Int? = null,
     @Serializable(with = UUIDSerializer::class) val id: UUID,

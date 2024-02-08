@@ -14,8 +14,8 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class AssignAuthorizationProfileToMediumMapi(
-    @Serializable(with = UUIDSerializer::class) val authorizationProfileId: UUID,
+    override val commandId: @Serializable(with = UUIDSerializer::class) UUID,
+    @Serializable(with = UUIDSerializer::class) val authorizationProfileId: UUID? = null,
     @Serializable(with = UUIDSerializer::class) val id: UUID,
-    @Serializable(with = UUIDSerializer::class) val commandId: UUID,
     val token: String
 ) : Command

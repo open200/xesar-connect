@@ -97,7 +97,7 @@ class ConnectAndLoginTest :
                         XesarMqttClient.connectAsync(config).await().use { client ->
                             client.subscribeAsync(arrayOf(Topics.ALL_TOPICS)).await()
 
-                            client.onMessage = { topic, payload ->
+                            client.onMessage = { _, payload ->
                                 loginReceived.complete(payload.decodeToString())
                             }
 

@@ -166,7 +166,7 @@ class QueryIdentificationMediumTest :
                         XesarMqttClient.connectAsync(config).await().use { client ->
                             client.subscribeAsync(arrayOf(Topics.ALL_TOPICS)).await()
 
-                            client.onMessage = { topic, payload ->
+                            client.onMessage = { topic, _ ->
                                 when (topic) {
                                     Topics.Query.REQUEST -> {
                                         queryReceived.complete(null)

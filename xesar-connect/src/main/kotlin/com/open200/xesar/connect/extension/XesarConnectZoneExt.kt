@@ -2,6 +2,7 @@ package com.open200.xesar.connect.extension
 
 import com.open200.xesar.connect.Topics
 import com.open200.xesar.connect.XesarConnect
+import com.open200.xesar.connect.messages.SingleEventResult
 import com.open200.xesar.connect.messages.command.*
 import com.open200.xesar.connect.messages.event.InstallationPointsInZoneChanged
 import com.open200.xesar.connect.messages.event.ZoneChanged
@@ -9,10 +10,8 @@ import com.open200.xesar.connect.messages.event.ZoneCreated
 import com.open200.xesar.connect.messages.event.ZoneDeleted
 import com.open200.xesar.connect.messages.query.QueryList
 import com.open200.xesar.connect.messages.query.Zone
-import com.open200.xesar.connect.utils.UUIDSerializer
 import java.util.*
 import kotlinx.coroutines.Deferred
-import kotlinx.serialization.Serializable
 
 /**
  * Queries the list of zones asynchronously.
@@ -48,13 +47,15 @@ suspend fun XesarConnect.queryZoneByIdAsync(
  * @param zoneId The ID of the zone.
  * @param requestConfig The request configuration (optional).
  */
-suspend fun XesarConnect.addInstallationPointToZone(
+suspend fun XesarConnect.addInstallationPointToZoneAsync(
     installationPointId: UUID,
     zoneId: UUID,
     requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
-): Deferred<InstallationPointsInZoneChanged> {
-    return sendCommand<AddInstallationPointToZoneMapi, InstallationPointsInZoneChanged>(
+): SingleEventResult<InstallationPointsInZoneChanged> {
+    return sendCommandAsync<AddInstallationPointToZoneMapi, InstallationPointsInZoneChanged>(
         Topics.Command.ADD_INSTALLATION_POINT_TO_ZONE,
+        Topics.Event.INSTALLATION_POINTS_IN_ZONE_CHANGED,
+        true,
         AddInstallationPointToZoneMapi(
             config.uuidGenerator.generateId(), installationPointId, zoneId, token),
         requestConfig)
@@ -67,14 +68,16 @@ suspend fun XesarConnect.addInstallationPointToZone(
  * @param zoneId The ID of the zone.
  * @param requestConfig The request configuration (optional).
  */
-suspend fun XesarConnect.changeZoneData(
+suspend fun XesarConnect.changeZoneDataAsync(
     name: String,
     description: String,
     zoneId: UUID,
     requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
-): Deferred<ZoneChanged> {
-    return sendCommand<ChangeZoneDataMapi, ZoneChanged>(
+): SingleEventResult<ZoneChanged> {
+    return sendCommandAsync<ChangeZoneDataMapi, ZoneChanged>(
         Topics.Command.CHANGE_ZONE_DATA,
+        Topics.Event.ZONE_CHANGED,
+        true,
         ChangeZoneDataMapi(config.uuidGenerator.generateId(), name, description, zoneId, token),
         requestConfig)
 }
@@ -87,15 +90,17 @@ suspend fun XesarConnect.changeZoneData(
  * @param zoneId The ID of the zone.
  * @param requestConfig The request configuration (optional).
  */
-suspend fun XesarConnect.createZone(
-    installationPoints: List<@Serializable(with = UUIDSerializer::class) UUID> = emptyList(),
+suspend fun XesarConnect.createZoneAsync(
+    installationPoints: List<UUID> = emptyList(),
     name: String,
     description: String? = null,
     zoneId: UUID,
     requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
-): Deferred<ZoneCreated> {
-    return sendCommand<CreateZoneMapi, ZoneCreated>(
+): SingleEventResult<ZoneCreated> {
+    return sendCommandAsync<CreateZoneMapi, ZoneCreated>(
         Topics.Command.CREATE_ZONE,
+        Topics.Event.ZONE_CREATED,
+        true,
         CreateZoneMapi(
             config.uuidGenerator.generateId(),
             installationPoints,
@@ -111,12 +116,14 @@ suspend fun XesarConnect.createZone(
  * @param zoneId The ID of the zone.
  * @param requestConfig The request configuration (optional).
  */
-suspend fun XesarConnect.deleteZone(
+suspend fun XesarConnect.deleteZoneAsync(
     zoneId: UUID,
     requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
-): Deferred<ZoneDeleted> {
-    return sendCommand<DeleteZoneMapi, ZoneDeleted>(
+): SingleEventResult<ZoneDeleted> {
+    return sendCommandAsync<DeleteZoneMapi, ZoneDeleted>(
         Topics.Command.DELETE_ZONE,
+        Topics.Event.ZONE_DELETED,
+        true,
         DeleteZoneMapi(config.uuidGenerator.generateId(), zoneId, token),
         requestConfig)
 }
@@ -127,13 +134,15 @@ suspend fun XesarConnect.deleteZone(
  * @param zoneId The ID of the zone.
  * @param requestConfig The request configuration (optional).
  */
-suspend fun XesarConnect.removeInstallationPointFromZone(
+suspend fun XesarConnect.removeInstallationPointFromZoneAsync(
     installationPointId: UUID,
     zoneId: UUID,
     requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
-): Deferred<InstallationPointsInZoneChanged> {
-    return sendCommand<RemoveInstallationPointFromZoneMapi, InstallationPointsInZoneChanged>(
+): SingleEventResult<InstallationPointsInZoneChanged> {
+    return sendCommandAsync<RemoveInstallationPointFromZoneMapi, InstallationPointsInZoneChanged>(
         Topics.Command.REMOVE_INSTALLATION_POINT_FROM_ZONE,
+        Topics.Event.INSTALLATION_POINTS_IN_ZONE_CHANGED,
+        true,
         RemoveInstallationPointFromZoneMapi(
             config.uuidGenerator.generateId(), installationPointId, zoneId, token),
         requestConfig)

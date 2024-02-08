@@ -41,7 +41,7 @@ data class InstallationPoint(
     val linkedInstallationPoints: List<@Serializable(with = UUIDSerializer::class) UUID>? =
         emptyList(),
     val onlineStatus: OnlineStatus? = null,
-    val componentType: ComponentType,
+    val componentType: ComponentType? = null,
     val releaseDurationShort: Int,
     val releaseDurationLong: Int,
     val logMode: String? = null,

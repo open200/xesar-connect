@@ -15,7 +15,7 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class ConfigureManualOfficeModeAndShopModeMapi(
-    @Serializable(with = UUIDSerializer::class) val commandId: UUID,
+    override val commandId: @Serializable(with = UUIDSerializer::class) UUID,
     val shopMode: Boolean? = null,
     val manualOfficeMode: Boolean? = null,
     @Serializable(with = UUIDSerializer::class) val id: UUID? = null,

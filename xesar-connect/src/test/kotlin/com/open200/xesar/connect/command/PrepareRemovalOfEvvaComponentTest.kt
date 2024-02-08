@@ -3,7 +3,7 @@ package com.open200.xesar.connect.command
 import com.open200.xesar.connect.Topics
 import com.open200.xesar.connect.XesarConnect
 import com.open200.xesar.connect.XesarMqttClient
-import com.open200.xesar.connect.extension.prepareRemovalOfEvvaComponent
+import com.open200.xesar.connect.extension.prepareRemovalOfEvvaComponentAsync
 import com.open200.xesar.connect.messages.event.ApiEvent
 import com.open200.xesar.connect.messages.event.EvvaComponentRemovalPrepared
 import com.open200.xesar.connect.messages.event.encodeEvent
@@ -73,7 +73,7 @@ class PrepareRemovalOfEvvaComponentTest :
                             .await()
 
                         val result =
-                            api.prepareRemovalOfEvvaComponent(
+                            api.prepareRemovalOfEvvaComponentAsync(
                                     UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
                                 .await()
                         result.aggregateId.shouldBeEqual(

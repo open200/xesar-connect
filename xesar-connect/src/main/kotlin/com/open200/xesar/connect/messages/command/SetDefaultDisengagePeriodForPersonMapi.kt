@@ -17,7 +17,7 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class SetDefaultDisengagePeriodForPersonMapi(
-    @Serializable(with = UUIDSerializer::class) val commandId: UUID,
+    override val commandId: @Serializable(with = UUIDSerializer::class) UUID,
     val disengagePeriod: DisengagePeriod,
     val externalId: String,
     val token: String

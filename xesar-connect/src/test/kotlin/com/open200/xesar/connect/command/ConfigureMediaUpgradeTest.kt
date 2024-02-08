@@ -3,7 +3,7 @@ package com.open200.xesar.connect.command
 import com.open200.xesar.connect.Topics
 import com.open200.xesar.connect.XesarConnect
 import com.open200.xesar.connect.XesarMqttClient
-import com.open200.xesar.connect.extension.configureMediaUpgradeMapi
+import com.open200.xesar.connect.extension.configureMediaUpgradeMapiAsync
 import com.open200.xesar.connect.messages.event.ApiEvent
 import com.open200.xesar.connect.messages.event.InstallationPointChanged
 import com.open200.xesar.connect.messages.event.encodeEvent
@@ -70,7 +70,7 @@ class ConfigureMediaUpgradeTest :
                     XesarConnect.connectAndLoginAsync(config).await().use { api ->
                         api.subscribeAsync(Topics(Topics.Event.INSTALLATION_POINT_CHANGED)).await()
                         val result =
-                            api.configureMediaUpgradeMapi(
+                            api.configureMediaUpgradeMapiAsync(
                                     true, UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
                                 .await()
                         result.upgradeMedia?.shouldBeTrue()

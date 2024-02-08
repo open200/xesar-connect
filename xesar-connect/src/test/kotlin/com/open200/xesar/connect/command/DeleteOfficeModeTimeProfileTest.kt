@@ -3,7 +3,7 @@ package com.open200.xesar.connect.command
 import com.open200.xesar.connect.Topics
 import com.open200.xesar.connect.XesarConnect
 import com.open200.xesar.connect.XesarMqttClient
-import com.open200.xesar.connect.extension.deleteOfficeModeTimeProfile
+import com.open200.xesar.connect.extension.deleteOfficeModeTimeProfileAsync
 import com.open200.xesar.connect.messages.event.ApiEvent
 import com.open200.xesar.connect.messages.event.OfficeModeTimeProfileDeleted
 import com.open200.xesar.connect.messages.event.encodeEvent
@@ -69,7 +69,7 @@ class DeleteOfficeModeTimeProfileTest :
                         api.subscribeAsync(Topics(Topics.Event.OFFICE_MODE_TIME_PROFILE_DELETED))
                             .await()
                         val result =
-                            api.deleteOfficeModeTimeProfile(
+                            api.deleteOfficeModeTimeProfileAsync(
                                     UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
                                 )
                                 .await()

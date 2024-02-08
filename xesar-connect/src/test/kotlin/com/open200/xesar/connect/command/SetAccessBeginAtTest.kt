@@ -3,7 +3,7 @@ package com.open200.xesar.connect.command
 import com.open200.xesar.connect.Topics
 import com.open200.xesar.connect.XesarConnect
 import com.open200.xesar.connect.XesarMqttClient
-import com.open200.xesar.connect.extension.setAccessBeginAt
+import com.open200.xesar.connect.extension.setAccessBeginAtAsync
 import com.open200.xesar.connect.messages.event.ApiEvent
 import com.open200.xesar.connect.messages.event.MediumChanged
 import com.open200.xesar.connect.messages.event.encodeEvent
@@ -70,7 +70,7 @@ class SetAccessBeginAtTest :
                     XesarConnect.connectAndLoginAsync(config).await().use { api ->
                         api.subscribeAsync(Topics(Topics.Event.MEDIUM_CHANGED)).await()
                         val result =
-                            api.setAccessBeginAt(
+                            api.setAccessBeginAtAsync(
                                     UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
                                     LocalDateTime.parse("2023-08-24T16:25:52.225991"))
                                 .await()

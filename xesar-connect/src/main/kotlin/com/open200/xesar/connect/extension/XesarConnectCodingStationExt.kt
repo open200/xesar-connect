@@ -2,6 +2,7 @@ package com.open200.xesar.connect.extension
 
 import com.open200.xesar.connect.Topics
 import com.open200.xesar.connect.XesarConnect
+import com.open200.xesar.connect.messages.SingleEventResult
 import com.open200.xesar.connect.messages.command.ChangeCodingStationMapi
 import com.open200.xesar.connect.messages.command.CreateCodingStationMapi
 import com.open200.xesar.connect.messages.command.DeleteCodingStationMapi
@@ -50,14 +51,16 @@ suspend fun XesarConnect.queryCodingStationByIdAsync(
  * @param codingStationId The ID of the coding station.
  * @param requestConfig The request configuration (optional).
  */
-suspend fun XesarConnect.createCodingStation(
+suspend fun XesarConnect.createCodingStationAsync(
     name: String,
     description: String? = null,
     codingStationId: UUID,
     requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
-): Deferred<CodingStationCreated> {
-    return sendCommand<CreateCodingStationMapi, CodingStationCreated>(
+): SingleEventResult<CodingStationCreated> {
+    return sendCommandAsync<CreateCodingStationMapi, CodingStationCreated>(
         Topics.Command.CREATE_CODING_STATION,
+        Topics.Event.CODING_STATION_CREATED,
+        true,
         CreateCodingStationMapi(
             config.uuidGenerator.generateId(), name, description, codingStationId, token),
         requestConfig)
@@ -71,14 +74,16 @@ suspend fun XesarConnect.createCodingStation(
  * @param description The description of the coding station (optional).
  * @param requestConfig The request configuration (optional).
  */
-suspend fun XesarConnect.changeCodingStation(
+suspend fun XesarConnect.changeCodingStationAsync(
     codingStationId: UUID,
     name: String? = null,
     description: String? = null,
     requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
-): Deferred<CodingStationChanged> {
-    return sendCommand<ChangeCodingStationMapi, CodingStationChanged>(
+): SingleEventResult<CodingStationChanged> {
+    return sendCommandAsync<ChangeCodingStationMapi, CodingStationChanged>(
         Topics.Command.CHANGE_CODING_STATION,
+        Topics.Event.CODING_STATION_CHANGED,
+        true,
         ChangeCodingStationMapi(
             config.uuidGenerator.generateId(), codingStationId, name, description, token),
         requestConfig)
@@ -90,12 +95,14 @@ suspend fun XesarConnect.changeCodingStation(
  * @param codingStationId The ID of the coding station.
  * @param requestConfig The request configuration (optional).
  */
-suspend fun XesarConnect.deleteCodingStation(
+suspend fun XesarConnect.deleteCodingStationAsync(
     codingStationId: UUID,
     requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
-): Deferred<CodingStationDeleted> {
-    return sendCommand<DeleteCodingStationMapi, CodingStationDeleted>(
+): SingleEventResult<CodingStationDeleted> {
+    return sendCommandAsync<DeleteCodingStationMapi, CodingStationDeleted>(
         Topics.Command.DELETE_CODING_STATION,
+        Topics.Event.CODING_STATION_DELETED,
+        true,
         DeleteCodingStationMapi(config.uuidGenerator.generateId(), codingStationId, token),
         requestConfig)
 }

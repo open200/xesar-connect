@@ -3,7 +3,7 @@ package com.open200.xesar.connect.command
 import com.open200.xesar.connect.Topics
 import com.open200.xesar.connect.XesarConnect
 import com.open200.xesar.connect.XesarMqttClient
-import com.open200.xesar.connect.extension.setInstallationPointPersonalReferenceDuration
+import com.open200.xesar.connect.extension.setInstallationPointPersonalReferenceDurationAsync
 import com.open200.xesar.connect.messages.PersonalLog
 import com.open200.xesar.connect.messages.event.ApiEvent
 import com.open200.xesar.connect.messages.event.PartitionChanged
@@ -70,7 +70,7 @@ class SetInstallationPointPersonalReferenceDurationTest :
                     XesarConnect.connectAndLoginAsync(config).await().use { api ->
                         api.subscribeAsync(Topics(Topics.Event.PARTITION_CHANGED)).await()
                         val result =
-                            api.setInstallationPointPersonalReferenceDuration(
+                            api.setInstallationPointPersonalReferenceDurationAsync(
                                     PersonalLog(days = 30))
                                 .await()
                         result.id.shouldBeEqual(

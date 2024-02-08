@@ -3,7 +3,7 @@ package com.open200.xesar.connect.command
 import com.open200.xesar.connect.Topics
 import com.open200.xesar.connect.XesarConnect
 import com.open200.xesar.connect.XesarMqttClient
-import com.open200.xesar.connect.extension.setDefaultDisengagePeriodForPerson
+import com.open200.xesar.connect.extension.setDefaultDisengagePeriodForPersonAsync
 import com.open200.xesar.connect.messages.DisengagePeriod
 import com.open200.xesar.connect.messages.event.ApiEvent
 import com.open200.xesar.connect.messages.event.PersonChanged
@@ -70,7 +70,8 @@ class SetDefaultDisengagePeriodForPersonTest :
                     XesarConnect.connectAndLoginAsync(config).await().use { api ->
                         api.subscribeAsync(Topics(Topics.Event.PERSON_CHANGED)).await()
                         val result =
-                            api.setDefaultDisengagePeriodForPerson("EXT-123", DisengagePeriod.SHORT)
+                            api.setDefaultDisengagePeriodForPersonAsync(
+                                    "EXT-123", DisengagePeriod.SHORT)
                                 .await()
                         result.id.shouldBeEqual(
                             UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))

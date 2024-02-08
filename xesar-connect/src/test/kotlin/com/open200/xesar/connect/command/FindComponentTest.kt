@@ -3,8 +3,8 @@ package com.open200.xesar.connect.command
 import com.open200.xesar.connect.Topics
 import com.open200.xesar.connect.XesarConnect
 import com.open200.xesar.connect.XesarMqttClient
-import com.open200.xesar.connect.exception.HttpErrorException
-import com.open200.xesar.connect.extension.findComponent
+import com.open200.xesar.connect.exception.RequiredEventException
+import com.open200.xesar.connect.extension.findComponentAsync
 import com.open200.xesar.connect.messages.ApiError
 import com.open200.xesar.connect.messages.encodeError
 import com.open200.xesar.connect.messages.event.ApiEvent
@@ -72,8 +72,8 @@ class FindComponentTest :
                     simulatedBackendReady.await()
 
                     XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                        shouldThrow<HttpErrorException> {
-                            api.findComponent(
+                        shouldThrow<RequiredEventException> {
+                            api.findComponentAsync(
                                     InstallationPointFixture.installationPointFixture.id, true)
                                 .await()
                         }
@@ -124,7 +124,7 @@ class FindComponentTest :
                     XesarConnect.connectAndLoginAsync(config).await().use { api ->
                         api.subscribeAsync(Topics(Topics.Event.FIND_COMPONENT_PERFORMED)).await()
                         val result =
-                            api.findComponent(
+                            api.findComponentAsync(
                                     InstallationPointFixture.installationPointFixture.id, true)
                                 .await()
 

@@ -14,7 +14,7 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class RemoveInstallationPointAuthorizationFromMediumMapi(
-    @Serializable(with = UUIDSerializer::class) val commandId: UUID,
+    override val commandId: @Serializable(with = UUIDSerializer::class) UUID,
     @Serializable(with = UUIDSerializer::class) val authorization: UUID? = null,
     @Serializable(with = UUIDSerializer::class) val id: UUID,
     val token: String

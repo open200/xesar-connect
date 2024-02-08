@@ -3,7 +3,7 @@ package com.open200.xesar.connect.command
 import com.open200.xesar.connect.Topics
 import com.open200.xesar.connect.XesarConnect
 import com.open200.xesar.connect.XesarMqttClient
-import com.open200.xesar.connect.extension.createOfficeModeTimeProfile
+import com.open200.xesar.connect.extension.createOfficeModeTimeProfileAsync
 import com.open200.xesar.connect.messages.event.ApiEvent
 import com.open200.xesar.connect.messages.event.OfficeModeTimeProfileCreated
 import com.open200.xesar.connect.messages.event.encodeEvent
@@ -75,7 +75,7 @@ class CreateOfficeModeTimeProfileTest :
                         api.subscribeAsync(Topics(Topics.Event.OFFICE_MODE_TIME_PROFILE_CREATED))
                             .await()
                         val result =
-                            api.createOfficeModeTimeProfile(
+                            api.createOfficeModeTimeProfileAsync(
                                     name = "timeProfileName",
                                     timeSeries = TimeProfileFixture.timeSeries,
                                     timeProfileId =

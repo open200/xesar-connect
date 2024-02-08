@@ -3,7 +3,7 @@ package com.open200.xesar.connect.command
 import com.open200.xesar.connect.Topics
 import com.open200.xesar.connect.XesarConnect
 import com.open200.xesar.connect.XesarMqttClient
-import com.open200.xesar.connect.extension.setDailySchedulerExecutionTime
+import com.open200.xesar.connect.extension.setDailySchedulerExecutionTimeAsync
 import com.open200.xesar.connect.messages.event.ApiEvent
 import com.open200.xesar.connect.messages.event.PartitionChanged
 import com.open200.xesar.connect.messages.event.encodeEvent
@@ -13,6 +13,7 @@ import io.kotest.common.runBlocking
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.extensions.testcontainers.perProject
 import io.kotest.matchers.equals.shouldBeEqual
+import io.kotest.matchers.shouldBe
 import io.mockk.coEvery
 import java.util.*
 import kotlinx.coroutines.CompletableDeferred
@@ -58,7 +59,7 @@ class SetDailySchedulerExecutionTimeTest :
                                     dailySchedulerExecutionTime = TimeProfileFixture.localTime))
 
                         client
-                            .publishAsync(Topics.Event.MEDIUM_CHANGED, encodeEvent(apiEvent))
+                            .publishAsync(Topics.Event.PARTITION_CHANGED, encodeEvent(apiEvent))
                             .await()
                     }
                 }
@@ -66,11 +67,11 @@ class SetDailySchedulerExecutionTimeTest :
                     simulatedBackendReady.await()
 
                     XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                        api.subscribeAsync(Topics(Topics.Event.MEDIUM_CHANGED)).await()
+                        api.subscribeAsync(Topics(Topics.Event.PARTITION_CHANGED)).await()
                         val result =
-                            api.setDailySchedulerExecutionTime(TimeProfileFixture.localTime).await()
-                        result.dailySchedulerExecutionTime?.shouldBeEqual(
-                            TimeProfileFixture.localTime)
+                            api.setDailySchedulerExecutionTimeAsync(TimeProfileFixture.localTime)
+                                .await()
+                        result.dailySchedulerExecutionTime.shouldBe(TimeProfileFixture.localTime)
                     }
                 }
             }

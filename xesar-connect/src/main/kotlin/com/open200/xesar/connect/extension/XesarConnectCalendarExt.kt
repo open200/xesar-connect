@@ -2,6 +2,7 @@ package com.open200.xesar.connect.extension
 
 import com.open200.xesar.connect.Topics
 import com.open200.xesar.connect.XesarConnect
+import com.open200.xesar.connect.messages.SingleEventResult
 import com.open200.xesar.connect.messages.command.ChangeCalendarMapi
 import com.open200.xesar.connect.messages.command.CreateCalendarMapi
 import com.open200.xesar.connect.messages.command.DeleteCalendarMapi
@@ -11,11 +12,9 @@ import com.open200.xesar.connect.messages.event.CalendarCreated
 import com.open200.xesar.connect.messages.event.CalendarDeleted
 import com.open200.xesar.connect.messages.query.Calendar
 import com.open200.xesar.connect.messages.query.QueryList
-import com.open200.xesar.connect.utils.LocalDateSerializer
 import java.time.LocalDate
 import java.util.*
 import kotlinx.coroutines.Deferred
-import kotlinx.serialization.Serializable
 
 /**
  * Queries the list of calendars asynchronously.
@@ -53,14 +52,16 @@ suspend fun XesarConnect.queryCalendarByIdAsync(
  * @param calendarId The ID of the calendar.
  * @param requestConfig The request configuration (optional).
  */
-suspend fun XesarConnect.createCalendar(
+suspend fun XesarConnect.createCalendarAsync(
     name: String,
-    specialDays: List<@Serializable(with = LocalDateSerializer::class) LocalDate> = emptyList(),
+    specialDays: List<LocalDate> = emptyList(),
     calendarId: UUID,
     requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
-): Deferred<CalendarCreated> {
-    return sendCommand<CreateCalendarMapi, CalendarCreated>(
+): SingleEventResult<CalendarCreated> {
+    return sendCommandAsync<CreateCalendarMapi, CalendarCreated>(
         Topics.Command.CREATE_CALENDAR,
+        Topics.Event.CALENDAR_CREATED,
+        true,
         CreateCalendarMapi(config.uuidGenerator.generateId(), name, specialDays, calendarId, token),
         requestConfig)
 }
@@ -73,14 +74,16 @@ suspend fun XesarConnect.createCalendar(
  * @param specialDays The new list of special days.
  * @param requestConfig The request configuration (optional).
  */
-suspend fun XesarConnect.changeCalendar(
+suspend fun XesarConnect.changeCalendarAsync(
     calendarId: UUID,
     calendarName: String,
     specialDays: List<LocalDate> = emptyList(),
     requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
-): Deferred<CalendarChanged> {
-    return sendCommand<ChangeCalendarMapi, CalendarChanged>(
+): SingleEventResult<CalendarChanged> {
+    return sendCommandAsync<ChangeCalendarMapi, CalendarChanged>(
         Topics.Command.CHANGE_CALENDAR,
+        Topics.Event.CALENDAR_CHANGED,
+        true,
         ChangeCalendarMapi(
             config.uuidGenerator.generateId(), calendarName, specialDays, calendarId, token),
         requestConfig)
@@ -92,12 +95,14 @@ suspend fun XesarConnect.changeCalendar(
  * @param calendarId The ID of the calendar to delete.
  * @param requestConfig The request configuration (optional).
  */
-suspend fun XesarConnect.deleteCalendar(
+suspend fun XesarConnect.deleteCalendarAsync(
     calendarId: UUID,
     requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
-): Deferred<CalendarDeleted> {
-    return sendCommand<DeleteCalendarMapi, CalendarDeleted>(
+): SingleEventResult<CalendarDeleted> {
+    return sendCommandAsync<DeleteCalendarMapi, CalendarDeleted>(
         Topics.Command.DELETE_CALENDAR,
+        Topics.Event.CALENDAR_DELETED,
+        true,
         DeleteCalendarMapi(config.uuidGenerator.generateId(), calendarId, token),
         requestConfig)
 }

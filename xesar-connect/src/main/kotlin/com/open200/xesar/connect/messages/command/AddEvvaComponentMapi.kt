@@ -15,8 +15,8 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class AddEvvaComponentMapi(
+    override val commandId: @Serializable(with = UUIDSerializer::class) UUID,
     @Serializable(with = UUIDSerializer::class) val id: UUID,
     val type: ComponentType,
-    @Serializable(with = UUIDSerializer::class) val commandId: UUID,
     val token: String
 ) : Command

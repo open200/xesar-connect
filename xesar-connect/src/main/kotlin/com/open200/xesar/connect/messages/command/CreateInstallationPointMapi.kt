@@ -15,7 +15,6 @@ import kotlinx.serialization.Serializable
  *   properties as values. Use this if the installation point has more than one evva component. For
  *   example the Evva component type 'WallReader2x'.
  * @param commandId The id of the command.
- * @param properties The properties of the installation point.
  * @param token The token of the command.
  */
 @Serializable
@@ -25,8 +24,7 @@ data class CreateInstallationPointMapi(
     val linkedInstallationPoints:
         Map<@Serializable(with = UUIDSerializer::class) UUID, Properties> =
         emptyMap(),
-    @Serializable(with = UUIDSerializer::class) val commandId: UUID,
-    val properties: Properties,
+    override val commandId: @Serializable(with = UUIDSerializer::class) UUID,
     val token: Token
 ) : Command {
     @Serializable

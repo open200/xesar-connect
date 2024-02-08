@@ -16,7 +16,7 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class SetDefaultAuthorizationProfileForPersonMapi(
-    @Serializable(with = UUIDSerializer::class) val commandId: UUID,
+    override val commandId: @Serializable(with = UUIDSerializer::class) UUID,
     val externalId: String,
     val defaultAuthorizationProfileName: String? = null,
     val token: String,

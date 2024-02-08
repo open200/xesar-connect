@@ -3,10 +3,10 @@ package com.open200.xesar.connect.extension
 import com.open200.xesar.connect.Topics
 import com.open200.xesar.connect.XesarConnect
 import com.open200.xesar.connect.messages.PersonalLog
+import com.open200.xesar.connect.messages.SingleEventResult
 import com.open200.xesar.connect.messages.command.*
 import com.open200.xesar.connect.messages.event.PartitionChanged
 import java.time.LocalTime
-import kotlinx.coroutines.Deferred
 
 /**
  * Sets the daily scheduler execution time in the default partition asynchronously.
@@ -14,12 +14,14 @@ import kotlinx.coroutines.Deferred
  * @param dailySchedulerExecutionTime The time of day when the daily scheduler should be executed
  * @param requestConfig The request configuration (optional).
  */
-suspend fun XesarConnect.setDailySchedulerExecutionTime(
+suspend fun XesarConnect.setDailySchedulerExecutionTimeAsync(
     dailySchedulerExecutionTime: LocalTime,
     requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
-): Deferred<PartitionChanged> {
-    return sendCommand<SetDailySchedulerExecutionTimeMapi, PartitionChanged>(
+): SingleEventResult<PartitionChanged> {
+    return sendCommandAsync<SetDailySchedulerExecutionTimeMapi, PartitionChanged>(
         Topics.Command.SET_DAILY_SCHEDULER_EXECUTION_TIME,
+        Topics.Event.PARTITION_CHANGED,
+        true,
         SetDailySchedulerExecutionTimeMapi(
             config.uuidGenerator.generateId(), dailySchedulerExecutionTime, token),
         requestConfig)
@@ -30,12 +32,14 @@ suspend fun XesarConnect.setDailySchedulerExecutionTime(
  * @param validityDuration The default validity duration
  * @param requestConfig The request configuration (optional).
  */
-suspend fun XesarConnect.setDefaultValidityDuration(
+suspend fun XesarConnect.setDefaultValidityDurationAsync(
     validityDuration: Short,
     requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
-): Deferred<PartitionChanged> {
-    return sendCommand<SetDefaultValidityDurationMapi, PartitionChanged>(
+): SingleEventResult<PartitionChanged> {
+    return sendCommandAsync<SetDefaultValidityDurationMapi, PartitionChanged>(
         Topics.Command.SET_DEFAULT_VALIDITY_DURATION,
+        Topics.Event.PARTITION_CHANGED,
+        true,
         SetDefaultValidityDurationMapi(config.uuidGenerator.generateId(), validityDuration, token),
         requestConfig)
 }
@@ -47,12 +51,14 @@ suspend fun XesarConnect.setDefaultValidityDuration(
  * @param personalReferenceDuration The default personal reference duration
  * @param requestConfig The request configuration (optional).
  */
-suspend fun XesarConnect.setInstallationPointPersonalReferenceDuration(
+suspend fun XesarConnect.setInstallationPointPersonalReferenceDurationAsync(
     personalReferenceDuration: PersonalLog,
     requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
-): Deferred<PartitionChanged> {
-    return sendCommand<SetInstallationPointPersonalReferenceDurationMapi, PartitionChanged>(
+): SingleEventResult<PartitionChanged> {
+    return sendCommandAsync<SetInstallationPointPersonalReferenceDurationMapi, PartitionChanged>(
         Topics.Command.SET_INSTALLATION_POINT_PERSONAL_REFERENCE_DURATION,
+        Topics.Event.PARTITION_CHANGED,
+        true,
         SetInstallationPointPersonalReferenceDurationMapi(
             config.uuidGenerator.generateId(), personalReferenceDuration, token),
         requestConfig)
@@ -64,12 +70,14 @@ suspend fun XesarConnect.setInstallationPointPersonalReferenceDuration(
  * @param personalReferenceDuration The default personal reference duration
  * @param requestConfig The request configuration (optional).
  */
-suspend fun XesarConnect.setPersonPersonalReferenceDuration(
+suspend fun XesarConnect.setPersonPersonalReferenceDurationAsync(
     personalReferenceDuration: PersonalLog,
     requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
-): Deferred<PartitionChanged> {
-    return sendCommand<SetPersonPersonalReferenceDurationMapi, PartitionChanged>(
+): SingleEventResult<PartitionChanged> {
+    return sendCommandAsync<SetPersonPersonalReferenceDurationMapi, PartitionChanged>(
         Topics.Command.SET_PERSON_PERSONAL_REFERENCE_DURATION,
+        Topics.Event.PARTITION_CHANGED,
+        true,
         SetPersonPersonalReferenceDurationMapi(
             config.uuidGenerator.generateId(), personalReferenceDuration, token),
         requestConfig)
@@ -81,12 +89,14 @@ suspend fun XesarConnect.setPersonPersonalReferenceDuration(
  * @param replacementMediumDuration The replacement medium duration
  * @param requestConfig The request configuration (optional).
  */
-suspend fun XesarConnect.setReplacementMediumDuration(
+suspend fun XesarConnect.setReplacementMediumDurationAsync(
     replacementMediumDuration: Short,
     requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
-): Deferred<PartitionChanged> {
-    return sendCommand<SetReplacementMediumDurationMapi, PartitionChanged>(
+): SingleEventResult<PartitionChanged> {
+    return sendCommandAsync<SetReplacementMediumDurationMapi, PartitionChanged>(
         Topics.Command.SET_REPLACEMENT_MEDIUM_DURATION,
+        Topics.Event.PARTITION_CHANGED,
+        true,
         SetReplacementMediumDurationMapi(
             config.uuidGenerator.generateId(), replacementMediumDuration, token),
         requestConfig)
@@ -97,12 +107,14 @@ suspend fun XesarConnect.setReplacementMediumDuration(
  * @param validityThreshold The validity threshold
  * @param requestConfig The request configuration (optional).
  */
-suspend fun XesarConnect.setValidityThreshold(
+suspend fun XesarConnect.setValidityThresholdAsync(
     validityThreshold: Short,
     requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
-): Deferred<PartitionChanged> {
-    return sendCommand<SetValidityThresholdMapi, PartitionChanged>(
+): SingleEventResult<PartitionChanged> {
+    return sendCommandAsync<SetValidityThresholdMapi, PartitionChanged>(
         Topics.Command.SET_VALIDITY_THRESHOLD,
+        Topics.Event.PARTITION_CHANGED,
+        true,
         SetValidityThresholdMapi(config.uuidGenerator.generateId(), validityThreshold, token),
         requestConfig)
 }

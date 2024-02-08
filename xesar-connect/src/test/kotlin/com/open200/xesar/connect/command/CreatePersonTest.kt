@@ -3,7 +3,7 @@ package com.open200.xesar.connect.command
 import com.open200.xesar.connect.Topics
 import com.open200.xesar.connect.XesarConnect
 import com.open200.xesar.connect.XesarMqttClient
-import com.open200.xesar.connect.extension.createPerson
+import com.open200.xesar.connect.extension.createPersonAsync
 import com.open200.xesar.connect.messages.PersonalLog
 import com.open200.xesar.connect.messages.event.ApiEvent
 import com.open200.xesar.connect.messages.event.PersonCreated
@@ -72,7 +72,7 @@ class CreatePersonTest :
                     XesarConnect.connectAndLoginAsync(config).await().use { api ->
                         api.subscribeAsync(Topics(Topics.Event.PERSON_CREATED)).await()
                         val result =
-                            api.createPerson(
+                            api.createPersonAsync(
                                     firstName = "firstName",
                                     lastName = "lastName",
                                     personId =

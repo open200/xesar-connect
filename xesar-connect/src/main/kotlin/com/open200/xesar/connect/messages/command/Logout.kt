@@ -1,5 +1,6 @@
 package com.open200.xesar.connect.messages.command
 
+import com.open200.xesar.connect.messages.Message
 import kotlinx.serialization.Serializable
 
 /**
@@ -7,4 +8,4 @@ import kotlinx.serialization.Serializable
  *
  * @param token The token associated with the user's session to be logged out.
  */
-@Serializable data class Logout(val token: String) : Command
+@Serializable data class Logout(val token: String) : Message

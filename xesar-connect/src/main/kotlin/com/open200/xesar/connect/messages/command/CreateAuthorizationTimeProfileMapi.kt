@@ -19,7 +19,7 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class CreateAuthorizationTimeProfileMapi(
-    @Serializable(with = UUIDSerializer::class) val commandId: UUID,
+    override val commandId: @Serializable(with = UUIDSerializer::class) UUID,
     val timeSeries: List<TimeSerie> = emptyList(),
     val exceptionTimeSeries: List<ExceptionTimeSerie> = emptyList(),
     val name: String,

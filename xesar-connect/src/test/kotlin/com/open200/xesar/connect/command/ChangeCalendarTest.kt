@@ -3,7 +3,7 @@ package com.open200.xesar.connect.command
 import com.open200.xesar.connect.Topics
 import com.open200.xesar.connect.XesarConnect
 import com.open200.xesar.connect.XesarMqttClient
-import com.open200.xesar.connect.extension.changeCalendar
+import com.open200.xesar.connect.extension.changeCalendarAsync
 import com.open200.xesar.connect.messages.event.ApiEvent
 import com.open200.xesar.connect.messages.event.CalendarChanged
 import com.open200.xesar.connect.messages.event.encodeEvent
@@ -70,7 +70,7 @@ class ChangeCalendarTest :
                     XesarConnect.connectAndLoginAsync(config).await().use { api ->
                         api.subscribeAsync(Topics(Topics.Event.CALENDAR_CHANGED)).await()
                         val result =
-                            api.changeCalendar(
+                            api.changeCalendarAsync(
                                     UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
                                     "calendarName",
                                     specialDays = listOf(LocalDate.parse("2018-02-25")))

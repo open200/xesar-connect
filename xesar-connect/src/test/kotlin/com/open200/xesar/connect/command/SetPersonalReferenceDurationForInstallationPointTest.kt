@@ -3,7 +3,7 @@ package com.open200.xesar.connect.command
 import com.open200.xesar.connect.Topics
 import com.open200.xesar.connect.XesarConnect
 import com.open200.xesar.connect.XesarMqttClient
-import com.open200.xesar.connect.extension.setPersonalReferenceDurationForInstallationPoint
+import com.open200.xesar.connect.extension.setPersonalReferenceDurationForInstallationPointAsync
 import com.open200.xesar.connect.messages.PersonalLog
 import com.open200.xesar.connect.messages.event.ApiEvent
 import com.open200.xesar.connect.messages.event.InstallationPointChanged
@@ -74,7 +74,7 @@ class SetPersonalReferenceDurationForInstallationPointTest :
                     XesarConnect.connectAndLoginAsync(config).await().use { api ->
                         api.subscribeAsync(Topics(Topics.Event.INSTALLATION_POINT_CHANGED)).await()
                         val result =
-                            api.setPersonalReferenceDurationForInstallationPoint(
+                            api.setPersonalReferenceDurationForInstallationPointAsync(
                                     UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
                                     PersonalLog(
                                         days = 30,

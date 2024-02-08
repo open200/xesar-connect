@@ -3,7 +3,7 @@ package com.open200.xesar.connect.command
 import com.open200.xesar.connect.Topics
 import com.open200.xesar.connect.XesarConnect
 import com.open200.xesar.connect.XesarMqttClient
-import com.open200.xesar.connect.extension.addInstallationPointToZone
+import com.open200.xesar.connect.extension.addInstallationPointToZoneAsync
 import com.open200.xesar.connect.messages.event.ApiEvent
 import com.open200.xesar.connect.messages.event.InstallationPointsInZoneChanged
 import com.open200.xesar.connect.messages.event.encodeEvent
@@ -71,7 +71,7 @@ class AddInstallationPointToZoneTest :
                         api.subscribeAsync(Topics(Topics.Event.INSTALLATION_POINTS_IN_ZONE_CHANGED))
                             .await()
                         val result =
-                            api.addInstallationPointToZone(
+                            api.addInstallationPointToZoneAsync(
                                     UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
                                     UUID.fromString("2d52bd95-18ba-4e46-8f00-0fc4c1e3f9be"))
                                 .await()
