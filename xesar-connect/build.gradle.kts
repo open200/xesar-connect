@@ -25,10 +25,14 @@ repositories {
     mavenCentral()
 }
 
-val ktorVersion: String = "2.3.0"
+val ktorVersion: String = "2.3.2"
 val kotlinxVersion: String = "1.7.1"
+val kotlinLoggingVersion: String = "3.0.5"
 val kotestVersion: String = "5.6.2"
-val logbackVersion: String = "1.4.6"
+val logbackVersion: String = "1.4.14"
+val pahoVersion: String = "1.2.5"
+val mockkVersion: String = "1.13.5"
+val kotestTestcontainersVersion: String = "2.0.2"
 
 dependencies {
     // This dependency is exported to consumers, that is to say found on their compile classpath.
@@ -37,9 +41,9 @@ dependencies {
     // This dependency is used internally, and not exposed to consumers on their own compile
     // classpath.
 
-    implementation("org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.5")
+    implementation("org.eclipse.paho:org.eclipse.paho.client.mqttv3:$pahoVersion")
 
-    implementation("io.github.microutils:kotlin-logging:3.0.5")
+    implementation("io.github.microutils:kotlin-logging:$kotlinLoggingVersion")
     implementation("io.ktor:ktor-serialization-kotlinx:$ktorVersion")
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxVersion")
@@ -49,9 +53,9 @@ dependencies {
     testImplementation("io.kotest:kotest-assertions-core:$kotestVersion")
     testImplementation("io.kotest:kotest-property:$kotestVersion")
     testImplementation("ch.qos.logback:logback-classic:$logbackVersion")
-    testImplementation("io.mockk:mockk:1.13.5")
-    testImplementation(kotlin("test"))
-    testImplementation("io.kotest.extensions:kotest-extensions-testcontainers:2.0.2")
+    testImplementation("io.mockk:mockk:$mockkVersion")
+    testImplementation(
+        "io.kotest.extensions:kotest-extensions-testcontainers:$kotestTestcontainersVersion")
 }
 
 tasks.test { useJUnitPlatform() }
