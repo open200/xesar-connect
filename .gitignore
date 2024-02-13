@@ -5,3 +5,5 @@
 build
 
 .idea
+
+/xesar-connect/src/test/kotlin/realsystem/

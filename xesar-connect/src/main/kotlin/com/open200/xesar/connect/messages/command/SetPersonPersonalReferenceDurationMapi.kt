@@ -15,7 +15,7 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class SetPersonPersonalReferenceDurationMapi(
-    @Serializable(with = UUIDSerializer::class) val commandId: UUID,
+    override val commandId: @Serializable(with = UUIDSerializer::class) UUID,
     val personalReferenceDuration: PersonalLog,
     val token: String
 ) : Command

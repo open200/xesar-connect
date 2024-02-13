@@ -3,7 +3,7 @@ package com.open200.xesar.connect.command
 import com.open200.xesar.connect.Topics
 import com.open200.xesar.connect.XesarConnect
 import com.open200.xesar.connect.XesarMqttClient
-import com.open200.xesar.connect.extension.setDefaultAuthorizationProfileForPerson
+import com.open200.xesar.connect.extension.setDefaultAuthorizationProfileForPersonAsync
 import com.open200.xesar.connect.messages.event.ApiEvent
 import com.open200.xesar.connect.messages.event.PersonChanged
 import com.open200.xesar.connect.messages.event.encodeEvent
@@ -69,7 +69,8 @@ class SetDefaultAuthorizationProfileForPersonTest :
                     XesarConnect.connectAndLoginAsync(config).await().use { api ->
                         api.subscribeAsync(Topics(Topics.Event.PERSON_CHANGED)).await()
                         val result =
-                            api.setDefaultAuthorizationProfileForPerson("EXT-123", null).await()
+                            api.setDefaultAuthorizationProfileForPersonAsync("EXT-123", null)
+                                .await()
                         result.id.shouldBeEqual(
                             UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
                     }

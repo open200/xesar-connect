@@ -3,7 +3,7 @@ package com.open200.xesar.connect.command
 import com.open200.xesar.connect.Topics
 import com.open200.xesar.connect.XesarConnect
 import com.open200.xesar.connect.XesarMqttClient
-import com.open200.xesar.connect.extension.removeInstallationPointAuthorizationFromMedium
+import com.open200.xesar.connect.extension.removeInstallationPointAuthorizationFromMediumAsync
 import com.open200.xesar.connect.messages.event.ApiEvent
 import com.open200.xesar.connect.messages.event.IndividualAuthorizationsDeleted
 import com.open200.xesar.connect.messages.event.encodeEvent
@@ -72,7 +72,7 @@ class RemoveInstallationPointAuthorizationFromMediumTest :
                             .await()
 
                         val result =
-                            api.removeInstallationPointAuthorizationFromMedium(
+                            api.removeInstallationPointAuthorizationFromMediumAsync(
                                     UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
                                     UUID.fromString("8c7128d4-a30f-4aad-b5d2-d7b975c5cf8f"))
                                 .await()

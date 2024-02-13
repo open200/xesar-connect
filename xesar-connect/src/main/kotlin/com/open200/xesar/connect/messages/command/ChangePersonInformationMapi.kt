@@ -16,7 +16,7 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class ChangePersonInformationMapi(
-    @Serializable(with = UUIDSerializer::class) val commandId: UUID,
+    override val commandId: @Serializable(with = UUIDSerializer::class) UUID,
     val firstName: String? = null,
     val lastName: String? = null,
     val identifier: String? = null,

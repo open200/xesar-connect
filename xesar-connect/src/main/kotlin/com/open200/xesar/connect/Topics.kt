@@ -28,6 +28,30 @@ class Topics(vararg val topics: String) {
                 return "xs3/1/$userId/LoggedIn"
             }
 
+            /** MQTT topic string from the "AuthorizationProfileChanged" event. */
+            val AUTHORIZATION_PROFILE_CHANGED = "xs3/1/ces/AuthorizationProfileChanged"
+
+            /** MQTT topic string from the "AuthorizationProfileAccessChanged" event. */
+            val AUTHORIZATION_PROFILE_ACCESS_CHANGED = "xs3/1/ces/AuthorizationProfileAccessChanged"
+
+            /** MQTT topic string from the "AuthorizationProfileInfoChanged" event. */
+            val AUTHORIZATION_PROFILE_INFO_CHANGED = "xs3/1/ces/AuthorizationProfileInfoChanged"
+
+            /** MQTT topic string from the "MediumAddedToInstallation" event. */
+            val MEDIUM_ADDED_TO_INSTALLATION = "xs3/1/ces/MediumAddedToInstallation"
+
+            /** MQTT topic string from the "AddMediumToInstallationRequested" event. */
+            val ADD_MEDIUM_TO_INSTALLATION_REQUESTED = "xs3/1/ces/AddMediumToInstallationRequested"
+
+            /** MQTT topic string from the "InstallationPointCreated" event. */
+            val INSTALLATION_POINT_CREATED = "xs3/1/ces/InstallationPointCreated"
+
+            /** MQTT topic string from the "MediumAuthorizationProfileChanged" event. */
+            val MEDIUM_AUTHORIZATION_PROFILE_CHANGED = "xs3/1/ces/MediumAuthorizationProfileChanged"
+
+            /** MQTT topic string from the "EvvaComponentAdded" event. */
+            val EVVA_COMPONENT_ADDED = "xs3/1/ces/EvvaComponentAdded"
+
             /** MQTT topic string from the "AuthorizationProfileWithdrawnFromMedium" event. */
             val AUTHORIZATION_PROFILE_WITHDRAWN_FROM_MEDIUM =
                 "xs3/1/ces/AuthorizationProfileWithdrawnFromMedium"
@@ -145,6 +169,9 @@ class Topics(vararg val topics: String) {
             /** MQTT topic string for the "AuthorizationProfileCreated" event */
             val AUTHORIZATION_PROFILE_CREATED = "xs3/1/ces/AuthorizationProfileCreated"
 
+            /** MQTT topic string for the "AuthorizationTimeProfileChanged" event */
+            val AUTHORIZATION_TIME_PROFILE_CHANGED = "xs3/1/ces/AuthorizationTimeProfileChanged"
+
             /**
              * Generates the MQTT topic string which emits errors for previously received queries or
              * commands.
@@ -161,6 +188,23 @@ class Topics(vararg val topics: String) {
     class Command {
 
         companion object {
+
+            /** MQTT topic string for the "ChangeAuthorizationProfileMapi" command. */
+            val CHANGE_AUTHORIZATION_PROFILE = "xs3/1/cmd/ChangeAuthorizationProfileMapi"
+
+            /** MQTT topic string for the "RequestAddMediumToInstallationMapi" command. */
+            val REQUEST_ADD_MEDIUM_TO_INSTALLATION = "xs3/1/cmd/RequestAddMediumToInstallationMapi"
+
+            /** MQTT topic string for the "CreateInstallationPointMapi" command. */
+            val CREATE_INSTALLATION_POINT = "xs3/1/cmd/CreateInstallationPointMapi"
+
+            /** MQTT topic string for the "AssignAuthorizationProfileToMediumMapi" command. */
+            val ASSIGN_AUTHORIZATION_PROFILE_TO_MEDIUM =
+                "xs3/1/cmd/AssignAuthorizationProfileToMediumMapi"
+
+            /** MQTT topic string for the "AddEvvaComponentMapi" command. */
+            val ADD_EVVA_COMPONENT = "xs3/1/cmd/AddEvvaComponentMapi"
+
             /** MQTT topic string for the "WithdrawAuthorizationProfileFromMediumMapi" command. */
             val WITHDRAW_AUTHORIZATION_PROFILE_FROM_MEDIUM =
                 "xs3/1/cmd/WithdrawAuthorizationProfileFromMediumMapi"

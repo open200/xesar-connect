@@ -20,6 +20,6 @@ data class RequestAddMediumToInstallationMapi(
     @Serializable(with = UUIDSerializer::class) val id: UUID,
     @Serializable(with = UUIDSerializer::class) val terminalId: UUID,
     val label: String? = null,
-    @Serializable(with = UUIDSerializer::class) val commandId: UUID,
+    override val commandId: @Serializable(with = UUIDSerializer::class) UUID,
     val token: String
 ) : Command

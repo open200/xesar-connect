@@ -14,11 +14,12 @@ import kotlinx.serialization.Serializable
  * @param terminalId The id of the terminal.
  * @param label The label of the medium.
  */
+@Serializable
 data class AddMediumToInstallationRequested(
-    @Serializable(with = UUIDSerializer::class) val aggregateId: UUID,
-    @Serializable(with = UUIDSerializer::class) val partitionId: UUID,
-    val hardwareId: String,
-    val mediumIdentifier: Long,
-    @Serializable(with = UUIDSerializer::class) val terminalId: UUID,
+    @Serializable(with = UUIDSerializer::class) val aggregateId: UUID? = null,
+    @Serializable(with = UUIDSerializer::class) val partitionId: UUID? = null,
+    val hardwareId: String? = null,
+    val mediumIdentifier: Long? = null,
+    @Serializable(with = UUIDSerializer::class) val terminalId: UUID? = null,
     val label: String? = null,
 ) : Event

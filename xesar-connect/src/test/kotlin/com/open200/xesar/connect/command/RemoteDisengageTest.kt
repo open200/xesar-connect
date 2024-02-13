@@ -3,8 +3,8 @@ package com.open200.xesar.connect.command
 import com.open200.xesar.connect.Topics
 import com.open200.xesar.connect.XesarConnect
 import com.open200.xesar.connect.XesarMqttClient
-import com.open200.xesar.connect.exception.HttpErrorException
-import com.open200.xesar.connect.extension.executeRemoteDisengage
+import com.open200.xesar.connect.exception.RequiredEventException
+import com.open200.xesar.connect.extension.executeRemoteDisengageAsync
 import com.open200.xesar.connect.messages.ApiError
 import com.open200.xesar.connect.messages.encodeError
 import com.open200.xesar.connect.messages.event.*
@@ -70,8 +70,8 @@ class RemoteDisengageTest :
                     simulatedBackendReady.await()
 
                     XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                        shouldThrow<HttpErrorException> {
-                            api.executeRemoteDisengage(
+                        shouldThrow<RequiredEventException> {
+                            api.executeRemoteDisengageAsync(
                                     InstallationPointFixture.installationPointFixture.id, true)
                                 .await()
                         }
@@ -123,7 +123,7 @@ class RemoteDisengageTest :
                     XesarConnect.connectAndLoginAsync(config).await().use { api ->
                         api.subscribeAsync(Topics(Topics.Event.REMOTE_DISENGAGE_PERFORMED)).await()
                         val result =
-                            api.executeRemoteDisengage(
+                            api.executeRemoteDisengageAsync(
                                     InstallationPointFixture.installationPointFixture.id, true)
                                 .await()
 

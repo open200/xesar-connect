@@ -3,7 +3,7 @@ package com.open200.xesar.connect.command
 import com.open200.xesar.connect.Topics
 import com.open200.xesar.connect.XesarConnect
 import com.open200.xesar.connect.XesarMqttClient
-import com.open200.xesar.connect.extension.deleteAuthorizationTimeProfile
+import com.open200.xesar.connect.extension.deleteAuthorizationTimeProfileAsync
 import com.open200.xesar.connect.messages.event.ApiEvent
 import com.open200.xesar.connect.messages.event.AuthorizationTimeProfileDeleted
 import com.open200.xesar.connect.messages.event.encodeEvent
@@ -69,7 +69,7 @@ class DeleteAuthorizationTimeProfileTest :
                         api.subscribeAsync(Topics(Topics.Event.AUTHORIZATION_TIME_PROFILE_DELETED))
                             .await()
                         val result =
-                            api.deleteAuthorizationTimeProfile(
+                            api.deleteAuthorizationTimeProfileAsync(
                                     UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
                                 .await()
                         result.id.shouldBeEqual(

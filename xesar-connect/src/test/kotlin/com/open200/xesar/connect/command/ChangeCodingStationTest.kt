@@ -3,7 +3,7 @@ package com.open200.xesar.connect.command
 import com.open200.xesar.connect.Topics
 import com.open200.xesar.connect.XesarConnect
 import com.open200.xesar.connect.XesarMqttClient
-import com.open200.xesar.connect.extension.changeCodingStation
+import com.open200.xesar.connect.extension.changeCodingStationAsync
 import com.open200.xesar.connect.messages.event.ApiEvent
 import com.open200.xesar.connect.messages.event.CodingStationChanged
 import com.open200.xesar.connect.messages.event.encodeEvent
@@ -68,7 +68,7 @@ class ChangeCodingStationTest :
                     XesarConnect.connectAndLoginAsync(config).await().use { api ->
                         api.subscribeAsync(Topics(Topics.Event.CODING_STATION_CHANGED)).await()
                         val result =
-                            api.changeCodingStation(
+                            api.changeCodingStationAsync(
                                     UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
                                     "codingStationName")
                                 .await()

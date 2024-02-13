@@ -3,7 +3,7 @@ package com.open200.xesar.connect.command
 import com.open200.xesar.connect.Topics
 import com.open200.xesar.connect.XesarConnect
 import com.open200.xesar.connect.XesarMqttClient
-import com.open200.xesar.connect.extension.withdrawAuthorizationProfileFromMedium
+import com.open200.xesar.connect.extension.withdrawAuthorizationProfileFromMediumAsync
 import com.open200.xesar.connect.messages.event.ApiEvent
 import com.open200.xesar.connect.messages.event.AuthorizationProfileWithdrawnFromMedium
 import com.open200.xesar.connect.messages.event.encodeEvent
@@ -74,7 +74,7 @@ class WithdrawAuthorizationProfileFromMediumTest :
                                 Topics(Topics.Event.AUTHORIZATION_PROFILE_WITHDRAWN_FROM_MEDIUM))
                             .await()
                         val result =
-                            api.withdrawAuthorizationProfileFromMedium(
+                            api.withdrawAuthorizationProfileFromMediumAsync(
                                     UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"), null)
                                 .await()
                         result.id.shouldBeEqual(

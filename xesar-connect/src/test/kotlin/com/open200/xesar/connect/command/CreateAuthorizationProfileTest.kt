@@ -3,7 +3,7 @@ package com.open200.xesar.connect.command
 import com.open200.xesar.connect.Topics
 import com.open200.xesar.connect.XesarConnect
 import com.open200.xesar.connect.XesarMqttClient
-import com.open200.xesar.connect.extension.createAuthorizationProfile
+import com.open200.xesar.connect.extension.createAuthorizationProfileAsync
 import com.open200.xesar.connect.messages.event.ApiEvent
 import com.open200.xesar.connect.messages.event.AuthorizationProfileCreated
 import com.open200.xesar.connect.messages.event.encodeEvent
@@ -74,7 +74,7 @@ class CreateAuthorizationProfileTest :
                         api.subscribeAsync(Topics(Topics.Event.AUTHORIZATION_PROFILE_CREATED))
                             .await()
                         val result =
-                            api.createAuthorizationProfile(
+                            api.createAuthorizationProfileAsync(
                                     "authorizationProfile1",
                                     "",
                                     UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),

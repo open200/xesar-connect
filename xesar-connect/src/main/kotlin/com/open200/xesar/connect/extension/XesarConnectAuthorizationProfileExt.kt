@@ -2,11 +2,10 @@ package com.open200.xesar.connect.extension
 
 import com.open200.xesar.connect.Topics
 import com.open200.xesar.connect.XesarConnect
-import com.open200.xesar.connect.messages.command.CreateAuthorizationProfileMapi
-import com.open200.xesar.connect.messages.command.DeleteAuthorizationProfileMapi
-import com.open200.xesar.connect.messages.command.Query
-import com.open200.xesar.connect.messages.event.AuthorizationProfileCreated
-import com.open200.xesar.connect.messages.event.AuthorizationProfileDeleted
+import com.open200.xesar.connect.messages.ChangeAuthorizationProfileResult
+import com.open200.xesar.connect.messages.SingleEventResult
+import com.open200.xesar.connect.messages.command.*
+import com.open200.xesar.connect.messages.event.*
 import com.open200.xesar.connect.messages.query.AuthorizationProfile
 import com.open200.xesar.connect.messages.query.QueryList
 import java.util.*
@@ -49,14 +48,16 @@ suspend fun XesarConnect.queryAuthorizationProfilesByIdAsync(
  * @param authorizationProfileId The ID of the authorization profile.
  * @param requestConfig The request configuration (optional).
  */
-suspend fun XesarConnect.createAuthorizationProfile(
+suspend fun XesarConnect.createAuthorizationProfileAsync(
     name: String,
     description: String? = null,
     authorizationProfileId: UUID,
     requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
-): Deferred<AuthorizationProfileCreated> {
-    return sendCommand<CreateAuthorizationProfileMapi, AuthorizationProfileCreated>(
+): SingleEventResult<AuthorizationProfileCreated> {
+    return sendCommandAsync<CreateAuthorizationProfileMapi, AuthorizationProfileCreated>(
         Topics.Command.CREATE_AUTHORIZATION_PROFILE,
+        Topics.Event.AUTHORIZATION_PROFILE_CREATED,
+        true,
         CreateAuthorizationProfileMapi(
             config.uuidGenerator.generateId(), name, description, authorizationProfileId, token),
         requestConfig)
@@ -68,13 +69,69 @@ suspend fun XesarConnect.createAuthorizationProfile(
  * @param authorizationProfileId The ID of the authorization profile to delete.
  * @param requestConfig The request configuration (optional).
  */
-suspend fun XesarConnect.deleteAuthorizationProfile(
+suspend fun XesarConnect.deleteAuthorizationProfileAsync(
     authorizationProfileId: UUID,
     requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
-): Deferred<AuthorizationProfileDeleted> {
-    return sendCommand<DeleteAuthorizationProfileMapi, AuthorizationProfileDeleted>(
+): SingleEventResult<AuthorizationProfileDeleted> {
+    return sendCommandAsync<DeleteAuthorizationProfileMapi, AuthorizationProfileDeleted>(
         Topics.Command.DELETE_AUTHORIZATION_PROFILE,
+        Topics.Event.AUTHORIZATION_PROFILE_DELETED,
+        true,
         DeleteAuthorizationProfileMapi(
             config.uuidGenerator.generateId(), authorizationProfileId, token),
         requestConfig)
+}
+/**
+ * Changes an authorization profile asynchronously.
+ *
+ * @param installationPoints The installation points of the authorization profile.
+ * @param manualOfficeMode The manual office mode of the authorization profile.
+ * @param name The name of the authorization profile.
+ * @param description The description of the authorization profile.
+ * @param standardTimeProfile The standard time profile of the authorization profile.
+ * @param id The ID of the authorization profile.
+ * @param zones The zones of the authorization profile.
+ * @param requestConfig The request configuration (optional).
+ * @return A deferred object that resolves to the result of the change authorization profile
+ *   command.
+ */
+suspend fun XesarConnect.changeAuthorizationProfileAsync(
+    installationPoints: List<Authorization>,
+    manualOfficeMode: Boolean,
+    name: String,
+    description: String? = null,
+    standardTimeProfile: UUID? = null,
+    id: UUID,
+    zones: List<Authorization>,
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+): ChangeAuthorizationProfileResult {
+    val changeAuthorizationProfileResult =
+        sendCommandAsync<
+            ChangeAuthorizationProfileMapi,
+            AuthorizationProfileInfoChanged,
+            AuthorizationProfileAccessChanged,
+            AuthorizationProfileChanged>(
+            Topics.Command.CHANGE_AUTHORIZATION_PROFILE,
+            Topics.Event.AUTHORIZATION_PROFILE_INFO_CHANGED,
+            true,
+            Topics.Event.AUTHORIZATION_PROFILE_ACCESS_CHANGED,
+            false,
+            Topics.Event.AUTHORIZATION_PROFILE_CHANGED,
+            false,
+            ChangeAuthorizationProfileMapi(
+                installationPoints,
+                manualOfficeMode,
+                name,
+                description,
+                standardTimeProfile,
+                id,
+                zones,
+                config.uuidGenerator.generateId(),
+                token),
+            requestConfig)
+    return ChangeAuthorizationProfileResult(
+        changeAuthorizationProfileResult.first.first,
+        changeAuthorizationProfileResult.first.second,
+        changeAuthorizationProfileResult.first.third,
+        changeAuthorizationProfileResult.second)
 }

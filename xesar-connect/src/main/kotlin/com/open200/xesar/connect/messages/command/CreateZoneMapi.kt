@@ -16,7 +16,7 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class CreateZoneMapi(
-    @Serializable(with = UUIDSerializer::class) val commandId: UUID,
+    override val commandId: @Serializable(with = UUIDSerializer::class) UUID,
     val installationPoints: List<@Serializable(with = UUIDSerializer::class) UUID> = emptyList(),
     val name: String,
     val description: String? = null,

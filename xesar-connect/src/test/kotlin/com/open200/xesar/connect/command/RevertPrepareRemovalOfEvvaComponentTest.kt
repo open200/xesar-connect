@@ -3,7 +3,7 @@ package com.open200.xesar.connect.command
 import com.open200.xesar.connect.Topics
 import com.open200.xesar.connect.XesarConnect
 import com.open200.xesar.connect.XesarMqttClient
-import com.open200.xesar.connect.extension.revertPrepareRemovalOfEvvaComponent
+import com.open200.xesar.connect.extension.revertPrepareRemovalOfEvvaComponentAsync
 import com.open200.xesar.connect.messages.event.ApiEvent
 import com.open200.xesar.connect.messages.event.PrepareEvvaComponentRemovalReverted
 import com.open200.xesar.connect.messages.event.encodeEvent
@@ -72,7 +72,7 @@ class RevertPrepareRemovalOfEvvaComponentTest :
                                 Topics(Topics.Event.PREPARE_EVVA_COMPONENT_REMOVAL_REVERTED))
                             .await()
                         val result =
-                            api.revertPrepareRemovalOfEvvaComponent(
+                            api.revertPrepareRemovalOfEvvaComponentAsync(
                                     UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
                                 )
                                 .await()

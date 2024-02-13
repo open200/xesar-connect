@@ -3,7 +3,7 @@ package com.open200.xesar.connect.command
 import com.open200.xesar.connect.Topics
 import com.open200.xesar.connect.XesarConnect
 import com.open200.xesar.connect.XesarMqttClient
-import com.open200.xesar.connect.extension.changePersonInformation
+import com.open200.xesar.connect.extension.changePersonInformationAsync
 import com.open200.xesar.connect.messages.event.ApiEvent
 import com.open200.xesar.connect.messages.event.PersonChanged
 import com.open200.xesar.connect.messages.event.encodeEvent
@@ -68,7 +68,7 @@ class ChangePersonInformationTest :
                     XesarConnect.connectAndLoginAsync(config).await().use { api ->
                         api.subscribeAsync(Topics(Topics.Event.PERSON_CHANGED)).await()
                         val result =
-                            api.changePersonInformation(
+                            api.changePersonInformationAsync(
                                     firstName = "first name", externalId = "EXT-4711")
                                 .await()
                         result.firstName.shouldBeEqual("first name")

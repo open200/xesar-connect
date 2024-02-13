@@ -1,5 +1,6 @@
 package com.open200.xesar.connect.messages.command
 
+import com.open200.xesar.connect.messages.Message
 import com.open200.xesar.connect.utils.FilterTypeSerializer
 import com.open200.xesar.connect.utils.UUIDSerializer
 import java.util.UUID
@@ -21,7 +22,7 @@ class Query(
     val token: String,
     @Serializable(with = UUIDSerializer::class) val id: UUID?,
     val params: Params? = null
-) : Command {
+) : Message {
 
     /**
      * Represents the parameters for a query.

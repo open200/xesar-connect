@@ -3,10 +3,9 @@ package com.open200.xesar.connect
 import QueryElementResource
 import QueryListResource
 import com.open200.xesar.connect.exception.*
-import com.open200.xesar.connect.filters.CommandIdFilter
-import com.open200.xesar.connect.filters.MessageFilter
-import com.open200.xesar.connect.filters.QueryIdFilter
-import com.open200.xesar.connect.filters.TopicFilter
+import com.open200.xesar.connect.filters.*
+import com.open200.xesar.connect.messages.ApiError
+import com.open200.xesar.connect.messages.SingleEventResult
 import com.open200.xesar.connect.messages.command.*
 import com.open200.xesar.connect.messages.decodeError
 import com.open200.xesar.connect.messages.event.*
@@ -30,6 +29,7 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) : A
     private val subscribedTopics = CopyOnWriteArraySet<String>()
     private val listeners = CopyOnWriteArrayList<Listener>()
     private val connectionChannel = Channel<ConnectionEvent>()
+    private val coroutineScopeForSendCommand = CoroutineScope(Dispatchers.IO)
 
     lateinit var token: Token
 
@@ -117,7 +117,8 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) : A
     }
 
     /**
-     * Performs an asynchronous login operation.
+     * Performs an asynchronous login operation where the internal token will be set within
+     * XesarConnect You can either log in with a username and a password or with a token.
      *
      * @param username The username for authentication.
      * @param password The password for authentication.
@@ -156,6 +157,7 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) : A
                                     "Probably invalid credentials were used"))
                         }
                     }
+                closeListenerOnCompletion(deferred, successListener, unauthorizedListener)
                 client
                     .publishAsync(
                         Topics.Command.LOGIN,
@@ -163,13 +165,7 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) : A
                             Login(commandId = commandId, username = username, password = password)))
                     .await()
 
-                closeListenerOnCompletion(deferred, successListener, unauthorizedListener)
-
-                deferred.invokeOnCompletion {
-                    if (it == null) {
-                        token = deferred.getCompleted()
-                    }
-                }
+                token = deferred.await()
             }
         }
 
@@ -177,7 +173,8 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) : A
     }
 
     /**
-     * Performs an asynchronous logout operation.
+     * Performs an asynchronous logout operation. The previously used access token will be
+     * invalidated by the Xesar system and cannot be used again.
      *
      * @param requestConfig The request configuration (optional).
      * @return A deferred object that resolves to the logged out token upon successful logout.
@@ -202,9 +199,9 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) : A
                             deferredToken.completeExceptionally(LoggedOutException())
                         }
                     }
-                client.publishAsync(Topics.Command.LOGOUT, encodeCommand(Logout(token))).await()
-
                 closeListenerOnCompletion(deferredToken, successfulListener)
+                client.publishAsync(Topics.Command.LOGOUT, encodeCommand(Logout(token))).await()
+                deferredToken.await()
             }
         }
 
@@ -241,10 +238,10 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) : A
                         val decoded = decodeQueryList<T>(it.message)
                         deferred.complete(decoded.response)
                     }
-                val apiErrorListener = registerDefaultApiErrorListener(deferred)
-
-                client.publishAsync(Topics.Query.REQUEST, encodeCommand(query)).await()
+                val apiErrorListener = registerDefaultApiErrorListener(requestId, deferred)
                 closeListenerOnCompletion(deferred, queryIdListener, apiErrorListener)
+                client.publishAsync(Topics.Query.REQUEST, encodeCommand(query)).await()
+                deferred.await()
             }
         }
 
@@ -266,14 +263,14 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) : A
                         val decoded = decodeQueryElement<T>(it.message)
                         deferred.complete(decoded.response)
                     }
-                val errorListener = registerDefaultApiErrorListener(deferred)
+                val errorListener = registerDefaultApiErrorListener(requestId, deferred)
+                closeListenerOnCompletion(deferred, queryListener, errorListener)
                 client
                     .publishAsync(
                         Topics.Query.REQUEST,
                         encodeCommand(Query(resource, requestId, token, id = id, params = null)))
                     .await()
-
-                closeListenerOnCompletion(deferred, queryListener, errorListener)
+                deferred.await()
             }
         }
 
@@ -287,36 +284,11 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) : A
         deferred.invokeOnCompletion { listeners.forEach { it.close() } }
     }
 
-    internal suspend inline fun <reified K : Command, reified T : Event> sendCommand(
-        topic: String,
-        cmd: K,
-        requestConfig: RequestConfig
-    ): Deferred<T> {
-        val deferred = CompletableDeferred<T>()
-        val commandId = config.uuidGenerator.generateId()
-
-        handleStandardExceptions(deferred, "Command") {
-            withTimeout(requestConfig.timeout) {
-                val commandIdListener =
-                    on(CommandIdFilter(commandId)) {
-                        try {
-                            val apiEvent = decodeEvent<T>(it.message)
-                            deferred.complete(apiEvent.event)
-                        } catch (e: Exception) {
-                            deferred.completeExceptionally(ParsingException())
-                        }
-                    }
-                val apiErrorListener = registerDefaultApiErrorListener(deferred)
-
-                client.publishAsync(topic, encodeCommand(cmd)).await()
-                closeListenerOnCompletion(deferred, commandIdListener, apiErrorListener)
-            }
-        }
-
-        return deferred
+    private fun closeListener(listeners: List<Listener>) {
+        listeners.forEach { it.close() }
     }
 
-    private suspend fun <T> handleStandardExceptions(
+    private suspend inline fun <T> handleStandardExceptions(
         deferred: CompletableDeferred<T>,
         messageType: String,
         block: suspend () -> (Unit)
@@ -328,25 +300,413 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) : A
             deferred.completeExceptionally(
                 ConnectionFailedException("$messageType request timed out", e))
         } catch (e: Exception) {
-            logger.error("Error while waiting for $messageType response", e)
+            logger.error("Error while waiting for $messageType response")
             deferred.completeExceptionally(ConnectionFailedException("$messageType failed", e))
         }
     }
 
-    private fun <T> registerDefaultApiErrorListener(deferred: CompletableDeferred<T>): Listener {
-        val listener =
-            on(TopicFilter(Topics.Event.error(config.apiProperties.userId))) {
-                try {
-                    val apiError = decodeError(it.message)
-                    deferred.completeExceptionally(
-                        HttpErrorException(
-                            "HTTP error code: ${apiError.error} ${apiError.reason.orEmpty()}",
-                            apiError.error))
-                } catch (e: Exception) {
-                    deferred.completeExceptionally(e)
+    /**
+     * Sends a command and returns a [com.open200.xesar.connect.messages.SingleEventResult]
+     * asynchronously. If the event is not received within the specified timeout, a
+     * [RequiredEventException] or an [OptionalEventException] is thrown for the [Deferred] of the
+     * event. To analyse these timeout exceptions check
+     * [com.open200.xesar.connect.messages.SingleEventResult.apiErrorDeferred] for an [ApiError].
+     *
+     * @param topicCommand The topic to send the command.
+     * @param topicEvent The topic to wait for the event.
+     * @param eventRequired Whether the event is required.
+     * @param command The command to send.
+     * @param requestConfig The request configuration (optional).
+     */
+    internal suspend inline fun <reified C : Command, reified E1 : Event> sendCommandAsync(
+        topicCommand: String,
+        topicEvent: String,
+        eventRequired: Boolean,
+        command: C,
+        requestConfig: RequestConfig = buildRequestConfig()
+    ): SingleEventResult<E1> {
+        val firstEventDeferred = CompletableDeferred<E1>()
+        val apiErrorDeferred = CompletableDeferred<Optional<ApiError>>()
+
+        val firstEventListener =
+            registerCommandEventListenerAsync<C, E1>(command, topicEvent, firstEventDeferred)
+        val errorListener = registerApiErrorListener<C>(command, apiErrorDeferred)
+        val listener = listOf(errorListener, firstEventListener)
+        val sendCommandJob =
+            sendAndWaitForCommandAsync<C>(
+                requestConfig,
+                topicCommand,
+                command,
+                listOf(firstEventDeferred),
+                apiErrorDeferred,
+                listener)
+        sendCommandJob.invokeOnCompletion { commandException ->
+            if (commandException == null) {
+                val eventJob =
+                    waitingForEventAsync<E1>(
+                        requestConfig, firstEventDeferred, eventRequired, topicEvent, listener[1])
+                registerToCloseResourcesOnCancellation(eventJob, listener[1], firstEventDeferred)
+
+                val apiErrorJob =
+                    waitingForApiErrorAsync(requestConfig, apiErrorDeferred, listener[0])
+                registerToCloseResourcesOnCancellation(apiErrorJob, listener[0], apiErrorDeferred)
+            }
+        }
+        return SingleEventResult(firstEventDeferred, apiErrorDeferred)
+    }
+
+    private fun <T> registerToCloseResourcesOnCancellation(
+        job: Job,
+        listener: Listener,
+        deferred: CompletableDeferred<T>
+    ) {
+        job.invokeOnCompletion {
+            when (it) {
+                is CancellationException -> {
+                    listener.close()
+                    deferred.completeExceptionally(it)
                 }
             }
-        return listener
+        }
+    }
+
+    /**
+     * Sends a command and returns a [Triple] including the two [Deferred] for two events and one
+     * [Deferred] for the [ApiError] asynchronously. If the events are not received within the
+     * specified timeout, a [RequiredEventException] or an [OptionalEventException] is thrown for
+     * the [Deferred] of the events respectively. To analyse these timeout exceptions check the
+     * [Deferred] for the [ApiError].
+     *
+     * @param topicCommand The topic to send the command.
+     * @param firstTopicEvent The topic to wait for the first event.
+     * @param firstEventRequired Whether the first event is required.
+     * @param secondTopicEvent The topic to wait for the second event.
+     * @param secondEventRequired Whether the second event is required.
+     * @param command The command to send.
+     * @param requestConfig The request configuration (optional).
+     */
+    internal suspend inline fun <
+        reified C : Command, reified E1 : Event, reified E2 : Event> sendCommandAsync(
+        topicCommand: String,
+        firstTopicEvent: String,
+        firstEventRequired: Boolean,
+        secondTopicEvent: String,
+        secondEventRequired: Boolean,
+        command: C,
+        requestConfig: RequestConfig = buildRequestConfig(),
+    ): Triple<Deferred<E1>, Deferred<E2>, Deferred<Optional<ApiError>>> {
+
+        val firstEventDeferred = CompletableDeferred<E1>()
+        val secondEventDeferred = CompletableDeferred<E2>()
+        val apiErrorDeferred = CompletableDeferred<Optional<ApiError>>()
+
+        val firstEventListener =
+            registerCommandEventListenerAsync<C, E1>(command, firstTopicEvent, firstEventDeferred)
+        val secondEventListener =
+            registerCommandEventListenerAsync<C, E2>(command, secondTopicEvent, secondEventDeferred)
+        val errorListener = registerApiErrorListener<C>(command, apiErrorDeferred)
+
+        val listener = listOf(errorListener, firstEventListener, secondEventListener)
+
+        logger.debug { "waited for all listeners" }
+        val sendCommandJob =
+            sendAndWaitForCommandAsync<C>(
+                requestConfig,
+                topicCommand,
+                command,
+                listOf(firstEventDeferred, secondEventDeferred),
+                apiErrorDeferred,
+                listener)
+
+        sendCommandJob.invokeOnCompletion { commandException ->
+            if (commandException == null) {
+                logger.debug { "start waiting for events" }
+
+                val firstEventJob =
+                    waitingForEventAsync<E1>(
+                        requestConfig,
+                        firstEventDeferred,
+                        firstEventRequired,
+                        firstTopicEvent,
+                        listener[1])
+                registerToCloseResourcesOnCancellation(
+                    firstEventJob, listener[1], firstEventDeferred)
+
+                val secondEventJob =
+                    waitingForEventAsync<E2>(
+                        requestConfig,
+                        secondEventDeferred,
+                        secondEventRequired,
+                        secondTopicEvent,
+                        listener[2])
+                registerToCloseResourcesOnCancellation(
+                    secondEventJob, listener[2], secondEventDeferred)
+
+                val apiErrorJob =
+                    waitingForApiErrorAsync(requestConfig, apiErrorDeferred, listener[0])
+                registerToCloseResourcesOnCancellation(apiErrorJob, listener[0], apiErrorDeferred)
+            }
+        }
+
+        return Triple(firstEventDeferred, secondEventDeferred, apiErrorDeferred)
+    }
+
+    /**
+     * Sends a command and returns a [Pair] including a [Triple] with three [Deferred] for three
+     * events and one [Deferred] for the [ApiError] asynchronously. If the events are not received
+     * within the specified timeout, a [RequiredEventException] or an [OptionalEventException] is
+     * thrown for the [Deferred] of the events respectively. To analyse these timeout exceptions
+     * check the [Deferred] for the [ApiError].
+     *
+     * @param topicCommand The topic to send the command.
+     * @param firstTopicEvent The topic to wait for the first event.
+     * @param firstEventRequired Whether the first event is required.
+     * @param secondTopicEvent The topic to wait for the second event.
+     * @param secondEventRequired Whether the second event is required.
+     * @param thirdTopicEvent The topic to wait for the third event.
+     * @param thirdEventRequired Whether the third event is required.
+     * @param command The command to send.
+     * @param requestConfig The request configuration (optional).
+     */
+    internal suspend inline fun <
+        reified C : Command,
+        reified E1 : Event,
+        reified E2 : Event,
+        reified E3 : Event> sendCommandAsync(
+        topicCommand: String,
+        firstTopicEvent: String,
+        firstEventRequired: Boolean,
+        secondTopicEvent: String,
+        secondEventRequired: Boolean,
+        thirdTopicEvent: String,
+        thirdEventRequired: Boolean,
+        command: C,
+        requestConfig: RequestConfig = buildRequestConfig(),
+    ): Pair<Triple<Deferred<E1>, Deferred<E2>, Deferred<E3>>, Deferred<Optional<ApiError>>> {
+
+        val firstEventDeferred = CompletableDeferred<E1>()
+        val secondEventDeferred = CompletableDeferred<E2>()
+        val thirdEventDeferred = CompletableDeferred<E3>()
+        val apiErrorDeferred = CompletableDeferred<Optional<ApiError>>()
+
+        val firstEventListenerDeferred =
+            registerCommandEventListenerAsync<C, E1>(command, firstTopicEvent, firstEventDeferred)
+        val secondEventListenerDeferred =
+            registerCommandEventListenerAsync<C, E2>(command, secondTopicEvent, secondEventDeferred)
+        val thirdEventListenerDeferred =
+            registerCommandEventListenerAsync<C, E3>(command, thirdTopicEvent, thirdEventDeferred)
+        val errorListener = registerApiErrorListener<C>(command, apiErrorDeferred)
+
+        val listener =
+            listOf(
+                errorListener,
+                firstEventListenerDeferred,
+                secondEventListenerDeferred,
+                thirdEventListenerDeferred)
+
+        logger.debug { "awaited all listener" }
+        val sendCommandJob =
+            sendAndWaitForCommandAsync<C>(
+                requestConfig,
+                topicCommand,
+                command,
+                listOf(firstEventDeferred, secondEventDeferred, thirdEventDeferred),
+                apiErrorDeferred,
+                listener)
+
+        sendCommandJob.invokeOnCompletion { commandException ->
+            if (commandException == null) {
+                logger.debug { "start waiting for events" }
+                val firstEventJob =
+                    waitingForEventAsync<E1>(
+                        requestConfig,
+                        firstEventDeferred,
+                        firstEventRequired,
+                        firstTopicEvent,
+                        listener[1])
+
+                registerToCloseResourcesOnCancellation(
+                    firstEventJob, listener[1], firstEventDeferred)
+
+                val secondEventJob =
+                    waitingForEventAsync<E2>(
+                        requestConfig,
+                        secondEventDeferred,
+                        secondEventRequired,
+                        secondTopicEvent,
+                        listener[2])
+
+                registerToCloseResourcesOnCancellation(
+                    secondEventJob, listener[2], secondEventDeferred)
+
+                val thirdEventJob =
+                    waitingForEventAsync<E3>(
+                        requestConfig,
+                        thirdEventDeferred,
+                        thirdEventRequired,
+                        thirdTopicEvent,
+                        listener[3])
+
+                registerToCloseResourcesOnCancellation(
+                    thirdEventJob, listener[3], thirdEventDeferred)
+
+                val apiErrorJob =
+                    waitingForApiErrorAsync(requestConfig, apiErrorDeferred, listener[0])
+
+                registerToCloseResourcesOnCancellation(apiErrorJob, listener[0], apiErrorDeferred)
+            }
+        }
+        return Pair(
+            Triple(firstEventDeferred, secondEventDeferred, thirdEventDeferred), apiErrorDeferred)
+    }
+
+    private inline fun <reified C : Command> sendAndWaitForCommandAsync(
+        requestConfig: RequestConfig,
+        topicCommand: String,
+        command: C,
+        listOfEventDeferred: List<CompletableDeferred<out Event>>,
+        apiErrorDeferred: CompletableDeferred<Optional<ApiError>>,
+        listeners: List<Listener>
+    ): Job {
+        var publishDeferred = CompletableDeferred<Unit>()
+        return coroutineScopeForSendCommand.launch {
+            try {
+                withTimeout(requestConfig.timeout) {
+                    logger.debug { "send commmand now" }
+                    publishDeferred =
+                        client.publishAsync(topicCommand, encodeCommand(command))
+                            as CompletableDeferred<Unit>
+                    publishDeferred.await()
+                }
+            } catch (e: TimeoutCancellationException) {
+                logger.error { "timeout while sending the command" }
+                completeWithSpecificException(
+                    ConnectionFailedException("Command Response timed out", e),
+                    publishDeferred,
+                    *listOfEventDeferred.toTypedArray(),
+                    apiErrorDeferred)
+                closeListener(listeners)
+            } catch (e: Exception) {
+                logger.error { "error while sending the command" }
+                completeWithSpecificException(
+                    ConnectionFailedException("Command request was invalid", e),
+                    publishDeferred,
+                    *listOfEventDeferred.toTypedArray(),
+                    apiErrorDeferred)
+                closeListener(listeners)
+            }
+        }
+    }
+
+    private fun waitingForApiErrorAsync(
+        requestConfig: RequestConfig,
+        apiErrorDeferred: CompletableDeferred<Optional<ApiError>>,
+        listener: Listener
+    ): Job =
+        coroutineScopeForSendCommand.launch {
+            logger.debug { "waiting for api error" }
+            try {
+                withTimeout(requestConfig.timeout) { apiErrorDeferred.await() }
+            } catch (e: TimeoutCancellationException) {
+                logger.error { "timeout while waiting for api error" }
+                apiErrorDeferred.complete(Optional.empty())
+            } catch (e: Exception) {
+                logger.error {
+                    "exception while waiting for api error ${e.cause.toString().orEmpty()}"
+                }
+                apiErrorDeferred.completeExceptionally(e)
+            } finally {
+                listener.close()
+            }
+        }
+
+    private inline fun <reified E : Event> waitingForEventAsync(
+        requestConfig: RequestConfig,
+        eventDeferred: CompletableDeferred<E>,
+        eventRequired: Boolean,
+        topicEvent: String,
+        listener: Listener
+    ): Job =
+        coroutineScopeForSendCommand.launch {
+            logger.debug { "waiting for event $topicEvent" }
+            try {
+                withTimeout(requestConfig.timeout) { eventDeferred.await() }
+            } catch (e: TimeoutCancellationException) {
+                logger.error { "timeout while waiting for event $topicEvent" }
+                completeWithSpecificException(
+                    getTypeOfExceptionDependingOnEventRequired(eventRequired, topicEvent, e),
+                    eventDeferred)
+            } catch (e: Exception) {
+                logger.error { "exception while waiting for event $topicEvent" }
+                completeWithSpecificException(e, eventDeferred)
+            } finally {
+                listener.close()
+            }
+        }
+
+    private inline fun <reified C : Command> registerApiErrorListener(
+        command: C,
+        apiErrorDeferred: CompletableDeferred<Optional<ApiError>>
+    ): Listener =
+        on(ApiErrorFilter(command.commandId, Topics.Event.error(config.apiProperties.userId))) {
+            try {
+                logger.debug { "decode api error message" }
+                val apiError = decodeError(it.message)
+                apiErrorDeferred.complete(Optional.of(apiError))
+            } catch (e: Exception) {
+                logger.error { "exception while waiting for api error: ${e.message}" }
+                apiErrorDeferred.completeExceptionally(e)
+            }
+        }
+
+    private inline fun <reified C : Command, reified E : Event> registerCommandEventListenerAsync(
+        command: C,
+        topicEvent: String,
+        eventDeferred: CompletableDeferred<E>
+    ): Listener =
+        on(EventAndCommandIdFilter(command.commandId, topicEvent)) {
+            try {
+                logger.debug { "decode $topicEvent message" }
+                val apiEvent = decodeEvent<E>(it.message)
+                eventDeferred.complete(apiEvent.event)
+            } catch (e: Exception) {
+                eventDeferred.completeExceptionally(ParsingException())
+            }
+        }
+
+    private fun <T> registerDefaultApiErrorListener(
+        id: UUID,
+        deferred: CompletableDeferred<T>
+    ): Listener =
+        on(ApiErrorFilter(id, Topics.Event.error(config.apiProperties.userId))) {
+            try {
+                val apiError = decodeError(it.message)
+                deferred.completeExceptionally(
+                    HttpErrorException(
+                        "HTTP error code: ${apiError.error} ${apiError.reason.orEmpty()}",
+                        apiError.error))
+            } catch (e: Exception) {
+                deferred.completeExceptionally(e)
+            }
+        }
+
+    private fun completeWithSpecificException(
+        e: Exception,
+        vararg deferreds: CompletableDeferred<*>
+    ) {
+        deferreds.forEach { it.completeExceptionally(e) }
+    }
+
+    private fun getTypeOfExceptionDependingOnEventRequired(
+        eventRequired: Boolean,
+        topic: String,
+        e: Throwable
+    ): XesarApiException {
+        return if (eventRequired) {
+            RequiredEventException("Required $topic event not received within timeout", e)
+        } else {
+            OptionalEventException("Optional $topic event not received within timeout", e)
+        }
     }
 
     /**
@@ -371,6 +731,13 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) : A
         }
     }
 
+    /**
+     * This clean up function does the following:
+     * 1. If the connection channel is closed, return immediately.
+     * 2. If the logoutOnClose configuration is set to true and a token was used for login, perform
+     *    a logout operation.
+     * 3. Cancel and clean up all underlying coroutines (close listener, complete deferred).
+     */
     override fun close() {
         if (connectionChannel.isClosedForSend) {
             return
@@ -379,6 +746,7 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) : A
             runBlocking { launch { logoutAsync().await() } }
         }
         client.close()
+        runBlocking { launch { coroutineScopeForSendCommand.cancel("program was closed") } }
     }
 
     companion object {

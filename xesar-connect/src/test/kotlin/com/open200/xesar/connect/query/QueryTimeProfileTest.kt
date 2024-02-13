@@ -80,8 +80,8 @@ class QueryTimeProfileTest :
                             .await()
                         val result = api.queryTimeProfileListAsync().await()
                         result.totalCount.shouldBeEqual(2)
-                        result.data[0].name.shouldBeEqual("name")
-                        result.data[1].name.shouldBeEqual("name 2")
+                        result.data[0].name?.shouldBeEqual("name")
+                        result.data[1].name?.shouldBeEqual("name 2")
                     }
                 }
             }
@@ -114,7 +114,7 @@ class QueryTimeProfileTest :
                             QueryTestHelper.createQueryRequest(
                                 TimeProfile.QUERY_RESOURCE,
                                 requestId,
-                                TimeProfileFixture.timeProfileFixture.id))
+                                TimeProfileFixture.timeProfileFixture.id!!))
 
                         val person =
                             encodeQueryElement(
@@ -131,10 +131,11 @@ class QueryTimeProfileTest :
                         api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
                             .await()
                         val result =
-                            api.queryTimeProfileByIdAsync(TimeProfileFixture.timeProfileFixture.id)
+                            api.queryTimeProfileByIdAsync(
+                                    TimeProfileFixture.timeProfileFixture.id!!)
                                 .await()
-                        result.id.shouldBeEqual(TimeProfileFixture.timeProfileFixture.id)
-                        result.name.shouldBeEqual("name")
+                        result.id?.shouldBeEqual(TimeProfileFixture.timeProfileFixture.id!!)
+                        result.name?.shouldBeEqual("name")
                     }
                 }
             }

@@ -3,7 +3,7 @@ package com.open200.xesar.connect.command
 import com.open200.xesar.connect.Topics
 import com.open200.xesar.connect.XesarConnect
 import com.open200.xesar.connect.XesarMqttClient
-import com.open200.xesar.connect.extension.setPersonalReferenceDurationInPerson
+import com.open200.xesar.connect.extension.setPersonalReferenceDurationInPersonAsync
 import com.open200.xesar.connect.messages.PersonalLog
 import com.open200.xesar.connect.messages.event.ApiEvent
 import com.open200.xesar.connect.messages.event.PersonChanged
@@ -70,7 +70,7 @@ class SetPersonalReferenceDurationInPersonTest :
                     XesarConnect.connectAndLoginAsync(config).await().use { api ->
                         api.subscribeAsync(Topics(Topics.Event.PERSON_CHANGED)).await()
                         val result =
-                            api.setPersonalReferenceDurationInPerson(
+                            api.setPersonalReferenceDurationInPersonAsync(
                                     "EXT-123", PersonalLog(days = 30))
                                 .await()
                         result.id.shouldBeEqual(

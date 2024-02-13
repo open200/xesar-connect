@@ -9,7 +9,7 @@ import java.util.*
  */
 class QueryIdFilter(requestId: UUID) : MessageFilter {
     private val requestIdRegex =
-        Regex("\"requestId\":\\s*\"${Regex.fromLiteral(requestId.toString())}\"")
+        Regex("\"${UUIDJsonName.requestId}\":\\s*\"${Regex.fromLiteral(requestId.toString())}\"")
 
     /**
      * Filters the given topic and message based on the query ID.

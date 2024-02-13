@@ -3,7 +3,7 @@ package com.open200.xesar.connect.command
 import com.open200.xesar.connect.Topics
 import com.open200.xesar.connect.XesarConnect
 import com.open200.xesar.connect.XesarMqttClient
-import com.open200.xesar.connect.extension.removeInstallationPointFromZone
+import com.open200.xesar.connect.extension.removeInstallationPointFromZoneAsync
 import com.open200.xesar.connect.messages.event.ApiEvent
 import com.open200.xesar.connect.messages.event.InstallationPointsInZoneChanged
 import com.open200.xesar.connect.messages.event.encodeEvent
@@ -63,7 +63,7 @@ class RemoveInstallationPointFromZoneTest :
 
                         client
                             .publishAsync(
-                                Topics.Event.AUTHORIZATION_TIME_PROFILE_CREATED,
+                                Topics.Event.INSTALLATION_POINTS_IN_ZONE_CHANGED,
                                 encodeEvent(apiEvent))
                             .await()
                     }
@@ -72,10 +72,10 @@ class RemoveInstallationPointFromZoneTest :
                     simulatedBackendReady.await()
 
                     XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                        api.subscribeAsync(Topics(Topics.Event.AUTHORIZATION_TIME_PROFILE_CREATED))
+                        api.subscribeAsync(Topics(Topics.Event.INSTALLATION_POINTS_IN_ZONE_CHANGED))
                             .await()
                         val result =
-                            api.removeInstallationPointFromZone(
+                            api.removeInstallationPointFromZoneAsync(
                                     UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
                                     UUID.fromString("8c7128d4-a30f-4aad-b5d2-d7b975c5cf8f"))
                                 .await()

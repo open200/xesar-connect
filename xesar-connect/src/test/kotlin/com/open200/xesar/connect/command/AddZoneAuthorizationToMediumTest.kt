@@ -3,7 +3,7 @@ package com.open200.xesar.connect.command
 import com.open200.xesar.connect.Topics
 import com.open200.xesar.connect.XesarConnect
 import com.open200.xesar.connect.XesarMqttClient
-import com.open200.xesar.connect.extension.addZoneAuthorizationToMedium
+import com.open200.xesar.connect.extension.addZoneAuthorizationToMediumAsync
 import com.open200.xesar.connect.messages.command.AuthorizationData
 import com.open200.xesar.connect.messages.event.ApiEvent
 import com.open200.xesar.connect.messages.event.IndividualAuthorizationsAddedToMedium
@@ -78,7 +78,7 @@ class AddZoneAuthorizationToMediumTest :
                                 false,
                                 UUID.fromString("e9b31e62-8969-4794-a219-8c81ff10c91d"))
                         val result =
-                            api.addZoneAuthorizationToMedium(
+                            api.addZoneAuthorizationToMediumAsync(
                                     UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
                                     authorizationData)
                                 .await()

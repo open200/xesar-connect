@@ -4,6 +4,7 @@ import com.open200.xesar.connect.Topics
 import com.open200.xesar.connect.XesarConnect
 import com.open200.xesar.connect.messages.ExceptionTimeSerie
 import com.open200.xesar.connect.messages.ExceptionTimepointSerie
+import com.open200.xesar.connect.messages.SingleEventResult
 import com.open200.xesar.connect.messages.TimePointSerie
 import com.open200.xesar.connect.messages.TimeSerie
 import com.open200.xesar.connect.messages.command.*
@@ -51,16 +52,18 @@ suspend fun XesarConnect.queryTimeProfileByIdAsync(
  * @param exceptionTimeSeries The exception time series of the time profile.
  * @param requestConfig The request configuration (optional).
  */
-suspend fun XesarConnect.changeAuthorizationTimeProfile(
+suspend fun XesarConnect.changeAuthorizationTimeProfileAsync(
     timeProfileId: UUID,
     timeProfileName: String,
     description: String? = null,
     timeSeries: List<TimeSerie> = emptyList(),
     exceptionTimeSeries: List<ExceptionTimeSerie> = emptyList(),
     requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
-): Deferred<AuthorizationTimeProfileChanged> {
-    return sendCommand<ChangeAuthorizationTimeProfileMapi, AuthorizationTimeProfileChanged>(
+): SingleEventResult<AuthorizationTimeProfileChanged> {
+    return sendCommandAsync<ChangeAuthorizationTimeProfileMapi, AuthorizationTimeProfileChanged>(
         Topics.Command.CHANGE_AUTHORIZATION_TIME_PROFILE,
+        Topics.Event.AUTHORIZATION_TIME_PROFILE_CHANGED,
+        true,
         ChangeAuthorizationTimeProfileMapi(
             config.uuidGenerator.generateId(),
             timeProfileId,
@@ -84,7 +87,7 @@ suspend fun XesarConnect.changeAuthorizationTimeProfile(
  * @param timePointSeries The time point series of the time profile.
  * @param requestConfig The request configuration (optional).
  */
-suspend fun XesarConnect.changeOfficeModeTimeProfile(
+suspend fun XesarConnect.changeOfficeModeTimeProfileAsync(
     timeProfileId: UUID,
     name: String,
     description: String? = null,
@@ -93,9 +96,11 @@ suspend fun XesarConnect.changeOfficeModeTimeProfile(
     exceptionTimePointSeries: List<ExceptionTimeSerie>? = emptyList(),
     timePointSeries: List<TimePointSerie>? = emptyList(),
     requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
-): Deferred<OfficeModeTimeProfileChanged> {
-    return sendCommand<ChangeOfficeModeTimeProfileMapi, OfficeModeTimeProfileChanged>(
+): SingleEventResult<OfficeModeTimeProfileChanged> {
+    return sendCommandAsync<ChangeOfficeModeTimeProfileMapi, OfficeModeTimeProfileChanged>(
         Topics.Command.CHANGE_OFFICE_MODE_TIME_PROFILE,
+        Topics.Event.OFFICE_MODE_TIME_PROFILE_CHANGED,
+        true,
         ChangeOfficeModeTimeProfileMapi(
             config.uuidGenerator.generateId(),
             timeProfileId,
@@ -120,7 +125,7 @@ suspend fun XesarConnect.changeOfficeModeTimeProfile(
  * @param timeProfileId The ID of the office mode time profile.
  * @param requestConfig The request configuration (optional).
  */
-suspend fun XesarConnect.createOfficeModeTimeProfile(
+suspend fun XesarConnect.createOfficeModeTimeProfileAsync(
     timeSeries: List<TimeSerie> = emptyList(),
     exceptionTimeSeries: List<ExceptionTimeSerie> = emptyList(),
     exceptionTimePointSeries: List<ExceptionTimepointSerie> = emptyList(),
@@ -129,9 +134,11 @@ suspend fun XesarConnect.createOfficeModeTimeProfile(
     timePointSeries: List<TimePointSerie> = emptyList(),
     timeProfileId: UUID,
     requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
-): Deferred<OfficeModeTimeProfileCreated> {
-    return sendCommand<CreateOfficeModeTimeProfileMapi, OfficeModeTimeProfileCreated>(
+): SingleEventResult<OfficeModeTimeProfileCreated> {
+    return sendCommandAsync<CreateOfficeModeTimeProfileMapi, OfficeModeTimeProfileCreated>(
         Topics.Command.CREATE_OFFICE_MODE_TIME_PROFILE,
+        Topics.Event.OFFICE_MODE_TIME_PROFILE_CREATED,
+        true,
         CreateOfficeModeTimeProfileMapi(
             config.uuidGenerator.generateId(),
             timeSeries,
@@ -151,12 +158,14 @@ suspend fun XesarConnect.createOfficeModeTimeProfile(
  * @param timeProfileId The ID of the office mode time profile to delete.
  * @param requestConfig The request configuration (optional).
  */
-suspend fun XesarConnect.deleteOfficeModeTimeProfile(
+suspend fun XesarConnect.deleteOfficeModeTimeProfileAsync(
     timeProfileId: UUID,
     requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
-): Deferred<OfficeModeTimeProfileDeleted> {
-    return sendCommand<DeleteOfficeModeTimeProfileMapi, OfficeModeTimeProfileDeleted>(
+): SingleEventResult<OfficeModeTimeProfileDeleted> {
+    return sendCommandAsync<DeleteOfficeModeTimeProfileMapi, OfficeModeTimeProfileDeleted>(
         Topics.Command.DELETE_OFFICE_MODE_TIME_PROFILE,
+        Topics.Event.OFFICE_MODE_TIME_PROFILE_DELETED,
+        true,
         DeleteOfficeModeTimeProfileMapi(config.uuidGenerator.generateId(), timeProfileId, token),
         requestConfig)
 }
@@ -171,16 +180,18 @@ suspend fun XesarConnect.deleteOfficeModeTimeProfile(
  * @param timeProfileId The ID of the authorization time profile.
  * @param requestConfig The request configuration (optional).
  */
-suspend fun XesarConnect.createAuthorizationTimeProfile(
+suspend fun XesarConnect.createAuthorizationTimeProfileAsync(
     timeSeries: List<TimeSerie> = emptyList(),
     exceptionTimeSeries: List<ExceptionTimeSerie> = emptyList(),
     name: String,
     description: String? = null,
     timeProfileId: UUID,
     requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
-): Deferred<AuthorizationTimeProfileCreated> {
-    return sendCommand<CreateAuthorizationTimeProfileMapi, AuthorizationTimeProfileCreated>(
+): SingleEventResult<AuthorizationTimeProfileCreated> {
+    return sendCommandAsync<CreateAuthorizationTimeProfileMapi, AuthorizationTimeProfileCreated>(
         Topics.Command.CREATE_AUTHORIZATION_TIME_PROFILE,
+        Topics.Event.AUTHORIZATION_TIME_PROFILE_CREATED,
+        true,
         CreateAuthorizationTimeProfileMapi(
             config.uuidGenerator.generateId(),
             timeSeries,
@@ -197,12 +208,14 @@ suspend fun XesarConnect.createAuthorizationTimeProfile(
  * @param timeProfileId The ID of the authorization time profile to delete.
  * @param requestConfig The request configuration (optional).
  */
-suspend fun XesarConnect.deleteAuthorizationTimeProfile(
+suspend fun XesarConnect.deleteAuthorizationTimeProfileAsync(
     timeProfileId: UUID,
     requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
-): Deferred<AuthorizationTimeProfileDeleted> {
-    return sendCommand<DeleteAuthorizationTimeProfileMapi, AuthorizationTimeProfileDeleted>(
+): SingleEventResult<AuthorizationTimeProfileDeleted> {
+    return sendCommandAsync<DeleteAuthorizationTimeProfileMapi, AuthorizationTimeProfileDeleted>(
         Topics.Command.DELETE_AUTHORIZATION_TIME_PROFILE,
+        Topics.Event.AUTHORIZATION_TIME_PROFILE_DELETED,
+        true,
         DeleteAuthorizationTimeProfileMapi(config.uuidGenerator.generateId(), timeProfileId, token),
         requestConfig)
 }
