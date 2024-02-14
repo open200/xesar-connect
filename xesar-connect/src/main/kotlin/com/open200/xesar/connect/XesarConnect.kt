@@ -13,6 +13,7 @@ import com.open200.xesar.connect.messages.query.*
 import java.util.*
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.CopyOnWriteArraySet
+import kotlin.coroutines.coroutineContext
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import mu.KotlinLogging
@@ -24,13 +25,14 @@ val logger = KotlinLogging.logger {}
  *
  * Handles the connection and the session of the Xesar API client in a stateful manner.
  */
-class XesarConnect(private val client: IXesarMqttClient, val config: Config) : AutoCloseable {
+class XesarConnect(private val client: IXesarMqttClient, val config: Config) {
 
     private val subscribedTopics = CopyOnWriteArraySet<String>()
     private val listeners = CopyOnWriteArrayList<Listener>()
     private val connectionChannel = Channel<ConnectionEvent>()
-    private val coroutineScopeForSendCommand = CoroutineScope(Dispatchers.IO)
-
+    private val coroutineScopeForSendCommand =
+        CoroutineScope(config.dispatcherForCommandsAndCleanUp)
+    private val coroutineScopeForCleanUp = CoroutineScope(config.dispatcherForCommandsAndCleanUp)
     lateinit var token: Token
 
     /**
@@ -291,7 +293,7 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) : A
     private suspend inline fun <T> handleStandardExceptions(
         deferred: CompletableDeferred<T>,
         messageType: String,
-        block: suspend () -> (Unit)
+        block: () -> (Unit)
     ) {
         try {
             block.invoke()
@@ -363,6 +365,7 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) : A
         job.invokeOnCompletion {
             when (it) {
                 is CancellationException -> {
+                    logger.debug { "cancelled job" }
                     listener.close()
                     deferred.completeExceptionally(it)
                 }
@@ -408,7 +411,6 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) : A
 
         val listener = listOf(errorListener, firstEventListener, secondEventListener)
 
-        logger.debug { "waited for all listeners" }
         val sendCommandJob =
             sendAndWaitForCommandAsync<C>(
                 requestConfig,
@@ -504,7 +506,6 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) : A
                 secondEventListenerDeferred,
                 thirdEventListenerDeferred)
 
-        logger.debug { "awaited all listener" }
         val sendCommandJob =
             sendAndWaitForCommandAsync<C>(
                 requestConfig,
@@ -560,7 +561,7 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) : A
             Triple(firstEventDeferred, secondEventDeferred, thirdEventDeferred), apiErrorDeferred)
     }
 
-    private inline fun <reified C : Command> sendAndWaitForCommandAsync(
+    private suspend inline fun <reified C : Command> sendAndWaitForCommandAsync(
         requestConfig: RequestConfig,
         topicCommand: String,
         command: C,
@@ -582,17 +583,13 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) : A
                 logger.error { "timeout while sending the command" }
                 completeWithSpecificException(
                     ConnectionFailedException("Command Response timed out", e),
-                    publishDeferred,
-                    *listOfEventDeferred.toTypedArray(),
-                    apiErrorDeferred)
+                    listOf(publishDeferred, *listOfEventDeferred.toTypedArray(), apiErrorDeferred))
                 closeListener(listeners)
             } catch (e: Exception) {
                 logger.error { "error while sending the command" }
                 completeWithSpecificException(
                     ConnectionFailedException("Command request was invalid", e),
-                    publishDeferred,
-                    *listOfEventDeferred.toTypedArray(),
-                    apiErrorDeferred)
+                    listOf(publishDeferred, *listOfEventDeferred.toTypedArray(), apiErrorDeferred))
                 closeListener(listeners)
             }
         }
@@ -611,12 +608,11 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) : A
                 logger.error { "timeout while waiting for api error" }
                 apiErrorDeferred.complete(Optional.empty())
             } catch (e: Exception) {
-                logger.error {
-                    "exception while waiting for api error ${e.cause.toString().orEmpty()}"
-                }
+                logger.error { "exception while waiting for api error ${e.message.orEmpty()}" }
                 apiErrorDeferred.completeExceptionally(e)
             } finally {
                 listener.close()
+                logger.info { "done with api error" }
             }
         }
 
@@ -635,12 +631,13 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) : A
                 logger.error { "timeout while waiting for event $topicEvent" }
                 completeWithSpecificException(
                     getTypeOfExceptionDependingOnEventRequired(eventRequired, topicEvent, e),
-                    eventDeferred)
+                    listOf(eventDeferred))
             } catch (e: Exception) {
                 logger.error { "exception while waiting for event $topicEvent" }
-                completeWithSpecificException(e, eventDeferred)
+                completeWithSpecificException(e, listOf(eventDeferred))
             } finally {
                 listener.close()
+                logger.info { "done with $topicEvent" }
             }
         }
 
@@ -692,7 +689,7 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) : A
 
     private fun completeWithSpecificException(
         e: Exception,
-        vararg deferreds: CompletableDeferred<*>
+        deferreds: List<CompletableDeferred<*>>
     ) {
         deferreds.forEach { it.completeExceptionally(e) }
     }
@@ -719,7 +716,7 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) : A
      *
      * @throws CancellationException if the coroutine is canceled while waiting.
      */
-    suspend fun delayUntilClose() {
+    suspend fun delay() {
         var connected = true
 
         while (connected) {
@@ -731,22 +728,56 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) : A
         }
     }
 
+    /** Breaks out of the delay function. */
+    suspend fun breakOutOfDelay() {
+        connectionChannel.trySend(ConnectionEvent.DISCONNECTED)
+    }
+
     /**
+     * Invokes [cleanUp] when the coroutine which called the [XesarConnect.connectAndLoginAsync] is
+     * completed.
+     */
+    private suspend fun invokeCleanUpOnCompletion() {
+        coroutineContext[Job]?.let { jobCallingXesarConnect ->
+            jobCallingXesarConnect.invokeOnCompletion {
+                val job = coroutineScopeForCleanUp.launch { cleanUp() }
+                job.invokeOnCompletion {
+                    it?.let { logger.error { "Clean up failed" } }
+                        ?: run { logger.info { "Clean up completed" } }
+                    coroutineScopeForCleanUp.cancel(CancellationException("program was closed"))
+                }
+            }
+        }
+    }
+
+    /**
+     * This clean up is internally handled within [XesarConnect.connectAndLoginAsync]
+     *
      * This clean up function does the following:
-     * 1. If the connection channel is closed, return immediately.
-     * 2. If the logoutOnClose configuration is set to true and a token was used for login, perform
-     *    a logout operation.
+     * 1. Regardless of whether the connection channel is closed or not cancel/clean up all
+     *    underlying coroutines (close listener, complete deferred) which are still active.
+     * 2. If the [Config.logoutOnClose] configuration is set to true and a token was used for login,
+     *    perform a logout operation and close the mqtt client to disconnect from the MQTT broker.
      * 3. Cancel and clean up all underlying coroutines (close listener, complete deferred).
      */
-    override fun close() {
-        if (connectionChannel.isClosedForSend) {
-            return
+    internal suspend fun cleanUp() {
+        logger.debug { "clean up" }
+        if (!connectionChannel.isClosedForSend) {
+            // channel (connection to mqtt broker) still open so logout if needed
+            if (config.logoutOnClose && token.isNotEmpty()) {
+                val job =
+                    coroutineScopeForSendCommand.launch {
+                        logoutAsync().await()
+                        logger.debug { "logout completed" }
+                    }
+                job.join()
+            }
+            if (client.isConnected()) {
+                client.close()
+            }
         }
-        if (config.logoutOnClose && token.isNotEmpty()) {
-            runBlocking { launch { logoutAsync().await() } }
-        }
-        client.close()
-        runBlocking { launch { coroutineScopeForSendCommand.cancel("program was closed") } }
+        logger.debug { "cancel all underlying coroutines which are still active" }
+        coroutineScopeForSendCommand.cancel(CancellationException("clean up function was executed"))
     }
 
     companion object {
@@ -764,13 +795,14 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) : A
          */
         suspend fun connectAndLoginAsync(
             config: Config,
-            userCredentials: UserCredentials? = null,
+            userCredentials: UserCredentials? = null
         ): Deferred<XesarConnect> {
             val deferred = CompletableDeferred<XesarConnect>()
 
             try {
                 val client = XesarMqttClient.connectAsync(config).await()
                 val api = XesarConnect(client, config)
+                api.invokeCleanUpOnCompletion()
 
                 api.subscribeAsync(
                         Topics(

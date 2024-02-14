@@ -69,12 +69,11 @@ class RemoteDisengageTest :
                 launch {
                     simulatedBackendReady.await()
 
-                    XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                        shouldThrow<RequiredEventException> {
-                            api.executeRemoteDisengageAsync(
-                                    InstallationPointFixture.installationPointFixture.id, true)
-                                .await()
-                        }
+                    val api = XesarConnect.connectAndLoginAsync(config).await()
+                    shouldThrow<RequiredEventException> {
+                        api.executeRemoteDisengageAsync(
+                                InstallationPointFixture.installationPointFixture.id, true)
+                            .await()
                     }
                 }
             }
@@ -120,15 +119,14 @@ class RemoteDisengageTest :
                 launch {
                     simulatedBackendReady.await()
 
-                    XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                        api.subscribeAsync(Topics(Topics.Event.REMOTE_DISENGAGE_PERFORMED)).await()
-                        val result =
-                            api.executeRemoteDisengageAsync(
-                                    InstallationPointFixture.installationPointFixture.id, true)
-                                .await()
+                    val api = XesarConnect.connectAndLoginAsync(config).await()
+                    api.subscribeAsync(Topics(Topics.Event.REMOTE_DISENGAGE_PERFORMED)).await()
+                    val result =
+                        api.executeRemoteDisengageAsync(
+                                InstallationPointFixture.installationPointFixture.id, true)
+                            .await()
 
-                        result.ok.shouldBeEqual("ok")
-                    }
+                    result.ok.shouldBeEqual("ok")
                 }
             }
         }

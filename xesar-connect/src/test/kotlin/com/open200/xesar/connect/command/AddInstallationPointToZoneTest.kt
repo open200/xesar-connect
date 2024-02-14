@@ -67,19 +67,18 @@ class AddInstallationPointToZoneTest :
                 launch {
                     simulatedBackendReady.await()
 
-                    XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                        api.subscribeAsync(Topics(Topics.Event.INSTALLATION_POINTS_IN_ZONE_CHANGED))
+                    val api = XesarConnect.connectAndLoginAsync(config).await()
+                    api.subscribeAsync(Topics(Topics.Event.INSTALLATION_POINTS_IN_ZONE_CHANGED))
+                        .await()
+                    val result =
+                        api.addInstallationPointToZoneAsync(
+                                UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
+                                UUID.fromString("2d52bd95-18ba-4e46-8f00-0fc4c1e3f9be"))
                             .await()
-                        val result =
-                            api.addInstallationPointToZoneAsync(
-                                    UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
-                                    UUID.fromString("2d52bd95-18ba-4e46-8f00-0fc4c1e3f9be"))
-                                .await()
-                        result.addedInstallationPoints.size.shouldBeEqual(1)
-                        result.aggregateId.shouldBeEqual(
-                            UUID.fromString("2d52bd95-18ba-4e46-8f00-0fc4c1e3f9be"))
-                        result.accessId.shouldBeEqual(123)
-                    }
+                    result.addedInstallationPoints.size.shouldBeEqual(1)
+                    result.aggregateId.shouldBeEqual(
+                        UUID.fromString("2d52bd95-18ba-4e46-8f00-0fc4c1e3f9be"))
+                    result.accessId.shouldBeEqual(123)
                 }
             }
         }

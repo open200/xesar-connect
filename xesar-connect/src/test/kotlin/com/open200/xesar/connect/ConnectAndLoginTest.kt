@@ -69,19 +69,18 @@ class ConnectAndLoginTest :
 
                     val userCredentials = UserCredentials("fordprefect", "foobar")
 
-                    XesarConnect.connectAndLoginAsync(config, userCredentials).await().use {
-                        it.getSubscribedTopics()
-                            .shouldBe(
-                                listOf(
-                                    Topics.Event.loggedIn(
-                                        UUID.fromString("faf3d0c4-1281-40ae-89d7-5c541d77a757")),
-                                    Topics.Event.UNAUTHORIZED_LOGIN_ATTEMPT,
-                                    Topics.Event.LOGGED_OUT,
-                                    Topics.Event.error(config.apiProperties.userId)))
+                    val it = XesarConnect.connectAndLoginAsync(config, userCredentials).await()
+                    it.getSubscribedTopics()
+                        .shouldBe(
+                            listOf(
+                                Topics.Event.loggedIn(
+                                    UUID.fromString("faf3d0c4-1281-40ae-89d7-5c541d77a757")),
+                                Topics.Event.UNAUTHORIZED_LOGIN_ATTEMPT,
+                                Topics.Event.LOGGED_OUT,
+                                Topics.Event.error(config.apiProperties.userId)))
 
-                        it.shouldBeInstanceOf<XesarConnect>()
-                        it.logoutAsync().await()
-                    }
+                    it.shouldBeInstanceOf<XesarConnect>()
+                    it.logoutAsync().await()
                 }
             }
         }
@@ -122,4 +121,6 @@ class ConnectAndLoginTest :
                     }
                 }
             }
+        // TODO
+        test("logout") {}
     })

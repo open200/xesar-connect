@@ -65,16 +65,14 @@ class DeleteAuthorizationTimeProfileTest :
                 launch {
                     simulatedBackendReady.await()
 
-                    XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                        api.subscribeAsync(Topics(Topics.Event.AUTHORIZATION_TIME_PROFILE_DELETED))
+                    val api = XesarConnect.connectAndLoginAsync(config).await()
+                    api.subscribeAsync(Topics(Topics.Event.AUTHORIZATION_TIME_PROFILE_DELETED))
+                        .await()
+                    val result =
+                        api.deleteAuthorizationTimeProfileAsync(
+                                UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
                             .await()
-                        val result =
-                            api.deleteAuthorizationTimeProfileAsync(
-                                    UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
-                                .await()
-                        result.id.shouldBeEqual(
-                            UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
-                    }
+                    result.id.shouldBeEqual(UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
                 }
             }
         }

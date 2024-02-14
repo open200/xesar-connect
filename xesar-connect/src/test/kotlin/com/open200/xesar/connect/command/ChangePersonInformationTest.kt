@@ -65,16 +65,14 @@ class ChangePersonInformationTest :
                 launch {
                     simulatedBackendReady.await()
 
-                    XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                        api.subscribeAsync(Topics(Topics.Event.PERSON_CHANGED)).await()
-                        val result =
-                            api.changePersonInformationAsync(
-                                    firstName = "first name", externalId = "EXT-4711")
-                                .await()
-                        result.firstName.shouldBeEqual("first name")
-                        result.id.shouldBeEqual(
-                            UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
-                    }
+                    val api = XesarConnect.connectAndLoginAsync(config).await()
+                    api.subscribeAsync(Topics(Topics.Event.PERSON_CHANGED)).await()
+                    val result =
+                        api.changePersonInformationAsync(
+                                firstName = "first name", externalId = "EXT-4711")
+                            .await()
+                    result.firstName.shouldBeEqual("first name")
+                    result.id.shouldBeEqual(UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
                 }
             }
         }

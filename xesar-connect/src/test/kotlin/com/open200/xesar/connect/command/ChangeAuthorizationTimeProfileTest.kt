@@ -70,25 +70,22 @@ class ChangeAuthorizationTimeProfileTest :
                 launch {
                     simulatedBackendReady.await()
 
-                    XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                        api.subscribeAsync(Topics(Topics.Event.AUTHORIZATION_TIME_PROFILE_CHANGED))
-                            .await()
+                    val api = XesarConnect.connectAndLoginAsync(config).await()
+                    api.subscribeAsync(Topics(Topics.Event.AUTHORIZATION_TIME_PROFILE_CHANGED))
+                        .await()
 
-                        val result =
-                            api.changeAuthorizationTimeProfileAsync(
-                                    timeProfileId =
-                                        UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
-                                    timeProfileName = "timeProfileName",
-                                    timeSeries = TimeProfileFixture.timeSeries,
-                                    exceptionTimeSeries = TimeProfileFixture.exceptionTimeSerie,
-                                )
-                                .await()
-                        result.id.shouldBeEqual(
-                            UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
-                        result.exceptionTimeSeries.shouldBeEqual(
-                            TimeProfileFixture.exceptionTimeSerie)
-                        result.name.shouldBeEqual("timeProfileName")
-                    }
+                    val result =
+                        api.changeAuthorizationTimeProfileAsync(
+                                timeProfileId =
+                                    UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
+                                timeProfileName = "timeProfileName",
+                                timeSeries = TimeProfileFixture.timeSeries,
+                                exceptionTimeSeries = TimeProfileFixture.exceptionTimeSerie,
+                            )
+                            .await()
+                    result.id.shouldBeEqual(UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
+                    result.exceptionTimeSeries.shouldBeEqual(TimeProfileFixture.exceptionTimeSerie)
+                    result.name.shouldBeEqual("timeProfileName")
                 }
             }
         }

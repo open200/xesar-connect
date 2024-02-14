@@ -66,16 +66,14 @@ class SetValidityDurationTest :
                 launch {
                     simulatedBackendReady.await()
 
-                    XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                        api.subscribeAsync(Topics(Topics.Event.MEDIUM_CHANGED)).await()
-                        val result =
-                            api.setValidityDurationAsync(
-                                    UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"), 123)
-                                .await()
-                        result.id.shouldBeEqual(
-                            UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
-                        result.validityDuration?.shouldBeEqual(123)
-                    }
+                    val api = XesarConnect.connectAndLoginAsync(config).await()
+                    api.subscribeAsync(Topics(Topics.Event.MEDIUM_CHANGED)).await()
+                    val result =
+                        api.setValidityDurationAsync(
+                                UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"), 123)
+                            .await()
+                    result.id.shouldBeEqual(UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
+                    result.validityDuration?.shouldBeEqual(123)
                 }
             }
         }

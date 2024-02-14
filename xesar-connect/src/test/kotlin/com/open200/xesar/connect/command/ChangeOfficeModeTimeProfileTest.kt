@@ -68,18 +68,17 @@ class ChangeOfficeModeTimeProfileTest :
                 launch {
                     simulatedBackendReady.await()
 
-                    XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                        api.subscribeAsync(Topics(Topics.Event.OFFICE_MODE_TIME_PROFILE_CHANGED))
+                    val api = XesarConnect.connectAndLoginAsync(config).await()
+                    api.subscribeAsync(Topics(Topics.Event.OFFICE_MODE_TIME_PROFILE_CHANGED))
+                        .await()
+                    val result =
+                        api.changeOfficeModeTimeProfileAsync(
+                                UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
+                                "name",
+                                timeSeries = TimeProfileFixture.timeSeries)
                             .await()
-                        val result =
-                            api.changeOfficeModeTimeProfileAsync(
-                                    UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
-                                    "name",
-                                    timeSeries = TimeProfileFixture.timeSeries)
-                                .await()
-                        result.id.shouldBe(UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
-                        result.timeSeries.shouldBe(TimeProfileFixture.timeSeries)
-                    }
+                    result.id.shouldBe(UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
+                    result.timeSeries.shouldBe(TimeProfileFixture.timeSeries)
                 }
             }
         }

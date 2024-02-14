@@ -57,23 +57,22 @@ class AddEvvaComponentTest :
                 launch {
                     simulatedBackendReady.await()
 
-                    XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                        api.subscribeAsync(
-                                Topics(
-                                    Topics.Event.INSTALLATION_POINT_CHANGED,
-                                    Topics.Event.EVVA_COMPONENT_ADDED))
-                            .await()
+                    val api = XesarConnect.connectAndLoginAsync(config).await()
+                    api.subscribeAsync(
+                            Topics(
+                                Topics.Event.INSTALLATION_POINT_CHANGED,
+                                Topics.Event.EVVA_COMPONENT_ADDED))
+                        .await()
 
-                        val addEvvaComponentEventPair =
-                            api.addEvvaComponentAsync(
-                                UUID.fromString("2d52bd95-18ba-4e46-8f00-0fc4c1e3f9be"),
-                                ComponentType.Cylinder)
-                        shouldThrow<OptionalEventException> {
-                            addEvvaComponentEventPair.evvaComponentAddedDeferred.await()
-                        }
-                        shouldThrow<RequiredEventException> {
-                            addEvvaComponentEventPair.installationPointChangedDeferred.await()
-                        }
+                    val addEvvaComponentEventPair =
+                        api.addEvvaComponentAsync(
+                            UUID.fromString("2d52bd95-18ba-4e46-8f00-0fc4c1e3f9be"),
+                            ComponentType.Cylinder)
+                    shouldThrow<OptionalEventException> {
+                        addEvvaComponentEventPair.evvaComponentAddedDeferred.await()
+                    }
+                    shouldThrow<RequiredEventException> {
+                        addEvvaComponentEventPair.installationPointChangedDeferred.await()
                     }
                 }
             }
@@ -120,29 +119,28 @@ class AddEvvaComponentTest :
                 launch {
                     simulatedBackendReady.await()
 
-                    XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                        api.subscribeAsync(
-                                Topics(
-                                    Topics.Event.INSTALLATION_POINT_CHANGED,
-                                    Topics.Event.EVVA_COMPONENT_ADDED,
-                                    Topics.Event.error(config.apiProperties.userId)))
-                            .await()
+                    val api = XesarConnect.connectAndLoginAsync(config).await()
+                    api.subscribeAsync(
+                            Topics(
+                                Topics.Event.INSTALLATION_POINT_CHANGED,
+                                Topics.Event.EVVA_COMPONENT_ADDED,
+                                Topics.Event.error(config.apiProperties.userId)))
+                        .await()
 
-                        val addEvvaComponentEventPair =
-                            api.addEvvaComponentAsync(
-                                UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
-                                ComponentType.Cylinder)
+                    val addEvvaComponentEventPair =
+                        api.addEvvaComponentAsync(
+                            UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
+                            ComponentType.Cylinder)
 
-                        shouldThrow<OptionalEventException> {
-                            addEvvaComponentEventPair.evvaComponentAddedDeferred.await()
-                        }
-                        shouldThrow<RequiredEventException> {
-                            addEvvaComponentEventPair.installationPointChangedDeferred.await()
-                        }
-
-                        val apiError = addEvvaComponentEventPair.apiErrorDeferred.await()
-                        apiError.get().reason.shouldBe("reason")
+                    shouldThrow<OptionalEventException> {
+                        addEvvaComponentEventPair.evvaComponentAddedDeferred.await()
                     }
+                    shouldThrow<RequiredEventException> {
+                        addEvvaComponentEventPair.installationPointChangedDeferred.await()
+                    }
+
+                    val apiError = addEvvaComponentEventPair.apiErrorDeferred.await()
+                    apiError.get().reason.shouldBe("reason")
                 }
             }
         }
@@ -199,27 +197,26 @@ class AddEvvaComponentTest :
                 launch {
                     simulatedBackendReady.await()
 
-                    XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                        api.subscribeAsync(
-                                Topics(
-                                    Topics.Event.INSTALLATION_POINT_CHANGED,
-                                    Topics.Event.EVVA_COMPONENT_ADDED,
-                                    Topics.Event.error(config.apiProperties.userId)))
-                            .await()
+                    val api = XesarConnect.connectAndLoginAsync(config).await()
+                    api.subscribeAsync(
+                            Topics(
+                                Topics.Event.INSTALLATION_POINT_CHANGED,
+                                Topics.Event.EVVA_COMPONENT_ADDED,
+                                Topics.Event.error(config.apiProperties.userId)))
+                        .await()
 
-                        val addEvvaComponentEventPair =
-                            api.addEvvaComponentAsync(
-                                UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
-                                ComponentType.Cylinder)
-                        val installationPointChanged =
-                            addEvvaComponentEventPair.installationPointChangedDeferred.await()
-                        installationPointChanged.aggregateId.shouldBeEqual(
-                            UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
-                        val apiError = addEvvaComponentEventPair.apiErrorDeferred.await()
-                        apiError.get().reason.shouldBe("reason")
-                        shouldThrow<OptionalEventException> {
-                            addEvvaComponentEventPair.evvaComponentAddedDeferred.await()
-                        }
+                    val addEvvaComponentEventPair =
+                        api.addEvvaComponentAsync(
+                            UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
+                            ComponentType.Cylinder)
+                    val installationPointChanged =
+                        addEvvaComponentEventPair.installationPointChangedDeferred.await()
+                    installationPointChanged.aggregateId.shouldBeEqual(
+                        UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
+                    val apiError = addEvvaComponentEventPair.apiErrorDeferred.await()
+                    apiError.get().reason.shouldBe("reason")
+                    shouldThrow<OptionalEventException> {
+                        addEvvaComponentEventPair.evvaComponentAddedDeferred.await()
                     }
                 }
             }
@@ -279,26 +276,23 @@ class AddEvvaComponentTest :
                     launch {
                         simulatedBackendReady.await()
 
-                        XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                            api.subscribeAsync(
-                                    Topics(
-                                        Topics.Event.INSTALLATION_POINT_CHANGED,
-                                        Topics.Event.EVVA_COMPONENT_ADDED,
-                                        Topics.Event.error(config.apiProperties.userId)))
-                                .await()
+                        val api = XesarConnect.connectAndLoginAsync(config).await()
+                        api.subscribeAsync(
+                                Topics(
+                                    Topics.Event.INSTALLATION_POINT_CHANGED,
+                                    Topics.Event.EVVA_COMPONENT_ADDED,
+                                    Topics.Event.error(config.apiProperties.userId)))
+                            .await()
 
-                            val addEvvaComponentEventPair =
-                                api.addEvvaComponentAsync(
-                                    UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
-                                    ComponentType.Cylinder)
-                            val installationPointChanged =
-                                addEvvaComponentEventPair.installationPointChangedDeferred.await()
-                            installationPointChanged.aggregateId.shouldBeEqual(
-                                UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
-                            shouldThrow<OptionalEventException> {
-                                addEvvaComponentEventPair.await()
-                            }
-                        }
+                        val addEvvaComponentEventPair =
+                            api.addEvvaComponentAsync(
+                                UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
+                                ComponentType.Cylinder)
+                        val installationPointChanged =
+                            addEvvaComponentEventPair.installationPointChangedDeferred.await()
+                        installationPointChanged.aggregateId.shouldBeEqual(
+                            UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
+                        shouldThrow<OptionalEventException> { addEvvaComponentEventPair.await() }
                     }
                 }
             }
@@ -354,25 +348,24 @@ class AddEvvaComponentTest :
                 launch {
                     simulatedBackendReady.await()
 
-                    XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                        api.subscribeAsync(
-                                Topics(
-                                    Topics.Event.INSTALLATION_POINT_CHANGED,
-                                    Topics.Event.EVVA_COMPONENT_ADDED))
-                            .await()
+                    val api = XesarConnect.connectAndLoginAsync(config).await()
+                    api.subscribeAsync(
+                            Topics(
+                                Topics.Event.INSTALLATION_POINT_CHANGED,
+                                Topics.Event.EVVA_COMPONENT_ADDED))
+                        .await()
 
-                        val addEvvaComponentEventPair =
-                            api.addEvvaComponentAsync(
-                                UUID.fromString("2d52bd95-18ba-4e46-8f00-0fc4c1e3f9be"),
-                                ComponentType.Cylinder)
+                    val addEvvaComponentEventPair =
+                        api.addEvvaComponentAsync(
+                            UUID.fromString("2d52bd95-18ba-4e46-8f00-0fc4c1e3f9be"),
+                            ComponentType.Cylinder)
 
-                        shouldThrow<ParsingException> {
-                            addEvvaComponentEventPair.installationPointChangedDeferred.await()
-                        }
-                        val evvaComponentAdded =
-                            addEvvaComponentEventPair.evvaComponentAddedDeferred.await()
-                        evvaComponentAdded.type.shouldBe(ComponentType.Cylinder)
+                    shouldThrow<ParsingException> {
+                        addEvvaComponentEventPair.installationPointChangedDeferred.await()
                     }
+                    val evvaComponentAdded =
+                        addEvvaComponentEventPair.evvaComponentAddedDeferred.await()
+                    evvaComponentAdded.type.shouldBe(ComponentType.Cylinder)
                 }
             }
         }
@@ -437,25 +430,23 @@ class AddEvvaComponentTest :
                 launch {
                     simulatedBackendReady.await()
 
-                    XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                        api.subscribeAsync(
-                                Topics(
-                                    Topics.Event.INSTALLATION_POINT_CHANGED,
-                                    Topics.Event.EVVA_COMPONENT_ADDED))
-                            .await()
+                    val api = XesarConnect.connectAndLoginAsync(config).await()
+                    api.subscribeAsync(
+                            Topics(
+                                Topics.Event.INSTALLATION_POINT_CHANGED,
+                                Topics.Event.EVVA_COMPONENT_ADDED))
+                        .await()
 
-                        val addEvvaComponentEventPair =
-                            api.addEvvaComponentAsync(
-                                UUID.fromString("2d52bd95-18ba-4e46-8f00-0fc4c1e3f9be"),
-                                ComponentType.Cylinder)
-                        val test =
-                            addEvvaComponentEventPair.installationPointChangedDeferred.await()
-                        test.aggregateId.shouldBeEqual(
-                            UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
-                        val evvaComponentAdded =
-                            addEvvaComponentEventPair.evvaComponentAddedDeferred.await()
-                        evvaComponentAdded.type.shouldBe(ComponentType.Cylinder)
-                    }
+                    val addEvvaComponentEventPair =
+                        api.addEvvaComponentAsync(
+                            UUID.fromString("2d52bd95-18ba-4e46-8f00-0fc4c1e3f9be"),
+                            ComponentType.Cylinder)
+                    val test = addEvvaComponentEventPair.installationPointChangedDeferred.await()
+                    test.aggregateId.shouldBeEqual(
+                        UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
+                    val evvaComponentAdded =
+                        addEvvaComponentEventPair.evvaComponentAddedDeferred.await()
+                    evvaComponentAdded.type.shouldBe(ComponentType.Cylinder)
                 }
             }
         }
@@ -501,25 +492,24 @@ class AddEvvaComponentTest :
                 launch {
                     simulatedBackendReady.await()
 
-                    XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                        api.subscribeAsync(
-                                Topics(
-                                    Topics.Event.INSTALLATION_POINT_CHANGED,
-                                    Topics.Event.EVVA_COMPONENT_ADDED))
-                            .await()
+                    val api = XesarConnect.connectAndLoginAsync(config).await()
+                    api.subscribeAsync(
+                            Topics(
+                                Topics.Event.INSTALLATION_POINT_CHANGED,
+                                Topics.Event.EVVA_COMPONENT_ADDED))
+                        .await()
 
-                        val addEvvaComponentEventPair =
-                            api.addEvvaComponentAsync(
-                                UUID.fromString("2d52bd95-18ba-4e46-8f00-0fc4c1e3f9be"),
-                                ComponentType.Cylinder)
-                        val installationPointChanged =
-                            addEvvaComponentEventPair.installationPointChangedDeferred.await()
-                        installationPointChanged.aggregateId.shouldBeEqual(
-                            UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
+                    val addEvvaComponentEventPair =
+                        api.addEvvaComponentAsync(
+                            UUID.fromString("2d52bd95-18ba-4e46-8f00-0fc4c1e3f9be"),
+                            ComponentType.Cylinder)
+                    val installationPointChanged =
+                        addEvvaComponentEventPair.installationPointChangedDeferred.await()
+                    installationPointChanged.aggregateId.shouldBeEqual(
+                        UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
 
-                        shouldThrow<OptionalEventException> {
-                            addEvvaComponentEventPair.evvaComponentAddedDeferred.await()
-                        }
+                    shouldThrow<OptionalEventException> {
+                        addEvvaComponentEventPair.evvaComponentAddedDeferred.await()
                     }
                 }
             }

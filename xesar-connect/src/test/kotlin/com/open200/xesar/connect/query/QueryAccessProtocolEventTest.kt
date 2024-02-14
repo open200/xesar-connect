@@ -71,18 +71,17 @@ class QueryAccessProtocolEventTest :
                 launch {
                     simulatedBackendReady.await()
 
-                    XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                        api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
-                            .await()
-                        val result = api.queryAccessProtocolEventListAsync().await()
-                        result.totalCount.shouldBeEqual(2)
-                        result.data[0]
-                            .id
-                            .shouldBeEqual(UUID.fromString("0f0f5120-098c-4d8f-92f3-2a073b85ef8a"))
-                        result.data[1]
-                            .id
-                            .shouldBeEqual(UUID.fromString("4509ca29-9fd3-454f-9c98-fc0967fe3f66"))
-                    }
+                    val api = XesarConnect.connectAndLoginAsync(config).await()
+                    api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
+                        .await()
+                    val result = api.queryAccessProtocolEventListAsync().await()
+                    result.totalCount.shouldBeEqual(2)
+                    result.data[0]
+                        .id
+                        .shouldBeEqual(UUID.fromString("0f0f5120-098c-4d8f-92f3-2a073b85ef8a"))
+                    result.data[1]
+                        .id
+                        .shouldBeEqual(UUID.fromString("4509ca29-9fd3-454f-9c98-fc0967fe3f66"))
                 }
             }
         }

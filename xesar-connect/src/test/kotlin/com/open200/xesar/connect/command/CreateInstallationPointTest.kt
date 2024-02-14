@@ -59,23 +59,22 @@ class CreateInstallationPointTest :
                 launch {
                     simulatedBackendReady.await()
 
-                    XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                        api.subscribeAsync(
-                                Topics(
-                                    Topics.Event.INSTALLATION_POINT_CREATED,
-                                    Topics.Event.EVVA_COMPONENT_ADDED))
-                            .await()
+                    val api = XesarConnect.connectAndLoginAsync(config).await()
+                    api.subscribeAsync(
+                            Topics(
+                                Topics.Event.INSTALLATION_POINT_CREATED,
+                                Topics.Event.EVVA_COMPONENT_ADDED))
+                        .await()
 
-                        val createInstallationPointResult =
-                            api.createInstallationPointAsync(
-                                ComponentType.Cylinder,
-                                UUID.fromString("2d52bd95-18ba-4e46-8f00-0fc4c1e3f9be"))
-                        shouldThrow<OptionalEventException> {
-                            createInstallationPointResult.evvaComponentAddedDeferred.await()
-                        }
-                        shouldThrow<RequiredEventException> {
-                            createInstallationPointResult.installationPointCreatedDeferred.await()
-                        }
+                    val createInstallationPointResult =
+                        api.createInstallationPointAsync(
+                            ComponentType.Cylinder,
+                            UUID.fromString("2d52bd95-18ba-4e46-8f00-0fc4c1e3f9be"))
+                    shouldThrow<OptionalEventException> {
+                        createInstallationPointResult.evvaComponentAddedDeferred.await()
+                    }
+                    shouldThrow<RequiredEventException> {
+                        createInstallationPointResult.installationPointCreatedDeferred.await()
                     }
                 }
             }
@@ -121,29 +120,28 @@ class CreateInstallationPointTest :
                 launch {
                     simulatedBackendReady.await()
 
-                    XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                        api.subscribeAsync(
-                                Topics(
-                                    Topics.Event.INSTALLATION_POINT_CREATED,
-                                    Topics.Event.EVVA_COMPONENT_ADDED,
-                                    Topics.Event.error(config.apiProperties.userId)))
-                            .await()
+                    val api = XesarConnect.connectAndLoginAsync(config).await()
+                    api.subscribeAsync(
+                            Topics(
+                                Topics.Event.INSTALLATION_POINT_CREATED,
+                                Topics.Event.EVVA_COMPONENT_ADDED,
+                                Topics.Event.error(config.apiProperties.userId)))
+                        .await()
 
-                        val createInstallationPointResult =
-                            api.createInstallationPointAsync(
-                                ComponentType.Cylinder,
-                                UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
+                    val createInstallationPointResult =
+                        api.createInstallationPointAsync(
+                            ComponentType.Cylinder,
+                            UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
 
-                        shouldThrow<OptionalEventException> {
-                            createInstallationPointResult.evvaComponentAddedDeferred.await()
-                        }
-                        shouldThrow<RequiredEventException> {
-                            createInstallationPointResult.installationPointCreatedDeferred.await()
-                        }
-
-                        val apiError = createInstallationPointResult.apiErrorDeferred.await()
-                        apiError.get().reason.shouldBe("reason")
+                    shouldThrow<OptionalEventException> {
+                        createInstallationPointResult.evvaComponentAddedDeferred.await()
                     }
+                    shouldThrow<RequiredEventException> {
+                        createInstallationPointResult.installationPointCreatedDeferred.await()
+                    }
+
+                    val apiError = createInstallationPointResult.apiErrorDeferred.await()
+                    apiError.get().reason.shouldBe("reason")
                 }
             }
         }
@@ -199,27 +197,26 @@ class CreateInstallationPointTest :
                 launch {
                     simulatedBackendReady.await()
 
-                    XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                        api.subscribeAsync(
-                                Topics(
-                                    Topics.Event.INSTALLATION_POINT_CREATED,
-                                    Topics.Event.EVVA_COMPONENT_ADDED,
-                                    Topics.Event.error(config.apiProperties.userId)))
-                            .await()
+                    val api = XesarConnect.connectAndLoginAsync(config).await()
+                    api.subscribeAsync(
+                            Topics(
+                                Topics.Event.INSTALLATION_POINT_CREATED,
+                                Topics.Event.EVVA_COMPONENT_ADDED,
+                                Topics.Event.error(config.apiProperties.userId)))
+                        .await()
 
-                        val createInstallationPointResult =
-                            api.createInstallationPointAsync(
-                                ComponentType.Cylinder,
-                                UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
-                        val installationPointCreated =
-                            createInstallationPointResult.installationPointCreatedDeferred.await()
-                        installationPointCreated.id.shouldBe(
+                    val createInstallationPointResult =
+                        api.createInstallationPointAsync(
+                            ComponentType.Cylinder,
                             UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
-                        val apiError = createInstallationPointResult.apiErrorDeferred.await()
-                        apiError.get().reason.shouldBe("reason")
-                        shouldThrow<OptionalEventException> {
-                            createInstallationPointResult.evvaComponentAddedDeferred.await()
-                        }
+                    val installationPointCreated =
+                        createInstallationPointResult.installationPointCreatedDeferred.await()
+                    installationPointCreated.id.shouldBe(
+                        UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
+                    val apiError = createInstallationPointResult.apiErrorDeferred.await()
+                    apiError.get().reason.shouldBe("reason")
+                    shouldThrow<OptionalEventException> {
+                        createInstallationPointResult.evvaComponentAddedDeferred.await()
                     }
                 }
             }
@@ -279,26 +276,24 @@ class CreateInstallationPointTest :
                     launch {
                         simulatedBackendReady.await()
 
-                        XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                            api.subscribeAsync(
-                                    Topics(
-                                        Topics.Event.INSTALLATION_POINT_CREATED,
-                                        Topics.Event.EVVA_COMPONENT_ADDED,
-                                        Topics.Event.error(config.apiProperties.userId)))
-                                .await()
+                        val api = XesarConnect.connectAndLoginAsync(config).await()
+                        api.subscribeAsync(
+                                Topics(
+                                    Topics.Event.INSTALLATION_POINT_CREATED,
+                                    Topics.Event.EVVA_COMPONENT_ADDED,
+                                    Topics.Event.error(config.apiProperties.userId)))
+                            .await()
 
-                            val createInstallationPointResult =
-                                api.createInstallationPointAsync(
-                                    ComponentType.Cylinder,
-                                    UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
-                            val installationPointCreated =
-                                createInstallationPointResult.installationPointCreatedDeferred
-                                    .await()
-                            installationPointCreated.id.shouldBe(
+                        val createInstallationPointResult =
+                            api.createInstallationPointAsync(
+                                ComponentType.Cylinder,
                                 UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
-                            shouldThrow<OptionalEventException> {
-                                createInstallationPointResult.await()
-                            }
+                        val installationPointCreated =
+                            createInstallationPointResult.installationPointCreatedDeferred.await()
+                        installationPointCreated.id.shouldBe(
+                            UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
+                        shouldThrow<OptionalEventException> {
+                            createInstallationPointResult.await()
                         }
                     }
                 }
@@ -358,25 +353,24 @@ class CreateInstallationPointTest :
                 launch {
                     simulatedBackendReady.await()
 
-                    XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                        api.subscribeAsync(
-                                Topics(
-                                    Topics.Event.INSTALLATION_POINT_CREATED,
-                                    Topics.Event.EVVA_COMPONENT_ADDED))
-                            .await()
+                    val api = XesarConnect.connectAndLoginAsync(config).await()
+                    api.subscribeAsync(
+                            Topics(
+                                Topics.Event.INSTALLATION_POINT_CREATED,
+                                Topics.Event.EVVA_COMPONENT_ADDED))
+                        .await()
 
-                        val createInstallationPointResult =
-                            api.createInstallationPointAsync(
-                                ComponentType.Cylinder,
-                                UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
+                    val createInstallationPointResult =
+                        api.createInstallationPointAsync(
+                            ComponentType.Cylinder,
+                            UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
 
-                        shouldThrow<ParsingException> {
-                            createInstallationPointResult.installationPointCreatedDeferred.await()
-                        }
-                        val evvaComponentAdded =
-                            createInstallationPointResult.evvaComponentAddedDeferred.await()
-                        evvaComponentAdded.type.shouldBe(ComponentType.Cylinder)
+                    shouldThrow<ParsingException> {
+                        createInstallationPointResult.installationPointCreatedDeferred.await()
                     }
+                    val evvaComponentAdded =
+                        createInstallationPointResult.evvaComponentAddedDeferred.await()
+                    evvaComponentAdded.type.shouldBe(ComponentType.Cylinder)
                 }
             }
         }
@@ -437,24 +431,23 @@ class CreateInstallationPointTest :
                 launch {
                     simulatedBackendReady.await()
 
-                    XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                        api.subscribeAsync(
-                                Topics(
-                                    Topics.Event.INSTALLATION_POINT_CREATED,
-                                    Topics.Event.EVVA_COMPONENT_ADDED))
-                            .await()
+                    val api = XesarConnect.connectAndLoginAsync(config).await()
+                    api.subscribeAsync(
+                            Topics(
+                                Topics.Event.INSTALLATION_POINT_CREATED,
+                                Topics.Event.EVVA_COMPONENT_ADDED))
+                        .await()
 
-                        val createInstallationPointResult =
-                            api.createInstallationPointAsync(
-                                ComponentType.Cylinder,
-                                UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
-                        val test =
-                            createInstallationPointResult.installationPointCreatedDeferred.await()
-                        test.id.shouldBe(UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
-                        val evvaComponentAdded =
-                            createInstallationPointResult.evvaComponentAddedDeferred.await()
-                        evvaComponentAdded.type.shouldBe(ComponentType.Cylinder)
-                    }
+                    val createInstallationPointResult =
+                        api.createInstallationPointAsync(
+                            ComponentType.Cylinder,
+                            UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
+                    val test =
+                        createInstallationPointResult.installationPointCreatedDeferred.await()
+                    test.id.shouldBe(UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
+                    val evvaComponentAdded =
+                        createInstallationPointResult.evvaComponentAddedDeferred.await()
+                    evvaComponentAdded.type.shouldBe(ComponentType.Cylinder)
                 }
             }
         }
@@ -499,26 +492,25 @@ class CreateInstallationPointTest :
                 launch {
                     simulatedBackendReady.await()
 
-                    XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                        api.subscribeAsync(
-                                Topics(
-                                    Topics.Event.INSTALLATION_POINT_CREATED,
-                                    Topics.Event.EVVA_COMPONENT_ADDED))
-                            .await()
+                    val api = XesarConnect.connectAndLoginAsync(config).await()
+                    api.subscribeAsync(
+                            Topics(
+                                Topics.Event.INSTALLATION_POINT_CREATED,
+                                Topics.Event.EVVA_COMPONENT_ADDED))
+                        .await()
 
-                        val createInstallationPointResult =
-                            api.createInstallationPointAsync(
-                                ComponentType.Cylinder,
-                                UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
-
-                        val installationPointCreated =
-                            createInstallationPointResult.installationPointCreatedDeferred.await()
-                        installationPointCreated.id.shouldBe(
+                    val createInstallationPointResult =
+                        api.createInstallationPointAsync(
+                            ComponentType.Cylinder,
                             UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
 
-                        shouldThrow<OptionalEventException> {
-                            createInstallationPointResult.evvaComponentAddedDeferred.await()
-                        }
+                    val installationPointCreated =
+                        createInstallationPointResult.installationPointCreatedDeferred.await()
+                    installationPointCreated.id.shouldBe(
+                        UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
+
+                    shouldThrow<OptionalEventException> {
+                        createInstallationPointResult.evvaComponentAddedDeferred.await()
                     }
                 }
             }

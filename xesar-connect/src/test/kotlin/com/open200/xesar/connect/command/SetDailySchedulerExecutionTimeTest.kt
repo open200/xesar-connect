@@ -66,13 +66,12 @@ class SetDailySchedulerExecutionTimeTest :
                 launch {
                     simulatedBackendReady.await()
 
-                    XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                        api.subscribeAsync(Topics(Topics.Event.PARTITION_CHANGED)).await()
-                        val result =
-                            api.setDailySchedulerExecutionTimeAsync(TimeProfileFixture.localTime)
-                                .await()
-                        result.dailySchedulerExecutionTime.shouldBe(TimeProfileFixture.localTime)
-                    }
+                    val api = XesarConnect.connectAndLoginAsync(config).await()
+                    api.subscribeAsync(Topics(Topics.Event.PARTITION_CHANGED)).await()
+                    val result =
+                        api.setDailySchedulerExecutionTimeAsync(TimeProfileFixture.localTime)
+                            .await()
+                    result.dailySchedulerExecutionTime.shouldBe(TimeProfileFixture.localTime)
                 }
             }
         }

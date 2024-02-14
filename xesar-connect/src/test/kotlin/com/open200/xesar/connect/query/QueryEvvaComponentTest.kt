@@ -76,14 +76,13 @@ class QueryEvvaComponentTest :
                 launch {
                     simulatedBackendReady.await()
 
-                    XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                        api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
-                            .await()
-                        val result = api.queryEvvaComponentListAsync().await()
-                        result.totalCount.shouldBeEqual(2)
-                        result.data[0].status?.shouldBeEqual(OnlineStatus.connected)
-                        result.data[1].status?.shouldBeEqual(OnlineStatus.disconnected)
-                    }
+                    val api = XesarConnect.connectAndLoginAsync(config).await()
+                    api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
+                        .await()
+                    val result = api.queryEvvaComponentListAsync().await()
+                    result.totalCount.shouldBeEqual(2)
+                    result.data[0].status?.shouldBeEqual(OnlineStatus.connected)
+                    result.data[1].status?.shouldBeEqual(OnlineStatus.disconnected)
                 }
             }
         }
@@ -130,16 +129,15 @@ class QueryEvvaComponentTest :
                 }
                 launch {
                     simulatedBackendReady.await()
-                    XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                        api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
+                    val api = XesarConnect.connectAndLoginAsync(config).await()
+                    api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
+                        .await()
+                    val result =
+                        api.queryEvvaComponentByIdAsync(
+                                EvvaComponentFixture.evvaComponentFixture.id)
                             .await()
-                        val result =
-                            api.queryEvvaComponentByIdAsync(
-                                    EvvaComponentFixture.evvaComponentFixture.id)
-                                .await()
-                        result.id.shouldBeEqual(EvvaComponentFixture.evvaComponentFixture.id)
-                        result.status?.shouldBeEqual(OnlineStatus.connected)
-                    }
+                    result.id.shouldBeEqual(EvvaComponentFixture.evvaComponentFixture.id)
+                    result.status?.shouldBeEqual(OnlineStatus.connected)
                 }
             }
         }

@@ -75,14 +75,13 @@ class QueryTimeProfileTest :
                 launch {
                     simulatedBackendReady.await()
 
-                    XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                        api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
-                            .await()
-                        val result = api.queryTimeProfileListAsync().await()
-                        result.totalCount.shouldBeEqual(2)
-                        result.data[0].name?.shouldBeEqual("name")
-                        result.data[1].name?.shouldBeEqual("name 2")
-                    }
+                    val api = XesarConnect.connectAndLoginAsync(config).await()
+                    api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
+                        .await()
+                    val result = api.queryTimeProfileListAsync().await()
+                    result.totalCount.shouldBeEqual(2)
+                    result.data[0].name?.shouldBeEqual("name")
+                    result.data[1].name?.shouldBeEqual("name 2")
                 }
             }
         }
@@ -127,16 +126,14 @@ class QueryTimeProfileTest :
                 }
                 launch {
                     simulatedBackendReady.await()
-                    XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                        api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
+                    val api = XesarConnect.connectAndLoginAsync(config).await()
+                    api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
+                        .await()
+                    val result =
+                        api.queryTimeProfileByIdAsync(TimeProfileFixture.timeProfileFixture.id!!)
                             .await()
-                        val result =
-                            api.queryTimeProfileByIdAsync(
-                                    TimeProfileFixture.timeProfileFixture.id!!)
-                                .await()
-                        result.id?.shouldBeEqual(TimeProfileFixture.timeProfileFixture.id!!)
-                        result.name?.shouldBeEqual("name")
-                    }
+                    result.id?.shouldBeEqual(TimeProfileFixture.timeProfileFixture.id!!)
+                    result.name?.shouldBeEqual("name")
                 }
             }
         }

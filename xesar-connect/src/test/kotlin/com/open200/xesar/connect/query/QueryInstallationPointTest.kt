@@ -80,14 +80,13 @@ class QueryInstallationPointTest :
                 launch {
                     simulatedBackendReady.await()
 
-                    XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                        api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
-                            .await()
-                        val result = api.queryInstallationPointListAsync().await()
-                        result.totalCount.shouldBeEqual(2)
-                        result.data[0].name.shouldBeEqual("door 1 entry point")
-                        result.data[1].name.shouldBeEqual("door 2 entry point")
-                    }
+                    val api = XesarConnect.connectAndLoginAsync(config).await()
+                    api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
+                        .await()
+                    val result = api.queryInstallationPointListAsync().await()
+                    result.totalCount.shouldBeEqual(2)
+                    result.data[0].name.shouldBeEqual("door 1 entry point")
+                    result.data[1].name.shouldBeEqual("door 2 entry point")
                 }
             }
         }
@@ -132,14 +131,13 @@ class QueryInstallationPointTest :
                 }
                 launch {
                     simulatedBackendReady.await()
-                    XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                        api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
-                            .await()
-                        val result =
-                            api.queryInstallationPointByIdAsync(installationPointFixture.id).await()
-                        result.id.shouldBeEqual(installationPointFixture.id)
-                        result.name.shouldBeEqual("door 1 entry point")
-                    }
+                    val api = XesarConnect.connectAndLoginAsync(config).await()
+                    api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
+                        .await()
+                    val result =
+                        api.queryInstallationPointByIdAsync(installationPointFixture.id).await()
+                    result.id.shouldBeEqual(installationPointFixture.id)
+                    result.name.shouldBeEqual("door 1 entry point")
                 }
             }
         }

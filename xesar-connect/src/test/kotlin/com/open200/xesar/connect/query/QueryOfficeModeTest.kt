@@ -76,14 +76,13 @@ class QueryOfficeModeTest :
                 launch {
                     simulatedBackendReady.await()
 
-                    XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                        api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
-                            .await()
-                        val result = api.queryOfficeModeListAsync().await()
-                        result.totalCount.shouldBeEqual(2)
-                        result.data[0].timeProfileName.shouldBeEqual("timeProfileName")
-                        result.data[1].timeProfileName.shouldBeEqual("timeProfileName2")
-                    }
+                    val api = XesarConnect.connectAndLoginAsync(config).await()
+                    api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
+                        .await()
+                    val result = api.queryOfficeModeListAsync().await()
+                    result.totalCount.shouldBeEqual(2)
+                    result.data[0].timeProfileName.shouldBeEqual("timeProfileName")
+                    result.data[1].timeProfileName.shouldBeEqual("timeProfileName2")
                 }
             }
         }
@@ -129,16 +128,14 @@ class QueryOfficeModeTest :
                 }
                 launch {
                     simulatedBackendReady.await()
-                    XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                        api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
-                            .await()
-                        val result =
-                            api.queryOfficeModeByIdAsync(OfficeModeFixture.officeModeFixture.id)
-                                .await()
-                        result.id.shouldBeEqual(OfficeModeFixture.officeModeFixture.id)
-                        result.installationPointId.shouldBeEqual(
-                            UUID.fromString("39b25462-2580-44dc-b0a8-22fd6c03a023"))
-                    }
+                    val api = XesarConnect.connectAndLoginAsync(config).await()
+                    api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
+                        .await()
+                    val result =
+                        api.queryOfficeModeByIdAsync(OfficeModeFixture.officeModeFixture.id).await()
+                    result.id.shouldBeEqual(OfficeModeFixture.officeModeFixture.id)
+                    result.installationPointId.shouldBeEqual(
+                        UUID.fromString("39b25462-2580-44dc-b0a8-22fd6c03a023"))
                 }
             }
         }

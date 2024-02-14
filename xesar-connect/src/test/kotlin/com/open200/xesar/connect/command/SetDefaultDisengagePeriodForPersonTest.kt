@@ -67,16 +67,14 @@ class SetDefaultDisengagePeriodForPersonTest :
                 launch {
                     simulatedBackendReady.await()
 
-                    XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                        api.subscribeAsync(Topics(Topics.Event.PERSON_CHANGED)).await()
-                        val result =
-                            api.setDefaultDisengagePeriodForPersonAsync(
-                                    "EXT-123", DisengagePeriod.SHORT)
-                                .await()
-                        result.id.shouldBeEqual(
-                            UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
-                        result.disengagePeriod?.shouldBeEqual(DisengagePeriod.SHORT)
-                    }
+                    val api = XesarConnect.connectAndLoginAsync(config).await()
+                    api.subscribeAsync(Topics(Topics.Event.PERSON_CHANGED)).await()
+                    val result =
+                        api.setDefaultDisengagePeriodForPersonAsync(
+                                "EXT-123", DisengagePeriod.SHORT)
+                            .await()
+                    result.id.shouldBeEqual(UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
+                    result.disengagePeriod?.shouldBeEqual(DisengagePeriod.SHORT)
                 }
             }
         }

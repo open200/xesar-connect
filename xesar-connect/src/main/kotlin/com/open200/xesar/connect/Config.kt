@@ -12,6 +12,8 @@ import java.security.cert.X509Certificate
 import java.security.spec.PKCS8EncodedKeySpec
 import java.util.*
 import java.util.zip.ZipFile
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.serialization.Serializable
 
 /**
@@ -29,6 +31,7 @@ data class Config(
     val uuidGenerator: IRequestIdGenerator = DefaultRequestIdGenerator(),
     val mqttConnectOptions: MqttConnectOptions = MqttConnectOptions(),
     val logoutOnClose: Boolean = true,
+    val dispatcherForCommandsAndCleanUp: CoroutineDispatcher = Dispatchers.IO
 ) {
     /**
      * @property hostname The hostname of the API.

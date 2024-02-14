@@ -78,14 +78,13 @@ class QueryCodingStationTest :
                 launch {
                     simulatedBackendReady.await()
 
-                    XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                        api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
-                            .await()
-                        val result = api.queryCodingStationListAsync().await()
-                        result.totalCount.shouldBeEqual(2)
-                        result.data[0].online?.shouldBeEqual(true)
-                        result.data[1].online?.shouldBeEqual(false)
-                    }
+                    val api = XesarConnect.connectAndLoginAsync(config).await()
+                    api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
+                        .await()
+                    val result = api.queryCodingStationListAsync().await()
+                    result.totalCount.shouldBeEqual(2)
+                    result.data[0].online?.shouldBeEqual(true)
+                    result.data[1].online?.shouldBeEqual(false)
                 }
             }
         }
@@ -130,16 +129,15 @@ class QueryCodingStationTest :
                 }
                 launch {
                     simulatedBackendReady.await()
-                    XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                        api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
+                    val api = XesarConnect.connectAndLoginAsync(config).await()
+                    api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
+                        .await()
+                    val result =
+                        api.queryCodingStationByIdAsync(
+                                CodingStationFixture.codingStationFixture.id)
                             .await()
-                        val result =
-                            api.queryCodingStationByIdAsync(
-                                    CodingStationFixture.codingStationFixture.id)
-                                .await()
-                        result.id.shouldBeEqual(CodingStationFixture.codingStationFixture.id)
-                        result.online?.shouldBeEqual(true)
-                    }
+                    result.id.shouldBeEqual(CodingStationFixture.codingStationFixture.id)
+                    result.online?.shouldBeEqual(true)
                 }
             }
         }
