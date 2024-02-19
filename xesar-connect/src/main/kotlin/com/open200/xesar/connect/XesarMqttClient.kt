@@ -39,7 +39,7 @@ class XesarMqttClient(private val client: MqttAsyncClient) : IXesarMqttClient {
                 override fun deliveryComplete(token: IMqttDeliveryToken?) {
                     if (log.isDebugEnabled) {
                         log.debug(
-                            "Generated token: ${token.toString().take(8)} - ${token.toString().takeLast(8)}")
+                            "Received MQTT 'delivery complete' message of topic: ${token?.topics?.joinToString(",")}")
                     }
                 }
             })

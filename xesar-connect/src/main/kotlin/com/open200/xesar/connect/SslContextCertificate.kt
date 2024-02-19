@@ -25,8 +25,6 @@ class SslContextCertificate(private val mqttCertificates: Config.MqttCertificate
 
         val mqttKey = mqttCertificates.clientKey
 
-        logger.debug { "Key - Certificate loaded. Valid until ${mqttKey.toString()} " }
-
         // CA certificate is used to authenticate server
         val caKs = KeyStore.getInstance(KeyStore.getDefaultType())
         caKs.load(null, null)
