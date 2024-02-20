@@ -17,18 +17,21 @@ Please note that Xesar-Connect is currently in beta. This means that while the l
 
 - **Customizable:** Easily configure MQTT settings, including broker address, port, and security credentials, to align with your specific deployment environment.
 
-- **Comprehensive Documentation:** Xesar-Connect comes complete with detailed documentation and practical usage examples to facilitate a seamless integration experience into your projects.
-
 ## Installation
 
 You can add Xesar-Connect to your project by including it as a dependency in your Kotlin project. Simply add the following to your `build.gradle.kts` file:
 
+
+## Compatibility
+
+Xesar-Connect is tested with EVVA's Xesar version 3.1 with Mqtt API version 1.2.1 see [EVVA Xesar Mqtt API](https://integrations.api.xesar.evva.com/)
+
+
 ```kotlin
 dependencies {
-    implementation("com.open200:xesar-connect:0.5.0")
+    implementation("com.open200:xesar-connect:0.9.0")
 }
 ```
-
 
 ## Usage
 
@@ -37,28 +40,50 @@ Integrating Xesar-Connect into your Kotlin project is straightforward. Here's a 
 ```kotlin
 fun main() {
 
+    // add a security provider
     Security.addProvider(BouncyCastleProvider())
 
     runBlocking {
-        launch {
-            val pathToZip = Path("<path-to-zip>")
-            val personCreatedTopic = "xs3/1/ces/PersonCreated"
 
-            XesarConnect.connectAndLoginAsync(Config.configureFromZip(pathToZip)).await()
-                .use {api ->
-                    // we are now connected to the MQTT broker and already logged in
+        // path to the zip file containing the certificates
+        val pathToZip = Path("mqtt-cert.zip")
 
-                    // Subscribe to topics we are interested
-                    api.subscribeAsync(Topics(personCreatedTopic), 2).await()
-                    
-                    // Create listeners to react on emitted events
-                    api.on({ topic, _ -> topic.startsWith(personCreatedTopic) }) {
-                        log.info { "Message received on topic ${it.topic}" }
-                    }
+        // connect to the MQTT broker and login to xesar
+        val xesar = XesarConnect.connectAndLoginAsync(Config.configureFromZip(pathToZip)).await()
 
-                    api.delayUntilClose()
-                }
+        // Subscribe to topics all topics (or the topics you are interested in)
+        xesar.subscribeAsync(Topics(Topics.ALL_TOPICS)).await()
+
+        // send command to create a person
+        val personId = UUID.randomUUID()
+        xesar.createPersonAsync(
+            firstName = "Ford",
+            lastName = "Prefect",
+            identifier = "fprefect",
+            externalId = "fprefect",
+            personId = personId
+        ).await()
+
+        // query all persons
+        xesar.queryPersonListAsync().await().let {
+            log.info { "Received person list: $it" }
         }
+
+        // query one person by id
+        val person = xesar.queryPersonByIdAsync(personId).await()
+
+        // send command to delete a person
+        xesar.deletePersonAsync(person.externalId).await()
+
+        // subscribe to the access event and listen to battery warnings. You can use the provided enums for the events from the library
+        val batteryEmptyTopic = Topics.Event.accessProtocolEventTopic(GroupOfEvent.EvvaComponent, EventType.BATTERY_EMPTY)
+        xesar.on(TopicFilter(batteryEmptyTopic)) {
+            val event = AccessProtocolEvent.decode(it.message)
+            log.info { "Received battery warning from installation point identifier: ${event.installationPointIdentifier}" }
+        }
+
+        // suspend the coroutine to keep the connection to xesar open
+        xesar.delay()
     }
 }
 ```
