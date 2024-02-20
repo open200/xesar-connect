@@ -605,14 +605,14 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) {
             try {
                 withTimeout(requestConfig.timeout) { apiErrorDeferred.await() }
             } catch (e: TimeoutCancellationException) {
-                logger.error { "timeout while waiting for api error" }
+                logger.debug { "timeout while waiting for api error" }
                 apiErrorDeferred.complete(Optional.empty())
             } catch (e: Exception) {
                 logger.error { "exception while waiting for api error ${e.message.orEmpty()}" }
                 apiErrorDeferred.completeExceptionally(e)
             } finally {
                 listener.close()
-                logger.info { "done with api error" }
+                logger.debug { "listener closed for api error" }
             }
         }
 
@@ -628,7 +628,11 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) {
             try {
                 withTimeout(requestConfig.timeout) { eventDeferred.await() }
             } catch (e: TimeoutCancellationException) {
-                logger.error { "timeout while waiting for event $topicEvent" }
+                val logMessage = "timeout while waiting for event $topicEvent"
+                when (eventRequired) {
+                    true -> logger.error { logMessage }
+                    false -> logger.debug { logMessage }
+                }
                 completeWithSpecificException(
                     getTypeOfExceptionDependingOnEventRequired(eventRequired, topicEvent, e),
                     listOf(eventDeferred))
@@ -637,7 +641,7 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) {
                 completeWithSpecificException(e, listOf(eventDeferred))
             } finally {
                 listener.close()
-                logger.info { "done with $topicEvent" }
+                logger.debug { "listener closed for $topicEvent" }
             }
         }
 
