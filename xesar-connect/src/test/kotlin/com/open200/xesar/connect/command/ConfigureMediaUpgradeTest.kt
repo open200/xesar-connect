@@ -67,14 +67,13 @@ class ConfigureMediaUpgradeTest :
                 launch {
                     simulatedBackendReady.await()
 
-                    XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                        api.subscribeAsync(Topics(Topics.Event.INSTALLATION_POINT_CHANGED)).await()
-                        val result =
-                            api.configureMediaUpgradeMapiAsync(
-                                    true, UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
-                                .await()
-                        result.upgradeMedia?.shouldBeTrue()
-                    }
+                    val api = XesarConnect.connectAndLoginAsync(config).await()
+                    api.subscribeAsync(Topics(Topics.Event.INSTALLATION_POINT_CHANGED)).await()
+                    val result =
+                        api.configureMediaUpgradeMapiAsync(
+                                true, UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
+                            .await()
+                    result.upgradeMedia?.shouldBeTrue()
                 }
             }
         }

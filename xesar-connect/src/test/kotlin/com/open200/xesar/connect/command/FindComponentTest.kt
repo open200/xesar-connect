@@ -71,12 +71,11 @@ class FindComponentTest :
                 launch {
                     simulatedBackendReady.await()
 
-                    XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                        shouldThrow<RequiredEventException> {
-                            api.findComponentAsync(
-                                    InstallationPointFixture.installationPointFixture.id, true)
-                                .await()
-                        }
+                    val api = XesarConnect.connectAndLoginAsync(config).await()
+                    shouldThrow<RequiredEventException> {
+                        api.findComponentAsync(
+                                InstallationPointFixture.installationPointFixture.id, true)
+                            .await()
                     }
                 }
             }
@@ -121,15 +120,14 @@ class FindComponentTest :
                 launch {
                     simulatedBackendReady.await()
 
-                    XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                        api.subscribeAsync(Topics(Topics.Event.FIND_COMPONENT_PERFORMED)).await()
-                        val result =
-                            api.findComponentAsync(
-                                    InstallationPointFixture.installationPointFixture.id, true)
-                                .await()
+                    val api = XesarConnect.connectAndLoginAsync(config).await()
+                    api.subscribeAsync(Topics(Topics.Event.FIND_COMPONENT_PERFORMED)).await()
+                    val result =
+                        api.findComponentAsync(
+                                InstallationPointFixture.installationPointFixture.id, true)
+                            .await()
 
-                        result.ok.shouldBeEqual("ok")
-                    }
+                    result.ok.shouldBeEqual("ok")
                 }
             }
         }

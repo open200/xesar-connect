@@ -21,50 +21,49 @@ class ListenerTest :
             withTimeout(5000) {
                 launch {
                     XesarMqttClient.connectAsync(config).await().use { client ->
-                        XesarConnect.connectAndLoginAsync(config).await().use { it ->
-                            it.subscribeAsync(Topics("#")).await()
+                        val it = XesarConnect.connectAndLoginAsync(config).await()
+                        it.subscribeAsync(Topics("#")).await()
 
-                            val firstEventReceived = CompletableDeferred<String>()
-                            val secondEventReceived = CompletableDeferred<String>()
-                            val thirdEventReceived = CompletableDeferred<String>()
+                        val firstEventReceived = CompletableDeferred<String>()
+                        val secondEventReceived = CompletableDeferred<String>()
+                        val thirdEventReceived = CompletableDeferred<String>()
 
-                            val listener =
-                                it.on(AllTopicsFilter()) {
-                                    if (!firstEventReceived.isCompleted) {
-                                        firstEventReceived.complete(it.message)
-                                        return@on
-                                    }
-                                    if (!secondEventReceived.isCompleted) {
-                                        secondEventReceived.complete(it.message)
-                                        return@on
-                                    }
-                                    throw RuntimeException("Unexpected event received in test")
-                                }
-
-                            // Make sure we are able to receive events at all
-                            client.publishAsync("test", "test1").await()
-                            firstEventReceived.await().shouldBeEqual("test1")
-
-                            // Close and unregister the event listener
-                            listener.close()
-
-                            // Publish the second message, but expect it to not be handled by the
-                            // previous listener
-                            client.publishAsync("test", "test2").await()
-
-                            // Add a new listener that only handles the test3 message
+                        val listener =
                             it.on(AllTopicsFilter()) {
-                                if (it.message == "test3") {
-                                    thirdEventReceived.complete(it.message)
+                                if (!firstEventReceived.isCompleted) {
+                                    firstEventReceived.complete(it.message)
+                                    return@on
                                 }
+                                if (!secondEventReceived.isCompleted) {
+                                    secondEventReceived.complete(it.message)
+                                    return@on
+                                }
+                                throw RuntimeException("Unexpected event received in test")
                             }
 
-                            // Publish a third message, but only handle it by the third listener
-                            client.publishAsync("test", "test3").await()
+                        // Make sure we are able to receive events at all
+                        client.publishAsync("test", "test1").await()
+                        firstEventReceived.await().shouldBeEqual("test1")
 
-                            thirdEventReceived.await().shouldBeEqual("test3")
-                            secondEventReceived.isCompleted.shouldBeFalse()
+                        // Close and unregister the event listener
+                        listener.close()
+
+                        // Publish the second message, but expect it to not be handled by the
+                        // previous listener
+                        client.publishAsync("test", "test2").await()
+
+                        // Add a new listener that only handles the test3 message
+                        it.on(AllTopicsFilter()) {
+                            if (it.message == "test3") {
+                                thirdEventReceived.complete(it.message)
+                            }
                         }
+
+                        // Publish a third message, but only handle it by the third listener
+                        client.publishAsync("test", "test3").await()
+
+                        thirdEventReceived.await().shouldBeEqual("test3")
+                        secondEventReceived.isCompleted.shouldBeFalse()
                     }
                 }
             }

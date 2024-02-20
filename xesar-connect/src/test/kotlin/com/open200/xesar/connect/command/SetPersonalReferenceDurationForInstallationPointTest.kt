@@ -71,21 +71,18 @@ class SetPersonalReferenceDurationForInstallationPointTest :
                 launch {
                     simulatedBackendReady.await()
 
-                    XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                        api.subscribeAsync(Topics(Topics.Event.INSTALLATION_POINT_CHANGED)).await()
-                        val result =
-                            api.setPersonalReferenceDurationForInstallationPointAsync(
-                                    UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
-                                    PersonalLog(
-                                        days = 30,
-                                        logMode = PersonalLog.PersonalLogModes.saveForDays))
-                                .await()
-                        result.aggregateId.shouldBeEqual(
-                            UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
-                        result.personalReferenceDuration?.shouldBeEqual(
-                            PersonalLog(
-                                days = 30, logMode = PersonalLog.PersonalLogModes.saveForDays))
-                    }
+                    val api = XesarConnect.connectAndLoginAsync(config).await()
+                    api.subscribeAsync(Topics(Topics.Event.INSTALLATION_POINT_CHANGED)).await()
+                    val result =
+                        api.setPersonalReferenceDurationForInstallationPointAsync(
+                                UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
+                                PersonalLog(
+                                    days = 30, logMode = PersonalLog.PersonalLogModes.saveForDays))
+                            .await()
+                    result.aggregateId.shouldBeEqual(
+                        UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
+                    result.personalReferenceDuration?.shouldBeEqual(
+                        PersonalLog(days = 30, logMode = PersonalLog.PersonalLogModes.saveForDays))
                 }
             }
         }

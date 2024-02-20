@@ -54,27 +54,26 @@ class RequestAddMediumToInstallationTest :
                 launch {
                     simulatedBackendReady.await()
 
-                    XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                        api.subscribeAsync(
-                                Topics(
-                                    Topics.Event.ADD_MEDIUM_TO_INSTALLATION_REQUESTED,
-                                    Topics.Event.MEDIUM_ADDED_TO_INSTALLATION))
-                            .await()
+                    val api = XesarConnect.connectAndLoginAsync(config).await()
+                    api.subscribeAsync(
+                            Topics(
+                                Topics.Event.ADD_MEDIUM_TO_INSTALLATION_REQUESTED,
+                                Topics.Event.MEDIUM_ADDED_TO_INSTALLATION))
+                        .await()
 
-                        val requestToAddMediumToInstallationResult =
-                            api.requestToAddMediumToInstallationAsync(
-                                UUID.fromString("2d52bd95-18ba-4e46-8f00-0fc4c1e3f9be"),
-                                "hardwareId",
-                                UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
-                        shouldThrow<RequiredEventException> {
-                            requestToAddMediumToInstallationResult
-                                .addMediumToInstallationRequestedDeferred
-                                .await()
-                        }
-                        shouldThrow<RequiredEventException> {
-                            requestToAddMediumToInstallationResult.mediumAddedToInstallationDeferred
-                                .await()
-                        }
+                    val requestToAddMediumToInstallationResult =
+                        api.requestToAddMediumToInstallationAsync(
+                            UUID.fromString("2d52bd95-18ba-4e46-8f00-0fc4c1e3f9be"),
+                            "hardwareId",
+                            UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
+                    shouldThrow<RequiredEventException> {
+                        requestToAddMediumToInstallationResult
+                            .addMediumToInstallationRequestedDeferred
+                            .await()
+                    }
+                    shouldThrow<RequiredEventException> {
+                        requestToAddMediumToInstallationResult.mediumAddedToInstallationDeferred
+                            .await()
                     }
                 }
             }
@@ -120,34 +119,32 @@ class RequestAddMediumToInstallationTest :
                 launch {
                     simulatedBackendReady.await()
 
-                    XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                        api.subscribeAsync(
-                                Topics(
-                                    Topics.Event.ADD_MEDIUM_TO_INSTALLATION_REQUESTED,
-                                    Topics.Event.MEDIUM_ADDED_TO_INSTALLATION,
-                                    Topics.Event.error(config.apiProperties.userId)))
+                    val api = XesarConnect.connectAndLoginAsync(config).await()
+                    api.subscribeAsync(
+                            Topics(
+                                Topics.Event.ADD_MEDIUM_TO_INSTALLATION_REQUESTED,
+                                Topics.Event.MEDIUM_ADDED_TO_INSTALLATION,
+                                Topics.Event.error(config.apiProperties.userId)))
+                        .await()
+
+                    val requestToAddMediumToInstallationResult =
+                        api.requestToAddMediumToInstallationAsync(
+                            UUID.fromString("2d52bd95-18ba-4e46-8f00-0fc4c1e3f9be"),
+                            "hardwareId",
+                            UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
+
+                    shouldThrow<RequiredEventException> {
+                        requestToAddMediumToInstallationResult
+                            .addMediumToInstallationRequestedDeferred
                             .await()
-
-                        val requestToAddMediumToInstallationResult =
-                            api.requestToAddMediumToInstallationAsync(
-                                UUID.fromString("2d52bd95-18ba-4e46-8f00-0fc4c1e3f9be"),
-                                "hardwareId",
-                                UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
-
-                        shouldThrow<RequiredEventException> {
-                            requestToAddMediumToInstallationResult
-                                .addMediumToInstallationRequestedDeferred
-                                .await()
-                        }
-                        shouldThrow<RequiredEventException> {
-                            requestToAddMediumToInstallationResult.mediumAddedToInstallationDeferred
-                                .await()
-                        }
-
-                        val apiError =
-                            requestToAddMediumToInstallationResult.apiErrorDeferred.await()
-                        apiError.get().reason.shouldBe("reason")
                     }
+                    shouldThrow<RequiredEventException> {
+                        requestToAddMediumToInstallationResult.mediumAddedToInstallationDeferred
+                            .await()
+                    }
+
+                    val apiError = requestToAddMediumToInstallationResult.apiErrorDeferred.await()
+                    apiError.get().reason.shouldBe("reason")
                 }
             }
         }
@@ -205,32 +202,30 @@ class RequestAddMediumToInstallationTest :
                 launch {
                     simulatedBackendReady.await()
 
-                    XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                        api.subscribeAsync(
-                                Topics(
-                                    Topics.Event.ADD_MEDIUM_TO_INSTALLATION_REQUESTED,
-                                    Topics.Event.MEDIUM_ADDED_TO_INSTALLATION,
-                                    Topics.Event.error(config.apiProperties.userId)))
-                            .await()
+                    val api = XesarConnect.connectAndLoginAsync(config).await()
+                    api.subscribeAsync(
+                            Topics(
+                                Topics.Event.ADD_MEDIUM_TO_INSTALLATION_REQUESTED,
+                                Topics.Event.MEDIUM_ADDED_TO_INSTALLATION,
+                                Topics.Event.error(config.apiProperties.userId)))
+                        .await()
 
-                        val requestToAddMediumToInstallationResult =
-                            api.requestToAddMediumToInstallationAsync(
-                                UUID.fromString("2d52bd95-18ba-4e46-8f00-0fc4c1e3f9be"),
-                                "hardwareId",
-                                UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
-                        val addMediumToInstallationRequested =
-                            requestToAddMediumToInstallationResult
-                                .addMediumToInstallationRequestedDeferred
-                                .await()
-                        addMediumToInstallationRequested.aggregateId.shouldBe(
-                            UUID.fromString("2d52bd95-18ba-4e46-8f00-0fc4c1e3f9be"))
-                        val apiError =
-                            requestToAddMediumToInstallationResult.apiErrorDeferred.await()
-                        apiError.get().reason.shouldBe("reason")
-                        shouldThrow<RequiredEventException> {
-                            requestToAddMediumToInstallationResult.mediumAddedToInstallationDeferred
-                                .await()
-                        }
+                    val requestToAddMediumToInstallationResult =
+                        api.requestToAddMediumToInstallationAsync(
+                            UUID.fromString("2d52bd95-18ba-4e46-8f00-0fc4c1e3f9be"),
+                            "hardwareId",
+                            UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
+                    val addMediumToInstallationRequested =
+                        requestToAddMediumToInstallationResult
+                            .addMediumToInstallationRequestedDeferred
+                            .await()
+                    addMediumToInstallationRequested.aggregateId.shouldBe(
+                        UUID.fromString("2d52bd95-18ba-4e46-8f00-0fc4c1e3f9be"))
+                    val apiError = requestToAddMediumToInstallationResult.apiErrorDeferred.await()
+                    apiError.get().reason.shouldBe("reason")
+                    shouldThrow<RequiredEventException> {
+                        requestToAddMediumToInstallationResult.mediumAddedToInstallationDeferred
+                            .await()
                     }
                 }
             }
@@ -291,28 +286,27 @@ class RequestAddMediumToInstallationTest :
                     launch {
                         simulatedBackendReady.await()
 
-                        XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                            api.subscribeAsync(
-                                    Topics(
-                                        Topics.Event.ADD_MEDIUM_TO_INSTALLATION_REQUESTED,
-                                        Topics.Event.MEDIUM_ADDED_TO_INSTALLATION,
-                                        Topics.Event.error(config.apiProperties.userId)))
-                                .await()
+                        val api = XesarConnect.connectAndLoginAsync(config).await()
+                        api.subscribeAsync(
+                                Topics(
+                                    Topics.Event.ADD_MEDIUM_TO_INSTALLATION_REQUESTED,
+                                    Topics.Event.MEDIUM_ADDED_TO_INSTALLATION,
+                                    Topics.Event.error(config.apiProperties.userId)))
+                            .await()
 
-                            val requestToAddMediumToInstallationResult =
-                                api.requestToAddMediumToInstallationAsync(
-                                    UUID.fromString("2d52bd95-18ba-4e46-8f00-0fc4c1e3f9be"),
-                                    "hardwareId",
-                                    UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
-                            val addMediumToInstallationRequested =
-                                requestToAddMediumToInstallationResult
-                                    .addMediumToInstallationRequestedDeferred
-                                    .await()
-                            addMediumToInstallationRequested.aggregateId.shouldBe(
-                                UUID.fromString("2d52bd95-18ba-4e46-8f00-0fc4c1e3f9be"))
-                            shouldThrow<RequiredEventException> {
-                                requestToAddMediumToInstallationResult.await()
-                            }
+                        val requestToAddMediumToInstallationResult =
+                            api.requestToAddMediumToInstallationAsync(
+                                UUID.fromString("2d52bd95-18ba-4e46-8f00-0fc4c1e3f9be"),
+                                "hardwareId",
+                                UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
+                        val addMediumToInstallationRequested =
+                            requestToAddMediumToInstallationResult
+                                .addMediumToInstallationRequestedDeferred
+                                .await()
+                        addMediumToInstallationRequested.aggregateId.shouldBe(
+                            UUID.fromString("2d52bd95-18ba-4e46-8f00-0fc4c1e3f9be"))
+                        shouldThrow<RequiredEventException> {
+                            requestToAddMediumToInstallationResult.await()
                         }
                     }
                 }
@@ -367,29 +361,28 @@ class RequestAddMediumToInstallationTest :
                 launch {
                     simulatedBackendReady.await()
 
-                    XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                        api.subscribeAsync(
-                                Topics(
-                                    Topics.Event.ADD_MEDIUM_TO_INSTALLATION_REQUESTED,
-                                    Topics.Event.MEDIUM_ADDED_TO_INSTALLATION))
+                    val api = XesarConnect.connectAndLoginAsync(config).await()
+                    api.subscribeAsync(
+                            Topics(
+                                Topics.Event.ADD_MEDIUM_TO_INSTALLATION_REQUESTED,
+                                Topics.Event.MEDIUM_ADDED_TO_INSTALLATION))
+                        .await()
+
+                    val requestToAddMediumToInstallationResult =
+                        api.requestToAddMediumToInstallationAsync(
+                            UUID.fromString("2d52bd95-18ba-4e46-8f00-0fc4c1e3f9be"),
+                            "hardwareId",
+                            UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
+
+                    shouldThrow<ParsingException> {
+                        requestToAddMediumToInstallationResult
+                            .addMediumToInstallationRequestedDeferred
                             .await()
-
-                        val requestToAddMediumToInstallationResult =
-                            api.requestToAddMediumToInstallationAsync(
-                                UUID.fromString("2d52bd95-18ba-4e46-8f00-0fc4c1e3f9be"),
-                                "hardwareId",
-                                UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
-
-                        shouldThrow<ParsingException> {
-                            requestToAddMediumToInstallationResult
-                                .addMediumToInstallationRequestedDeferred
-                                .await()
-                        }
-                        val evvaComponentAdded =
-                            requestToAddMediumToInstallationResult.mediumAddedToInstallationDeferred
-                                .await()
-                        evvaComponentAdded.hardwareId.shouldBe("hardwareId")
                     }
+                    val evvaComponentAdded =
+                        requestToAddMediumToInstallationResult.mediumAddedToInstallationDeferred
+                            .await()
+                    evvaComponentAdded.hardwareId.shouldBe("hardwareId")
                 }
             }
         }
@@ -451,29 +444,28 @@ class RequestAddMediumToInstallationTest :
                 launch {
                     simulatedBackendReady.await()
 
-                    XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                        api.subscribeAsync(
-                                Topics(
-                                    Topics.Event.ADD_MEDIUM_TO_INSTALLATION_REQUESTED,
-                                    Topics.Event.MEDIUM_ADDED_TO_INSTALLATION))
-                            .await()
+                    val api = XesarConnect.connectAndLoginAsync(config).await()
+                    api.subscribeAsync(
+                            Topics(
+                                Topics.Event.ADD_MEDIUM_TO_INSTALLATION_REQUESTED,
+                                Topics.Event.MEDIUM_ADDED_TO_INSTALLATION))
+                        .await()
 
-                        val requestToAddMediumToInstallationResult =
-                            api.requestToAddMediumToInstallationAsync(
-                                UUID.fromString("2d52bd95-18ba-4e46-8f00-0fc4c1e3f9be"),
-                                "hardwareId",
-                                UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
-                        val mediumAddedToInstallation =
-                            requestToAddMediumToInstallationResult.mediumAddedToInstallationDeferred
-                                .await()
-                        mediumAddedToInstallation.aggregateId.shouldBe(
-                            UUID.fromString("2d52bd95-18ba-4e46-8f00-0fc4c1e3f9be"))
-                        val addMediumToInstallationRequested =
-                            requestToAddMediumToInstallationResult
-                                .addMediumToInstallationRequestedDeferred
-                                .await()
-                        addMediumToInstallationRequested.hardwareId.shouldBe("hardwareId")
-                    }
+                    val requestToAddMediumToInstallationResult =
+                        api.requestToAddMediumToInstallationAsync(
+                            UUID.fromString("2d52bd95-18ba-4e46-8f00-0fc4c1e3f9be"),
+                            "hardwareId",
+                            UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
+                    val mediumAddedToInstallation =
+                        requestToAddMediumToInstallationResult.mediumAddedToInstallationDeferred
+                            .await()
+                    mediumAddedToInstallation.aggregateId.shouldBe(
+                        UUID.fromString("2d52bd95-18ba-4e46-8f00-0fc4c1e3f9be"))
+                    val addMediumToInstallationRequested =
+                        requestToAddMediumToInstallationResult
+                            .addMediumToInstallationRequestedDeferred
+                            .await()
+                    addMediumToInstallationRequested.hardwareId.shouldBe("hardwareId")
                 }
             }
         }
@@ -520,29 +512,28 @@ class RequestAddMediumToInstallationTest :
                 launch {
                     simulatedBackendReady.await()
 
-                    XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                        api.subscribeAsync(
-                                Topics(
-                                    Topics.Event.ADD_MEDIUM_TO_INSTALLATION_REQUESTED,
-                                    Topics.Event.MEDIUM_ADDED_TO_INSTALLATION))
+                    val api = XesarConnect.connectAndLoginAsync(config).await()
+                    api.subscribeAsync(
+                            Topics(
+                                Topics.Event.ADD_MEDIUM_TO_INSTALLATION_REQUESTED,
+                                Topics.Event.MEDIUM_ADDED_TO_INSTALLATION))
+                        .await()
+
+                    val requestToAddMediumToInstallationResult =
+                        api.requestToAddMediumToInstallationAsync(
+                            UUID.fromString("2d52bd95-18ba-4e46-8f00-0fc4c1e3f9be"),
+                            "hardwareId",
+                            UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
+                    val addMediumToInstallationRequested =
+                        requestToAddMediumToInstallationResult
+                            .addMediumToInstallationRequestedDeferred
                             .await()
+                    addMediumToInstallationRequested.aggregateId.shouldBe(
+                        UUID.fromString("2d52bd95-18ba-4e46-8f00-0fc4c1e3f9be"))
 
-                        val requestToAddMediumToInstallationResult =
-                            api.requestToAddMediumToInstallationAsync(
-                                UUID.fromString("2d52bd95-18ba-4e46-8f00-0fc4c1e3f9be"),
-                                "hardwareId",
-                                UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
-                        val addMediumToInstallationRequested =
-                            requestToAddMediumToInstallationResult
-                                .addMediumToInstallationRequestedDeferred
-                                .await()
-                        addMediumToInstallationRequested.aggregateId.shouldBe(
-                            UUID.fromString("2d52bd95-18ba-4e46-8f00-0fc4c1e3f9be"))
-
-                        shouldThrow<RequiredEventException> {
-                            requestToAddMediumToInstallationResult.mediumAddedToInstallationDeferred
-                                .await()
-                        }
+                    shouldThrow<RequiredEventException> {
+                        requestToAddMediumToInstallationResult.mediumAddedToInstallationDeferred
+                            .await()
                     }
                 }
             }

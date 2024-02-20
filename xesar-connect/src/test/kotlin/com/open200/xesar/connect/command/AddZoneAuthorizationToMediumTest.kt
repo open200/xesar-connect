@@ -65,26 +65,24 @@ class AddZoneAuthorizationToMediumTest :
                 launch {
                     simulatedBackendReady.await()
 
-                    XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                        api.subscribeAsync(
-                                Topics(Topics.Event.INDIVIDUAL_AUTHORIZATIONS_ADDED_TO_MEDIUM))
+                    val api = XesarConnect.connectAndLoginAsync(config).await()
+                    api.subscribeAsync(
+                            Topics(Topics.Event.INDIVIDUAL_AUTHORIZATIONS_ADDED_TO_MEDIUM))
+                        .await()
+                    val authorizationData =
+                        AuthorizationData(
+                            "authorizationName",
+                            UUID.fromString("2d52bd95-18ba-4e46-8f00-0fc4c1e3f9be"),
+                            "timeProfileName",
+                            UUID.fromString("8c124504-8263-4201-8b17-f49a6c2f8671"),
+                            false,
+                            UUID.fromString("e9b31e62-8969-4794-a219-8c81ff10c91d"))
+                    val result =
+                        api.addZoneAuthorizationToMediumAsync(
+                                UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
+                                authorizationData)
                             .await()
-                        val authorizationData =
-                            AuthorizationData(
-                                "authorizationName",
-                                UUID.fromString("2d52bd95-18ba-4e46-8f00-0fc4c1e3f9be"),
-                                "timeProfileName",
-                                UUID.fromString("8c124504-8263-4201-8b17-f49a6c2f8671"),
-                                false,
-                                UUID.fromString("e9b31e62-8969-4794-a219-8c81ff10c91d"))
-                        val result =
-                            api.addZoneAuthorizationToMediumAsync(
-                                    UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
-                                    authorizationData)
-                                .await()
-                        result.id.shouldBeEqual(
-                            UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
-                    }
+                    result.id.shouldBeEqual(UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
                 }
             }
         }

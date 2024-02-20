@@ -67,23 +67,19 @@ class CreateZoneTest :
                 launch {
                     simulatedBackendReady.await()
 
-                    XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                        api.subscribeAsync(Topics(Topics.Event.ZONE_CREATED)).await()
-                        val result =
-                            api.createZoneAsync(
-                                    name = "zoneName",
-                                    zoneId =
-                                        UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
-                                    installationPoints =
-                                        listOf(
-                                            UUID.fromString("720eb694-a085-47e8-8f18-512aa1a63bef"),
-                                            UUID.fromString(
-                                                "c457a028-dd08-4040-a1bb-17767e2b2c28")))
-                                .await()
-                        result.name.shouldBeEqual("zoneName")
-                        result.id.shouldBeEqual(
-                            UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
-                    }
+                    val api = XesarConnect.connectAndLoginAsync(config).await()
+                    api.subscribeAsync(Topics(Topics.Event.ZONE_CREATED)).await()
+                    val result =
+                        api.createZoneAsync(
+                                name = "zoneName",
+                                zoneId = UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
+                                installationPoints =
+                                    listOf(
+                                        UUID.fromString("720eb694-a085-47e8-8f18-512aa1a63bef"),
+                                        UUID.fromString("c457a028-dd08-4040-a1bb-17767e2b2c28")))
+                            .await()
+                    result.name.shouldBeEqual("zoneName")
+                    result.id.shouldBeEqual(UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
                 }
             }
         }

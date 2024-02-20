@@ -71,19 +71,18 @@ class CreateAuthorizationTimeProfileTest :
                 launch {
                     simulatedBackendReady.await()
 
-                    XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                        api.subscribeAsync(Topics(Topics.Event.AUTHORIZATION_TIME_PROFILE_CREATED))
+                    val api = XesarConnect.connectAndLoginAsync(config).await()
+                    api.subscribeAsync(Topics(Topics.Event.AUTHORIZATION_TIME_PROFILE_CREATED))
+                        .await()
+                    val result =
+                        api.createAuthorizationTimeProfileAsync(
+                                name = "timeProfileName",
+                                timeProfileId =
+                                    UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
+                                timeSeries = TimeProfileFixture.timeSeries)
                             .await()
-                        val result =
-                            api.createAuthorizationTimeProfileAsync(
-                                    name = "timeProfileName",
-                                    timeProfileId =
-                                        UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
-                                    timeSeries = TimeProfileFixture.timeSeries)
-                                .await()
-                        result.name.shouldBeEqual("timeProfileName")
-                        result.type.shouldBeEqual(TimeProfileType.AUTHORIZATION_PROFILE)
-                    }
+                    result.name.shouldBeEqual("timeProfileName")
+                    result.type.shouldBeEqual(TimeProfileType.AUTHORIZATION_PROFILE)
                 }
             }
         }

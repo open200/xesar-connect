@@ -57,42 +57,39 @@ class ChangeAuthorizationProfileTest :
                 launch {
                     simulatedBackendReady.await()
 
-                    XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                        api.subscribeAsync(
-                                Topics(
-                                    Topics.Event.AUTHORIZATION_PROFILE_CHANGED,
-                                    Topics.Event.AUTHORIZATION_PROFILE_ACCESS_CHANGED,
-                                    Topics.Event.AUTHORIZATION_PROFILE_INFO_CHANGED))
-                            .await()
+                    val api = XesarConnect.connectAndLoginAsync(config).await()
+                    api.subscribeAsync(
+                            Topics(
+                                Topics.Event.AUTHORIZATION_PROFILE_CHANGED,
+                                Topics.Event.AUTHORIZATION_PROFILE_ACCESS_CHANGED,
+                                Topics.Event.AUTHORIZATION_PROFILE_INFO_CHANGED))
+                        .await()
 
-                        val changeAuthorizationProfileResult =
-                            api.changeAuthorizationProfileAsync(
-                                emptyList(),
-                                true,
-                                "new name",
-                                "new description",
-                                null,
-                                UUID.fromString("2d52bd95-18ba-4e46-8f00-0fc4c1e3f9be"),
-                                emptyList())
+                    val changeAuthorizationProfileResult =
+                        api.changeAuthorizationProfileAsync(
+                            emptyList(),
+                            true,
+                            "new name",
+                            "new description",
+                            null,
+                            UUID.fromString("2d52bd95-18ba-4e46-8f00-0fc4c1e3f9be"),
+                            emptyList())
 
-                        shouldThrow<OptionalEventException> {
-                            changeAuthorizationProfileResult
-                                .authorizationProfileAccessChangedDeferred
-                                .await()
-                        }
-                        shouldThrow<OptionalEventException> {
-                            changeAuthorizationProfileResult.authorizationProfileChangedDeferred
-                                .await()
-                        }
-                        shouldThrow<RequiredEventException> {
-                            changeAuthorizationProfileResult.authorizationProfileInfoChangedDeferred
-                                .await()
-                        }
-                        changeAuthorizationProfileResult.apiErrorDeferred
+                    shouldThrow<OptionalEventException> {
+                        changeAuthorizationProfileResult.authorizationProfileAccessChangedDeferred
                             .await()
-                            .isPresent()
-                            .shouldBeFalse()
                     }
+                    shouldThrow<OptionalEventException> {
+                        changeAuthorizationProfileResult.authorizationProfileChangedDeferred.await()
+                    }
+                    shouldThrow<RequiredEventException> {
+                        changeAuthorizationProfileResult.authorizationProfileInfoChangedDeferred
+                            .await()
+                    }
+                    changeAuthorizationProfileResult.apiErrorDeferred
+                        .await()
+                        .isPresent()
+                        .shouldBeFalse()
                 }
             }
         }
@@ -138,41 +135,38 @@ class ChangeAuthorizationProfileTest :
                 launch {
                     simulatedBackendReady.await()
 
-                    XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                        api.subscribeAsync(
-                                Topics(
-                                    Topics.Event.AUTHORIZATION_PROFILE_CHANGED,
-                                    Topics.Event.AUTHORIZATION_PROFILE_ACCESS_CHANGED,
-                                    Topics.Event.AUTHORIZATION_PROFILE_INFO_CHANGED))
+                    val api = XesarConnect.connectAndLoginAsync(config).await()
+                    api.subscribeAsync(
+                            Topics(
+                                Topics.Event.AUTHORIZATION_PROFILE_CHANGED,
+                                Topics.Event.AUTHORIZATION_PROFILE_ACCESS_CHANGED,
+                                Topics.Event.AUTHORIZATION_PROFILE_INFO_CHANGED))
+                        .await()
+
+                    val changeAuthorizationProfileResult =
+                        api.changeAuthorizationProfileAsync(
+                            emptyList(),
+                            true,
+                            "new name",
+                            "new description",
+                            null,
+                            UUID.fromString("2d52bd95-18ba-4e46-8f00-0fc4c1e3f9be"),
+                            emptyList())
+
+                    shouldThrow<OptionalEventException> {
+                        changeAuthorizationProfileResult.authorizationProfileAccessChangedDeferred
                             .await()
-
-                        val changeAuthorizationProfileResult =
-                            api.changeAuthorizationProfileAsync(
-                                emptyList(),
-                                true,
-                                "new name",
-                                "new description",
-                                null,
-                                UUID.fromString("2d52bd95-18ba-4e46-8f00-0fc4c1e3f9be"),
-                                emptyList())
-
-                        shouldThrow<OptionalEventException> {
-                            changeAuthorizationProfileResult
-                                .authorizationProfileAccessChangedDeferred
-                                .await()
-                        }
-                        shouldThrow<OptionalEventException> {
-                            changeAuthorizationProfileResult.authorizationProfileChangedDeferred
-                                .await()
-                        }
-                        shouldThrow<RequiredEventException> {
-                            changeAuthorizationProfileResult.authorizationProfileInfoChangedDeferred
-                                .await()
-                        }
-
-                        val apiError = changeAuthorizationProfileResult.apiErrorDeferred.await()
-                        apiError.get().reason.shouldBe("reason")
                     }
+                    shouldThrow<OptionalEventException> {
+                        changeAuthorizationProfileResult.authorizationProfileChangedDeferred.await()
+                    }
+                    shouldThrow<RequiredEventException> {
+                        changeAuthorizationProfileResult.authorizationProfileInfoChangedDeferred
+                            .await()
+                    }
+
+                    val apiError = changeAuthorizationProfileResult.apiErrorDeferred.await()
+                    apiError.get().reason.shouldBe("reason")
                 }
             }
         }
@@ -229,39 +223,36 @@ class ChangeAuthorizationProfileTest :
                 launch {
                     simulatedBackendReady.await()
 
-                    XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                        api.subscribeAsync(
-                                Topics(
-                                    Topics.Event.AUTHORIZATION_PROFILE_CHANGED,
-                                    Topics.Event.AUTHORIZATION_PROFILE_ACCESS_CHANGED,
-                                    Topics.Event.AUTHORIZATION_PROFILE_INFO_CHANGED))
-                            .await()
+                    val api = XesarConnect.connectAndLoginAsync(config).await()
+                    api.subscribeAsync(
+                            Topics(
+                                Topics.Event.AUTHORIZATION_PROFILE_CHANGED,
+                                Topics.Event.AUTHORIZATION_PROFILE_ACCESS_CHANGED,
+                                Topics.Event.AUTHORIZATION_PROFILE_INFO_CHANGED))
+                        .await()
 
-                        val changeAuthorizationProfileResult =
-                            api.changeAuthorizationProfileAsync(
-                                emptyList(),
-                                true,
-                                "new name",
-                                "new description",
-                                null,
-                                UUID.fromString("2d52bd95-18ba-4e46-8f00-0fc4c1e3f9be"),
-                                emptyList())
-                        val authorizationProfileInfoChanged =
-                            changeAuthorizationProfileResult.authorizationProfileInfoChangedDeferred
-                                .await()
-                        authorizationProfileInfoChanged.id.shouldBe(
-                            UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
-                        val apiError = changeAuthorizationProfileResult.apiErrorDeferred.await()
-                        apiError.get().reason.shouldBe("reason")
-                        shouldThrow<OptionalEventException> {
-                            changeAuthorizationProfileResult.authorizationProfileChangedDeferred
-                                .await()
-                        }
-                        shouldThrow<OptionalEventException> {
-                            changeAuthorizationProfileResult
-                                .authorizationProfileAccessChangedDeferred
-                                .await()
-                        }
+                    val changeAuthorizationProfileResult =
+                        api.changeAuthorizationProfileAsync(
+                            emptyList(),
+                            true,
+                            "new name",
+                            "new description",
+                            null,
+                            UUID.fromString("2d52bd95-18ba-4e46-8f00-0fc4c1e3f9be"),
+                            emptyList())
+                    val authorizationProfileInfoChanged =
+                        changeAuthorizationProfileResult.authorizationProfileInfoChangedDeferred
+                            .await()
+                    authorizationProfileInfoChanged.id.shouldBe(
+                        UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
+                    val apiError = changeAuthorizationProfileResult.apiErrorDeferred.await()
+                    apiError.get().reason.shouldBe("reason")
+                    shouldThrow<OptionalEventException> {
+                        changeAuthorizationProfileResult.authorizationProfileChangedDeferred.await()
+                    }
+                    shouldThrow<OptionalEventException> {
+                        changeAuthorizationProfileResult.authorizationProfileAccessChangedDeferred
+                            .await()
                     }
                 }
             }
@@ -322,41 +313,39 @@ class ChangeAuthorizationProfileTest :
                     launch {
                         simulatedBackendReady.await()
 
-                        XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                            api.subscribeAsync(
-                                    Topics(
-                                        Topics.Event.AUTHORIZATION_PROFILE_CHANGED,
-                                        Topics.Event.AUTHORIZATION_PROFILE_ACCESS_CHANGED,
-                                        Topics.Event.AUTHORIZATION_PROFILE_INFO_CHANGED))
-                                .await()
+                        val api = XesarConnect.connectAndLoginAsync(config).await()
+                        api.subscribeAsync(
+                                Topics(
+                                    Topics.Event.AUTHORIZATION_PROFILE_CHANGED,
+                                    Topics.Event.AUTHORIZATION_PROFILE_ACCESS_CHANGED,
+                                    Topics.Event.AUTHORIZATION_PROFILE_INFO_CHANGED))
+                            .await()
 
-                            val changeAuthorizationProfileResult =
-                                api.changeAuthorizationProfileAsync(
-                                    emptyList(),
-                                    true,
-                                    "new name",
-                                    "new description",
-                                    null,
-                                    UUID.fromString("2d52bd95-18ba-4e46-8f00-0fc4c1e3f9be"),
-                                    emptyList())
-                            val authorizationProfileInfoChanged =
-                                changeAuthorizationProfileResult
-                                    .authorizationProfileInfoChangedDeferred
-                                    .await()
-                            authorizationProfileInfoChanged.id.shouldBe(
-                                UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
-                            shouldThrow<OptionalEventException> {
-                                changeAuthorizationProfileResult.authorizationProfileChangedDeferred
-                                    .await()
-                            }
-                            shouldThrow<OptionalEventException> {
-                                changeAuthorizationProfileResult
-                                    .authorizationProfileAccessChangedDeferred
-                                    .await()
-                            }
-                            val apiError = changeAuthorizationProfileResult.apiErrorDeferred.await()
-                            apiError.get().reason.shouldBe("reason")
+                        val changeAuthorizationProfileResult =
+                            api.changeAuthorizationProfileAsync(
+                                emptyList(),
+                                true,
+                                "new name",
+                                "new description",
+                                null,
+                                UUID.fromString("2d52bd95-18ba-4e46-8f00-0fc4c1e3f9be"),
+                                emptyList())
+                        val authorizationProfileInfoChanged =
+                            changeAuthorizationProfileResult.authorizationProfileInfoChangedDeferred
+                                .await()
+                        authorizationProfileInfoChanged.id.shouldBe(
+                            UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
+                        shouldThrow<OptionalEventException> {
+                            changeAuthorizationProfileResult.authorizationProfileChangedDeferred
+                                .await()
                         }
+                        shouldThrow<OptionalEventException> {
+                            changeAuthorizationProfileResult
+                                .authorizationProfileAccessChangedDeferred
+                                .await()
+                        }
+                        val apiError = changeAuthorizationProfileResult.apiErrorDeferred.await()
+                        apiError.get().reason.shouldBe("reason")
                     }
                 }
             }
@@ -409,35 +398,33 @@ class ChangeAuthorizationProfileTest :
                 launch {
                     simulatedBackendReady.await()
 
-                    XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                        api.subscribeAsync(
-                                Topics(
-                                    Topics.Event.AUTHORIZATION_PROFILE_CHANGED,
-                                    Topics.Event.AUTHORIZATION_PROFILE_ACCESS_CHANGED,
-                                    Topics.Event.AUTHORIZATION_PROFILE_INFO_CHANGED))
+                    val api = XesarConnect.connectAndLoginAsync(config).await()
+                    api.subscribeAsync(
+                            Topics(
+                                Topics.Event.AUTHORIZATION_PROFILE_CHANGED,
+                                Topics.Event.AUTHORIZATION_PROFILE_ACCESS_CHANGED,
+                                Topics.Event.AUTHORIZATION_PROFILE_INFO_CHANGED))
+                        .await()
+
+                    val changeAuthorizationProfileResult =
+                        api.changeAuthorizationProfileAsync(
+                            emptyList(),
+                            true,
+                            "new name",
+                            "new description",
+                            null,
+                            UUID.fromString("2d52bd95-18ba-4e46-8f00-0fc4c1e3f9be"),
+                            emptyList())
+
+                    shouldThrow<ParsingException> {
+                        changeAuthorizationProfileResult.authorizationProfileAccessChangedDeferred
                             .await()
-
-                        val changeAuthorizationProfileResult =
-                            api.changeAuthorizationProfileAsync(
-                                emptyList(),
-                                true,
-                                "new name",
-                                "new description",
-                                null,
-                                UUID.fromString("2d52bd95-18ba-4e46-8f00-0fc4c1e3f9be"),
-                                emptyList())
-
-                        shouldThrow<ParsingException> {
-                            changeAuthorizationProfileResult
-                                .authorizationProfileAccessChangedDeferred
-                                .await()
-                        }
-                        val authorizationProfileInfoChanged =
-                            changeAuthorizationProfileResult.authorizationProfileInfoChangedDeferred
-                                .await()
-                        authorizationProfileInfoChanged.id.shouldBe(
-                            UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
                     }
+                    val authorizationProfileInfoChanged =
+                        changeAuthorizationProfileResult.authorizationProfileInfoChangedDeferred
+                            .await()
+                    authorizationProfileInfoChanged.id.shouldBe(
+                        UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
                 }
             }
         }
@@ -506,42 +493,39 @@ class ChangeAuthorizationProfileTest :
                 launch {
                     simulatedBackendReady.await()
 
-                    XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                        api.subscribeAsync(
-                                Topics(
-                                    Topics.Event.AUTHORIZATION_PROFILE_CHANGED,
-                                    Topics.Event.AUTHORIZATION_PROFILE_ACCESS_CHANGED,
-                                    Topics.Event.AUTHORIZATION_PROFILE_INFO_CHANGED))
+                    val api = XesarConnect.connectAndLoginAsync(config).await()
+                    api.subscribeAsync(
+                            Topics(
+                                Topics.Event.AUTHORIZATION_PROFILE_CHANGED,
+                                Topics.Event.AUTHORIZATION_PROFILE_ACCESS_CHANGED,
+                                Topics.Event.AUTHORIZATION_PROFILE_INFO_CHANGED))
+                        .await()
+
+                    val changeAuthorizationProfileResult =
+                        api.changeAuthorizationProfileAsync(
+                            emptyList(),
+                            true,
+                            "new name",
+                            "new description",
+                            null,
+                            UUID.fromString("2d52bd95-18ba-4e46-8f00-0fc4c1e3f9be"),
+                            emptyList())
+                    val authorizationProfileInfoChanged =
+                        changeAuthorizationProfileResult.authorizationProfileInfoChangedDeferred
                             .await()
 
-                        val changeAuthorizationProfileResult =
-                            api.changeAuthorizationProfileAsync(
-                                emptyList(),
-                                true,
-                                "new name",
-                                "new description",
-                                null,
-                                UUID.fromString("2d52bd95-18ba-4e46-8f00-0fc4c1e3f9be"),
-                                emptyList())
-                        val authorizationProfileInfoChanged =
-                            changeAuthorizationProfileResult.authorizationProfileInfoChangedDeferred
-                                .await()
+                    authorizationProfileInfoChanged.id.shouldBe(
+                        UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
+                    val authorizationProfileChanged =
+                        changeAuthorizationProfileResult.authorizationProfileChangedDeferred.await()
+                    authorizationProfileChanged.id.shouldBe(
+                        UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
 
-                        authorizationProfileInfoChanged.id.shouldBe(
-                            UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
-                        val authorizationProfileChanged =
-                            changeAuthorizationProfileResult.authorizationProfileChangedDeferred
-                                .await()
-                        authorizationProfileChanged.id.shouldBe(
-                            UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
-
-                        val authorizationProfileAccessChanged =
-                            changeAuthorizationProfileResult
-                                .authorizationProfileAccessChangedDeferred
-                                .await()
-                        authorizationProfileAccessChanged.id.shouldBe(
-                            UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
-                    }
+                    val authorizationProfileAccessChanged =
+                        changeAuthorizationProfileResult.authorizationProfileAccessChangedDeferred
+                            .await()
+                    authorizationProfileAccessChanged.id.shouldBe(
+                        UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
                 }
             }
         }
@@ -587,38 +571,35 @@ class ChangeAuthorizationProfileTest :
                 launch {
                     simulatedBackendReady.await()
 
-                    XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                        api.subscribeAsync(
-                                Topics(
-                                    Topics.Event.AUTHORIZATION_PROFILE_CHANGED,
-                                    Topics.Event.AUTHORIZATION_PROFILE_ACCESS_CHANGED,
-                                    Topics.Event.AUTHORIZATION_PROFILE_INFO_CHANGED))
+                    val api = XesarConnect.connectAndLoginAsync(config).await()
+                    api.subscribeAsync(
+                            Topics(
+                                Topics.Event.AUTHORIZATION_PROFILE_CHANGED,
+                                Topics.Event.AUTHORIZATION_PROFILE_ACCESS_CHANGED,
+                                Topics.Event.AUTHORIZATION_PROFILE_INFO_CHANGED))
+                        .await()
+
+                    val changeAuthorizationProfileResult =
+                        api.changeAuthorizationProfileAsync(
+                            emptyList(),
+                            true,
+                            "new name",
+                            "new description",
+                            null,
+                            UUID.fromString("2d52bd95-18ba-4e46-8f00-0fc4c1e3f9be"),
+                            emptyList())
+                    val authorizationProfileInfoChanged =
+                        changeAuthorizationProfileResult.authorizationProfileInfoChangedDeferred
                             .await()
+                    authorizationProfileInfoChanged.id.shouldBe(
+                        UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
 
-                        val changeAuthorizationProfileResult =
-                            api.changeAuthorizationProfileAsync(
-                                emptyList(),
-                                true,
-                                "new name",
-                                "new description",
-                                null,
-                                UUID.fromString("2d52bd95-18ba-4e46-8f00-0fc4c1e3f9be"),
-                                emptyList())
-                        val authorizationProfileInfoChanged =
-                            changeAuthorizationProfileResult.authorizationProfileInfoChangedDeferred
-                                .await()
-                        authorizationProfileInfoChanged.id.shouldBe(
-                            UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
-
-                        shouldThrow<OptionalEventException> {
-                            changeAuthorizationProfileResult
-                                .authorizationProfileAccessChangedDeferred
-                                .await()
-                        }
-                        shouldThrow<OptionalEventException> {
-                            changeAuthorizationProfileResult.authorizationProfileChangedDeferred
-                                .await()
-                        }
+                    shouldThrow<OptionalEventException> {
+                        changeAuthorizationProfileResult.authorizationProfileAccessChangedDeferred
+                            .await()
+                    }
+                    shouldThrow<OptionalEventException> {
+                        changeAuthorizationProfileResult.authorizationProfileChangedDeferred.await()
                     }
                 }
             }

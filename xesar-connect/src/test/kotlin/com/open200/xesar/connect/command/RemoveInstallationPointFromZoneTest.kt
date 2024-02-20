@@ -71,19 +71,18 @@ class RemoveInstallationPointFromZoneTest :
                 launch {
                     simulatedBackendReady.await()
 
-                    XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                        api.subscribeAsync(Topics(Topics.Event.INSTALLATION_POINTS_IN_ZONE_CHANGED))
+                    val api = XesarConnect.connectAndLoginAsync(config).await()
+                    api.subscribeAsync(Topics(Topics.Event.INSTALLATION_POINTS_IN_ZONE_CHANGED))
+                        .await()
+                    val result =
+                        api.removeInstallationPointFromZoneAsync(
+                                UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
+                                UUID.fromString("8c7128d4-a30f-4aad-b5d2-d7b975c5cf8f"))
                             .await()
-                        val result =
-                            api.removeInstallationPointFromZoneAsync(
-                                    UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
-                                    UUID.fromString("8c7128d4-a30f-4aad-b5d2-d7b975c5cf8f"))
-                                .await()
-                        result.aggregateId.shouldBeEqual(
-                            UUID.fromString("8c7128d4-a30f-4aad-b5d2-d7b975c5cf8f"))
-                        result.removedInstallationPoints.shouldBeEqual(
-                            listOf(UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd")))
-                    }
+                    result.aggregateId.shouldBeEqual(
+                        UUID.fromString("8c7128d4-a30f-4aad-b5d2-d7b975c5cf8f"))
+                    result.removedInstallationPoints.shouldBeEqual(
+                        listOf(UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd")))
                 }
             }
         }

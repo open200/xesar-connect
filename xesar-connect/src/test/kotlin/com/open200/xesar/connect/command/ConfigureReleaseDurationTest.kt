@@ -67,15 +67,14 @@ class ConfigureReleaseDurationTest :
                 launch {
                     simulatedBackendReady.await()
 
-                    XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                        api.subscribeAsync(Topics(Topics.Event.INSTALLATION_POINT_CHANGED)).await()
-                        val result =
-                            api.configureReleaseDurationAsync(
-                                    10, 20, UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
-                                .await()
-                        result.releaseDurationShort?.shouldBeEqual(10)
-                        result.releaseDurationLong?.shouldBeEqual(20)
-                    }
+                    val api = XesarConnect.connectAndLoginAsync(config).await()
+                    api.subscribeAsync(Topics(Topics.Event.INSTALLATION_POINT_CHANGED)).await()
+                    val result =
+                        api.configureReleaseDurationAsync(
+                                10, 20, UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
+                            .await()
+                    result.releaseDurationShort?.shouldBeEqual(10)
+                    result.releaseDurationLong?.shouldBeEqual(20)
                 }
             }
         }

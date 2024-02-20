@@ -90,14 +90,13 @@ class QueryPersonTest :
                                     FilterType.CONTAINS,
                                     "filtered first name",
                                 )))
-                    XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                        api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
-                            .await()
-                        val result = api.queryPersonListAsync(params).await()
-                        result.totalCount.shouldBeEqual(2)
-                        result.data[0].firstName.shouldBeEqual("firstname String")
-                        result.data[1].firstName.shouldBeEqual("firstname 2 String")
-                    }
+                    val api = XesarConnect.connectAndLoginAsync(config).await()
+                    api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
+                        .await()
+                    val result = api.queryPersonListAsync(params).await()
+                    result.totalCount.shouldBeEqual(2)
+                    result.data[0].firstName.shouldBeEqual("firstname String")
+                    result.data[1].firstName.shouldBeEqual("firstname 2 String")
                 }
             }
         }
@@ -141,13 +140,12 @@ class QueryPersonTest :
                 }
                 launch {
                     simulatedBackendReady.await()
-                    XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                        api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
-                            .await()
-                        val result = api.queryPersonByIdAsync(personFixture.id).await()
-                        result.id.shouldBeEqual(personFixture.id)
-                        result.firstName.shouldBeEqual("firstname String")
-                    }
+                    val api = XesarConnect.connectAndLoginAsync(config).await()
+                    api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
+                        .await()
+                    val result = api.queryPersonByIdAsync(personFixture.id).await()
+                    result.id.shouldBeEqual(personFixture.id)
+                    result.firstName.shouldBeEqual("firstname String")
                 }
             }
         }

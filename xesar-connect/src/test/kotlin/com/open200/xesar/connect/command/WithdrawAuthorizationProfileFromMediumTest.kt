@@ -69,19 +69,17 @@ class WithdrawAuthorizationProfileFromMediumTest :
                 launch {
                     simulatedBackendReady.await()
 
-                    XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                        api.subscribeAsync(
-                                Topics(Topics.Event.AUTHORIZATION_PROFILE_WITHDRAWN_FROM_MEDIUM))
+                    val api = XesarConnect.connectAndLoginAsync(config).await()
+                    api.subscribeAsync(
+                            Topics(Topics.Event.AUTHORIZATION_PROFILE_WITHDRAWN_FROM_MEDIUM))
+                        .await()
+                    val result =
+                        api.withdrawAuthorizationProfileFromMediumAsync(
+                                UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"), null)
                             .await()
-                        val result =
-                            api.withdrawAuthorizationProfileFromMediumAsync(
-                                    UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"), null)
-                                .await()
-                        result.id.shouldBeEqual(
-                            UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
-                        result.authorizationProfileId?.shouldBeEqual(
-                            UUID.fromString("00000000-0000-0000-0000-000000000001"))
-                    }
+                    result.id.shouldBeEqual(UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
+                    result.authorizationProfileId?.shouldBeEqual(
+                        UUID.fromString("00000000-0000-0000-0000-000000000001"))
                 }
             }
         }

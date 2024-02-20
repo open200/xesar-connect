@@ -67,18 +67,17 @@ class RemoveInstallationPointAuthorizationFromMediumTest :
                 launch {
                     simulatedBackendReady.await()
 
-                    XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                        api.subscribeAsync(Topics(Topics.Event.INDIVIDUAL_AUTHORIZATIONS_DELETED))
-                            .await()
+                    val api = XesarConnect.connectAndLoginAsync(config).await()
+                    api.subscribeAsync(Topics(Topics.Event.INDIVIDUAL_AUTHORIZATIONS_DELETED))
+                        .await()
 
-                        val result =
-                            api.removeInstallationPointAuthorizationFromMediumAsync(
-                                    UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
-                                    UUID.fromString("8c7128d4-a30f-4aad-b5d2-d7b975c5cf8f"))
-                                .await()
-                        result.mediumId.shouldBeEqual(
-                            UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
-                    }
+                    val result =
+                        api.removeInstallationPointAuthorizationFromMediumAsync(
+                                UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
+                                UUID.fromString("8c7128d4-a30f-4aad-b5d2-d7b975c5cf8f"))
+                            .await()
+                    result.mediumId.shouldBeEqual(
+                        UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
                 }
             }
         }

@@ -66,16 +66,14 @@ class LockMediumTest :
                 launch {
                     simulatedBackendReady.await()
 
-                    XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                        api.subscribeAsync(Topics(Topics.Event.MEDIUM_LOCKED)).await()
-                        val result =
-                            api.lockMediumAsync(
-                                    UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
-                                .await()
-                        result.mediumIdentifier.shouldBeEqual(123L)
-                        result.aggregateId.shouldBeEqual(
-                            UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
-                    }
+                    val api = XesarConnect.connectAndLoginAsync(config).await()
+                    api.subscribeAsync(Topics(Topics.Event.MEDIUM_LOCKED)).await()
+                    val result =
+                        api.lockMediumAsync(UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
+                            .await()
+                    result.mediumIdentifier.shouldBeEqual(123L)
+                    result.aggregateId.shouldBeEqual(
+                        UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
                 }
             }
         }

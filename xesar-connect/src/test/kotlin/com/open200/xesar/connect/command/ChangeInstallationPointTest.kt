@@ -67,15 +67,14 @@ class ChangeInstallationPointTest :
                 launch {
                     simulatedBackendReady.await()
 
-                    XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                        api.subscribeAsync(Topics(Topics.Event.INSTALLATION_POINT_CHANGED)).await()
-                        val result =
-                            api.changeInstallationPointAsync(
-                                    UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
-                                    "installation type")
-                                .await()
-                        result.installationType?.shouldBeEqual("installation type")
-                    }
+                    val api = XesarConnect.connectAndLoginAsync(config).await()
+                    api.subscribeAsync(Topics(Topics.Event.INSTALLATION_POINT_CHANGED)).await()
+                    val result =
+                        api.changeInstallationPointAsync(
+                                UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
+                                "installation type")
+                            .await()
+                    result.installationType?.shouldBeEqual("installation type")
                 }
             }
         }

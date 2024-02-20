@@ -67,16 +67,14 @@ class SetAccessEndAtTest :
                 launch {
                     simulatedBackendReady.await()
 
-                    XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                        api.subscribeAsync(Topics(Topics.Event.MEDIUM_CHANGED)).await()
-                        val result =
-                            api.setAccessEndAtAsync(
-                                    UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
-                                    LocalDateTime.parse("2023-08-24T16:25:52.225991"))
-                                .await()
-                        result.id.shouldBeEqual(
-                            UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
-                    }
+                    val api = XesarConnect.connectAndLoginAsync(config).await()
+                    api.subscribeAsync(Topics(Topics.Event.MEDIUM_CHANGED)).await()
+                    val result =
+                        api.setAccessEndAtAsync(
+                                UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
+                                LocalDateTime.parse("2023-08-24T16:25:52.225991"))
+                            .await()
+                    result.id.shouldBeEqual(UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
                 }
             }
         }

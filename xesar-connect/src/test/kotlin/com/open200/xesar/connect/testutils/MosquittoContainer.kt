@@ -3,6 +3,8 @@ package com.open200.xesar.connect.testutils
 import com.open200.xesar.connect.Config
 import io.mockk.mockk
 import java.util.*
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import org.testcontainers.containers.GenericContainer
 import org.testcontainers.utility.MountableFile
 
@@ -19,7 +21,10 @@ object MosquittoContainer {
             start()
         }
 
-    fun config(container: GenericContainer<Nothing>) =
+    fun config(
+        container: GenericContainer<Nothing>,
+        dispatcher: CoroutineDispatcher = Dispatchers.IO
+    ) =
         Config(
             Config.ApiProperties(
                 hostname = container.host,
@@ -27,5 +32,6 @@ object MosquittoContainer {
                 userId = UUID.fromString("faf3d0c4-1281-40ae-89d7-5c541d77a757"),
                 token = TOKEN),
             uuidGenerator = mockk(),
-            logoutOnClose = false)
+            logoutOnClose = false,
+            dispatcherForCommandsAndCleanUp = dispatcher)
 }

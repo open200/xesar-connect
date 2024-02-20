@@ -79,14 +79,13 @@ class QueryIdentificationMediumTest :
                 launch {
                     simulatedBackendReady.await()
 
-                    XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                        api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
-                            .await()
-                        val result = api.queryIdentificationMediumListAsync().await()
-                        result.totalCount.shouldBeEqual(2)
-                        result.data[0].label.shouldBeEqual("test door")
-                        result.data[1].label.shouldBeEqual("test door 2")
-                    }
+                    val api = XesarConnect.connectAndLoginAsync(config).await()
+                    api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
+                        .await()
+                    val result = api.queryIdentificationMediumListAsync().await()
+                    result.totalCount.shouldBeEqual(2)
+                    result.data[0].label.shouldBeEqual("test door")
+                    result.data[1].label.shouldBeEqual("test door 2")
                 }
             }
         }
@@ -140,17 +139,15 @@ class QueryIdentificationMediumTest :
                     launch {
                         simulatedBackendReady.await()
 
-                        XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                            api.subscribeAsync(
-                                    Topics(Topics.Query.result(config.apiProperties.userId)))
+                        val api = XesarConnect.connectAndLoginAsync(config).await()
+                        api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
+                            .await()
+                        val result =
+                            api.queryIdentificationMediumByMediumIdentifierAsync(
+                                    mediumIdentifierValue = 1)
                                 .await()
-                            val result =
-                                api.queryIdentificationMediumByMediumIdentifierAsync(
-                                        mediumIdentifierValue = 1)
-                                    .await()
 
-                            result?.label?.shouldBeEqual("test door")
-                        }
+                        result?.label?.shouldBeEqual("test door")
                     }
                 }
             }
@@ -200,17 +197,15 @@ class QueryIdentificationMediumTest :
                     launch {
                         simulatedBackendReady.await()
 
-                        XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                            api.subscribeAsync(
-                                    Topics(Topics.Query.result(config.apiProperties.userId)))
+                        val api = XesarConnect.connectAndLoginAsync(config).await()
+                        api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
+                            .await()
+                        val result =
+                            api.queryIdentificationMediumByMediumIdentifierAsync(
+                                    mediumIdentifierValue = 9999)
                                 .await()
-                            val result =
-                                api.queryIdentificationMediumByMediumIdentifierAsync(
-                                        mediumIdentifierValue = 9999)
-                                    .await()
 
-                            result.shouldBeNull()
-                        }
+                        result.shouldBeNull()
                     }
                 }
             }
@@ -271,21 +266,19 @@ class QueryIdentificationMediumTest :
                     launch {
                         simulatedBackendReady.await()
 
-                        XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                            api.subscribeAsync(
-                                    Topics(Topics.Query.result(config.apiProperties.userId)))
-                                .await()
+                        val api = XesarConnect.connectAndLoginAsync(config).await()
+                        api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
+                            .await()
 
-                            val result =
-                                shouldThrow<MediumListSizeException> {
-                                    api.queryIdentificationMediumByMediumIdentifierAsync(
-                                            mediumIdentifierValue = 1)
-                                        .await()
-                                }
+                        val result =
+                            shouldThrow<MediumListSizeException> {
+                                api.queryIdentificationMediumByMediumIdentifierAsync(
+                                        mediumIdentifierValue = 1)
+                                    .await()
+                            }
 
-                            result.message?.shouldBeEqual(
-                                "Expected exactly one element in the list with mediumIdentifier 1, but found 2 elements")
-                        }
+                        result.message?.shouldBeEqual(
+                            "Expected exactly one element in the list with mediumIdentifier 1, but found 2 elements")
                     }
                 }
             }
@@ -334,13 +327,12 @@ class QueryIdentificationMediumTest :
                 }
                 launch {
                     simulatedBackendReady.await()
-                    XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                        api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
-                            .await()
-                        val result = api.queryIdentificationMediumByIdAsync(id).await()
-                        result.id.shouldBeEqual(id)
-                        result.label.shouldBeEqual("test door")
-                    }
+                    val api = XesarConnect.connectAndLoginAsync(config).await()
+                    api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
+                        .await()
+                    val result = api.queryIdentificationMediumByIdAsync(id).await()
+                    result.id.shouldBeEqual(id)
+                    result.label.shouldBeEqual("test door")
                 }
             }
         }

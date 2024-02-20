@@ -69,16 +69,14 @@ class ConfigureAssignableAuthorizationProfilesTest :
                 launch {
                     simulatedBackendReady.await()
 
-                    XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                        api.subscribeAsync(Topics(Topics.Event.USER_GROUP_CHANGED)).await()
-                        val result =
-                            api.configureAssignableAuthorizationProfilesAsync(
-                                    listOf(UUID.fromString("4e6f78d6-51c7-4bc2-a992-78971eecfbda")),
-                                    UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
-                                .await()
-                        result.id.shouldBeEqual(
-                            UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
-                    }
+                    val api = XesarConnect.connectAndLoginAsync(config).await()
+                    api.subscribeAsync(Topics(Topics.Event.USER_GROUP_CHANGED)).await()
+                    val result =
+                        api.configureAssignableAuthorizationProfilesAsync(
+                                listOf(UUID.fromString("4e6f78d6-51c7-4bc2-a992-78971eecfbda")),
+                                UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
+                            .await()
+                    result.id.shouldBeEqual(UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
                 }
             }
         }

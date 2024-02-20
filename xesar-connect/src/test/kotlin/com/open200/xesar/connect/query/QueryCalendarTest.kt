@@ -77,18 +77,17 @@ class QueryCalendarTest :
                 launch {
                     simulatedBackendReady.await()
 
-                    XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                        api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
-                            .await()
-                        val result = api.queryCalendarListAsync().await()
-                        result.totalCount.shouldBeEqual(2)
-                        result.data[0]
-                            .partitionId
-                            .shouldBeEqual(UUID.fromString("7b4399a0-21ce-4bee-ba43-e06e291248d2"))
-                        result.data[1]
-                            .partitionId
-                            .shouldBeEqual(UUID.fromString("6b4399a0-21ce-4bee-ba43-e06e291248d2"))
-                    }
+                    val api = XesarConnect.connectAndLoginAsync(config).await()
+                    api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
+                        .await()
+                    val result = api.queryCalendarListAsync().await()
+                    result.totalCount.shouldBeEqual(2)
+                    result.data[0]
+                        .partitionId
+                        .shouldBeEqual(UUID.fromString("7b4399a0-21ce-4bee-ba43-e06e291248d2"))
+                    result.data[1]
+                        .partitionId
+                        .shouldBeEqual(UUID.fromString("6b4399a0-21ce-4bee-ba43-e06e291248d2"))
                 }
             }
         }
@@ -133,14 +132,13 @@ class QueryCalendarTest :
                 }
                 launch {
                     simulatedBackendReady.await()
-                    XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                        api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
-                            .await()
-                        val result =
-                            api.queryCalendarByIdAsync(CalendarFixture.calendarFixture.id).await()
-                        result.id.shouldBeEqual(CalendarFixture.calendarFixture.id)
-                        result.name.shouldBeEqual("string")
-                    }
+                    val api = XesarConnect.connectAndLoginAsync(config).await()
+                    api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
+                        .await()
+                    val result =
+                        api.queryCalendarByIdAsync(CalendarFixture.calendarFixture.id).await()
+                    result.id.shouldBeEqual(CalendarFixture.calendarFixture.id)
+                    result.name.shouldBeEqual("string")
                 }
             }
         }

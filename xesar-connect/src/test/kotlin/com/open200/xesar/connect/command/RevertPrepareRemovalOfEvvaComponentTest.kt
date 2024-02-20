@@ -67,20 +67,17 @@ class RevertPrepareRemovalOfEvvaComponentTest :
                 launch {
                     simulatedBackendReady.await()
 
-                    XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                        api.subscribeAsync(
-                                Topics(Topics.Event.PREPARE_EVVA_COMPONENT_REMOVAL_REVERTED))
+                    val api = XesarConnect.connectAndLoginAsync(config).await()
+                    api.subscribeAsync(Topics(Topics.Event.PREPARE_EVVA_COMPONENT_REMOVAL_REVERTED))
+                        .await()
+                    val result =
+                        api.revertPrepareRemovalOfEvvaComponentAsync(
+                                UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
+                            )
                             .await()
-                        val result =
-                            api.revertPrepareRemovalOfEvvaComponentAsync(
-                                    UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
-                                )
-                                .await()
-                        result.id.shouldBeEqual(
-                            UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
-                        result.stateChangedAt.shouldBeEqual(
-                            LocalDateTime.parse("2023-07-05T15:22:38.230076"))
-                    }
+                    result.id.shouldBeEqual(UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
+                    result.stateChangedAt.shouldBeEqual(
+                        LocalDateTime.parse("2023-07-05T15:22:38.230076"))
                 }
             }
         }

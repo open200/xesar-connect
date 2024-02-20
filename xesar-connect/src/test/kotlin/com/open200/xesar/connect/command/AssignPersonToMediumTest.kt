@@ -65,19 +65,17 @@ class AssignPersonToMediumTest :
                 launch {
                     simulatedBackendReady.await()
 
-                    XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                        api.subscribeAsync(Topics(Topics.Event.MEDIUM_PERSON_CHANGED)).await()
-                        val result =
-                            api.assignPersonToMediumAsync(
-                                    UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
-                                    UUID.fromString("2d52bd95-18ba-4e46-8f00-0fc4c1e3f9be"))
-                                .await()
+                    val api = XesarConnect.connectAndLoginAsync(config).await()
+                    api.subscribeAsync(Topics(Topics.Event.MEDIUM_PERSON_CHANGED)).await()
+                    val result =
+                        api.assignPersonToMediumAsync(
+                                UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
+                                UUID.fromString("2d52bd95-18ba-4e46-8f00-0fc4c1e3f9be"))
+                            .await()
 
-                        result.id.shouldBeEqual(
-                            UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
-                        result.oldPersonId.shouldBeEqual(
-                            UUID.fromString("2d52bd95-18ba-4e46-8f00-0fc4c1e3f9be"))
-                    }
+                    result.id.shouldBeEqual(UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
+                    result.oldPersonId.shouldBeEqual(
+                        UUID.fromString("2d52bd95-18ba-4e46-8f00-0fc4c1e3f9be"))
                 }
             }
         }

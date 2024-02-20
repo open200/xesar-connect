@@ -145,6 +145,10 @@ class XesarMqttClient(private val client: MqttAsyncClient) : IXesarMqttClient {
             }
     }
 
+    override fun isConnected(): Boolean {
+        return client.isConnected
+    }
+
     /** Closes the MQTT client by disconnecting from the broker. */
     override fun close() {
         disconnect()

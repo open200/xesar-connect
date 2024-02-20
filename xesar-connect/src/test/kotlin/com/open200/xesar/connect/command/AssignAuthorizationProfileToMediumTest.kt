@@ -55,25 +55,24 @@ class AssignAuthorizationProfileToMediumTest :
                 launch {
                     simulatedBackendReady.await()
 
-                    XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                        api.subscribeAsync(
-                                Topics(
-                                    Topics.Event.MEDIUM_CHANGED,
-                                    Topics.Event.MEDIUM_AUTHORIZATION_PROFILE_CHANGED))
-                            .await()
+                    val api = XesarConnect.connectAndLoginAsync(config).await()
+                    api.subscribeAsync(
+                            Topics(
+                                Topics.Event.MEDIUM_CHANGED,
+                                Topics.Event.MEDIUM_AUTHORIZATION_PROFILE_CHANGED))
+                        .await()
 
-                        val assignAuthorizationProfileToMediumResult =
-                            api.assignAuthorizationProfileToMediumAsync(
-                                UUID.fromString("2d52bd95-18ba-4e46-8f00-0fc4c1e3f9be"),
-                            )
-                        shouldThrow<OptionalEventException> {
-                            assignAuthorizationProfileToMediumResult.mediumChangedDeferred.await()
-                        }
-                        shouldThrow<OptionalEventException> {
-                            assignAuthorizationProfileToMediumResult
-                                .mediumAuthorizationProfileChangedDeferred
-                                .await()
-                        }
+                    val assignAuthorizationProfileToMediumResult =
+                        api.assignAuthorizationProfileToMediumAsync(
+                            UUID.fromString("2d52bd95-18ba-4e46-8f00-0fc4c1e3f9be"),
+                        )
+                    shouldThrow<OptionalEventException> {
+                        assignAuthorizationProfileToMediumResult.mediumChangedDeferred.await()
+                    }
+                    shouldThrow<OptionalEventException> {
+                        assignAuthorizationProfileToMediumResult
+                            .mediumAuthorizationProfileChangedDeferred
+                            .await()
                     }
                 }
             }
@@ -120,32 +119,30 @@ class AssignAuthorizationProfileToMediumTest :
                 launch {
                     simulatedBackendReady.await()
 
-                    XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                        api.subscribeAsync(
-                                Topics(
-                                    Topics.Event.MEDIUM_CHANGED,
-                                    Topics.Event.MEDIUM_AUTHORIZATION_PROFILE_CHANGED,
-                                    Topics.Event.error(config.apiProperties.userId)))
-                            .await()
+                    val api = XesarConnect.connectAndLoginAsync(config).await()
+                    api.subscribeAsync(
+                            Topics(
+                                Topics.Event.MEDIUM_CHANGED,
+                                Topics.Event.MEDIUM_AUTHORIZATION_PROFILE_CHANGED,
+                                Topics.Event.error(config.apiProperties.userId)))
+                        .await()
 
-                        val assignAuthorizationProfileToMediumResult =
-                            api.assignAuthorizationProfileToMediumAsync(
-                                UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
-                            )
+                    val assignAuthorizationProfileToMediumResult =
+                        api.assignAuthorizationProfileToMediumAsync(
+                            UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
+                        )
 
-                        shouldThrow<OptionalEventException> {
-                            assignAuthorizationProfileToMediumResult.mediumChangedDeferred.await()
-                        }
-                        shouldThrow<OptionalEventException> {
-                            assignAuthorizationProfileToMediumResult
-                                .mediumAuthorizationProfileChangedDeferred
-                                .await()
-                        }
-
-                        val apiError =
-                            assignAuthorizationProfileToMediumResult.apiErrorDeferred.await()
-                        apiError.get().reason.shouldBe("reason")
+                    shouldThrow<OptionalEventException> {
+                        assignAuthorizationProfileToMediumResult.mediumChangedDeferred.await()
                     }
+                    shouldThrow<OptionalEventException> {
+                        assignAuthorizationProfileToMediumResult
+                            .mediumAuthorizationProfileChangedDeferred
+                            .await()
+                    }
+
+                    val apiError = assignAuthorizationProfileToMediumResult.apiErrorDeferred.await()
+                    apiError.get().reason.shouldBe("reason")
                 }
             }
         }
@@ -203,30 +200,28 @@ class AssignAuthorizationProfileToMediumTest :
                 launch {
                     simulatedBackendReady.await()
 
-                    XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                        api.subscribeAsync(
-                                Topics(
-                                    Topics.Event.MEDIUM_CHANGED,
-                                    Topics.Event.MEDIUM_AUTHORIZATION_PROFILE_CHANGED,
-                                    Topics.Event.error(config.apiProperties.userId)))
-                            .await()
+                    val api = XesarConnect.connectAndLoginAsync(config).await()
+                    api.subscribeAsync(
+                            Topics(
+                                Topics.Event.MEDIUM_CHANGED,
+                                Topics.Event.MEDIUM_AUTHORIZATION_PROFILE_CHANGED,
+                                Topics.Event.error(config.apiProperties.userId)))
+                        .await()
 
-                        val assignAuthorizationProfileToMediumResult =
-                            api.assignAuthorizationProfileToMediumAsync(
-                                UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
-                            )
-                        val mediumChanged =
-                            assignAuthorizationProfileToMediumResult.mediumChangedDeferred.await()
-                        mediumChanged.id.shouldBeEqual(
-                            UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
-                        val apiError =
-                            assignAuthorizationProfileToMediumResult.apiErrorDeferred.await()
-                        apiError.get().reason.shouldBe("reason")
-                        shouldThrow<OptionalEventException> {
-                            assignAuthorizationProfileToMediumResult
-                                .mediumAuthorizationProfileChangedDeferred
-                                .await()
-                        }
+                    val assignAuthorizationProfileToMediumResult =
+                        api.assignAuthorizationProfileToMediumAsync(
+                            UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
+                        )
+                    val mediumChanged =
+                        assignAuthorizationProfileToMediumResult.mediumChangedDeferred.await()
+                    mediumChanged.id.shouldBeEqual(
+                        UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
+                    val apiError = assignAuthorizationProfileToMediumResult.apiErrorDeferred.await()
+                    apiError.get().reason.shouldBe("reason")
+                    shouldThrow<OptionalEventException> {
+                        assignAuthorizationProfileToMediumResult
+                            .mediumAuthorizationProfileChangedDeferred
+                            .await()
                     }
                 }
             }
@@ -287,27 +282,26 @@ class AssignAuthorizationProfileToMediumTest :
                     launch {
                         simulatedBackendReady.await()
 
-                        XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                            api.subscribeAsync(
-                                    Topics(
-                                        Topics.Event.MEDIUM_CHANGED,
-                                        Topics.Event.MEDIUM_AUTHORIZATION_PROFILE_CHANGED,
-                                        Topics.Event.error(config.apiProperties.userId)))
-                                .await()
+                        val api = XesarConnect.connectAndLoginAsync(config).await()
+                        api.subscribeAsync(
+                                Topics(
+                                    Topics.Event.MEDIUM_CHANGED,
+                                    Topics.Event.MEDIUM_AUTHORIZATION_PROFILE_CHANGED,
+                                    Topics.Event.error(config.apiProperties.userId)))
+                            .await()
 
-                            val assignAuthorizationProfileToMediumResult =
-                                api.assignAuthorizationProfileToMediumAsync(
-                                    UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
-                                )
-                            val MediumAuthorizationProfileChanged =
-                                assignAuthorizationProfileToMediumResult
-                                    .mediumAuthorizationProfileChangedDeferred
-                                    .await()
-                            MediumAuthorizationProfileChanged.id.shouldBeEqual(
-                                UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
-                            shouldThrow<OptionalEventException> {
-                                assignAuthorizationProfileToMediumResult.await()
-                            }
+                        val assignAuthorizationProfileToMediumResult =
+                            api.assignAuthorizationProfileToMediumAsync(
+                                UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
+                            )
+                        val MediumAuthorizationProfileChanged =
+                            assignAuthorizationProfileToMediumResult
+                                .mediumAuthorizationProfileChangedDeferred
+                                .await()
+                        MediumAuthorizationProfileChanged.id.shouldBeEqual(
+                            UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
+                        shouldThrow<OptionalEventException> {
+                            assignAuthorizationProfileToMediumResult.await()
                         }
                     }
                 }
@@ -364,28 +358,27 @@ class AssignAuthorizationProfileToMediumTest :
                 launch {
                     simulatedBackendReady.await()
 
-                    XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                        api.subscribeAsync(
-                                Topics(
-                                    Topics.Event.MEDIUM_CHANGED,
-                                    Topics.Event.MEDIUM_AUTHORIZATION_PROFILE_CHANGED))
-                            .await()
+                    val api = XesarConnect.connectAndLoginAsync(config).await()
+                    api.subscribeAsync(
+                            Topics(
+                                Topics.Event.MEDIUM_CHANGED,
+                                Topics.Event.MEDIUM_AUTHORIZATION_PROFILE_CHANGED))
+                        .await()
 
-                        val assignAuthorizationProfileToMediumResult =
-                            api.assignAuthorizationProfileToMediumAsync(
-                                UUID.fromString("2d52bd95-18ba-4e46-8f00-0fc4c1e3f9be"),
-                            )
+                    val assignAuthorizationProfileToMediumResult =
+                        api.assignAuthorizationProfileToMediumAsync(
+                            UUID.fromString("2d52bd95-18ba-4e46-8f00-0fc4c1e3f9be"),
+                        )
 
-                        shouldThrow<ParsingException> {
-                            assignAuthorizationProfileToMediumResult.mediumChangedDeferred.await()
-                        }
-                        val mediumAuthorizationProfilechanged =
-                            assignAuthorizationProfileToMediumResult
-                                .mediumAuthorizationProfileChangedDeferred
-                                .await()
-                        mediumAuthorizationProfilechanged.id.shouldBeEqual(
-                            UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
+                    shouldThrow<ParsingException> {
+                        assignAuthorizationProfileToMediumResult.mediumChangedDeferred.await()
                     }
+                    val mediumAuthorizationProfilechanged =
+                        assignAuthorizationProfileToMediumResult
+                            .mediumAuthorizationProfileChangedDeferred
+                            .await()
+                    mediumAuthorizationProfilechanged.id.shouldBeEqual(
+                        UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
                 }
             }
         }
@@ -445,28 +438,26 @@ class AssignAuthorizationProfileToMediumTest :
                 launch {
                     simulatedBackendReady.await()
 
-                    XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                        api.subscribeAsync(
-                                Topics(
-                                    Topics.Event.MEDIUM_CHANGED,
-                                    Topics.Event.MEDIUM_AUTHORIZATION_PROFILE_CHANGED))
-                            .await()
+                    val api = XesarConnect.connectAndLoginAsync(config).await()
+                    api.subscribeAsync(
+                            Topics(
+                                Topics.Event.MEDIUM_CHANGED,
+                                Topics.Event.MEDIUM_AUTHORIZATION_PROFILE_CHANGED))
+                        .await()
 
-                        val assignAuthorizationProfileToMediumResult =
-                            api.assignAuthorizationProfileToMediumAsync(
-                                UUID.fromString("2d52bd95-18ba-4e46-8f00-0fc4c1e3f9be"),
-                            )
-                        val test =
-                            assignAuthorizationProfileToMediumResult
-                                .mediumAuthorizationProfileChangedDeferred
-                                .await()
-                        test.id.shouldBeEqual(
-                            UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
-                        val mediumChanged =
-                            assignAuthorizationProfileToMediumResult.mediumChangedDeferred.await()
-                        mediumChanged.id.shouldBeEqual(
-                            UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
-                    }
+                    val assignAuthorizationProfileToMediumResult =
+                        api.assignAuthorizationProfileToMediumAsync(
+                            UUID.fromString("2d52bd95-18ba-4e46-8f00-0fc4c1e3f9be"),
+                        )
+                    val test =
+                        assignAuthorizationProfileToMediumResult
+                            .mediumAuthorizationProfileChangedDeferred
+                            .await()
+                    test.id.shouldBeEqual(UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
+                    val mediumChanged =
+                        assignAuthorizationProfileToMediumResult.mediumChangedDeferred.await()
+                    mediumChanged.id.shouldBeEqual(
+                        UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
                 }
             }
         }
@@ -516,28 +507,26 @@ class AssignAuthorizationProfileToMediumTest :
                     launch {
                         simulatedBackendReady.await()
 
-                        XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                            api.subscribeAsync(
-                                    Topics(
-                                        Topics.Event.MEDIUM_CHANGED,
-                                        Topics.Event.MEDIUM_AUTHORIZATION_PROFILE_CHANGED))
+                        val api = XesarConnect.connectAndLoginAsync(config).await()
+                        api.subscribeAsync(
+                                Topics(
+                                    Topics.Event.MEDIUM_CHANGED,
+                                    Topics.Event.MEDIUM_AUTHORIZATION_PROFILE_CHANGED))
+                            .await()
+
+                        val assignAuthorizationProfileToMediumResult =
+                            api.assignAuthorizationProfileToMediumAsync(
+                                UUID.fromString("2d52bd95-18ba-4e46-8f00-0fc4c1e3f9be"),
+                            )
+                        val mediumAuthorizationProfileChanged =
+                            assignAuthorizationProfileToMediumResult.mediumChangedDeferred.await()
+                        mediumAuthorizationProfileChanged.id.shouldBeEqual(
+                            UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
+
+                        shouldThrow<OptionalEventException> {
+                            assignAuthorizationProfileToMediumResult
+                                .mediumAuthorizationProfileChangedDeferred
                                 .await()
-
-                            val assignAuthorizationProfileToMediumResult =
-                                api.assignAuthorizationProfileToMediumAsync(
-                                    UUID.fromString("2d52bd95-18ba-4e46-8f00-0fc4c1e3f9be"),
-                                )
-                            val mediumAuthorizationProfileChanged =
-                                assignAuthorizationProfileToMediumResult.mediumChangedDeferred
-                                    .await()
-                            mediumAuthorizationProfileChanged.id.shouldBeEqual(
-                                UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
-
-                            shouldThrow<OptionalEventException> {
-                                assignAuthorizationProfileToMediumResult
-                                    .mediumAuthorizationProfileChangedDeferred
-                                    .await()
-                            }
                         }
                     }
                 }

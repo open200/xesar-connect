@@ -69,18 +69,16 @@ class CreateCalendarTest :
                 launch {
                     simulatedBackendReady.await()
 
-                    XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                        api.subscribeAsync(Topics(Topics.Event.CALENDAR_CREATED)).await()
-                        val result =
-                            api.createCalendarAsync(
-                                    "calendarName",
-                                    listOf(LocalDate.parse("2018-02-25")),
-                                    UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
-                                .await()
-                        result.name.shouldBeEqual("calendarName")
-                        result.id.shouldBeEqual(
-                            UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
-                    }
+                    val api = XesarConnect.connectAndLoginAsync(config).await()
+                    api.subscribeAsync(Topics(Topics.Event.CALENDAR_CREATED)).await()
+                    val result =
+                        api.createCalendarAsync(
+                                "calendarName",
+                                listOf(LocalDate.parse("2018-02-25")),
+                                UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
+                            .await()
+                    result.name.shouldBeEqual("calendarName")
+                    result.id.shouldBeEqual(UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
                 }
             }
         }

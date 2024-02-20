@@ -74,14 +74,13 @@ class QueryZoneTest :
                 launch {
                     simulatedBackendReady.await()
 
-                    XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                        api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
-                            .await()
-                        val result = api.queryZoneListAsync().await()
-                        result.totalCount.shouldBeEqual(2)
-                        result.data[0].name.shouldBeEqual("zone name")
-                        result.data[1].name.shouldBeEqual("zone name2")
-                    }
+                    val api = XesarConnect.connectAndLoginAsync(config).await()
+                    api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
+                        .await()
+                    val result = api.queryZoneListAsync().await()
+                    result.totalCount.shouldBeEqual(2)
+                    result.data[0].name.shouldBeEqual("zone name")
+                    result.data[1].name.shouldBeEqual("zone name2")
                 }
             }
         }
@@ -123,13 +122,12 @@ class QueryZoneTest :
                 }
                 launch {
                     simulatedBackendReady.await()
-                    XesarConnect.connectAndLoginAsync(config).await().use { api ->
-                        api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
-                            .await()
-                        val result = api.queryZoneByIdAsync(ZoneFixture.zoneFixture.id).await()
-                        result.id.shouldBeEqual(ZoneFixture.zoneFixture.id)
-                        result.name.shouldBeEqual("zone name")
-                    }
+                    val api = XesarConnect.connectAndLoginAsync(config).await()
+                    api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
+                        .await()
+                    val result = api.queryZoneByIdAsync(ZoneFixture.zoneFixture.id).await()
+                    result.id.shouldBeEqual(ZoneFixture.zoneFixture.id)
+                    result.name.shouldBeEqual("zone name")
                 }
             }
         }
