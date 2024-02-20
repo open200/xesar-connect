@@ -1,5 +1,7 @@
 package com.open200.xesar.connect
 
+import com.open200.xesar.connect.messages.query.EventType
+import com.open200.xesar.connect.messages.query.GroupOfEvent
 import java.util.*
 
 class Topics(vararg val topics: String) {
@@ -181,6 +183,20 @@ class Topics(vararg val topics: String) {
              */
             fun error(userId: UUID): String {
                 return "xs3/1/$userId/err"
+            }
+            /**
+             * MQTT topic string for the "AccessProtocolEvent" event for a specific [GroupOfEvent]
+             * and [EventType]
+             */
+            fun accessProtocolEventTopic(eventGroup: GroupOfEvent, eventType: EventType): String {
+                return "xs3/1/ase/%s/%04X".format(eventGroup.name, eventType.eventNumber)
+            }
+
+            /**
+             * MQTT topic string for the "AccessProtocolEvent" event for a specific [GroupOfEvent]
+             */
+            fun accessProtocolEventTopic(eventGroup: GroupOfEvent): String {
+                return "xs3/1/ase/%s/+".format(eventGroup.name)
             }
         }
     }
