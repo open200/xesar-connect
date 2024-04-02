@@ -6,6 +6,7 @@ import com.open200.xesar.connect.messages.query.OfficeMode
 import com.open200.xesar.connect.messages.query.QueryList
 import java.util.*
 import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.flow.Flow
 
 /**
  * Queries the list of office modes asynchronously.
@@ -33,4 +34,11 @@ suspend fun XesarConnect.queryOfficeModeByIdAsync(
     requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
 ): Deferred<OfficeMode> {
     return queryElementAsync(OfficeMode.QUERY_RESOURCE, id, requestConfig)
+}
+
+fun XesarConnect.queryStreamOfficeMode(
+    params: Query.Params? = null,
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+): Flow<OfficeMode> {
+    return queryStream(OfficeMode.QUERY_RESOURCE, params, requestConfig)
 }

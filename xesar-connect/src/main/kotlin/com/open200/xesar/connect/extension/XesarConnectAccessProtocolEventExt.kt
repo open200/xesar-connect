@@ -2,28 +2,28 @@ package com.open200.xesar.connect.extension
 
 import com.open200.xesar.connect.XesarConnect
 import com.open200.xesar.connect.messages.command.Query
+import com.open200.xesar.connect.messages.query.AccessProtocolEvent
 import com.open200.xesar.connect.messages.query.QueryList
-import com.open200.xesar.connect.messages.query.User
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.flow.Flow
 
 /**
- * Queries the list of users asynchronously.
+ * Queries the list of access protocols asynchronously.
  *
  * @param params The query parameters (optional).
  * @param requestConfig The request configuration (optional).
- * @return A deferred object that resolves to a response containing a list of users.
+ * @return A deferred object that resolves to a response containing a list of access protocols.
  */
-suspend fun XesarConnect.queryUserListAsync(
+suspend fun XesarConnect.queryAccessProtocolEventListAsync(
     params: Query.Params? = null,
     requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
-): Deferred<QueryList.Response<User>> {
-    return queryListAsync(User.QUERY_RESOURCE, params, requestConfig)
+): Deferred<QueryList.Response<AccessProtocolEvent>> {
+    return queryListAsync(AccessProtocolEvent.QUERY_RESOURCE, params, requestConfig)
 }
 
-fun XesarConnect.queryStreamUser(
+fun XesarConnect.queryStreamAccessProtocolEvent(
     params: Query.Params? = null,
     requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
-): Flow<User> {
-    return queryStream(User.QUERY_RESOURCE, params, requestConfig)
+): Flow<AccessProtocolEvent> {
+    return queryStream(AccessProtocolEvent.QUERY_RESOURCE, params, requestConfig)
 }

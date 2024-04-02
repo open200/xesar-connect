@@ -6,6 +6,7 @@ import com.open200.xesar.connect.messages.query.EvvaComponent
 import com.open200.xesar.connect.messages.query.QueryList
 import java.util.*
 import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.flow.Flow
 
 /**
  * Queries the list of evva components asynchronously.
@@ -33,4 +34,11 @@ suspend fun XesarConnect.queryEvvaComponentByIdAsync(
     requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
 ): Deferred<EvvaComponent> {
     return queryElementAsync(EvvaComponent.QUERY_RESOURCE, id, requestConfig)
+}
+
+fun XesarConnect.queryStreamEvvaComponent(
+    params: Query.Params? = null,
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+): Flow<EvvaComponent> {
+    return queryStream(EvvaComponent.QUERY_RESOURCE, params, requestConfig)
 }

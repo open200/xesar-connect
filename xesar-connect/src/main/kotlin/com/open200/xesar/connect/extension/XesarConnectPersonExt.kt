@@ -13,6 +13,7 @@ import com.open200.xesar.connect.messages.query.Person
 import com.open200.xesar.connect.messages.query.QueryList
 import java.util.*
 import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.flow.Flow
 
 /**
  * Queries the list of persons asynchronously.
@@ -176,4 +177,11 @@ suspend fun XesarConnect.setPersonalReferenceDurationInPersonAsync(
         SetPersonalReferenceDurationInPersonMapi(
             config.uuidGenerator.generateId(), personalReferenceDuration, externalId, token),
         requestConfig)
+}
+
+fun XesarConnect.queryStreamPerson(
+    params: Query.Params? = null,
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+): Flow<Person> {
+    return queryStream(Person.QUERY_RESOURCE, params, requestConfig)
 }

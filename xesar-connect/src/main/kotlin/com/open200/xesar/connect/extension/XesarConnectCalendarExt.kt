@@ -15,6 +15,7 @@ import com.open200.xesar.connect.messages.query.QueryList
 import java.time.LocalDate
 import java.util.*
 import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.flow.Flow
 
 /**
  * Queries the list of calendars asynchronously.
@@ -105,4 +106,11 @@ suspend fun XesarConnect.deleteCalendarAsync(
         true,
         DeleteCalendarMapi(config.uuidGenerator.generateId(), calendarId, token),
         requestConfig)
+}
+
+fun XesarConnect.queryStreamCalendar(
+    params: Query.Params? = null,
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+): Flow<Calendar> {
+    return queryStream(Calendar.QUERY_RESOURCE, params, requestConfig)
 }

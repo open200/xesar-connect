@@ -13,6 +13,7 @@ import com.open200.xesar.connect.messages.query.InstallationPoint
 import com.open200.xesar.connect.messages.query.QueryList
 import java.util.*
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.Flow
 
 /**
  * Queries the list of installation points asynchronously.
@@ -388,4 +389,11 @@ suspend fun XesarConnect.createInstallationPointAsync(
         createInstallationPointResult.first,
         createInstallationPointResult.second,
         createInstallationPointResult.third)
+}
+
+fun XesarConnect.queryStreamInstallationPoint(
+    params: Query.Params? = null,
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+): Flow<InstallationPoint> {
+    return queryStream(InstallationPoint.QUERY_RESOURCE, params, requestConfig)
 }

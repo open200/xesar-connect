@@ -3,6 +3,7 @@ package com.open200.xesar.connect.query
 import com.open200.xesar.connect.Topics
 import com.open200.xesar.connect.XesarConnect
 import com.open200.xesar.connect.XesarMqttClient
+import com.open200.xesar.connect.extension.queryAccessProtocolEventListAsync
 import com.open200.xesar.connect.messages.query.QueryList
 import com.open200.xesar.connect.messages.query.encodeQueryList
 import com.open200.xesar.connect.testutils.AccessProtocolEventFixture

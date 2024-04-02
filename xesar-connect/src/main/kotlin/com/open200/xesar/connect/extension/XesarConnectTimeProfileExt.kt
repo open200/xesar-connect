@@ -13,6 +13,7 @@ import com.open200.xesar.connect.messages.query.QueryList
 import com.open200.xesar.connect.messages.query.TimeProfile
 import java.util.*
 import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.flow.Flow
 
 /**
  * Queries the list of time profiles asynchronously.
@@ -218,4 +219,11 @@ suspend fun XesarConnect.deleteAuthorizationTimeProfileAsync(
         true,
         DeleteAuthorizationTimeProfileMapi(config.uuidGenerator.generateId(), timeProfileId, token),
         requestConfig)
+}
+
+fun XesarConnect.queryStreamTimeProfile(
+    params: Query.Params? = null,
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+): Flow<TimeProfile> {
+    return queryStream(TimeProfile.QUERY_RESOURCE, params, requestConfig)
 }

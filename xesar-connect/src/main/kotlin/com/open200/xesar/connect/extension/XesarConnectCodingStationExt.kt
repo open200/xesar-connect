@@ -14,6 +14,7 @@ import com.open200.xesar.connect.messages.query.CodingStation
 import com.open200.xesar.connect.messages.query.QueryList
 import java.util.*
 import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.flow.Flow
 
 /**
  * Queries the list of coding stations asynchronously.
@@ -105,4 +106,11 @@ suspend fun XesarConnect.deleteCodingStationAsync(
         true,
         DeleteCodingStationMapi(config.uuidGenerator.generateId(), codingStationId, token),
         requestConfig)
+}
+
+fun XesarConnect.queryStreamCodingStation(
+    params: Query.Params? = null,
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+): Flow<CodingStation> {
+    return queryStream(CodingStation.QUERY_RESOURCE, params, requestConfig)
 }

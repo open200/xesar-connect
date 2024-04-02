@@ -12,6 +12,7 @@ import com.open200.xesar.connect.messages.query.QueryList
 import com.open200.xesar.connect.messages.query.Zone
 import java.util.*
 import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.flow.Flow
 
 /**
  * Queries the list of zones asynchronously.
@@ -146,4 +147,11 @@ suspend fun XesarConnect.removeInstallationPointFromZoneAsync(
         RemoveInstallationPointFromZoneMapi(
             config.uuidGenerator.generateId(), installationPointId, zoneId, token),
         requestConfig)
+}
+
+fun XesarConnect.queryStreamZone(
+    params: Query.Params? = null,
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+): Flow<Zone> {
+    return queryStream(Zone.QUERY_RESOURCE, params, requestConfig)
 }

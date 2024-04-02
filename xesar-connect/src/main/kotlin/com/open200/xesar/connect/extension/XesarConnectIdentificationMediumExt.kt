@@ -15,6 +15,7 @@ import java.time.LocalDateTime
 import java.util.*
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.flow.Flow
 
 /**
  * Queries the list of identification media asynchronously.
@@ -407,4 +408,11 @@ suspend fun XesarConnect.requestToAddMediumToInstallationAsync(
         requestAddMediumToInstallationResult.first,
         requestAddMediumToInstallationResult.second,
         requestAddMediumToInstallationResult.third)
+}
+
+fun XesarConnect.queryStreamIdentificationMedium(
+    params: Query.Params? = null,
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+): Flow<IdentificationMedium> {
+    return queryStream(IdentificationMedium.QUERY_RESOURCE, params, requestConfig)
 }

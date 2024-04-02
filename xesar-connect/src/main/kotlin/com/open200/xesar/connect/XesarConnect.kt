@@ -14,8 +14,11 @@ import java.util.*
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.CopyOnWriteArraySet
 import kotlin.coroutines.coroutineContext
+import kotlin.math.ceil
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import mu.KotlinLogging
 
 val logger = KotlinLogging.logger {}
@@ -210,20 +213,6 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) {
         return deferredToken
     }
 
-    /**
-     * Queries the list of access protocols asynchronously.
-     *
-     * @param params The query parameters (optional).
-     * @param requestConfig The request configuration (optional).
-     * @return A deferred object that resolves to a response containing a list of access protocols.
-     */
-    suspend fun queryAccessProtocolEventListAsync(
-        params: Query.Params? = null,
-        requestConfig: RequestConfig = buildRequestConfig()
-    ): Deferred<QueryList.Response<AccessProtocolEvent>> {
-        return queryListAsync(AccessProtocolEvent.QUERY_RESOURCE, params, requestConfig)
-    }
-
     internal suspend inline fun <reified T : QueryListResource> queryListAsync(
         resource: String,
         params: Query.Params? = null,
@@ -277,6 +266,48 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) {
         }
 
         return deferred
+    }
+
+    internal inline fun <reified T : QueryListResource> queryStream(
+        resource: String,
+        params: Query.Params? = null,
+        requestConfig: RequestConfig = buildRequestConfig()
+    ): Flow<T> {
+        return flow {
+            val firstQueryListResponse = queryListAsync<T>(resource, params, requestConfig).await()
+            firstQueryListResponse.data.forEach { emit(it) }
+
+            val totalNumberOfElements = firstQueryListResponse.filterCount
+
+            var pageOffset = params?.pageOffset ?: 0
+            val numberOfElementsInAPage = params?.pageLimit ?: 50
+
+            if (totalNumberOfElements <= numberOfElementsInAPage) {
+                return@flow
+            }
+
+            val totalPages =
+                ceil(totalNumberOfElements.toDouble() / numberOfElementsInAPage.toDouble()).toInt()
+
+            val pageIndex = pageOffset / numberOfElementsInAPage
+
+            // minus 1 because I already fetched data with one query
+            val remainingPages = totalPages - 1 - pageIndex
+
+            val paramsIter = params ?: Query.Params()
+            for (page in 0 until remainingPages) {
+                pageOffset += numberOfElementsInAPage
+                val queryListResponse =
+                    queryListAsync<T>(
+                            resource,
+                            paramsIter.copy(
+                                pageOffset = pageOffset, pageLimit = numberOfElementsInAPage),
+                            requestConfig)
+                        .await()
+
+                queryListResponse.data.forEach { emit(it) }
+            }
+        }
     }
 
     private fun <T> closeListenerOnCompletion(
