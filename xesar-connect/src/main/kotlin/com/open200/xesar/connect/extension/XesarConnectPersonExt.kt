@@ -179,6 +179,16 @@ suspend fun XesarConnect.setPersonalReferenceDurationInPersonAsync(
         requestConfig)
 }
 
+/**
+ * Retrieves a cold stream of [Person] objects, fetching them incrementally in smaller,more
+ * manageable chunks rather than retrieving the entire dataset at once. Use [Query.Params.pageLimit]
+ * to choose the size of one chunk. Use [Query.Params.pageOffset] to choose at which offset to
+ * start.
+ *
+ * @param params The query parameters (optional).
+ * @param requestConfig The request configuration (optional).
+ * @return A cold flow of [Person] objects
+ */
 fun XesarConnect.queryStreamPerson(
     params: Query.Params? = null,
     requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
