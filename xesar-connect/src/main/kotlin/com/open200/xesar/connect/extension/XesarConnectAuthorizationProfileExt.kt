@@ -10,6 +10,7 @@ import com.open200.xesar.connect.messages.query.AuthorizationProfile
 import com.open200.xesar.connect.messages.query.QueryList
 import java.util.*
 import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.flow.Flow
 
 /**
  * Queries the list of authorization profiles asynchronously.
@@ -134,4 +135,11 @@ suspend fun XesarConnect.changeAuthorizationProfileAsync(
         changeAuthorizationProfileResult.first.second,
         changeAuthorizationProfileResult.first.third,
         changeAuthorizationProfileResult.second)
+}
+
+fun XesarConnect.queryStreamAuthorizationProfile(
+    params: Query.Params? = null,
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+): Flow<AuthorizationProfile> {
+    return queryStream(AuthorizationProfile.QUERY_RESOURCE, params, requestConfig)
 }
