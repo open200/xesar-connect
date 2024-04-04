@@ -21,6 +21,15 @@ suspend fun XesarConnect.queryUserListAsync(
     return queryListAsync(User.QUERY_RESOURCE, params, requestConfig)
 }
 
+/**
+ * Retrieves a cold stream of [User] objects, fetching them incrementally in smaller,more manageable
+ * chunks rather than retrieving the entire dataset at once. Use [Query.Params.pageLimit] to choose
+ * the size of one chunk. Use [Query.Params.pageOffset] to choose at which offset to start.
+ *
+ * @param params The query parameters (optional).
+ * @param requestConfig The request configuration (optional).
+ * @return A cold flow of [User] objects
+ */
 fun XesarConnect.queryStreamUser(
     params: Query.Params? = null,
     requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
