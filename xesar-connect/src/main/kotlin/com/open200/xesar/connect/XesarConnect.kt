@@ -793,7 +793,7 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) {
      *    perform a logout operation and close the mqtt client to disconnect from the MQTT broker.
      * 3. Cancel and clean up all underlying coroutines (close listener, complete deferred).
      */
-    internal suspend fun cleanUp() {
+    suspend fun cleanUp() {
         logger.debug { "clean up" }
         if (!connectionChannel.isClosedForSend) {
             // channel (connection to mqtt broker) still open so logout if needed
