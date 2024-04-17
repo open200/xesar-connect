@@ -848,20 +848,27 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) {
          * @param config The configuration for connecting to the Xesar system.
          * @param userCredentials Optional user credentials for authentication, including a username
          *   and password.
+         * @param closeUponCoroutineCompletion True indicates that [cleanUp] is invoked when the
+         *   coroutine that called [XesarConnect.connectAndLoginAsync] completes. Use False when you
+         *   want to manually execute [cleanUp].
          * @return A [Deferred] object representing the result of the connection and login process.
          *   The [Deferred] result is of type [XesarConnect].
          * @throws Exception if an error occurs during the connection or login process.
          */
         suspend fun connectAndLoginAsync(
             config: Config,
-            userCredentials: UserCredentials? = null
+            userCredentials: UserCredentials? = null,
+            closeUponCoroutineCompletion: Boolean = true
         ): Deferred<XesarConnect> {
             val deferred = CompletableDeferred<XesarConnect>()
 
             try {
                 val client = XesarMqttClient.connectAsync(config).await()
                 val api = XesarConnect(client, config)
-                api.invokeCleanUpOnCompletion()
+
+                if (closeUponCoroutineCompletion) {
+                    api.invokeCleanUpOnCompletion()
+                }
 
                 api.subscribeAsync(
                         Topics(
