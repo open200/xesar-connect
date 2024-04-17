@@ -14,7 +14,6 @@ import com.open200.xesar.connect.messages.query.Calendar
 import com.open200.xesar.connect.messages.query.QueryList
 import java.time.LocalDate
 import java.util.*
-import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -22,13 +21,15 @@ import kotlinx.coroutines.flow.Flow
  *
  * @param params The query parameters (optional).
  * @param requestConfig The request configuration (optional).
- * @return A deferred object that resolves to a response containing a list of calendars.
+ * @return A response object containing a list of calendars.
  */
-suspend fun XesarConnect.queryCalendarListAsync(
+suspend fun XesarConnect.queryCalendars(
     params: Query.Params? = null,
     requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
-): Deferred<QueryList.Response<Calendar>> {
-    return queryListAsync(Calendar.QUERY_RESOURCE, params, requestConfig)
+): QueryList.Response<Calendar> {
+    return handleQueryListFunction {
+        queryListAsync(Calendar.QUERY_RESOURCE, params, requestConfig)
+    }
 }
 
 /**
@@ -36,13 +37,15 @@ suspend fun XesarConnect.queryCalendarListAsync(
  *
  * @param id The ID of the calendar to query.
  * @param requestConfig The request configuration (optional).
- * @return A deferred object that resolves to the queried calendar.
+ * @return A calendar.
  */
-suspend fun XesarConnect.queryCalendarByIdAsync(
+suspend fun XesarConnect.queryCalendarById(
     id: UUID,
     requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
-): Deferred<Calendar> {
-    return queryElementAsync(Calendar.QUERY_RESOURCE, id, requestConfig)
+): Calendar? {
+    return handleQueryElementFunction {
+        queryElementAsync(Calendar.QUERY_RESOURCE, id, requestConfig)
+    }
 }
 
 /**

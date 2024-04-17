@@ -3,8 +3,8 @@ package com.open200.xesar.connect.query
 import com.open200.xesar.connect.Topics
 import com.open200.xesar.connect.XesarConnect
 import com.open200.xesar.connect.XesarMqttClient
-import com.open200.xesar.connect.extension.queryZoneByIdAsync
-import com.open200.xesar.connect.extension.queryZoneListAsync
+import com.open200.xesar.connect.extension.queryZoneById
+import com.open200.xesar.connect.extension.queryZones
 import com.open200.xesar.connect.messages.query.*
 import com.open200.xesar.connect.testutils.MosquittoContainer
 import com.open200.xesar.connect.testutils.QueryTestHelper
@@ -77,7 +77,7 @@ class QueryZoneTest :
                     val api = XesarConnect.connectAndLoginAsync(config).await()
                     api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
                         .await()
-                    val result = api.queryZoneListAsync().await()
+                    val result = api.queryZones()
                     result.totalCount.shouldBeEqual(2)
                     result.data[0].name.shouldBeEqual("zone name")
                     result.data[1].name.shouldBeEqual("zone name2")
@@ -125,8 +125,8 @@ class QueryZoneTest :
                     val api = XesarConnect.connectAndLoginAsync(config).await()
                     api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
                         .await()
-                    val result = api.queryZoneByIdAsync(ZoneFixture.zoneFixture.id).await()
-                    result.id.shouldBeEqual(ZoneFixture.zoneFixture.id)
+                    val result = api.queryZoneById(ZoneFixture.zoneFixture.id)
+                    result!!.id.shouldBeEqual(ZoneFixture.zoneFixture.id)
                     result.name.shouldBeEqual("zone name")
                 }
             }

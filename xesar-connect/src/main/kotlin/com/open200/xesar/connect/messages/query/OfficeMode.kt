@@ -1,7 +1,5 @@
 package com.open200.xesar.connect.messages.query
 
-import QueryElementResource
-import QueryListResource
 import com.open200.xesar.connect.messages.ExceptionTimeSerie
 import com.open200.xesar.connect.messages.ExceptionTimepointSerie
 import com.open200.xesar.connect.messages.TimePointSerie

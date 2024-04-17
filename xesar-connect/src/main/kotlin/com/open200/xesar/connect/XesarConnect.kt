@@ -1,7 +1,5 @@
 package com.open200.xesar.connect
 
-import QueryElementResource
-import QueryListResource
 import com.open200.xesar.connect.exception.*
 import com.open200.xesar.connect.filters.*
 import com.open200.xesar.connect.messages.ApiError
@@ -813,6 +811,32 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) {
         }
         logger.debug { "cancel all underlying coroutines which are still active" }
         coroutineScopeForSendCommand.cancel(CancellationException("clean up function was executed"))
+    }
+
+    internal suspend inline fun <reified T : QueryListResource> handleQueryListFunction(
+        queryListAsyncFunction: () -> Deferred<QueryList.Response<T>>
+    ): QueryList.Response<T> {
+        try {
+            return queryListAsyncFunction.invoke().await()
+        } catch (e: HttpErrorException) {
+            if (e.httpErrorCode == 404) {
+                return QueryList.Response(emptyList(), 0, 0)
+            }
+            throw e
+        }
+    }
+
+    internal suspend inline fun <reified T : QueryElementResource> handleQueryElementFunction(
+        queryElementAsyncFunction: () -> Deferred<T>
+    ): T? {
+        try {
+            return queryElementAsyncFunction.invoke().await()
+        } catch (e: HttpErrorException) {
+            if (e.httpErrorCode == 404) {
+                return null
+            }
+            throw e
+        }
     }
 
     companion object {

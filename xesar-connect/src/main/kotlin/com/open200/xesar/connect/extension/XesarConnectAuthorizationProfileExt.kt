@@ -9,36 +9,40 @@ import com.open200.xesar.connect.messages.event.*
 import com.open200.xesar.connect.messages.query.AuthorizationProfile
 import com.open200.xesar.connect.messages.query.QueryList
 import java.util.*
-import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.flow.Flow
 
 /**
- * Queries the list of authorization profiles asynchronously.
+ * Queries the list of authorization profiles.
  *
  * @param params The query parameters (optional).
  * @param requestConfig The request configuration (optional).
- * @return A deferred object that resolves to a response containing a list of authorization
- *   profiles.
+ * @return A response object containing a list of authorization profiles.
  */
-suspend fun XesarConnect.queryAuthorizationProfilesListAsync(
+suspend fun XesarConnect.queryAuthorizationProfiles(
     params: Query.Params? = null,
     requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
-): Deferred<QueryList.Response<AuthorizationProfile>> {
-    return queryListAsync(AuthorizationProfile.QUERY_RESOURCE, params, requestConfig)
+): QueryList.Response<AuthorizationProfile> {
+    return handleQueryListFunction {
+        queryListAsync<AuthorizationProfile>(
+            AuthorizationProfile.QUERY_RESOURCE, params, requestConfig)
+    }
 }
 
 /**
- * Queries an authorization profile by ID asynchronously.
+ * Queries an authorization profile by ID.
  *
  * @param id The ID of the authorization profile to query.
  * @param requestConfig The request configuration (optional).
- * @return A deferred object that resolves to the queried authorization profile.
+ * @return An authorization profile.
  */
-suspend fun XesarConnect.queryAuthorizationProfilesByIdAsync(
+suspend fun XesarConnect.queryAuthorizationProfileById(
     id: UUID,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
-): Deferred<AuthorizationProfile> {
-    return queryElementAsync(AuthorizationProfile.QUERY_RESOURCE, id, requestConfig)
+    requestConfig: XesarConnect.RequestConfig = XesarConnect.RequestConfig()
+): AuthorizationProfile? {
+    return handleQueryElementFunction {
+        queryElementAsync<AuthorizationProfile>(
+            AuthorizationProfile.QUERY_RESOURCE, id, requestConfig)
+    }
 }
 
 /**

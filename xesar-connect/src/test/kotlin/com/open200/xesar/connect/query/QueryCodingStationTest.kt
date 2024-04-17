@@ -3,8 +3,8 @@ package com.open200.xesar.connect.query
 import com.open200.xesar.connect.Topics
 import com.open200.xesar.connect.XesarConnect
 import com.open200.xesar.connect.XesarMqttClient
-import com.open200.xesar.connect.extension.queryCodingStationByIdAsync
-import com.open200.xesar.connect.extension.queryCodingStationListAsync
+import com.open200.xesar.connect.extension.queryCodingStationById
+import com.open200.xesar.connect.extension.queryCodingStations
 import com.open200.xesar.connect.messages.query.*
 import com.open200.xesar.connect.testutils.CodingStationFixture
 import com.open200.xesar.connect.testutils.MosquittoContainer
@@ -81,7 +81,7 @@ class QueryCodingStationTest :
                     val api = XesarConnect.connectAndLoginAsync(config).await()
                     api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
                         .await()
-                    val result = api.queryCodingStationListAsync().await()
+                    val result = api.queryCodingStations()
                     result.totalCount.shouldBeEqual(2)
                     result.data[0].online?.shouldBeEqual(true)
                     result.data[1].online?.shouldBeEqual(false)
@@ -133,10 +133,8 @@ class QueryCodingStationTest :
                     api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
                         .await()
                     val result =
-                        api.queryCodingStationByIdAsync(
-                                CodingStationFixture.codingStationFixture.id)
-                            .await()
-                    result.id.shouldBeEqual(CodingStationFixture.codingStationFixture.id)
+                        api.queryCodingStationById(CodingStationFixture.codingStationFixture.id)
+                    result!!.id.shouldBeEqual(CodingStationFixture.codingStationFixture.id)
                     result.online?.shouldBeEqual(true)
                 }
             }

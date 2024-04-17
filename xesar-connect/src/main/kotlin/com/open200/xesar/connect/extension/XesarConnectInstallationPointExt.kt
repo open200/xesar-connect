@@ -12,7 +12,6 @@ import com.open200.xesar.connect.messages.event.*
 import com.open200.xesar.connect.messages.query.InstallationPoint
 import com.open200.xesar.connect.messages.query.QueryList
 import java.util.*
-import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -20,13 +19,15 @@ import kotlinx.coroutines.flow.Flow
  *
  * @param params The query parameters (optional).
  * @param requestConfig The request configuration (optional).
- * @return A deferred object that resolves to a response containing a list of installation points.
+ * @return A response object containing a list of installation points.
  */
-suspend fun XesarConnect.queryInstallationPointListAsync(
+suspend fun XesarConnect.queryInstallationPoints(
     params: Query.Params? = null,
     requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
-): Deferred<QueryList.Response<InstallationPoint>> {
-    return queryListAsync(InstallationPoint.QUERY_RESOURCE, params, requestConfig)
+): QueryList.Response<InstallationPoint> {
+    return handleQueryListFunction {
+        queryListAsync(InstallationPoint.QUERY_RESOURCE, params, requestConfig)
+    }
 }
 
 /**
@@ -34,13 +35,15 @@ suspend fun XesarConnect.queryInstallationPointListAsync(
  *
  * @param id The ID of the installation point to query.
  * @param requestConfig The request configuration (optional).
- * @return A deferred object that resolves to the queried installation point.
+ * @return An installation point.
  */
-suspend fun XesarConnect.queryInstallationPointByIdAsync(
+suspend fun XesarConnect.queryInstallationPointById(
     id: UUID,
     requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
-): Deferred<InstallationPoint> {
-    return queryElementAsync(InstallationPoint.QUERY_RESOURCE, id, requestConfig)
+): InstallationPoint? {
+    return handleQueryElementFunction {
+        queryElementAsync(InstallationPoint.QUERY_RESOURCE, id, requestConfig)
+    }
 }
 
 /**

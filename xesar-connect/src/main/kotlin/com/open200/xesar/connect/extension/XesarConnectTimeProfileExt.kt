@@ -12,7 +12,6 @@ import com.open200.xesar.connect.messages.event.*
 import com.open200.xesar.connect.messages.query.QueryList
 import com.open200.xesar.connect.messages.query.TimeProfile
 import java.util.*
-import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -20,13 +19,15 @@ import kotlinx.coroutines.flow.Flow
  *
  * @param params The query parameters (optional).
  * @param requestConfig The request configuration (optional).
- * @return A deferred object that resolves to a response containing a list of time profiles.
+ * @return A response object containing a list of time profiles.
  */
-suspend fun XesarConnect.queryTimeProfileListAsync(
+suspend fun XesarConnect.queryTimeProfiles(
     params: Query.Params? = null,
     requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
-): Deferred<QueryList.Response<TimeProfile>> {
-    return queryListAsync(TimeProfile.QUERY_RESOURCE, params, requestConfig)
+): QueryList.Response<TimeProfile> {
+    return handleQueryListFunction {
+        queryListAsync(TimeProfile.QUERY_RESOURCE, params, requestConfig)
+    }
 }
 
 /**
@@ -34,13 +35,15 @@ suspend fun XesarConnect.queryTimeProfileListAsync(
  *
  * @param id The ID of the time profile to query.
  * @param requestConfig The request configuration (optional).
- * @return A deferred object that resolves to the queried time profile.
+ * @return A time profile.
  */
-suspend fun XesarConnect.queryTimeProfileByIdAsync(
+suspend fun XesarConnect.queryTimeProfileById(
     id: UUID,
     requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
-): Deferred<TimeProfile> {
-    return queryElementAsync(TimeProfile.QUERY_RESOURCE, id, requestConfig)
+): TimeProfile? {
+    return handleQueryElementFunction {
+        queryElementAsync(TimeProfile.QUERY_RESOURCE, id, requestConfig)
+    }
 }
 
 /**

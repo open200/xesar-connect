@@ -2,9 +2,9 @@ package com.open200.xesar.connect.query
 
 import com.open200.xesar.connect.*
 import com.open200.xesar.connect.exception.MediumListSizeException
-import com.open200.xesar.connect.extension.queryIdentificationMediumByIdAsync
-import com.open200.xesar.connect.extension.queryIdentificationMediumByMediumIdentifierAsync
-import com.open200.xesar.connect.extension.queryIdentificationMediumListAsync
+import com.open200.xesar.connect.extension.queryIdentificationMediumById
+import com.open200.xesar.connect.extension.queryIdentificationMediumByMediumIdentifier
+import com.open200.xesar.connect.extension.queryIdentificationMediums
 import com.open200.xesar.connect.messages.query.*
 import com.open200.xesar.connect.testutils.IdentificationMediumFixture
 import com.open200.xesar.connect.testutils.MosquittoContainer
@@ -82,7 +82,7 @@ class QueryIdentificationMediumTest :
                     val api = XesarConnect.connectAndLoginAsync(config).await()
                     api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
                         .await()
-                    val result = api.queryIdentificationMediumListAsync().await()
+                    val result = api.queryIdentificationMediums()
                     result.totalCount.shouldBeEqual(2)
                     result.data[0].label.shouldBeEqual("test door")
                     result.data[1].label.shouldBeEqual("test door 2")
@@ -143,9 +143,8 @@ class QueryIdentificationMediumTest :
                         api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
                             .await()
                         val result =
-                            api.queryIdentificationMediumByMediumIdentifierAsync(
-                                    mediumIdentifierValue = 1)
-                                .await()
+                            api.queryIdentificationMediumByMediumIdentifier(
+                                mediumIdentifierValue = 1)
 
                         result?.label?.shouldBeEqual("test door")
                     }
@@ -201,9 +200,8 @@ class QueryIdentificationMediumTest :
                         api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
                             .await()
                         val result =
-                            api.queryIdentificationMediumByMediumIdentifierAsync(
-                                    mediumIdentifierValue = 9999)
-                                .await()
+                            api.queryIdentificationMediumByMediumIdentifier(
+                                mediumIdentifierValue = 9999)
 
                         result.shouldBeNull()
                     }
@@ -272,9 +270,8 @@ class QueryIdentificationMediumTest :
 
                         val result =
                             shouldThrow<MediumListSizeException> {
-                                api.queryIdentificationMediumByMediumIdentifierAsync(
-                                        mediumIdentifierValue = 1)
-                                    .await()
+                                api.queryIdentificationMediumByMediumIdentifier(
+                                    mediumIdentifierValue = 1)
                             }
 
                         result.message?.shouldBeEqual(
@@ -330,8 +327,8 @@ class QueryIdentificationMediumTest :
                     val api = XesarConnect.connectAndLoginAsync(config).await()
                     api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
                         .await()
-                    val result = api.queryIdentificationMediumByIdAsync(id).await()
-                    result.id.shouldBeEqual(id)
+                    val result = api.queryIdentificationMediumById(id)
+                    result!!.id.shouldBeEqual(id)
                     result.label.shouldBeEqual("test door")
                 }
             }

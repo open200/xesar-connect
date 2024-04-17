@@ -1,7 +1,5 @@
 package com.open200.xesar.connect.messages.query
 
-import QueryElementResource
-import QueryListResource
 import com.open200.xesar.connect.messages.DisengagePeriod
 import com.open200.xesar.connect.utils.LocalDateTimeSerializer
 import com.open200.xesar.connect.utils.UUIDSerializer
@@ -54,22 +52,23 @@ import kotlinx.serialization.Serializable
 data class IdentificationMedium(
     @Serializable(with = UUIDSerializer::class) val id: UUID,
     val label: String,
-    @Serializable(with = LocalDateTimeSerializer::class) val issuedAt: LocalDateTime,
-    @Serializable(with = LocalDateTimeSerializer::class) val syncedAt: LocalDateTime,
+    @Serializable(with = LocalDateTimeSerializer::class) val issuedAt: LocalDateTime? = null,
+    @Serializable(with = LocalDateTimeSerializer::class) val syncedAt: LocalDateTime? = null,
     val validityDuration: Int? = null,
     @Serializable(with = UUIDSerializer::class) val authorizationProfileId: UUID? = null,
     val authorizationProfileName: String? = null,
     val individualAuthorizationProfileIds: List<@Serializable(with = UUIDSerializer::class) UUID>,
     val mediumState: String,
-    @Serializable(with = LocalDateTimeSerializer::class) val accessBeginAt: LocalDateTime,
+    @Serializable(with = LocalDateTimeSerializer::class) val accessBeginAt: LocalDateTime? = null,
     @Serializable(with = LocalDateTimeSerializer::class) val accessEndAt: LocalDateTime? = null,
-    @Serializable(with = LocalDateTimeSerializer::class) val validityBeginAt: LocalDateTime,
-    @Serializable(with = LocalDateTimeSerializer::class) val validityEndAt: LocalDateTime,
+    @Serializable(with = LocalDateTimeSerializer::class) val validityBeginAt: LocalDateTime? = null,
+    @Serializable(with = LocalDateTimeSerializer::class) val validityEndAt: LocalDateTime? = null,
     @Serializable(with = LocalDateTimeSerializer::class)
-    val validityBeginAtInHardware: LocalDateTime,
-    @Serializable(with = LocalDateTimeSerializer::class) val validityEndAtInHardware: LocalDateTime,
+    val validityBeginAtInHardware: LocalDateTime? = null,
+    @Serializable(with = LocalDateTimeSerializer::class)
+    val validityEndAtInHardware: LocalDateTime? = null,
     val external: Boolean,
-    val disengagePeriod: DisengagePeriod,
+    val disengagePeriod: DisengagePeriod? = null,
     val mediumIdentifier: Int,
     val outdated: Boolean,
     @Serializable(with = UUIDSerializer::class) val personId: UUID? = null,
@@ -80,8 +79,8 @@ data class IdentificationMedium(
     val softwareStatus: String,
     val hardwareStatus: String,
     val fitsOnHardware: Boolean,
-    @Serializable(with = UUIDSerializer::class) val userId: UUID,
-    val userName: String,
+    @Serializable(with = UUIDSerializer::class) val userId: UUID? = null,
+    val userName: String? = null,
     val requiredAction: String,
     // TODO: mediumType is not in the documentation
     val mediumType: String? = null

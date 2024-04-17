@@ -1,6 +1,5 @@
 package com.open200.xesar.connect.messages.query
 
-import QueryListResource
 import com.open200.xesar.connect.utils.LocalDateTimeSerializer
 import com.open200.xesar.connect.utils.UUIDSerializer
 import java.time.LocalDateTime

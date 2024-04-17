@@ -5,7 +5,6 @@ import com.open200.xesar.connect.messages.command.Query
 import com.open200.xesar.connect.messages.query.OfficeMode
 import com.open200.xesar.connect.messages.query.QueryList
 import java.util.*
-import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -13,13 +12,15 @@ import kotlinx.coroutines.flow.Flow
  *
  * @param params The query parameters (optional).
  * @param requestConfig The request configuration (optional).
- * @return A deferred object that resolves to a response containing a list of office modes.
+ * @return A response object containing a list of office modes.
  */
-suspend fun XesarConnect.queryOfficeModeListAsync(
+suspend fun XesarConnect.queryOfficeModes(
     params: Query.Params? = null,
     requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
-): Deferred<QueryList.Response<OfficeMode>> {
-    return queryListAsync(OfficeMode.QUERY_RESOURCE, params, requestConfig)
+): QueryList.Response<OfficeMode> {
+    return handleQueryListFunction {
+        queryListAsync(OfficeMode.QUERY_RESOURCE, params, requestConfig)
+    }
 }
 
 /**
@@ -27,13 +28,15 @@ suspend fun XesarConnect.queryOfficeModeListAsync(
  *
  * @param id The ID of the office mode to query.
  * @param requestConfig The request configuration (optional).
- * @return A deferred object that resolves to the queried office mode.
+ * @return An office mode.
  */
-suspend fun XesarConnect.queryOfficeModeByIdAsync(
+suspend fun XesarConnect.queryOfficeModeById(
     id: UUID,
     requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
-): Deferred<OfficeMode> {
-    return queryElementAsync(OfficeMode.QUERY_RESOURCE, id, requestConfig)
+): OfficeMode? {
+    return handleQueryElementFunction {
+        queryElementAsync(OfficeMode.QUERY_RESOURCE, id, requestConfig)
+    }
 }
 
 /**

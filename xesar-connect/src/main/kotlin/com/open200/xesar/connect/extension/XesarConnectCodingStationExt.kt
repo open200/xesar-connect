@@ -13,7 +13,6 @@ import com.open200.xesar.connect.messages.event.CodingStationDeleted
 import com.open200.xesar.connect.messages.query.CodingStation
 import com.open200.xesar.connect.messages.query.QueryList
 import java.util.*
-import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -21,13 +20,15 @@ import kotlinx.coroutines.flow.Flow
  *
  * @param params The query parameters (optional).
  * @param requestConfig The request configuration (optional).
- * @return A deferred object that resolves to a response containing a list of coding stations.
+ * @return A response object containing a list of coding stations.
  */
-suspend fun XesarConnect.queryCodingStationListAsync(
+suspend fun XesarConnect.queryCodingStations(
     params: Query.Params? = null,
     requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
-): Deferred<QueryList.Response<CodingStation>> {
-    return queryListAsync(CodingStation.QUERY_RESOURCE, params, requestConfig)
+): QueryList.Response<CodingStation> {
+    return handleQueryListFunction {
+        queryListAsync(CodingStation.QUERY_RESOURCE, params, requestConfig)
+    }
 }
 
 /**
@@ -35,13 +36,15 @@ suspend fun XesarConnect.queryCodingStationListAsync(
  *
  * @param id The ID of the coding station to query.
  * @param requestConfig The request configuration (optional).
- * @return A deferred object that resolves to the queried coding station.
+ * @return A coding station.
  */
-suspend fun XesarConnect.queryCodingStationByIdAsync(
+suspend fun XesarConnect.queryCodingStationById(
     id: UUID,
     requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
-): Deferred<CodingStation> {
-    return queryElementAsync(CodingStation.QUERY_RESOURCE, id, requestConfig)
+): CodingStation? {
+    return handleQueryElementFunction {
+        queryElementAsync(CodingStation.QUERY_RESOURCE, id, requestConfig)
+    }
 }
 
 /**

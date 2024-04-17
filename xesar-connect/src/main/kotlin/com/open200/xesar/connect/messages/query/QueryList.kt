@@ -1,12 +1,10 @@
 package com.open200.xesar.connect.messages.query
 
-import QueryResource
 import com.open200.xesar.connect.exception.ParsingException
 import com.open200.xesar.connect.messages.Message
 import com.open200.xesar.connect.utils.UUIDSerializer
 import java.util.UUID
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 
 /**
