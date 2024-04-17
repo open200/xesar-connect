@@ -1,3 +1,4 @@
+package com.open200.xesar.connect.messages.query
 /**
  * Marker interface for a query resource. Implementing this interface indicates that a class is a
  * query resource.
