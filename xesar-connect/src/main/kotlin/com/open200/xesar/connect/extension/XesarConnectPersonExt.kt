@@ -39,7 +39,9 @@ suspend fun XesarConnect.queryPersonById(
     id: UUID,
     requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
 ): Person? {
-    return handleQueryElementFunction { queryElementAsync(Person.QUERY_RESOURCE, id, requestConfig) }
+    return handleQueryElementFunction {
+        queryElementAsync(Person.QUERY_RESOURCE, id, requestConfig)
+    }
 }
 
 /**

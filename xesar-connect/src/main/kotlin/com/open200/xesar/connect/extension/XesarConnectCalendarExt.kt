@@ -27,7 +27,9 @@ suspend fun XesarConnect.queryCalendars(
     params: Query.Params? = null,
     requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
 ): QueryList.Response<Calendar> {
-    return handleQueryListFunction { queryListAsync(Calendar.QUERY_RESOURCE, params, requestConfig) }
+    return handleQueryListFunction {
+        queryListAsync(Calendar.QUERY_RESOURCE, params, requestConfig)
+    }
 }
 
 /**

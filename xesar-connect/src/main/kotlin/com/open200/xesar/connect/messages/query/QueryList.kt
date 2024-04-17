@@ -1,6 +1,5 @@
 package com.open200.xesar.connect.messages.query
 
-
 import com.open200.xesar.connect.exception.ParsingException
 import com.open200.xesar.connect.messages.Message
 import com.open200.xesar.connect.utils.UUIDSerializer

@@ -1,7 +1,5 @@
 package com.open200.xesar.connect
 
-import QueryElementResource
-import QueryListResource
 import com.open200.xesar.connect.exception.*
 import com.open200.xesar.connect.filters.*
 import com.open200.xesar.connect.messages.ApiError
