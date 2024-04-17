@@ -3,8 +3,8 @@ package com.open200.xesar.connect.query
 import com.open200.xesar.connect.Topics
 import com.open200.xesar.connect.XesarConnect
 import com.open200.xesar.connect.XesarMqttClient
-import com.open200.xesar.connect.extension.queryOfficeModeByIdAsync
-import com.open200.xesar.connect.extension.queryOfficeModeListAsync
+import com.open200.xesar.connect.extension.queryOfficeModeById
+import com.open200.xesar.connect.extension.queryOfficeModes
 import com.open200.xesar.connect.messages.query.*
 import com.open200.xesar.connect.testutils.MosquittoContainer
 import com.open200.xesar.connect.testutils.OfficeModeFixture
@@ -79,7 +79,7 @@ class QueryOfficeModeTest :
                     val api = XesarConnect.connectAndLoginAsync(config).await()
                     api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
                         .await()
-                    val result = api.queryOfficeModeListAsync().await()
+                    val result = api.queryOfficeModes()
                     result.totalCount.shouldBeEqual(2)
                     result.data[0].timeProfileName.shouldBeEqual("timeProfileName")
                     result.data[1].timeProfileName.shouldBeEqual("timeProfileName2")
@@ -131,9 +131,8 @@ class QueryOfficeModeTest :
                     val api = XesarConnect.connectAndLoginAsync(config).await()
                     api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
                         .await()
-                    val result =
-                        api.queryOfficeModeByIdAsync(OfficeModeFixture.officeModeFixture.id).await()
-                    result.id.shouldBeEqual(OfficeModeFixture.officeModeFixture.id)
+                    val result = api.queryOfficeModeById(OfficeModeFixture.officeModeFixture.id)
+                    result!!.id.shouldBeEqual(OfficeModeFixture.officeModeFixture.id)
                     result.installationPointId.shouldBeEqual(
                         UUID.fromString("39b25462-2580-44dc-b0a8-22fd6c03a023"))
                 }

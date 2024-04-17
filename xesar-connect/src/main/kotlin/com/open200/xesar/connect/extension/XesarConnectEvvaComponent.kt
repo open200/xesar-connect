@@ -5,7 +5,6 @@ import com.open200.xesar.connect.messages.command.Query
 import com.open200.xesar.connect.messages.query.EvvaComponent
 import com.open200.xesar.connect.messages.query.QueryList
 import java.util.*
-import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -13,13 +12,15 @@ import kotlinx.coroutines.flow.Flow
  *
  * @param params The query parameters (optional).
  * @param requestConfig The request configuration (optional).
- * @return A deferred object that resolves to a response containing a list of evva components.
+ * @return A response object containing a list of evva components.
  */
-suspend fun XesarConnect.queryEvvaComponentListAsync(
+suspend fun XesarConnect.queryEvvaComponents(
     params: Query.Params? = null,
     requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
-): Deferred<QueryList.Response<EvvaComponent>> {
-    return queryListAsync(EvvaComponent.QUERY_RESOURCE, params, requestConfig)
+): QueryList.Response<EvvaComponent> {
+    return handleQueryListFunction {
+        queryListAsync(EvvaComponent.QUERY_RESOURCE, params, requestConfig)
+    }
 }
 
 /**
@@ -27,13 +28,15 @@ suspend fun XesarConnect.queryEvvaComponentListAsync(
  *
  * @param id The ID of the evva component to query.
  * @param requestConfig The request configuration (optional).
- * @return A deferred object that resolves to the queried evva component.
+ * @return An evva component.
  */
-suspend fun XesarConnect.queryEvvaComponentByIdAsync(
+suspend fun XesarConnect.queryEvvaComponentById(
     id: UUID,
     requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
-): Deferred<EvvaComponent> {
-    return queryElementAsync(EvvaComponent.QUERY_RESOURCE, id, requestConfig)
+): EvvaComponent? {
+    return handleQueryElementFunction {
+        queryElementAsync(EvvaComponent.QUERY_RESOURCE, id, requestConfig)
+    }
 }
 
 /**

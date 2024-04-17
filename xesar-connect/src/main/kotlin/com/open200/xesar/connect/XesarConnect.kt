@@ -815,6 +815,32 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) {
         coroutineScopeForSendCommand.cancel(CancellationException("clean up function was executed"))
     }
 
+    internal suspend inline fun <reified T : QueryListResource> handleQueryListFunction(
+        queryListAsyncFunction: () -> Deferred<QueryList.Response<T>>
+    ): QueryList.Response<T> {
+        try {
+            return queryListAsyncFunction.invoke().await()
+        } catch (e: HttpErrorException) {
+            if (e.httpErrorCode == 404) {
+                return QueryList.Response(emptyList(), 0, 0)
+            }
+            throw e
+        }
+    }
+
+    internal suspend inline fun <reified T : QueryElementResource> handleQueryElementFunction(
+        queryElementAsyncFunction: () -> Deferred<T>
+    ): T? {
+        try {
+            return queryElementAsyncFunction.invoke().await()
+        } catch (e: HttpErrorException) {
+            if (e.httpErrorCode == 404) {
+                return null
+            }
+            throw e
+        }
+    }
+
     companion object {
         /**
          * Asynchronously connects to the Xesar API, performs a login operation, and returns an

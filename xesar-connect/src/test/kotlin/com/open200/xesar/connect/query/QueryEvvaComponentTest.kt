@@ -3,8 +3,8 @@ package com.open200.xesar.connect.query
 import com.open200.xesar.connect.Topics
 import com.open200.xesar.connect.XesarConnect
 import com.open200.xesar.connect.XesarMqttClient
-import com.open200.xesar.connect.extension.queryEvvaComponentByIdAsync
-import com.open200.xesar.connect.extension.queryEvvaComponentListAsync
+import com.open200.xesar.connect.extension.queryEvvaComponentById
+import com.open200.xesar.connect.extension.queryEvvaComponents
 import com.open200.xesar.connect.messages.query.*
 import com.open200.xesar.connect.testutils.EvvaComponentFixture
 import com.open200.xesar.connect.testutils.MosquittoContainer
@@ -79,7 +79,7 @@ class QueryEvvaComponentTest :
                     val api = XesarConnect.connectAndLoginAsync(config).await()
                     api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
                         .await()
-                    val result = api.queryEvvaComponentListAsync().await()
+                    val result = api.queryEvvaComponents()
                     result.totalCount.shouldBeEqual(2)
                     result.data[0].status?.shouldBeEqual(OnlineStatus.connected)
                     result.data[1].status?.shouldBeEqual(OnlineStatus.disconnected)
@@ -133,10 +133,8 @@ class QueryEvvaComponentTest :
                     api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
                         .await()
                     val result =
-                        api.queryEvvaComponentByIdAsync(
-                                EvvaComponentFixture.evvaComponentFixture.id)
-                            .await()
-                    result.id.shouldBeEqual(EvvaComponentFixture.evvaComponentFixture.id)
+                        api.queryEvvaComponentById(EvvaComponentFixture.evvaComponentFixture.id)
+                    result!!.id.shouldBeEqual(EvvaComponentFixture.evvaComponentFixture.id)
                     result.status?.shouldBeEqual(OnlineStatus.connected)
                 }
             }

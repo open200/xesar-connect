@@ -3,8 +3,8 @@ package com.open200.xesar.connect.query
 import com.open200.xesar.connect.Topics
 import com.open200.xesar.connect.XesarConnect
 import com.open200.xesar.connect.XesarMqttClient
-import com.open200.xesar.connect.extension.queryAuthorizationProfilesByIdAsync
-import com.open200.xesar.connect.extension.queryAuthorizationProfilesListAsync
+import com.open200.xesar.connect.extension.queryAuthorizationProfileById
+import com.open200.xesar.connect.extension.queryAuthorizationProfiles
 import com.open200.xesar.connect.messages.query.*
 import com.open200.xesar.connect.testutils.AuthorizationProfileFixture.authorizationProfileFixture
 import com.open200.xesar.connect.testutils.MosquittoContainer
@@ -80,7 +80,7 @@ class QueryAuthorizationProfileTest :
                     val api = XesarConnect.connectAndLoginAsync(config).await()
                     api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
                         .await()
-                    val result = api.queryAuthorizationProfilesListAsync().await()
+                    val result = api.queryAuthorizationProfiles()
                     result.totalCount.shouldBeEqual(2)
                     result.data[0].name.shouldBeEqual("authorization profile 1 String")
                     result.data[1].name.shouldBeEqual("authorization profile 2")
@@ -133,10 +133,8 @@ class QueryAuthorizationProfileTest :
                     val api = XesarConnect.connectAndLoginAsync(config).await()
                     api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
                         .await()
-                    val result =
-                        api.queryAuthorizationProfilesByIdAsync(authorizationProfileFixture.id)
-                            .await()
-                    result.id.shouldBeEqual(authorizationProfileFixture.id)
+                    val result = api.queryAuthorizationProfileById(authorizationProfileFixture.id)
+                    result!!.id.shouldBeEqual(authorizationProfileFixture.id)
                     result.name.shouldBeEqual("authorization profile 1 String")
                 }
             }

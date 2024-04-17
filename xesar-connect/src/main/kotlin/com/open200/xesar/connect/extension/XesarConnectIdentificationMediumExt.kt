@@ -13,8 +13,6 @@ import com.open200.xesar.connect.messages.query.IdentificationMedium
 import com.open200.xesar.connect.messages.query.QueryList
 import java.time.LocalDateTime
 import java.util.*
-import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -22,13 +20,15 @@ import kotlinx.coroutines.flow.Flow
  *
  * @param params The query parameters (optional).
  * @param requestConfig The request configuration (optional).
- * @return A deferred object that resolves to a response containing a list of identification media.
+ * @return A response object containing a list of identification media.
  */
-suspend fun XesarConnect.queryIdentificationMediumListAsync(
+suspend fun XesarConnect.queryIdentificationMediums(
     params: Query.Params? = null,
     requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
-): Deferred<QueryList.Response<IdentificationMedium>> {
-    return queryListAsync(IdentificationMedium.QUERY_RESOURCE, params, requestConfig)
+): QueryList.Response<IdentificationMedium> {
+    return handleQueryListFunction {
+        queryListAsync(IdentificationMedium.QUERY_RESOURCE, params, requestConfig)
+    }
 }
 
 /**
@@ -36,13 +36,15 @@ suspend fun XesarConnect.queryIdentificationMediumListAsync(
  *
  * @param id The ID of the identification media to query.
  * @param requestConfig The request configuration (optional).
- * @return A deferred object that resolves to the queried identification media.
+ * @return An identification media.
  */
-suspend fun XesarConnect.queryIdentificationMediumByIdAsync(
+suspend fun XesarConnect.queryIdentificationMediumById(
     id: UUID,
     requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
-): Deferred<IdentificationMedium> {
-    return queryElementAsync(IdentificationMedium.QUERY_RESOURCE, id, requestConfig)
+): IdentificationMedium? {
+    return handleQueryElementFunction {
+        queryElementAsync(IdentificationMedium.QUERY_RESOURCE, id, requestConfig)
+    }
 }
 
 /**
@@ -50,13 +52,13 @@ suspend fun XesarConnect.queryIdentificationMediumByIdAsync(
  *
  * @param mediumIdentifierValue The medium identifier.
  * @param requestConfig The request configuration (optional).
- * @return A deferred object that resolves to the queried access protocol event.
+ * @return An access protocol event.
  */
-suspend fun XesarConnect.queryIdentificationMediumByMediumIdentifierAsync(
+suspend fun XesarConnect.queryIdentificationMediumByMediumIdentifier(
     mediumIdentifierValue: Int,
     params: Query.Params? = null,
     requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
-): Deferred<IdentificationMedium?> {
+): IdentificationMedium? {
     val filters =
         (params?.filters
             ?: emptyList()) +
@@ -73,24 +75,17 @@ suspend fun XesarConnect.queryIdentificationMediumByMediumIdentifierAsync(
             sort = params?.sort,
             filters = filters)
 
-    val queryListMedia =
+    val queryListMedia = handleQueryListFunction {
         queryListAsync<IdentificationMedium>(
-                IdentificationMedium.QUERY_RESOURCE, paramsMedium, requestConfig)
-            .await()
+            IdentificationMedium.QUERY_RESOURCE, paramsMedium, requestConfig)
+    }
 
     return when {
-        queryListMedia.data.isEmpty() ->
-            CompletableDeferred<IdentificationMedium?>().apply { complete(null) }
+        queryListMedia.data.isEmpty() -> null
         queryListMedia.data.size > 1 ->
-            CompletableDeferred<IdentificationMedium?>().apply {
-                completeExceptionally(
-                    MediumListSizeException(
-                        "Expected exactly one element in the list with mediumIdentifier $mediumIdentifierValue, but found ${queryListMedia.data.size} elements"))
-            }
-        else ->
-            CompletableDeferred<IdentificationMedium?>().apply {
-                complete(queryListMedia.data.first())
-            }
+            throw MediumListSizeException(
+                "Expected exactly one element in the list with mediumIdentifier $mediumIdentifierValue, but found ${queryListMedia.data.size} elements")
+        else -> queryListMedia.data.first()
     }
 }
 

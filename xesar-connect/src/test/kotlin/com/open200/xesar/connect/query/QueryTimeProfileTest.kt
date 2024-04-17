@@ -3,8 +3,8 @@ package com.open200.xesar.connect.query
 import com.open200.xesar.connect.Topics
 import com.open200.xesar.connect.XesarConnect
 import com.open200.xesar.connect.XesarMqttClient
-import com.open200.xesar.connect.extension.queryTimeProfileByIdAsync
-import com.open200.xesar.connect.extension.queryTimeProfileListAsync
+import com.open200.xesar.connect.extension.queryTimeProfileById
+import com.open200.xesar.connect.extension.queryTimeProfiles
 import com.open200.xesar.connect.messages.query.*
 import com.open200.xesar.connect.testutils.MosquittoContainer
 import com.open200.xesar.connect.testutils.QueryTestHelper
@@ -78,7 +78,7 @@ class QueryTimeProfileTest :
                     val api = XesarConnect.connectAndLoginAsync(config).await()
                     api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
                         .await()
-                    val result = api.queryTimeProfileListAsync().await()
+                    val result = api.queryTimeProfiles()
                     result.totalCount.shouldBeEqual(2)
                     result.data[0].name?.shouldBeEqual("name")
                     result.data[1].name?.shouldBeEqual("name 2")
@@ -130,9 +130,8 @@ class QueryTimeProfileTest :
                     api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
                         .await()
                     val result =
-                        api.queryTimeProfileByIdAsync(TimeProfileFixture.timeProfileFixture.id!!)
-                            .await()
-                    result.id?.shouldBeEqual(TimeProfileFixture.timeProfileFixture.id!!)
+                        api.queryTimeProfileById(TimeProfileFixture.timeProfileFixture.id!!)
+                    result!!.id?.shouldBeEqual(TimeProfileFixture.timeProfileFixture.id!!)
                     result.name?.shouldBeEqual("name")
                 }
             }

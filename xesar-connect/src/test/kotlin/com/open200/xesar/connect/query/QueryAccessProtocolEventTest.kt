@@ -3,7 +3,7 @@ package com.open200.xesar.connect.query
 import com.open200.xesar.connect.Topics
 import com.open200.xesar.connect.XesarConnect
 import com.open200.xesar.connect.XesarMqttClient
-import com.open200.xesar.connect.extension.queryAccessProtocolEventListAsync
+import com.open200.xesar.connect.extension.queryAccessProtocolEvents
 import com.open200.xesar.connect.messages.query.QueryList
 import com.open200.xesar.connect.messages.query.encodeQueryList
 import com.open200.xesar.connect.testutils.AccessProtocolEventFixture
@@ -75,7 +75,7 @@ class QueryAccessProtocolEventTest :
                     val api = XesarConnect.connectAndLoginAsync(config).await()
                     api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
                         .await()
-                    val result = api.queryAccessProtocolEventListAsync().await()
+                    val result = api.queryAccessProtocolEvents()
                     result.totalCount.shouldBeEqual(2)
                     result.data[0]
                         .id

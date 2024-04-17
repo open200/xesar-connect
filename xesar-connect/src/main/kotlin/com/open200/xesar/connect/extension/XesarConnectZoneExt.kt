@@ -11,7 +11,6 @@ import com.open200.xesar.connect.messages.event.ZoneDeleted
 import com.open200.xesar.connect.messages.query.QueryList
 import com.open200.xesar.connect.messages.query.Zone
 import java.util.*
-import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -19,13 +18,13 @@ import kotlinx.coroutines.flow.Flow
  *
  * @param params The query parameters (optional).
  * @param requestConfig The request configuration (optional).
- * @return A deferred object that resolves a response containing a list of zones.
+ * @return A response object containing a list of zones.
  */
-suspend fun XesarConnect.queryZoneListAsync(
+suspend fun XesarConnect.queryZones(
     params: Query.Params? = null,
     requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
-): Deferred<QueryList.Response<Zone>> {
-    return queryListAsync(Zone.QUERY_RESOURCE, params, requestConfig)
+): QueryList.Response<Zone> {
+    return handleQueryListFunction { queryListAsync(Zone.QUERY_RESOURCE, params, requestConfig) }
 }
 
 /**
@@ -33,13 +32,13 @@ suspend fun XesarConnect.queryZoneListAsync(
  *
  * @param id The ID of the zone to query.
  * @param requestConfig The request configuration (optional).
- * @return A deferred object that resolves to the queried zone.
+ * @return A zone.
  */
-suspend fun XesarConnect.queryZoneByIdAsync(
+suspend fun XesarConnect.queryZoneById(
     id: UUID,
     requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
-): Deferred<Zone> {
-    return queryElementAsync(Zone.QUERY_RESOURCE, id, requestConfig)
+): Zone? {
+    return handleQueryElementFunction { queryElementAsync(Zone.QUERY_RESOURCE, id, requestConfig) }
 }
 /**
  * Adds an installation point to a zone asynchronously.

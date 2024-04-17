@@ -4,7 +4,6 @@ import com.open200.xesar.connect.XesarConnect
 import com.open200.xesar.connect.messages.command.Query
 import com.open200.xesar.connect.messages.query.AccessProtocolEvent
 import com.open200.xesar.connect.messages.query.QueryList
-import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -12,13 +11,15 @@ import kotlinx.coroutines.flow.Flow
  *
  * @param params The query parameters (optional).
  * @param requestConfig The request configuration (optional).
- * @return A deferred object that resolves to a response containing a list of access protocols.
+ * @return A response object containing a list of access protocols.
  */
-suspend fun XesarConnect.queryAccessProtocolEventListAsync(
+suspend fun XesarConnect.queryAccessProtocolEvents(
     params: Query.Params? = null,
     requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
-): Deferred<QueryList.Response<AccessProtocolEvent>> {
-    return queryListAsync(AccessProtocolEvent.QUERY_RESOURCE, params, requestConfig)
+): QueryList.Response<AccessProtocolEvent> {
+    return handleQueryListFunction {
+        queryListAsync(AccessProtocolEvent.QUERY_RESOURCE, params, requestConfig)
+    }
 }
 
 /**

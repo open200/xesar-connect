@@ -3,8 +3,8 @@ package com.open200.xesar.connect.query
 import com.open200.xesar.connect.Topics
 import com.open200.xesar.connect.XesarConnect
 import com.open200.xesar.connect.XesarMqttClient
-import com.open200.xesar.connect.extension.queryPersonByIdAsync
-import com.open200.xesar.connect.extension.queryPersonListAsync
+import com.open200.xesar.connect.extension.queryPersonById
+import com.open200.xesar.connect.extension.queryPersons
 import com.open200.xesar.connect.messages.command.FilterType
 import com.open200.xesar.connect.messages.command.Query
 import com.open200.xesar.connect.messages.query.QueryElement
@@ -93,7 +93,7 @@ class QueryPersonTest :
                     val api = XesarConnect.connectAndLoginAsync(config).await()
                     api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
                         .await()
-                    val result = api.queryPersonListAsync(params).await()
+                    val result = api.queryPersons(params)
                     result.totalCount.shouldBeEqual(2)
                     result.data[0].firstName.shouldBeEqual("firstname String")
                     result.data[1].firstName.shouldBeEqual("firstname 2 String")
@@ -143,8 +143,8 @@ class QueryPersonTest :
                     val api = XesarConnect.connectAndLoginAsync(config).await()
                     api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
                         .await()
-                    val result = api.queryPersonByIdAsync(personFixture.id).await()
-                    result.id.shouldBeEqual(personFixture.id)
+                    val result = api.queryPersonById(personFixture.id)
+                    result!!.id.shouldBeEqual(personFixture.id)
                     result.firstName.shouldBeEqual("firstname String")
                 }
             }

@@ -3,7 +3,7 @@ package com.open200.xesar.connect.query
 import com.open200.xesar.connect.Topics
 import com.open200.xesar.connect.XesarConnect
 import com.open200.xesar.connect.XesarMqttClient
-import com.open200.xesar.connect.extension.queryUserListAsync
+import com.open200.xesar.connect.extension.queryUsers
 import com.open200.xesar.connect.messages.query.QueryList
 import com.open200.xesar.connect.messages.query.User
 import com.open200.xesar.connect.messages.query.encodeQueryList
@@ -78,7 +78,7 @@ class QueryUserTest :
                     val api = XesarConnect.connectAndLoginAsync(config).await()
                     api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
                         .await()
-                    val result = api.queryUserListAsync().await()
+                    val result = api.queryUsers()
                     result.totalCount.shouldBeEqual(2)
                     result.data[0].name.shouldBeEqual("lastname String")
                     result.data[1].name.shouldBeEqual("lastname 2 String")

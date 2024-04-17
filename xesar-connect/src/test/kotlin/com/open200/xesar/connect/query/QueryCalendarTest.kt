@@ -3,8 +3,8 @@ package com.open200.xesar.connect.query
 import com.open200.xesar.connect.Topics
 import com.open200.xesar.connect.XesarConnect
 import com.open200.xesar.connect.XesarMqttClient
-import com.open200.xesar.connect.extension.queryCalendarByIdAsync
-import com.open200.xesar.connect.extension.queryCalendarListAsync
+import com.open200.xesar.connect.extension.queryCalendarById
+import com.open200.xesar.connect.extension.queryCalendars
 import com.open200.xesar.connect.messages.query.*
 import com.open200.xesar.connect.messages.query.Calendar
 import com.open200.xesar.connect.testutils.CalendarFixture
@@ -80,7 +80,7 @@ class QueryCalendarTest :
                     val api = XesarConnect.connectAndLoginAsync(config).await()
                     api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
                         .await()
-                    val result = api.queryCalendarListAsync().await()
+                    val result = api.queryCalendars()
                     result.totalCount.shouldBeEqual(2)
                     result.data[0]
                         .partitionId
@@ -135,9 +135,8 @@ class QueryCalendarTest :
                     val api = XesarConnect.connectAndLoginAsync(config).await()
                     api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
                         .await()
-                    val result =
-                        api.queryCalendarByIdAsync(CalendarFixture.calendarFixture.id).await()
-                    result.id.shouldBeEqual(CalendarFixture.calendarFixture.id)
+                    val result = api.queryCalendarById(CalendarFixture.calendarFixture.id)
+                    result!!.id.shouldBeEqual(CalendarFixture.calendarFixture.id)
                     result.name.shouldBeEqual("string")
                 }
             }

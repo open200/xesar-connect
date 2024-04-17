@@ -4,7 +4,6 @@ import com.open200.xesar.connect.XesarConnect
 import com.open200.xesar.connect.messages.command.Query
 import com.open200.xesar.connect.messages.query.QueryList
 import com.open200.xesar.connect.messages.query.User
-import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -12,13 +11,13 @@ import kotlinx.coroutines.flow.Flow
  *
  * @param params The query parameters (optional).
  * @param requestConfig The request configuration (optional).
- * @return A deferred object that resolves to a response containing a list of users.
+ * @return A response object containing a list of users.
  */
-suspend fun XesarConnect.queryUserListAsync(
+suspend fun XesarConnect.queryUsers(
     params: Query.Params? = null,
     requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
-): Deferred<QueryList.Response<User>> {
-    return queryListAsync(User.QUERY_RESOURCE, params, requestConfig)
+): QueryList.Response<User> {
+    return handleQueryListFunction { queryListAsync(User.QUERY_RESOURCE, params, requestConfig) }
 }
 
 /**

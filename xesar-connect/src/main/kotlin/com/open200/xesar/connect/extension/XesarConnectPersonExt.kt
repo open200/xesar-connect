@@ -12,7 +12,6 @@ import com.open200.xesar.connect.messages.event.PersonDeleted
 import com.open200.xesar.connect.messages.query.Person
 import com.open200.xesar.connect.messages.query.QueryList
 import java.util.*
-import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -20,13 +19,13 @@ import kotlinx.coroutines.flow.Flow
  *
  * @param params The query parameters (optional).
  * @param requestConfig The request configuration (optional).
- * @return A deferred object that resolves to a response containing a list of persons.
+ * @return A response object containing a list of persons.
  */
-suspend fun XesarConnect.queryPersonListAsync(
+suspend fun XesarConnect.queryPersons(
     params: Query.Params? = null,
     requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
-): Deferred<QueryList.Response<Person>> {
-    return queryListAsync(Person.QUERY_RESOURCE, params, requestConfig)
+): QueryList.Response<Person> {
+    return handleQueryListFunction { queryListAsync(Person.QUERY_RESOURCE, params, requestConfig) }
 }
 
 /**
@@ -34,13 +33,13 @@ suspend fun XesarConnect.queryPersonListAsync(
  *
  * @param id The ID of the person to query.
  * @param requestConfig The request configuration (optional).
- * @return A deferred object that resolves to the queried person.
+ * @return A person.
  */
-suspend fun XesarConnect.queryPersonByIdAsync(
+suspend fun XesarConnect.queryPersonById(
     id: UUID,
     requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
-): Deferred<Person> {
-    return queryElementAsync(Person.QUERY_RESOURCE, id, requestConfig)
+): Person? {
+    return handleQueryElementFunction { queryElementAsync(Person.QUERY_RESOURCE, id, requestConfig) }
 }
 
 /**

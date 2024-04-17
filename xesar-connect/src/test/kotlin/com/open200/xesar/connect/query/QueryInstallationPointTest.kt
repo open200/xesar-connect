@@ -3,8 +3,8 @@ package com.open200.xesar.connect.query
 import com.open200.xesar.connect.Topics
 import com.open200.xesar.connect.XesarConnect
 import com.open200.xesar.connect.XesarMqttClient
-import com.open200.xesar.connect.extension.queryInstallationPointByIdAsync
-import com.open200.xesar.connect.extension.queryInstallationPointListAsync
+import com.open200.xesar.connect.extension.queryInstallationPointById
+import com.open200.xesar.connect.extension.queryInstallationPoints
 import com.open200.xesar.connect.messages.query.*
 import com.open200.xesar.connect.testutils.InstallationPointFixture.installationPointFixture
 import com.open200.xesar.connect.testutils.MosquittoContainer
@@ -83,7 +83,7 @@ class QueryInstallationPointTest :
                     val api = XesarConnect.connectAndLoginAsync(config).await()
                     api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
                         .await()
-                    val result = api.queryInstallationPointListAsync().await()
+                    val result = api.queryInstallationPoints()
                     result.totalCount.shouldBeEqual(2)
                     result.data[0].name.shouldBeEqual("door 1 entry point")
                     result.data[1].name.shouldBeEqual("door 2 entry point")
@@ -134,9 +134,8 @@ class QueryInstallationPointTest :
                     val api = XesarConnect.connectAndLoginAsync(config).await()
                     api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
                         .await()
-                    val result =
-                        api.queryInstallationPointByIdAsync(installationPointFixture.id).await()
-                    result.id.shouldBeEqual(installationPointFixture.id)
+                    val result = api.queryInstallationPointById(installationPointFixture.id)
+                    result!!.id.shouldBeEqual(installationPointFixture.id)
                     result.name.shouldBeEqual("door 1 entry point")
                 }
             }
