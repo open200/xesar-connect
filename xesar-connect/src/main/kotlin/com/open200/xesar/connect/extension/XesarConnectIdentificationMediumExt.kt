@@ -48,11 +48,11 @@ suspend fun XesarConnect.queryIdentificationMediumById(
 }
 
 /**
- * Queries an access protocol event by ID asynchronously.
+ * Queries an identification medium by medium identifier.
  *
  * @param mediumIdentifierValue The medium identifier.
  * @param requestConfig The request configuration (optional).
- * @return An access protocol event.
+ * @return An identification medium.
  */
 suspend fun XesarConnect.queryIdentificationMediumByMediumIdentifier(
     mediumIdentifierValue: Int,
