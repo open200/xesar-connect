@@ -2,11 +2,6 @@
 
 The **Xesar-Connect** library is an open-source Kotlin wrapper designed to simplify MQTT communication for seamless integration of the EVVA Xesar access control system with other software applications. This library streamlines the process of exchanging data and commands between your software and the EVVA Xesar system using the MQTT protocol.
 
-## ⚠️ Beta Notice ⚠️
-
-Please note that Xesar-Connect is currently in beta. This means that while the library is fully functional and usable, there is a possibility of encountering issues or facing breaking changes in future releases. We appreciate your feedback and encourage you to report any problems you encounter.
-
-
 ## Features
 
 - **Simplified Integration:** Xesar-Connect offers an intuitive interface that abstracts the complexities of MQTT communication, enabling developers to focus on seamlessly integrating Xesar functionality into their Kotlin applications.
@@ -29,7 +24,7 @@ Xesar-Connect is tested with EVVA's Xesar version 3.1 with Mqtt API version 1.2.
 
 ```kotlin
 dependencies {
-    implementation("com.open200:xesar-connect:0.9.0")
+    implementation("com.open200:xesar-connect:1.0.0")
 }
 ```
 
@@ -51,7 +46,7 @@ fun main() {
         // connect to the MQTT broker and login to xesar
         val xesar = XesarConnect.connectAndLoginAsync(Config.configureFromZip(pathToZip)).await()
 
-        // Subscribe to topics all topics (or the topics you are interested in)
+        // Subscribe to topics ALL_TOPICS (or the topics you are interested in)
         xesar.subscribeAsync(Topics(Topics.ALL_TOPICS)).await()
 
         // send command to create a person
@@ -65,16 +60,22 @@ fun main() {
         ).await()
 
         // query all persons
-        xesar.queryPersonListAsync().await().let {
-            log.info { "Received person list: $it" }
-        }
+        val persons = xesar.queryPersons()
+        log.info { "Received person list: ${persons.data}" }
 
         // query one person by id
-        val person = xesar.queryPersonByIdAsync(personId).await()
+        val person = xesar.queryPersonById(personId)
+        person?.let {
+            // send command to delete this person
+            xesar.deletePersonAsync(person.externalId).await()
+        }
 
-        // send command to delete a person
-        xesar.deletePersonAsync(person.externalId).await()
-
+        // fetching persons incrementally in smaller,more manageable chunks
+        val chunkSize = 15
+        xesar.queryStreamPerson(Query.Params(pageLimit =chunkSize)).collect{
+            log.info { "person: ${it.firstName}, ${it.lastName}" }
+        }
+        
         // subscribe to the access event and listen to battery warnings. You can use the provided enums for the events from the library
         val batteryEmptyTopic = Topics.Event.accessProtocolEventTopic(GroupOfEvent.EvvaComponent, EventType.BATTERY_EMPTY)
         xesar.on(TopicFilter(batteryEmptyTopic)) {
