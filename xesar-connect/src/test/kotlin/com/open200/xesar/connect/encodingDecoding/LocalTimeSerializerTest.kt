@@ -11,7 +11,7 @@ import org.junit.jupiter.api.assertThrows
 class LocalTimeSerializerTest :
     FunSpec({
         val localTimeSerializer = LocalTimeSerializer
-        val timeString = "08:02"
+        val timeString = "08:02:00"
         val localTime = LocalTime.parse(timeString)
 
         test("serialize LocalTime should return correct String") {

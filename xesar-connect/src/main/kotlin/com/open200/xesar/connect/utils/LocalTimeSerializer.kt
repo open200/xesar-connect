@@ -11,11 +11,9 @@ import kotlinx.serialization.encoding.Encoder
 object LocalTimeSerializer : KSerializer<LocalTime> {
     override val descriptor = PrimitiveSerialDescriptor("LocalTime", PrimitiveKind.STRING)
 
-    private val localTimeFormatter = DateTimeFormatter.ofPattern("HH:mm")
-
     override fun serialize(encoder: Encoder, value: LocalTime) =
-        encoder.encodeString(value.format(localTimeFormatter))
+        encoder.encodeString(value.format(DateTimeFormatter.ISO_LOCAL_TIME))
 
     override fun deserialize(decoder: Decoder): LocalTime =
-        LocalTime.parse(decoder.decodeString(), localTimeFormatter)
+        LocalTime.parse(decoder.decodeString(), DateTimeFormatter.ISO_LOCAL_TIME)
 }
