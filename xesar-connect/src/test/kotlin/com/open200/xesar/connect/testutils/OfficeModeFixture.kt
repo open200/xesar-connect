@@ -11,7 +11,7 @@ import java.util.*
 
 object OfficeModeFixture {
 
-    val localTime = LocalTime.parse("14:15")
+    val localTime = LocalTime.parse("14:15:00")
 
     val exceptionTimepointSerie =
         ExceptionTimepointSerie(
