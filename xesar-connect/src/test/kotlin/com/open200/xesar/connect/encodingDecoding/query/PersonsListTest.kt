@@ -44,7 +44,7 @@ class PersonsListTest :
                 "\"identificationMediaCount\":0," +
                 "\"outdatedMedia\":true," +
                 "\"externalId\":\"123\"," +
-                "\"external\":false}," +
+                "\"external\":false,\"defaultAuthorizationProfile\":null,\"zones\":[],\"installationPoints\":[],\"defaultAuthorizationProfileId\":null}," +
                 "{\"id\":\"cf45d8d5-4f99-4d85-a9b3-204c2ed3c56a\"," +
                 "\"partitionId\":\"7ae501f7-173e-43e5-842c-662b44720734\"," +
                 "\"firstName\":\"firstname 2 String\"," +
@@ -56,7 +56,7 @@ class PersonsListTest :
                 "\"identificationMediaCount\":0," +
                 "\"outdatedMedia\":true," +
                 "\"externalId\":\"1234\"," +
-                "\"external\":false}]," +
+                "\"external\":false,\"defaultAuthorizationProfile\":null,\"zones\":[],\"installationPoints\":[],\"defaultAuthorizationProfileId\":null}]," +
                 "\"totalCount\":2," +
                 "\"filterCount\":2}}"
 
@@ -97,7 +97,7 @@ class PersonsListTest :
                     "\"identificationMediaCount\":0," +
                     "\"outdatedMedia\":true," +
                     "\"externalId\":\"1234\"," +
-                    "\"external\":false}]," +
+                    "\"external\":false,\"defaultAuthorizationProfile\":null,\"zones\":[],\"installationPoints\":[],\"defaultAuthorizationProfileId\":null}]," +
                     "\"totalCount\":2," +
                     "\"additionalProperties\":\"additional Information\"," +
                     "\"filterCount\":2}}"
