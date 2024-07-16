@@ -76,6 +76,8 @@ java {
     withSourcesJar()
 }
 
+val publishDirPath = layout.buildDirectory.dir("xesar-connect-artifact")
+
 publishing {
     publications {
         create<MavenPublication>("library") {
@@ -107,13 +109,19 @@ publishing {
             from(components["java"])
         }
     }
-    repositories {
-        maven {
-            name = "Sonatype"
-            url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
-            credentials(PasswordCredentials::class)
-        }
-    }
+    repositories { maven { url = uri(publishDirPath) } }
+}
+
+tasks.register<Zip>("zipArtifact") {
+    description = "Creates a zip archive containing the xesar-connect artifact."
+    group = "publishing"
+    destinationDirectory.set(layout.buildDirectory)
+    from(publishDirPath)
+}
+
+tasks.register("prepareMavenPublish") {
+    dependsOn(setOf("publish", "zipArtifact"))
+    group = "publishing"
 }
 
 signing { sign(publishing.publications["library"]) }
