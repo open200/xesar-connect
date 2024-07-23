@@ -4,7 +4,7 @@ import com.open200.xesar.connect.messages.query.Calendar
 import com.open200.xesar.connect.messages.query.QueryList
 import com.open200.xesar.connect.messages.query.decodeQueryList
 import com.open200.xesar.connect.messages.query.encodeQueryList
-import com.open200.xesar.connect.testutils.CalendarFixture
+import com.open200.xesar.connect.util.fixture.CalendarFixture
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.equals.shouldBeEqual
 import io.kotest.matchers.shouldBe

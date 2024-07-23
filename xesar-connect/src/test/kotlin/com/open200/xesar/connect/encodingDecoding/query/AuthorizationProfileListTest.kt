@@ -4,7 +4,7 @@ import com.open200.xesar.connect.messages.query.AuthorizationProfile
 import com.open200.xesar.connect.messages.query.QueryList
 import com.open200.xesar.connect.messages.query.decodeQueryList
 import com.open200.xesar.connect.messages.query.encodeQueryList
-import com.open200.xesar.connect.testutils.AuthorizationProfileFixture.authorizationProfileFixture
+import com.open200.xesar.connect.util.fixture.AuthorizationProfileFixture.authorizationProfileFixture
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.equals.shouldBeEqual
 import io.kotest.matchers.shouldBe

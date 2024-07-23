@@ -1,7 +1,7 @@
 package com.open200.xesar.connect.encodingDecoding.query
 
 import com.open200.xesar.connect.messages.query.AccessProtocolEvent
-import com.open200.xesar.connect.testutils.AccessProtocolEventFixture
+import com.open200.xesar.connect.util.fixture.AccessProtocolEventFixture
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.equals.shouldBeEqual
 import io.kotest.matchers.shouldBe

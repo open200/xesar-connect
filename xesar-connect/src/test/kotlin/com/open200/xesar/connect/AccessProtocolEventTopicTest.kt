@@ -4,7 +4,6 @@ import com.open200.xesar.connect.messages.query.EventType
 import com.open200.xesar.connect.messages.query.GroupOfEvent
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
-import java.util.*
 
 class AccessProtocolEventTopicTest :
     FunSpec({

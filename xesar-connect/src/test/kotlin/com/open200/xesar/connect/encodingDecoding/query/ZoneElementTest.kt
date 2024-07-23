@@ -1,7 +1,7 @@
 package com.open200.xesar.connect.encodingDecoding.query
 
 import com.open200.xesar.connect.messages.query.*
-import com.open200.xesar.connect.testutils.ZoneFixture
+import com.open200.xesar.connect.util.fixture.ZoneFixture
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.equals.shouldBeEqual
 import io.kotest.matchers.shouldBe
