@@ -5,7 +5,7 @@ import com.open200.xesar.connect.messages.query.Person
 import com.open200.xesar.connect.messages.query.QueryElement
 import com.open200.xesar.connect.messages.query.decodeQueryElement
 import com.open200.xesar.connect.messages.query.encodeQueryElement
-import com.open200.xesar.connect.testutils.PersonFixture.personFixture
+import com.open200.xesar.connect.util.fixture.PersonFixture.personFixture
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.equals.shouldBeEqual

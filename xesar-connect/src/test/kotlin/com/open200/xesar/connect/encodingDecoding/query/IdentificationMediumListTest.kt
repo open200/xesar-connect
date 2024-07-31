@@ -2,7 +2,7 @@ package com.open200.xesar.connect.encodingDecoding.query
 
 import com.open200.xesar.connect.logger
 import com.open200.xesar.connect.messages.query.*
-import com.open200.xesar.connect.testutils.IdentificationMediumFixture
+import com.open200.xesar.connect.util.fixture.IdentificationMediumFixture
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.equals.shouldBeEqual
 import java.util.*
