@@ -6,7 +6,10 @@ import javax.net.ssl.KeyManagerFactory
 import javax.net.ssl.SSLContext
 import javax.net.ssl.TrustManagerFactory
 
-class SslContextCertificate(private val mqttCertificates: Config.MqttCertificates) {
+class SslContextCertificate(
+    private val mqttCertificates: Config.MqttCertificates,
+    private val securityProtocol: String
+) {
     lateinit var ssLContext: SSLContext
 
     init {
@@ -44,7 +47,7 @@ class SslContextCertificate(private val mqttCertificates: Config.MqttCertificate
         kmf.init(ks, password)
 
         // initialize sslContext
-        ssLContext = SSLContext.getInstance("TLS")
+        ssLContext = SSLContext.getInstance(securityProtocol)
         return ssLContext.init(kmf.keyManagers, tmf.trustManagers, null)
     }
 }
