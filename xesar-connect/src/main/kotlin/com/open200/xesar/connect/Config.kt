@@ -65,6 +65,8 @@ data class Config(
      * @property isAutomaticReconnect Whether to enable automatic reconnection (default: true).
      * @property maxInflight The maximum number of in-flight messages (default: 500).
      * @property keepAliveInterval The keep-alive interval in seconds (default: 600).
+     * @property securityProtocol The protocol used for a secure connection between client and
+     *   broker when [MqttCertificates] are provided. (default: "TLSv1.3").
      */
     data class MqttConnectOptions(
         val isCleanSession: Boolean = false,
@@ -72,6 +74,7 @@ data class Config(
         val isAutomaticReconnect: Boolean = true,
         val maxInflight: Int = 500,
         val keepAliveInterval: Int = 600,
+        val securityProtocol: String = "TLSv1.3"
     )
 
     companion object {

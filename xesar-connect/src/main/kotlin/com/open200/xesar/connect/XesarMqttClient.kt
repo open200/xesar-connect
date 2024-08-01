@@ -181,7 +181,9 @@ class XesarMqttClient(private val client: MqttAsyncClient) : IXesarMqttClient {
             options.keepAliveInterval = config.mqttConnectOptions.keepAliveInterval
 
             if (config.mqttCertificates != null) {
-                val sslContextCertificate = SslContextCertificate(config.mqttCertificates)
+                val sslContextCertificate =
+                    SslContextCertificate(
+                        config.mqttCertificates, config.mqttConnectOptions.securityProtocol)
                 options.socketFactory = sslContextCertificate.ssLContext.socketFactory
                 options.isHttpsHostnameVerificationEnabled = false
             }
