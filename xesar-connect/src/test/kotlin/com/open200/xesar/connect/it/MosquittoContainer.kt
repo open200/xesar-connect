@@ -26,11 +26,12 @@ object MosquittoContainer {
         dispatcher: CoroutineDispatcher = Dispatchers.IO
     ) =
         Config(
-            Config.ApiProperties(
-                hostname = container.host,
-                port = container.firstMappedPort.toString(),
-                userId = UUID.fromString("faf3d0c4-1281-40ae-89d7-5c541d77a757"),
-                token = TOKEN),
+            apiProperties =
+                Config.ApiProperties(
+                    hostname = container.host,
+                    port = container.firstMappedPort.toString(),
+                    userId = UUID.fromString("faf3d0c4-1281-40ae-89d7-5c541d77a757"),
+                    token = TOKEN),
             uuidGenerator = mockk(),
             logoutOnClose = false,
             dispatcherForCommandsAndCleanUp = dispatcher)

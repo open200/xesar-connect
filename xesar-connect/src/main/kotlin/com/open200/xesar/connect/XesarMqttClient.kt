@@ -154,6 +154,10 @@ class XesarMqttClient(private val client: MqttAsyncClient) : IXesarMqttClient {
         disconnect()
     }
 
+    override fun getClientId(): String {
+        return client.clientId
+    }
+
     companion object {
 
         /**
@@ -165,8 +169,7 @@ class XesarMqttClient(private val client: MqttAsyncClient) : IXesarMqttClient {
          * @throws ConnectionFailedException if the connection to the MQTT broker fails.
          */
         fun connectAsync(config: Config): Deferred<XesarMqttClient> {
-
-            val clientId = MqttClient.generateClientId()
+            val mqttClientId = config.mqttClientId ?: MqttClient.generateClientId()
             val persistence = MemoryPersistence()
 
             val deferredResult = CompletableDeferred<XesarMqttClient>()
@@ -188,7 +191,7 @@ class XesarMqttClient(private val client: MqttAsyncClient) : IXesarMqttClient {
                 options.isHttpsHostnameVerificationEnabled = false
             }
 
-            val client = MqttAsyncClient(broker, clientId, persistence)
+            val client = MqttAsyncClient(broker, mqttClientId, persistence)
 
             client.connect(
                 options,

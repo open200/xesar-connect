@@ -13,8 +13,14 @@ interface IXesarMqttClient : AutoCloseable {
     var onDisconnect: (ConnectionFailedException?) -> Unit
 
     fun subscribeAsync(topics: Array<out String>, qos: Int = 0): Deferred<Unit>
+
     fun publishAsync(topic: String, message: String, qos: Int = 0): Deferred<Unit>
+
     fun unsubscribe(topics: Topics)
+
     fun disconnect()
+
     fun isConnected(): Boolean
+
+    fun getClientId(): String
 }
