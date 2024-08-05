@@ -188,8 +188,9 @@ class Topics(vararg val topics: String) {
              * MQTT topic string for the "AccessProtocolEvent" event for a specific [GroupOfEvent]
              * and [EventType]
              */
-            fun accessProtocolEventTopic(eventGroup: GroupOfEvent, eventType: EventType): String {
-                return "xs3/1/ase/%s/%04X".format(eventGroup.name, eventType.eventNumber)
+            fun accessProtocolEventTopic(eventType: EventType): String {
+                return "xs3/1/ase/%s/%04X".format(
+                    eventType.groupOfEvent.name, eventType.eventNumber)
             }
 
             /**
