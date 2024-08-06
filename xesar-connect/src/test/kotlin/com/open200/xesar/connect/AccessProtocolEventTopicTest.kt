@@ -8,8 +8,7 @@ import io.kotest.matchers.shouldBe
 class AccessProtocolEventTopicTest :
     FunSpec({
         test("accessProtocolEventTopic should return correct topic for NORMAL_OPENING event") {
-            Topics.Event.accessProtocolEventTopic(
-                    GroupOfEvent.MediumEvents, EventType.NORMAL_OPENING)
+            Topics.Event.accessProtocolEventTopic(EventType.NORMAL_OPENING)
                 .shouldBe("xs3/1/ase/MediumEvents/0001")
         }
 

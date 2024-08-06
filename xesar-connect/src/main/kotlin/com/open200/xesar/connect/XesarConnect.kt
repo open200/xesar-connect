@@ -93,6 +93,24 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) {
     }
 
     /**
+     * Registers a listener for incoming messages that match the specified access protocol event
+     * types.
+     *
+     * @param eventTypes The access protocol event types to match incoming messages against.
+     * @param onAccessProtocolEventHandler The access protocol event handler that will be invoked
+     *   when a matching message is received.
+     */
+    fun onAccessProtocolEvent(
+        eventTypes: List<EventType>,
+        onAccessProtocolEventHandler: AccessProtocolEventHandler
+    ): Listener {
+        return on(TopicFilter(eventTypes.map { Topics.Event.accessProtocolEventTopic(it) })) {
+            val event = AccessProtocolEvent.decode(it.message)
+            onAccessProtocolEventHandler.handle(event)
+        }
+    }
+
+    /**
      * Retrieves a list of currently subscribed topics.
      *
      * @return The list of subscribed topics.
