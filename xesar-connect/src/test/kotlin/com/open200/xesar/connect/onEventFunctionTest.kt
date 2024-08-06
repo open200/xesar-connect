@@ -16,7 +16,7 @@ import org.eclipse.paho.client.mqttv3.MqttAsyncClient
 
 class onEventFunctionTest :
     FunSpec({
-        test("test onAccessProtocolEvent handling two access protocol events") {
+        test("test onEvent function with two different MessageFilters and two different events") {
             runTest {
                 val mqttAsyncClient = mockk<MqttAsyncClient>()
                 coEvery { mqttAsyncClient.setCallback(any()) } returns Unit
