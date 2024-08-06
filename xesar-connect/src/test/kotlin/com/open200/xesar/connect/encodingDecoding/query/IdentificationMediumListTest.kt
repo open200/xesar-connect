@@ -95,7 +95,6 @@ class IdentificationMediumListTest :
         test("encoding QueryResponseElement for an identification medium") {
             val identificationMediumEncoded = encodeQueryList(identificationMediumList)
             logger.info(identificationMediumEncoded)
-            logger.info { identificationMediumString }
             identificationMediumEncoded.shouldBeEqual(identificationMediumString)
         }
 
