@@ -82,11 +82,16 @@ data class IdentificationMedium(
     @Serializable(with = UUIDSerializer::class) val userId: UUID? = null,
     val userName: String? = null,
     val requiredAction: String,
-    // TODO: mediumType is not in the documentation
-    val mediumType: String? = null
+    val mediumType: MediumType? = null,
+    val phoneNumber: String? = null
 ) : QueryListResource, QueryElementResource {
 
     companion object {
         const val QUERY_RESOURCE = "identification-media"
+    }
+
+    enum class MediumType {
+        SMARTPHONE,
+        PASSIVE
     }
 }

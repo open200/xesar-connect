@@ -42,5 +42,5 @@ object IdentificationMediumFixture {
             userId = UUID.fromString("91781b22-ebdf-4ada-80cf-91f1fb9a4d96"),
             userName = "test User",
             requiredAction = "UPDATE",
-            mediumType = "PASSIVE")
+            mediumType = IdentificationMedium.MediumType.PASSIVE)
 }
