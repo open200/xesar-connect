@@ -93,6 +93,23 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) {
     }
 
     /**
+     * Registers a listener for incoming messages that match the specified message filter.
+     *
+     * @param messageFilter The filter to match incoming messages against.
+     * @param onEventHandler The event handler for an event of type `E` that will be invoked when a
+     *   matching message is received.
+     */
+    inline fun <reified E : Event> onEvent(
+        messageFilter: MessageFilter,
+        onEventHandler: EventHandler<E>
+    ): Listener {
+        return on(messageFilter) {
+            val event = decodeEvent<E>(it.message)
+            onEventHandler.handle(event)
+        }
+    }
+
+    /**
      * Registers a listener for incoming messages that match the specified access protocol event
      * types.
      *
