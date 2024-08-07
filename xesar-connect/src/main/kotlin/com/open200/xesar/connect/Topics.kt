@@ -423,6 +423,10 @@ class Topics(vararg val topics: String) {
 
             /** MQTT topic string for the "ChangeInstallationPointMapi" command */
             val CHANGE_INSTALLATION_POINT = "xs3/1/cmd/ChangeInstallationPointMapi"
+
+            /** MQTT topic string for the "SetDefaultSmartphoneValidityDurationMapi" command. */
+            val SET_DEFAULT_SMARTPHONE_VALIDITIY_DURATION =
+                "xs3/1/cmd/SetDefaultSmartphoneValidityDurationMapi"
         }
     }
 
