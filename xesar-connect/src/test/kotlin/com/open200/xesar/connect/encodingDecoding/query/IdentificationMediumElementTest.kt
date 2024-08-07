@@ -47,7 +47,8 @@ class IdentificationMediumElementTest :
                 "\"userId\":\"91781b22-ebdf-4ada-80cf-91f1fb9a4d96\"," +
                 "\"userName\":\"test User\"," +
                 "\"requiredAction\":\"UPDATE\"," +
-                "\"mediumType\":\"PASSIVE\"}}"
+                "\"mediumType\":\"PASSIVE\"," +
+                "\"phoneNumber\":null}}"
 
         test("encoding QueryResponseElement for an identification medium") {
             val identificationMediumEncoded = encodeQueryElement(identificationMedium)

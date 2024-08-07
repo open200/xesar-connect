@@ -53,7 +53,9 @@ class IdentificationMediumListTest :
                 "\"userId\":\"91781b22-ebdf-4ada-80cf-91f1fb9a4d96\"," +
                 "\"userName\":\"test User\"," +
                 "\"requiredAction\":\"UPDATE\"," +
-                "\"mediumType\":\"PASSIVE\"}," +
+                "\"mediumType\":\"PASSIVE\"," +
+                "\"phoneNumber\":null" +
+                "}," +
                 "{\"id\":\"8293e920-90ce-48da-851c-cff54a13e2c6\"," +
                 "\"label\":\"test door\"," +
                 "\"issuedAt\":\"2023-07-05T15:22:13.509825\"," +
@@ -85,14 +87,15 @@ class IdentificationMediumListTest :
                 "\"userId\":\"91781b22-ebdf-4ada-80cf-91f1fb9a4d96\"," +
                 "\"userName\":\"test User\"," +
                 "\"requiredAction\":\"UPDATE\"," +
-                "\"mediumType\":\"PASSIVE\"}]," +
+                "\"mediumType\":\"PASSIVE\"," +
+                "\"phoneNumber\":null}]," +
                 "\"totalCount\":2," +
                 "\"filterCount\":2}}"
 
         test("encoding QueryResponseElement for an identification medium") {
             val identificationMediumEncoded = encodeQueryList(identificationMediumList)
-            logger.info("identificationMediumEncoded: $identificationMediumEncoded")
-
+            logger.info(identificationMediumEncoded)
+            logger.info { identificationMediumString }
             identificationMediumEncoded.shouldBeEqual(identificationMediumString)
         }
 
