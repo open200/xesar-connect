@@ -177,6 +177,9 @@ class Topics(vararg val topics: String) {
             /** MQTT topic string for the "PhoneNumberChanged" event */
             val PHONE_NUMBER_CHANGED = "xs3/1/ces/PhoneNumberChanged"
 
+            /** MQTT topic string for the "SmartphoneAddedToInstallation" event */
+            val SMARTPHONE_ADDED_TO_INSTALLATION = "xs3/1/ces/SmartphoneAddedToInstallation"
+
             /**
              * Generates the MQTT topic string which emits errors for previously received queries or
              * commands.
@@ -433,6 +436,9 @@ class Topics(vararg val topics: String) {
 
             /** MQTT topic string for the "SetPhoneNumberOnSmartphoneMapi" command. */
             val SET_PHONE_NUMBER_ON_SMARTPHONE = "xs3/1/cmd/SetPhoneNumberOnSmartphoneMapi"
+
+            /** MQTT topic string for the "AddSmartphoneToInstallationMapi" command. */
+            val ADD_SMARTPHONE_TO_INSTALLATION = "xs3/1/cmd/AddSmartphoneToInstallationMapi"
         }
     }
 

@@ -2,13 +2,17 @@ package com.open200.xesar.connect.extension
 
 import com.open200.xesar.connect.Topics
 import com.open200.xesar.connect.XesarConnect
+import com.open200.xesar.connect.messages.DisengagePeriod
 import com.open200.xesar.connect.messages.SetPhoneNumberOnSmartphoneResult
 import com.open200.xesar.connect.messages.SingleEventResult
+import com.open200.xesar.connect.messages.command.AddSmartphoneToInstallationMapi
 import com.open200.xesar.connect.messages.command.SetDefaultSmartphoneValidityDurationMapi
 import com.open200.xesar.connect.messages.command.SetPhoneNumberOnSmartphoneMapi
 import com.open200.xesar.connect.messages.event.MediumChanged
 import com.open200.xesar.connect.messages.event.PartitionChanged
 import com.open200.xesar.connect.messages.event.PhoneNumberChanged
+import com.open200.xesar.connect.messages.event.SmartphoneAddedToInstallation
+import java.time.LocalDateTime
 import java.util.*
 
 /**
@@ -59,4 +63,67 @@ suspend fun XesarConnect.setPhoneNumberOnSmartphoneAsync(
         setPhoneNumberOnSmartPhoneResult.first,
         setPhoneNumberOnSmartPhoneResult.second,
         setPhoneNumberOnSmartPhoneResult.third)
+}
+
+/**
+ * Adds a smartphone media to an installation.
+ *
+ * The AddSmartphoneToInstallationMapi command is designed specifically for adding smartphone
+ * identification mediums, while the AddMediumToInstallationMapi command is dedicated to adding
+ * passive identification mediums. All other commands related to identification mediums can be used
+ * for modifying both smartphone identification mediums and other types of identification mediums.
+ *
+ * @param accessBeginAt The timestamp when access begins for the smartphone media (optional).
+ * @param partitionId The identifier of the partition associated with the smartphone media
+ *   (optional).
+ * @param disengagePeriod The disengage period of the smartphone media (optional).
+ * @param authorizationProfileId The identifier of the authorization profile associated with the
+ *   smartphone media (optional).
+ * @param individualAuthorizationProfileIds The list of individual authorization profile identifiers
+ *   associated with the smartphone media (optional).
+ * @param messageLanguage The language for correspondence (optional).
+ * @param label The label of the smartphone media (optional).
+ * @param accessEndAt The timestamp when access ends for the smartphone media (optional).
+ * @param phoneNumber The phone number of the smartphone media (optional).
+ * @param validityDuration The duration of validity for the smartphone media (optional).
+ * @param personId The unique identifier of the person associated with the smartphone media
+ *   (optional).
+ * @param id The unique identifier of the smartphone media.
+ * @param requestConfig The request configuration (optional).
+ */
+suspend fun XesarConnect.addSmartphoneToInstallationAsync(
+    accessBeginAt: LocalDateTime? = null,
+    partitionId: UUID? = null,
+    disengagePeriod: DisengagePeriod? = null,
+    authorizationProfileId: UUID? = null,
+    individualAuthorizationProfileIds: List<UUID>? = null,
+    messageLanguage: String? = null,
+    label: String? = null,
+    accessEndAt: LocalDateTime? = null,
+    phoneNumber: String? = null,
+    validityDuration: Int? = null,
+    personId: UUID? = null,
+    id: UUID,
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+): SingleEventResult<SmartphoneAddedToInstallation> {
+    return sendCommandAsync<AddSmartphoneToInstallationMapi, SmartphoneAddedToInstallation>(
+        Topics.Command.ADD_SMARTPHONE_TO_INSTALLATION,
+        Topics.Event.SMARTPHONE_ADDED_TO_INSTALLATION,
+        true,
+        AddSmartphoneToInstallationMapi(
+            config.uuidGenerator.generateId(),
+            accessBeginAt,
+            partitionId,
+            disengagePeriod,
+            authorizationProfileId,
+            individualAuthorizationProfileIds,
+            messageLanguage,
+            label,
+            accessEndAt,
+            phoneNumber,
+            validityDuration,
+            personId,
+            id,
+            token),
+        requestConfig)
 }
