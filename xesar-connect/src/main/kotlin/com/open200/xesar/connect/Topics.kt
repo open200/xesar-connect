@@ -174,6 +174,9 @@ class Topics(vararg val topics: String) {
             /** MQTT topic string for the "AuthorizationTimeProfileChanged" event */
             val AUTHORIZATION_TIME_PROFILE_CHANGED = "xs3/1/ces/AuthorizationTimeProfileChanged"
 
+            /** MQTT topic string for the "PhoneNumberChanged" event */
+            val PHONE_NUMBER_CHANGED = "xs3/1/ces/PhoneNumberChanged"
+
             /**
              * Generates the MQTT topic string which emits errors for previously received queries or
              * commands.
@@ -427,6 +430,9 @@ class Topics(vararg val topics: String) {
             /** MQTT topic string for the "SetDefaultSmartphoneValidityDurationMapi" command. */
             val SET_DEFAULT_SMARTPHONE_VALIDITIY_DURATION =
                 "xs3/1/cmd/SetDefaultSmartphoneValidityDurationMapi"
+
+            /** MQTT topic string for the "SetPhoneNumberOnSmartphoneMapi" command. */
+            val SET_PHONE_NUMBER_ON_SMARTPHONE = "xs3/1/cmd/SetPhoneNumberOnSmartphoneMapi"
         }
     }
 
