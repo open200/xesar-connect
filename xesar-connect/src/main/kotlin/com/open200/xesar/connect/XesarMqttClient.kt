@@ -24,22 +24,19 @@ class XesarMqttClient(private val client: MqttAsyncClient) : IXesarMqttClient {
             object : MqttCallback {
 
                 override fun connectionLost(cause: Throwable?) {
-                    log.error("lost connection: $cause")
+                    log.error(cause) { "lost connection" }
                     val exception = ConnectionFailedException("lost connection: $cause")
                     onDisconnect(exception)
                 }
 
                 override fun messageArrived(topic: String?, message: MqttMessage?) {
+                    log.debug { "Message arrived: ${message?.payload?.decodeToString()}" }
                     onMessage(topic ?: "", message?.payload ?: ByteArray(0))
-                    if (log.isDebugEnabled) {
-                        log.debug("Message arrived: ${message?.payload?.decodeToString()}")
-                    }
                 }
 
                 override fun deliveryComplete(token: IMqttDeliveryToken?) {
-                    if (log.isDebugEnabled) {
-                        log.debug(
-                            "Received MQTT 'delivery complete' message of topic: ${token?.topics?.joinToString(",")}")
+                    log.debug {
+                        "Received MQTT 'delivery complete' message of topic: ${token?.topics?.joinToString(",")}"
                     }
                 }
             })
@@ -57,6 +54,8 @@ class XesarMqttClient(private val client: MqttAsyncClient) : IXesarMqttClient {
         try {
             val result = CompletableDeferred<Unit>()
             val qosArr = IntArray(topics.size) { qos }
+
+            log.debug { "Subscribing to topics: ${topics.joinToString(",")} with qos $qos" }
 
             client.subscribe(
                 topics,
@@ -95,6 +94,8 @@ class XesarMqttClient(private val client: MqttAsyncClient) : IXesarMqttClient {
     override fun publishAsync(topic: String, message: String, qos: Int): Deferred<Unit> {
         val deferredResult = CompletableDeferred<Unit>()
 
+        log.debug { "Publishing message to topic: $topic, qos $qos, message: $message" }
+
         client.publish(
             topic,
             message.encodeToByteArray(),
@@ -122,11 +123,13 @@ class XesarMqttClient(private val client: MqttAsyncClient) : IXesarMqttClient {
      * @param topics The topics to unsubscribe from.
      */
     override fun unsubscribe(topics: Topics) {
+        log.debug { "Unsubscribing from topics: ${topics.topics.joinToString(",")}" }
         client.unsubscribe(topics.topics)
     }
 
     /** Disconnects from the MQTT broker. */
     override fun disconnect() {
+        log.debug { "Disconnecting from MQTT broker" }
         val token = client.disconnect()
 
         token.actionCallback =
