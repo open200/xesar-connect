@@ -19,6 +19,8 @@ import kotlinx.serialization.Serializable
 /**
  * Configuration data class for Xesar API.
  *
+ * @property mqttClientId The client ID to use for the connection. If not provided, a random
+ *   generated id is used.
  * @property apiProperties The API properties containing hostname, port, userId, and token.
  * @property mqttCertificates The MQTT certificates used for secure communication (optional).
  * @property uuidGenerator The generator for request IDs.
@@ -26,6 +28,7 @@ import kotlinx.serialization.Serializable
  * @property logoutOnClose Whether the logout is set up on close of the connection (optional).
  */
 data class Config(
+    val mqttClientId: String? = null,
     val apiProperties: ApiProperties,
     val mqttCertificates: MqttCertificates? = null,
     val uuidGenerator: IRequestIdGenerator = DefaultRequestIdGenerator(),
@@ -113,24 +116,28 @@ data class Config(
                 "ApiProperties for host: ${apiProperties.hostname} on port: ${apiProperties.port} loaded.")
 
             return Config(
-                ApiProperties(
-                    hostname = apiProperties.hostname,
-                    port = apiProperties.port,
-                    userId = apiProperties.userId,
-                    token = apiProperties.token),
-                MqttCertificates(
-                    caCertificate =
-                        readX509CertificateFromZip(archiveOptions.caCertificateName, zipFile),
-                    clientCertificate =
-                        readX509CertificateFromZip(archiveOptions.clientCertificateName, zipFile),
-                    clientKey = readKeyPairWithZip(archiveOptions.clientKeyName, zipFile)),
+                apiProperties =
+                    ApiProperties(
+                        hostname = apiProperties.hostname,
+                        port = apiProperties.port,
+                        userId = apiProperties.userId,
+                        token = apiProperties.token),
+                mqttCertificates =
+                    MqttCertificates(
+                        caCertificate =
+                            readX509CertificateFromZip(archiveOptions.caCertificateName, zipFile),
+                        clientCertificate =
+                            readX509CertificateFromZip(
+                                archiveOptions.clientCertificateName, zipFile),
+                        clientKey = readKeyPairWithZip(archiveOptions.clientKeyName, zipFile)),
                 uuidGenerator = requestIdGenerator,
-                MqttConnectOptions(
-                    isCleanSession = mqttConnectOptions.isCleanSession,
-                    connectionTimeout = mqttConnectOptions.connectionTimeout,
-                    isAutomaticReconnect = mqttConnectOptions.isAutomaticReconnect,
-                    maxInflight = mqttConnectOptions.maxInflight,
-                    keepAliveInterval = mqttConnectOptions.keepAliveInterval),
+                mqttConnectOptions =
+                    MqttConnectOptions(
+                        isCleanSession = mqttConnectOptions.isCleanSession,
+                        connectionTimeout = mqttConnectOptions.connectionTimeout,
+                        isAutomaticReconnect = mqttConnectOptions.isAutomaticReconnect,
+                        maxInflight = mqttConnectOptions.maxInflight,
+                        keepAliveInterval = mqttConnectOptions.keepAliveInterval),
                 logoutOnClose = logoutOnClose)
         }
 
