@@ -28,6 +28,10 @@ import kotlinx.serialization.Serializable
  * @param timeProfileName The name of the time profile associated with the installation point
  *   (optional).
  * @param batteryCondition The battery condition of the installation point (optional).
+ * @param timeProfileId The unique identifier of the time profile associated with the installation
+ *   point (optional).
+ * @param accessId The access ID of the installation point (optional).
+ * @param secure Indicates if the installation point is secure (optional).
  */
 @Serializable
 data class InstallationPoint(
@@ -50,6 +54,9 @@ data class InstallationPoint(
     val bleStatus: String? = null,
     val timeProfileName: String? = null,
     val batteryCondition: String? = null,
+    val timeProfileId: @Serializable(with = UUIDSerializer::class) UUID? = null,
+    val accessId: Long? = null,
+    val secure: Boolean? = null,
 ) : QueryListResource, QueryElementResource {
     companion object {
         const val QUERY_RESOURCE = "installation-points"
