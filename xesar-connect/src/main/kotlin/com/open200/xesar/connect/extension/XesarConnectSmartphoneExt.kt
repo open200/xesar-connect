@@ -6,12 +6,10 @@ import com.open200.xesar.connect.messages.DisengagePeriod
 import com.open200.xesar.connect.messages.SetPhoneNumberOnSmartphoneResult
 import com.open200.xesar.connect.messages.SingleEventResult
 import com.open200.xesar.connect.messages.command.AddSmartphoneToInstallationMapi
+import com.open200.xesar.connect.messages.command.RequestNewRegistrationCodeMapi
 import com.open200.xesar.connect.messages.command.SetDefaultSmartphoneValidityDurationMapi
 import com.open200.xesar.connect.messages.command.SetPhoneNumberOnSmartphoneMapi
-import com.open200.xesar.connect.messages.event.MediumChanged
-import com.open200.xesar.connect.messages.event.PartitionChanged
-import com.open200.xesar.connect.messages.event.PhoneNumberChanged
-import com.open200.xesar.connect.messages.event.SmartphoneAddedToInstallation
+import com.open200.xesar.connect.messages.event.*
 import java.time.LocalDateTime
 import java.util.*
 
@@ -125,5 +123,23 @@ suspend fun XesarConnect.addSmartphoneToInstallationAsync(
             personId,
             id,
             token),
+        requestConfig)
+}
+
+/**
+ * Manually requests a new registration code for a smartphone media.
+ *
+ * @param id The id of the smartphone media.
+ * @param requestConfig The request configuration (optional).
+ */
+suspend fun XesarConnect.requestNewRegistrationCodeAsync(
+    id: UUID,
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+): SingleEventResult<NewRegistrationCodeRequested> {
+    return sendCommandAsync<RequestNewRegistrationCodeMapi, NewRegistrationCodeRequested>(
+        Topics.Command.REQUEST_NEW_REGISTRATION_CODE,
+        Topics.Event.NEW_REGISTRATION_CODE_REQUESTED,
+        true,
+        RequestNewRegistrationCodeMapi(config.uuidGenerator.generateId(), id, token),
         requestConfig)
 }
