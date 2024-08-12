@@ -25,7 +25,7 @@ class EvvaComponentListTest :
                     2))
 
         val evvaComponentString =
-            "{\"requestId\":\"ffcf5e00-83ad-40cb-b37b-e91abb6f75cd\",\"response\":{\"data\":[{\"componentType\":\"WallReader\",\"batteryCondition\":\"Full\",\"id\":\"497f6eca-6276-4993-bfeb-53cbbbba6f08\",\"batteryStatusUpdatedAt\":\"2023-08-24T16:25:52.225991\",\"stateChangedAt\":\"2023-06-15T16:25:52.225991\",\"status\":\"connected\"},{\"componentType\":\"WallReader\",\"batteryCondition\":\"Full\",\"id\":\"555e7d1a-54f1-432a-ade7-80d20a63ee2d\",\"batteryStatusUpdatedAt\":\"2023-08-24T16:25:52.225991\",\"stateChangedAt\":\"2023-06-15T16:25:52.225991\",\"status\":\"connected\"}],\"totalCount\":2,\"filterCount\":2}}"
+            "{\"requestId\":\"ffcf5e00-83ad-40cb-b37b-e91abb6f75cd\",\"response\":{\"data\":[{\"componentType\":\"WallReader\",\"batteryCondition\":\"Full\",\"id\":\"497f6eca-6276-4993-bfeb-53cbbbba6f08\",\"batteryStatusUpdatedAt\":\"2023-08-24T16:25:52.225991\",\"stateChangedAt\":\"2023-06-15T16:25:52.225991\",\"status\":\"Synced\"},{\"componentType\":\"WallReader\",\"batteryCondition\":\"Full\",\"id\":\"555e7d1a-54f1-432a-ade7-80d20a63ee2d\",\"batteryStatusUpdatedAt\":\"2023-08-24T16:25:52.225991\",\"stateChangedAt\":\"2023-06-15T16:25:52.225991\",\"status\":\"Synced\"}],\"totalCount\":2,\"filterCount\":2}}"
 
         test("encoding QueryList for a list of evva components") {
             val evvaComponentEncoded = encodeQueryList(evvaComponentList)

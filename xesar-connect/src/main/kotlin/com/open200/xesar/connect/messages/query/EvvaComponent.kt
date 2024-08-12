@@ -25,7 +25,7 @@ data class EvvaComponent(
     @Serializable(with = LocalDateTimeSerializer::class)
     val batteryStatusUpdatedAt: LocalDateTime? = null,
     @Serializable(with = LocalDateTimeSerializer::class) val stateChangedAt: LocalDateTime? = null,
-    val status: OnlineStatus? = null
+    val status: ComponentStatus? = null
 ) : QueryListResource, QueryElementResource {
 
     companion object {

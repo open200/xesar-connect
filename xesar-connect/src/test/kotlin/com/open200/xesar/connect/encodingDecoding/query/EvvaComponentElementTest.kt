@@ -25,7 +25,7 @@ class EvvaComponentElementTest :
                 "\"id\":\"497f6eca-6276-4993-bfeb-53cbbbba6f08\"," +
                 "\"batteryStatusUpdatedAt\":\"2023-08-24T16:25:52.225991\"," +
                 "\"stateChangedAt\":\"2023-06-15T16:25:52.225991\"," +
-                "\"status\":\"connected\"}}"
+                "\"status\":\"Synced\"}}"
 
         test("encoding QueryElement for an evva component") {
             val evvaComponentEncoded = encodeQueryElement(evvaComponent)
