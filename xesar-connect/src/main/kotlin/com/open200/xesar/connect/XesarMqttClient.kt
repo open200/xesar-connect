@@ -24,22 +24,19 @@ class XesarMqttClient(private val client: MqttAsyncClient) : IXesarMqttClient {
             object : MqttCallback {
 
                 override fun connectionLost(cause: Throwable?) {
-                    log.error("lost connection: $cause")
+                    log.error(cause) { "lost connection" }
                     val exception = ConnectionFailedException("lost connection: $cause")
                     onDisconnect(exception)
                 }
 
                 override fun messageArrived(topic: String?, message: MqttMessage?) {
+                    log.debug { "Message arrived: ${message?.payload?.decodeToString()}" }
                     onMessage(topic ?: "", message?.payload ?: ByteArray(0))
-                    if (log.isDebugEnabled) {
-                        log.debug("Message arrived: ${message?.payload?.decodeToString()}")
-                    }
                 }
 
                 override fun deliveryComplete(token: IMqttDeliveryToken?) {
-                    if (log.isDebugEnabled) {
-                        log.debug(
-                            "Received MQTT 'delivery complete' message of topic: ${token?.topics?.joinToString(",")}")
+                    log.debug {
+                        "Received MQTT 'delivery complete' message of topic: ${token?.topics?.joinToString(",")}"
                     }
                 }
             })
