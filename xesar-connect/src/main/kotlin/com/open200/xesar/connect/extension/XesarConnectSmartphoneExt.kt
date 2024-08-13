@@ -179,3 +179,22 @@ suspend fun XesarConnect.unregisterSmartphone(
         UnregisterSmartphoneMapi(config.uuidGenerator.generateId(), smartphoneMediaId, token),
         requestConfig)
 }
+
+/**
+ * Resends a smartphone authorizations request.
+ *
+ * @param smartphoneMediaId The id of the smartphone media.
+ * @param requestConfig The request configuration (optional).
+ */
+suspend fun XesarConnect.resendSmartphoneAuthorizationsAsync(
+    smartphoneMediaId: UUID,
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+): SingleEventResult<SmartphoneAuthorizationsResent> {
+    return sendCommandAsync<ResendSmartphoneAuthorizationsMapi, SmartphoneAuthorizationsResent>(
+        Topics.Command.RESEND_SMARTPHONE_AUTHORIZATIONS,
+        Topics.Event.SMARTPHONE_AUTHORIZATIONS_RESENT,
+        true,
+        ResendSmartphoneAuthorizationsMapi(
+            config.uuidGenerator.generateId(), smartphoneMediaId, token),
+        requestConfig)
+}

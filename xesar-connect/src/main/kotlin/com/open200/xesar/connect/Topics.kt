@@ -186,6 +186,9 @@ class Topics(vararg val topics: String) {
             /** MQTT topic string for the "SmartphoneUnregistered" event */
             val SMARTPHONE_UNREGISTERED = "xs3/1/ces/SmartphoneUnregistered"
 
+            /** MQTT topic string for the "SmartphoneAuthorizationsResent" event */
+            val SMARTPHONE_AUTHORIZATIONS_RESENT = "xs3/1/ces/SmartphoneAuthorizationsResent"
+
             /**
              * Generates the MQTT topic string which emits errors for previously received queries or
              * commands.
@@ -457,6 +460,9 @@ class Topics(vararg val topics: String) {
 
             /** MQTT topic string for the "UnregisterSmartphoneMapi" command. */
             val UNREGISTER_SMARTPHONE = "xs3/1/cmd/UnregisterSmartphoneMapi"
+
+            /** MQTT topic string for the "ResendSmartphoneAuthorizationsMapi" command. */
+            val RESEND_SMARTPHONE_AUTHORIZATIONS = "xs3/1/cmd/ResendSmartphoneAuthorizationsMapi"
         }
     }
 
