@@ -161,3 +161,21 @@ suspend fun XesarConnect.setMessageLanguageOnSmartphoneAsync(
             config.uuidGenerator.generateId(), messageLanguage, id, token),
         requestConfig)
 }
+
+/**
+ * Unregisters a smartphone media.
+ *
+ * @param smartphoneMediaId The id of the smartphone media.
+ * @param requestConfig The request configuration (optional).
+ */
+suspend fun XesarConnect.unregisterSmartphone(
+    smartphoneMediaId: UUID,
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+): SingleEventResult<SmartphoneUnregistered> {
+    return sendCommandAsync<UnregisterSmartphoneMapi, SmartphoneUnregistered>(
+        Topics.Command.UNREGISTER_SMARTPHONE,
+        Topics.Event.SMARTPHONE_UNREGISTERED,
+        true,
+        UnregisterSmartphoneMapi(config.uuidGenerator.generateId(), smartphoneMediaId, token),
+        requestConfig)
+}

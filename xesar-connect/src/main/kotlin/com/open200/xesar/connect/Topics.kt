@@ -183,6 +183,9 @@ class Topics(vararg val topics: String) {
             /** MQTT topic string for the "NewRegistrationCodeRequested" event */
             val NEW_REGISTRATION_CODE_REQUESTED = "xs3/1/ces/NewRegistrationCodeRequested"
 
+            /** MQTT topic string for the "SmartphoneUnregistered" event */
+            val SMARTPHONE_UNREGISTERED = "xs3/1/ces/SmartphoneUnregistered"
+
             /**
              * Generates the MQTT topic string which emits errors for previously received queries or
              * commands.
@@ -451,6 +454,9 @@ class Topics(vararg val topics: String) {
 
             /** MQTT topic string for the "ConfigureBluetoothStateMapi" command. */
             val CONFIGURE_BLUETOOTH_STATE = "xs3/1/cmd/ConfigureBluetoothStateMapi"
+
+            /** MQTT topic string for the "UnregisterSmartphoneMapi" command. */
+            val UNREGISTER_SMARTPHONE = "xs3/1/cmd/UnregisterSmartphoneMapi"
         }
     }
 
