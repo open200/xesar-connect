@@ -47,6 +47,8 @@ import kotlinx.serialization.Serializable
  * @param userName The name of the user associated with the identification media.
  * @param requiredAction The required action for the identification media.
  * @param mediumType The type of the identification media (optional).
+ * @param registrationState The registration state of the identification media (smartphone)
+ *   (optional).
  */
 @Serializable
 data class IdentificationMedium(
@@ -83,7 +85,8 @@ data class IdentificationMedium(
     val userName: String? = null,
     val requiredAction: String,
     val mediumType: MediumType? = null,
-    val phoneNumber: String? = null
+    val phoneNumber: String? = null,
+    val registrationState: String? = null
 ) : QueryListResource, QueryElementResource {
 
     companion object {
