@@ -5,10 +5,7 @@ import com.open200.xesar.connect.XesarConnect
 import com.open200.xesar.connect.messages.DisengagePeriod
 import com.open200.xesar.connect.messages.SetPhoneNumberOnSmartphoneResult
 import com.open200.xesar.connect.messages.SingleEventResult
-import com.open200.xesar.connect.messages.command.AddSmartphoneToInstallationMapi
-import com.open200.xesar.connect.messages.command.RequestNewRegistrationCodeMapi
-import com.open200.xesar.connect.messages.command.SetDefaultSmartphoneValidityDurationMapi
-import com.open200.xesar.connect.messages.command.SetPhoneNumberOnSmartphoneMapi
+import com.open200.xesar.connect.messages.command.*
 import com.open200.xesar.connect.messages.event.*
 import java.time.LocalDateTime
 import java.util.*
@@ -141,5 +138,26 @@ suspend fun XesarConnect.requestNewRegistrationCodeAsync(
         Topics.Event.NEW_REGISTRATION_CODE_REQUESTED,
         true,
         RequestNewRegistrationCodeMapi(config.uuidGenerator.generateId(), id, token),
+        requestConfig)
+}
+
+/**
+ * Sets the message language on a smartphone media.
+ *
+ * @param id The id of the smartphone media.
+ * @param messageLanguage The message language to set.
+ * @param requestConfig The request configuration (optional).
+ */
+suspend fun XesarConnect.setMessageLanguageOnSmartphoneAsync(
+    id: UUID,
+    messageLanguage: String,
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+): SingleEventResult<MediumChanged> {
+    return sendCommandAsync<SetMessageLanguageOnSmartphoneMapi, MediumChanged>(
+        Topics.Command.SET_MESSAGE_LANGUAGE_ON_SMARTPHONE,
+        Topics.Event.MEDIUM_CHANGED,
+        true,
+        SetMessageLanguageOnSmartphoneMapi(
+            config.uuidGenerator.generateId(), messageLanguage, id, token),
         requestConfig)
 }

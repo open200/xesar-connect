@@ -445,6 +445,9 @@ class Topics(vararg val topics: String) {
 
             /** MQTT topic string for the "RequestNewRegistrationCodeMapi" command. */
             val REQUEST_NEW_REGISTRATION_CODE = "xs3/1/cmd/RequestNewRegistrationCodeMapi"
+
+            /** MQTT topic string for the "SetMessageLanguageOnSmartphoneMapi" command. */
+            val SET_MESSAGE_LANGUAGE_ON_SMARTPHONE = "xs3/1/cmd/SetMessageLanguageOnSmartphoneMapi"
         }
     }
 

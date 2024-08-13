@@ -21,6 +21,7 @@ import kotlinx.serialization.Serializable
  * @param validFrom The valid from date of the medium.
  * @param accessEndAt The access end date of the medium.
  * @param phoneNumber The phone number of the medium (smartphone).
+ * @param messageLanguage The message language of the medium (smartphone).
  */
 @Serializable
 data class MediumChanged(
@@ -34,5 +35,6 @@ data class MediumChanged(
     val label: String? = null,
     val validFrom: @Serializable(with = LocalDateTimeSerializer::class) LocalDateTime? = null,
     val accessEndAt: @Serializable(with = LocalDateTimeSerializer::class) LocalDateTime? = null,
-    val phoneNumber: String? = null
+    val phoneNumber: String? = null,
+    val messageLanguage: String? = null
 ) : Event
