@@ -49,6 +49,10 @@ import kotlinx.serialization.Serializable
  * @param mediumType The type of the identification media (optional).
  * @param registrationState The registration state of the identification media (smartphone)
  *   (optional).
+ * @param registrationCode The registration code of the identification media (smartphone)
+ *   (optional).
+ * @param registrationCodeValidUntil The expiration timestamp of the smartphone registration code
+ *   (optional).
  */
 @Serializable
 data class IdentificationMedium(
@@ -86,7 +90,10 @@ data class IdentificationMedium(
     val requiredAction: String,
     val mediumType: MediumType? = null,
     val phoneNumber: String? = null,
-    val registrationState: String? = null
+    val registrationState: String? = null,
+    val registrationCode: String? = null,
+    @Serializable(with = LocalDateTimeSerializer::class)
+    val registrationCodeValidUntil: LocalDateTime? = null,
 ) : QueryListResource, QueryElementResource {
 
     companion object {
