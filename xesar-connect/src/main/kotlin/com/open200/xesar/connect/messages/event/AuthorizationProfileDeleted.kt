@@ -12,6 +12,7 @@ import kotlinx.serialization.Serializable
  * @param timeProfiles The corresponding time profiles of the authorization profile.
  * @param id The id of the authorization profile.
  * @param zones The corresponding zones of the authorization profile.
+ * @param standardTimeProfile The standard time profile of the authorization profile.
  */
 @Serializable
 data class AuthorizationProfileDeleted(
@@ -19,5 +20,6 @@ data class AuthorizationProfileDeleted(
     val individual: Boolean,
     val timeProfiles: List<@Serializable(with = UUIDSerializer::class) UUID> = emptyList(),
     @Serializable(with = UUIDSerializer::class) val id: UUID,
-    val zones: List<@Serializable(with = UUIDSerializer::class) UUID> = emptyList()
+    val zones: List<@Serializable(with = UUIDSerializer::class) UUID> = emptyList(),
+    @Serializable(with = UUIDSerializer::class) val standardTimeProfile: UUID? = null
 ) : Event
