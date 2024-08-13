@@ -32,6 +32,7 @@ import kotlinx.serialization.Serializable
  *   point (optional).
  * @param accessId The access ID of the installation point (optional).
  * @param secure Indicates if the installation point is secure (optional).
+ * @param bluetoothState The Bluetooth state of the installation point (optional).
  */
 @Serializable
 data class InstallationPoint(
@@ -57,6 +58,7 @@ data class InstallationPoint(
     val timeProfileId: @Serializable(with = UUIDSerializer::class) UUID? = null,
     val accessId: Long? = null,
     val secure: Boolean? = null,
+    val bluetoothState: String? = null
 ) : QueryListResource, QueryElementResource {
     companion object {
         const val QUERY_RESOURCE = "installation-points"

@@ -448,6 +448,9 @@ class Topics(vararg val topics: String) {
 
             /** MQTT topic string for the "SetMessageLanguageOnSmartphoneMapi" command. */
             val SET_MESSAGE_LANGUAGE_ON_SMARTPHONE = "xs3/1/cmd/SetMessageLanguageOnSmartphoneMapi"
+
+            /** MQTT topic string for the "ConfigureBluetoothStateMapi" command. */
+            val CONFIGURE_BLUETOOTH_STATE = "xs3/1/cmd/ConfigureBluetoothStateMapi"
         }
     }
 
