@@ -23,9 +23,10 @@ import kotlinx.serialization.Serializable
  * @param installationType The installation type.
  * @param manualOfficeMode Whether the manual office mode is enabled.
  * @param name The name of the installation point.
- * @param installationPointId The ID of the installation point.
+ * @param installationId The ID of the installation.
  * @param timeProfileData The time profile data.
  * @param openDoor Whether the door is open.
+ * @param bluetoothState The Bluetooth state of the installation point (optional).
  */
 @Serializable
 data class InstallationPointChanged(
@@ -44,7 +45,8 @@ data class InstallationPointChanged(
     val installationType: String? = null,
     val manualOfficeMode: Boolean? = null,
     val name: String? = null,
-    val installationPointId: Int? = null,
+    val installationId: String? = null,
     val timeProfileData: TimeProfile? = null,
     val openDoor: Boolean? = null,
+    val bluetoothState: String? = null,
 ) : Event

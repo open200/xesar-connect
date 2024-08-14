@@ -410,3 +410,24 @@ fun XesarConnect.queryStreamInstallationPoint(
 ): Flow<InstallationPoint> {
     return queryStream(InstallationPoint.QUERY_RESOURCE, params, requestConfig)
 }
+
+/**
+ * Configures the Bluetooth state of an installation point asynchronously.
+ *
+ * @param installationPointId The ID of the installation point
+ * @param bluetoothState The Bluetooth state to set
+ * @param requestConfig The request configuration (optional).
+ */
+suspend fun XesarConnect.configureBluetoothStateAsync(
+    installationPointId: UUID,
+    bluetoothState: String,
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+): SingleEventResult<InstallationPointChanged> {
+    return sendCommandAsync<ConfigureBluetoothStateMapi, InstallationPointChanged>(
+        Topics.Command.CONFIGURE_BLUETOOTH_STATE,
+        Topics.Event.INSTALLATION_POINT_CHANGED,
+        true,
+        ConfigureBluetoothStateMapi(
+            config.uuidGenerator.generateId(), bluetoothState, installationPointId, token),
+        requestConfig)
+}

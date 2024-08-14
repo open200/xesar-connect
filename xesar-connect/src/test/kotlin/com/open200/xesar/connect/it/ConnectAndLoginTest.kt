@@ -19,8 +19,8 @@ import kotlinx.coroutines.launch
 
 class ConnectAndLoginTest :
     FunSpec({
-        val container = com.open200.xesar.connect.it.MosquittoContainer.container()
-        val config = com.open200.xesar.connect.it.MosquittoContainer.config(container)
+        val container = MosquittoContainer.container()
+        val config = MosquittoContainer.config(container)
         listener(container.perProject())
 
         test("connect and login as well as logout with testcontainers work") {
