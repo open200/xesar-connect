@@ -1,6 +1,7 @@
 package com.open200.xesar.connect.messages.event
 
 import com.open200.xesar.connect.messages.DisengagePeriod
+import com.open200.xesar.connect.messages.command.AuthorizationData
 import com.open200.xesar.connect.utils.LocalDateTimeSerializer
 import com.open200.xesar.connect.utils.UUIDSerializer
 import java.time.LocalDateTime
@@ -17,7 +18,7 @@ import kotlinx.serialization.Serializable
  * @param mediumIdentifier The identifier of the smartphone media.
  * @param authorizationProfileId The identifier of the authorization profile associated with the
  *   smartphone media (optional).
- * @param individualAuthorizationProfileIds The list of individual authorization profile identifiers
+ * @param individualAuthorizations The list of individual authorization profile identifiers
  *   associated with the smartphone media.
  * @param sagaId The unique identifier of the saga.
  * @param messageLanguage The language for correspondence (optional).
@@ -39,8 +40,7 @@ data class SmartphoneAddedToInstallation(
     val disengagePeriod: DisengagePeriod? = null,
     val mediumIdentifier: Long? = null,
     @Serializable(with = UUIDSerializer::class) val authorizationProfileId: UUID? = null,
-    val individualAuthorizationProfileIds: List<@Serializable(with = UUIDSerializer::class) UUID> =
-        emptyList(),
+    val individualAuthorizations: List<AuthorizationData> = emptyList(),
     @Serializable(with = UUIDSerializer::class) val sagaId: UUID? = null,
     val messageLanguage: String? = null,
     val label: String? = null,

@@ -74,8 +74,8 @@ suspend fun XesarConnect.setPhoneNumberOnSmartphoneAsync(
  * @param disengagePeriod The disengage period of the smartphone media (optional).
  * @param authorizationProfileId The identifier of the authorization profile associated with the
  *   smartphone media (optional).
- * @param individualAuthorizationProfileIds The list of individual authorization profile identifiers
- *   associated with the smartphone media (optional).
+ * @param individualAuthorizations The list of individual authorizations associated with the
+ *   smartphone media (optional).
  * @param messageLanguage The language for correspondence (optional).
  * @param label The label of the smartphone media (optional).
  * @param accessEndAt The timestamp when access ends for the smartphone media (optional).
@@ -91,12 +91,12 @@ suspend fun XesarConnect.addSmartphoneToInstallationAsync(
     partitionId: UUID? = null,
     disengagePeriod: DisengagePeriod? = null,
     authorizationProfileId: UUID? = null,
-    individualAuthorizationProfileIds: List<UUID>? = null,
+    individualAuthorizations: List<AuthorizationData> = emptyList(),
     messageLanguage: String? = null,
     label: String? = null,
     accessEndAt: LocalDateTime? = null,
     phoneNumber: String? = null,
-    validityDuration: Int? = null,
+    validityDuration: Short? = null,
     personId: UUID? = null,
     id: UUID,
     requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
@@ -111,7 +111,7 @@ suspend fun XesarConnect.addSmartphoneToInstallationAsync(
             partitionId,
             disengagePeriod,
             authorizationProfileId,
-            individualAuthorizationProfileIds,
+            individualAuthorizations,
             messageLanguage,
             label,
             accessEndAt,

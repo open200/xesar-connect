@@ -17,8 +17,8 @@ import kotlinx.serialization.Serializable
  * @param disengagePeriod The disengage period of the smartphone media (optional).
  * @param authorizationProfileId The identifier of the authorization profile associated with the
  *   smartphone media (optional).
- * @param individualAuthorizationProfileIds The list of individual authorization profile identifiers
- *   associated with the smartphone media.
+ * @param individualAuthorizations The individual authorizations associated with the smartphone
+ *   media.
  * @param messageLanguage The language for correspondence (optional).
  * @param label The label of the smartphone media (optional).
  * @param accessEndAt The timestamp when access ends for the smartphone media (optional).
@@ -36,13 +36,12 @@ data class AddSmartphoneToInstallationMapi(
     val partitionId: @Serializable(with = UUIDSerializer::class) UUID? = null,
     val disengagePeriod: DisengagePeriod? = null,
     @Serializable(with = UUIDSerializer::class) val authorizationProfileId: UUID? = null,
-    val individualAuthorizationProfileIds: List<@Serializable(with = UUIDSerializer::class) UUID>? =
-        null,
+    val individualAuthorizations: List<AuthorizationData> = emptyList(),
     val messageLanguage: String? = null,
     val label: String? = null,
     @Serializable(with = LocalDateTimeSerializer::class) val accessEndAt: LocalDateTime? = null,
     val phoneNumber: String? = null,
-    val validityDuration: Int? = null,
+    val validityDuration: Short? = null,
     @Serializable(with = UUIDSerializer::class) val personId: UUID? = null,
     @Serializable(with = UUIDSerializer::class) val id: UUID,
     val token: String

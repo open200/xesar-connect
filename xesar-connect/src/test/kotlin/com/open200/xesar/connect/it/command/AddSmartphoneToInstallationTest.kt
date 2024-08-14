@@ -48,7 +48,7 @@ class AddSmartphoneToInstallationTest :
 
                         val commandContent = commandReceived.await()
                         commandContent.shouldBe(
-                            "{\"commandId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"accessBeginAt\":null,\"partitionId\":null,\"disengagePeriod\":null,\"authorizationProfileId\":null,\"individualAuthorizationProfileIds\":null,\"messageLanguage\":null,\"label\":null,\"accessEndAt\":null,\"phoneNumber\":null,\"validityDuration\":null,\"personId\":null,\"id\":\"43edc7cf-80ab-4486-86db-41cda2c7a2cd\",\"token\":\"JDJhJDEwJDFSNEljZ2FaRUNXUXBTQ25XN05KbE9qRzFHQ1VjMzkvWTBVcFpZb1M4Vmt0dnJYZ0tJVFBx\"}")
+                            "{\"commandId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"accessBeginAt\":null,\"partitionId\":null,\"disengagePeriod\":null,\"authorizationProfileId\":null,\"individualAuthorizations\":[],\"messageLanguage\":null,\"label\":null,\"accessEndAt\":null,\"phoneNumber\":null,\"validityDuration\":null,\"personId\":null,\"id\":\"43edc7cf-80ab-4486-86db-41cda2c7a2cd\",\"token\":\"JDJhJDEwJDFSNEljZ2FaRUNXUXBTQ25XN05KbE9qRzFHQ1VjMzkvWTBVcFpZb1M4Vmt0dnJYZ0tJVFBx\"}")
 
                         val apiEvent =
                             ApiEvent(
@@ -61,7 +61,7 @@ class AddSmartphoneToInstallationTest :
                                     mediumIdentifier = 8,
                                     authorizationProfileId =
                                         UUID.fromString("00000000-0000-0000-0000-000000000001"),
-                                    individualAuthorizationProfileIds = emptyList(),
+                                    individualAuthorizations = emptyList(),
                                     sagaId =
                                         UUID.fromString("a14d08c0-6f7a-4fc6-8469-be15a3e7b575"),
                                     messageLanguage = "en",
