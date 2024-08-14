@@ -53,6 +53,7 @@ import kotlinx.serialization.Serializable
  *   (optional).
  * @param registrationCodeValidUntil The expiration timestamp of the smartphone registration code
  *   (optional).
+ * @param messageLanguage The language for correspondence (optional).
  */
 @Serializable
 data class IdentificationMedium(
@@ -94,6 +95,7 @@ data class IdentificationMedium(
     val registrationCode: String? = null,
     @Serializable(with = LocalDateTimeSerializer::class)
     val registrationCodeValidUntil: LocalDateTime? = null,
+    val messageLanguage: String? = null
 ) : QueryListResource, QueryElementResource {
 
     companion object {
