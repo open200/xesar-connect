@@ -9,6 +9,10 @@ import kotlinx.coroutines.awaitAll
 /**
  * Pair of events returning from
  * [com.open200.xesar.connect.extension.setPhoneNumberOnSmartphoneAsync]
+ *
+ * @param mediumChangedDeferred The deferred [MediumChanged] event.
+ * @param phoneNumberChangedDeferred The deferred [PhoneNumberChanged] event.
+ * @param apiErrorDeferred The deferred [Optional] [ApiError] event.
  */
 class SetPhoneNumberOnSmartphoneResult(
     val mediumChangedDeferred: Deferred<MediumChanged>,

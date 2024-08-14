@@ -11,7 +11,7 @@ import java.time.LocalDateTime
 import java.util.*
 
 /**
- * Sets the default validity duration (in days) for all smartphones in a partition.
+ * Sets the default validity duration (in days) for all smartphones in a partition asynchronously.
  *
  * @param validityDuration The validity duration to set in days (Min: 1, Max: 1095).
  * @param requestConfig The request configuration (optional).
@@ -30,7 +30,7 @@ suspend fun XesarConnect.setDefaultSmartphoneValidityDurationAsync(
 }
 
 /**
- * Sets the phone number on a smartphone access media.
+ * Sets the phone number on a smartphone access media asynchronously.
  *
  * @param phoneNumber The phone number to set. Phone numbers starting with a '+' and max. 50
  *   characters are allowed.
@@ -61,7 +61,7 @@ suspend fun XesarConnect.setPhoneNumberOnSmartphoneAsync(
 }
 
 /**
- * Adds a smartphone media to an installation.
+ * Adds a smartphone media to an installation asynchronously.
  *
  * The AddSmartphoneToInstallationMapi command is designed specifically for adding smartphone
  * identification mediums, while the AddMediumToInstallationMapi command is dedicated to adding
@@ -124,7 +124,7 @@ suspend fun XesarConnect.addSmartphoneToInstallationAsync(
 }
 
 /**
- * Manually requests a new registration code for a smartphone media.
+ * Manually requests a new registration code for a smartphone media asynchronously.
  *
  * @param id The id of the smartphone media.
  * @param requestConfig The request configuration (optional).
@@ -142,7 +142,7 @@ suspend fun XesarConnect.requestNewRegistrationCodeAsync(
 }
 
 /**
- * Sets the message language on a smartphone media.
+ * Sets the message language on a smartphone media asynchronously.
  *
  * @param id The id of the smartphone media.
  * @param messageLanguage The message language to set.
@@ -163,12 +163,12 @@ suspend fun XesarConnect.setMessageLanguageOnSmartphoneAsync(
 }
 
 /**
- * Unregisters a smartphone media.
+ * Unregisters a smartphone media asynchronously.
  *
  * @param smartphoneMediaId The id of the smartphone media.
  * @param requestConfig The request configuration (optional).
  */
-suspend fun XesarConnect.unregisterSmartphone(
+suspend fun XesarConnect.unregisterSmartphoneAsync(
     smartphoneMediaId: UUID,
     requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
 ): SingleEventResult<SmartphoneUnregistered> {
@@ -181,7 +181,7 @@ suspend fun XesarConnect.unregisterSmartphone(
 }
 
 /**
- * Resends a smartphone authorizations request.
+ * Resends a smartphone authorizations request asynchronously.
  *
  * @param smartphoneMediaId The id of the smartphone media.
  * @param requestConfig The request configuration (optional).

@@ -3,7 +3,7 @@ package com.open200.xesar.connect.it.command
 import com.open200.xesar.connect.Topics
 import com.open200.xesar.connect.XesarConnect
 import com.open200.xesar.connect.XesarMqttClient
-import com.open200.xesar.connect.extension.unregisterSmartphone
+import com.open200.xesar.connect.extension.unregisterSmartphoneAsync
 import com.open200.xesar.connect.it.MosquittoContainer
 import com.open200.xesar.connect.messages.event.ApiEvent
 import com.open200.xesar.connect.messages.event.SmartphoneUnregistered
@@ -66,7 +66,7 @@ class UnregisterSmartphoneTest :
                     val api = XesarConnect.connectAndLoginAsync(config).await()
                     api.subscribeAsync(Topics(Topics.Event.SMARTPHONE_UNREGISTERED)).await()
                     val result =
-                        api.unregisterSmartphone(
+                        api.unregisterSmartphoneAsync(
                                 UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
                             .await()
 
