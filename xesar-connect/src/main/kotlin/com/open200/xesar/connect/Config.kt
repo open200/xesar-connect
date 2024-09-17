@@ -94,11 +94,6 @@ data class Config(
          * @param archiveOptions The options to configure the name of the files inside your ZIP
          *   archive (optional, default: ArchiveOptions()).
          * @param port The port number for the API (default: "1883").
-         * @param mqttConnectOptions The MQTT connect options (optional, default:
-         *   MqttConnectOptions()).
-         * @param requestIdGenerator The generator for request IDs (optional, default:
-         *   DefaultRequestIdGenerator()).
-         * @param logoutOnClose Whether to log out on close (optional).
          * @return A [Config] instance configured from the provided ZIP file that you can use to
          *   connect to the XesarMqttInstance.
          */
@@ -106,9 +101,6 @@ data class Config(
             configurationZipFile: Path,
             archiveOptions: ArchiveOptions = ArchiveOptions(),
             port: String? = null,
-            mqttConnectOptions: MqttConnectOptions = MqttConnectOptions(),
-            requestIdGenerator: IRequestIdGenerator = DefaultRequestIdGenerator(),
-            logoutOnClose: Boolean = true,
         ): Config {
 
             val zipFile = extractZipFile(configurationZipFile)
@@ -135,15 +127,7 @@ data class Config(
                             readX509CertificateFromZip(
                                 archiveOptions.clientCertificateName, zipFile),
                         clientKey = readKeyPairWithZip(archiveOptions.clientKeyName, zipFile)),
-                uuidGenerator = requestIdGenerator,
-                mqttConnectOptions =
-                    MqttConnectOptions(
-                        isCleanSession = mqttConnectOptions.isCleanSession,
-                        connectionTimeout = mqttConnectOptions.connectionTimeout,
-                        isAutomaticReconnect = mqttConnectOptions.isAutomaticReconnect,
-                        maxInflight = mqttConnectOptions.maxInflight,
-                        keepAliveInterval = mqttConnectOptions.keepAliveInterval),
-                logoutOnClose = logoutOnClose)
+            )
         }
 
         private fun readTokenProperties(
