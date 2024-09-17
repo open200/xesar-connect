@@ -39,9 +39,8 @@ class ConfigTest :
                 val certificateZipFile = copyResourceToTempFile("/certificates/certificates.zip")
 
                 val configZip =
-                    Config.configureFromZip(
-                        certificateZipFile.toPath(),
-                        mqttConnectOptions = Config.MqttConnectOptions(isCleanSession = true))
+                    Config.configureFromZip(certificateZipFile.toPath())
+                        .copy(mqttConnectOptions = Config.MqttConnectOptions(isCleanSession = true))
 
                 configZip.apiProperties.userId.shouldBeEqual(
                     UUID.fromString("35919920-c5aa-4371-900a-2ad6aa8206e0"))
