@@ -48,6 +48,7 @@ data class Config(
         @Serializable(with = UUIDSerializer::class) val userId: UUID,
         val token: Token? = null,
     )
+
     /**
      * Data class for MQTT certificates.
      *
@@ -60,6 +61,7 @@ data class Config(
         val clientCertificate: X509Certificate,
         val clientKey: KeyPair,
     )
+
     /**
      * Data class for MQTT connect options.
      *
@@ -82,6 +84,8 @@ data class Config(
 
     companion object {
 
+        private const val DEFAULT_PORT = "1883"
+
         /**
          * Creates a [Config] instance by configuring it from a ZIP file containing the necessary
          * configuration data.
@@ -101,7 +105,7 @@ data class Config(
         fun configureFromZip(
             configurationZipFile: Path,
             archiveOptions: ArchiveOptions = ArchiveOptions(),
-            port: String = "1883",
+            port: String? = null,
             mqttConnectOptions: MqttConnectOptions = MqttConnectOptions(),
             requestIdGenerator: IRequestIdGenerator = DefaultRequestIdGenerator(),
             logoutOnClose: Boolean = true,
@@ -110,7 +114,8 @@ data class Config(
             val zipFile = extractZipFile(configurationZipFile)
 
             val apiProperties =
-                readTokenProperties(archiveOptions.apiPropertiesFileName, zipFile, port)
+                readTokenProperties(
+                    archiveOptions.apiPropertiesFileName, zipFile, port ?: DEFAULT_PORT)
 
             logger.debug(
                 "ApiProperties for host: ${apiProperties.hostname} on port: ${apiProperties.port} loaded.")
