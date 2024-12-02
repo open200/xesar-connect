@@ -13,7 +13,7 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class MediumPersonChanged(
-    @Serializable(with = UUIDSerializer::class) val oldPersonId: UUID,
+    @Serializable(with = UUIDSerializer::class) val oldPersonId: UUID? = null,
     @Serializable(with = UUIDSerializer::class) val newPersonId: UUID? = null,
     @Serializable(with = UUIDSerializer::class) val id: UUID
 ) : Event
