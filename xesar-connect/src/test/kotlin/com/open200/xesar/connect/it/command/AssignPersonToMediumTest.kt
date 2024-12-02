@@ -74,7 +74,7 @@ class AssignPersonToMediumTest :
                             .await()
 
                     result.id.shouldBeEqual(UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
-                    result.oldPersonId.shouldBeEqual(
+                    result.oldPersonId!!.shouldBeEqual(
                         UUID.fromString("2d52bd95-18ba-4e46-8f00-0fc4c1e3f9be"))
                 }
             }
