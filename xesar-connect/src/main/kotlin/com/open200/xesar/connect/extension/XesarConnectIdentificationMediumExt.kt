@@ -216,12 +216,13 @@ suspend fun XesarConnect.removeZoneAuthorizationFromMediumAsync(
  * Sets the access begin of an identification medium asynchronously.
  *
  * @param mediumId The ID of the medium to set the access begin.
- * @param accessBeginAt The access begin to set.
+ * @param accessBeginAt The access begin to set (optional). If the parameter is null, the access
+ *   begin is automatically set to the current LocalDateTime minus 2 hours by Xesar.
  * @param requestConfig The request configuration (optional).
  */
 suspend fun XesarConnect.setAccessBeginAtAsync(
     mediumId: UUID,
-    accessBeginAt: LocalDateTime,
+    accessBeginAt: LocalDateTime?,
     requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
 ): SingleEventResult<MediumChanged> {
     return sendCommandAsync<SetAccessBeginAtMapi, MediumChanged>(
