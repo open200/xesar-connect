@@ -174,6 +174,21 @@ class Topics(vararg val topics: String) {
             /** MQTT topic string for the "AuthorizationTimeProfileChanged" event */
             val AUTHORIZATION_TIME_PROFILE_CHANGED = "xs3/1/ces/AuthorizationTimeProfileChanged"
 
+            /** MQTT topic string for the "PhoneNumberChanged" event */
+            val PHONE_NUMBER_CHANGED = "xs3/1/ces/PhoneNumberChanged"
+
+            /** MQTT topic string for the "SmartphoneAddedToInstallation" event */
+            val SMARTPHONE_ADDED_TO_INSTALLATION = "xs3/1/ces/SmartphoneAddedToInstallation"
+
+            /** MQTT topic string for the "NewRegistrationCodeRequested" event */
+            val NEW_REGISTRATION_CODE_REQUESTED = "xs3/1/ces/NewRegistrationCodeRequested"
+
+            /** MQTT topic string for the "SmartphoneUnregistered" event */
+            val SMARTPHONE_UNREGISTERED = "xs3/1/ces/SmartphoneUnregistered"
+
+            /** MQTT topic string for the "SmartphoneAuthorizationsResent" event */
+            val SMARTPHONE_AUTHORIZATIONS_RESENT = "xs3/1/ces/SmartphoneAuthorizationsResent"
+
             /**
              * Generates the MQTT topic string which emits errors for previously received queries or
              * commands.
@@ -423,6 +438,31 @@ class Topics(vararg val topics: String) {
 
             /** MQTT topic string for the "ChangeInstallationPointMapi" command */
             val CHANGE_INSTALLATION_POINT = "xs3/1/cmd/ChangeInstallationPointMapi"
+
+            /** MQTT topic string for the "SetDefaultSmartphoneValidityDurationMapi" command. */
+            val SET_DEFAULT_SMARTPHONE_VALIDITIY_DURATION =
+                "xs3/1/cmd/SetDefaultSmartphoneValidityDurationMapi"
+
+            /** MQTT topic string for the "SetPhoneNumberOnSmartphoneMapi" command. */
+            val SET_PHONE_NUMBER_ON_SMARTPHONE = "xs3/1/cmd/SetPhoneNumberOnSmartphoneMapi"
+
+            /** MQTT topic string for the "AddSmartphoneToInstallationMapi" command. */
+            val ADD_SMARTPHONE_TO_INSTALLATION = "xs3/1/cmd/AddSmartphoneToInstallationMapi"
+
+            /** MQTT topic string for the "RequestNewRegistrationCodeMapi" command. */
+            val REQUEST_NEW_REGISTRATION_CODE = "xs3/1/cmd/RequestNewRegistrationCodeMapi"
+
+            /** MQTT topic string for the "SetMessageLanguageOnSmartphoneMapi" command. */
+            val SET_MESSAGE_LANGUAGE_ON_SMARTPHONE = "xs3/1/cmd/SetMessageLanguageOnSmartphoneMapi"
+
+            /** MQTT topic string for the "ConfigureBluetoothStateMapi" command. */
+            val CONFIGURE_BLUETOOTH_STATE = "xs3/1/cmd/ConfigureBluetoothStateMapi"
+
+            /** MQTT topic string for the "UnregisterSmartphoneMapi" command. */
+            val UNREGISTER_SMARTPHONE = "xs3/1/cmd/UnregisterSmartphoneMapi"
+
+            /** MQTT topic string for the "ResendSmartphoneAuthorizationsMapi" command. */
+            val RESEND_SMARTPHONE_AUTHORIZATIONS = "xs3/1/cmd/ResendSmartphoneAuthorizationsMapi"
         }
     }
 
