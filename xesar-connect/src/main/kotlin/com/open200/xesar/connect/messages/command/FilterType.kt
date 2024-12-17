@@ -9,8 +9,8 @@ enum class FilterType(val filterString: String? = null) {
     CONTAINS("contains"),
     EMPTY("empty"),
     NE("ne"),
-    IS_NULL("isnull"),
-    IS_NOT_NULL("isnotnull"),
+    IS_NULL("isNull"),
+    IS_NOT_NULL("isNotNull"),
     LIKE("like"),
     BETWEEN("between"),
     CUSTOM("custom")
