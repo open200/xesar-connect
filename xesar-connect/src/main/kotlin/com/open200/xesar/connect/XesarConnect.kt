@@ -637,7 +637,6 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) {
         return coroutineScopeForSendCommand.launch {
             try {
                 withTimeout(requestConfig.timeout) {
-                    logger.debug { "send commmand now" }
                     publishDeferred =
                         client.publishAsync(topicCommand, encodeCommand(command))
                             as CompletableDeferred<Unit>
