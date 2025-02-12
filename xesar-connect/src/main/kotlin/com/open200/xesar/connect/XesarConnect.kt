@@ -691,11 +691,7 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) {
             try {
                 withTimeout(requestConfig.timeout) { eventDeferred.await() }
             } catch (e: TimeoutCancellationException) {
-                val logMessage = "timeout while waiting for event $topicEvent"
-                when (eventRequired) {
-                    true -> logger.error { logMessage }
-                    false -> logger.debug { logMessage }
-                }
+                logger.debug { "timeout while waiting for event $topicEvent" }
                 completeWithSpecificException(
                     getTypeOfExceptionDependingOnEventRequired(eventRequired, topicEvent, e),
                     listOf(eventDeferred))
