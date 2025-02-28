@@ -61,7 +61,7 @@ class QueryEvvaComponentTest :
                                                 id =
                                                     UUID.fromString(
                                                         "f7019248-f7f9-4138-9af7-119e2e251408"),
-                                                status = OnlineStatus.disconnected,
+                                                status = ComponentStatus.NotSynced,
                                             )),
                                         2,
                                         2,
@@ -81,8 +81,8 @@ class QueryEvvaComponentTest :
                         .await()
                     val result = api.queryEvvaComponents()
                     result.totalCount.shouldBeEqual(2)
-                    result.data[0].status?.shouldBeEqual(OnlineStatus.connected)
-                    result.data[1].status?.shouldBeEqual(OnlineStatus.disconnected)
+                    result.data[0].status?.shouldBeEqual(ComponentStatus.Synced)
+                    result.data[1].status?.shouldBeEqual(ComponentStatus.NotSynced)
                 }
             }
         }
@@ -135,7 +135,7 @@ class QueryEvvaComponentTest :
                     val result =
                         api.queryEvvaComponentById(EvvaComponentFixture.evvaComponentFixture.id)
                     result!!.id.shouldBeEqual(EvvaComponentFixture.evvaComponentFixture.id)
-                    result.status?.shouldBeEqual(OnlineStatus.connected)
+                    result.status?.shouldBeEqual(ComponentStatus.Synced)
                 }
             }
         }

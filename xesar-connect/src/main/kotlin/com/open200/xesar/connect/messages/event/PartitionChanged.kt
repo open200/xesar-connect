@@ -20,6 +20,8 @@ import kotlinx.serialization.Serializable
  * @param personDefaultPersonalReferenceDuration The default personal reference duration.
  * @param id The ID of the partition.
  * @param dailySchedulerExecutionTime The daily scheduler execution time.
+ * @param smartphoneValidityDuration The default smartphone validity duration for all smartphones of
+ *   this partition
  */
 @Serializable
 data class PartitionChanged(
@@ -33,5 +35,6 @@ data class PartitionChanged(
     val personDefaultPersonalReferenceDuration: PersonalLog? = null,
     val id: @Serializable(with = UUIDSerializer::class) UUID,
     val dailySchedulerExecutionTime: @Serializable(with = LocalTimeSerializer::class) LocalTime? =
-        null
+        null,
+    val smartphoneValidityDuration: Short? = null
 ) : Event

@@ -1,9 +1,6 @@
 package com.open200.xesar.connect.encodingDecoding.query
 
-import com.open200.xesar.connect.messages.query.EvvaComponent
-import com.open200.xesar.connect.messages.query.QueryElement
-import com.open200.xesar.connect.messages.query.decodeQueryElement
-import com.open200.xesar.connect.messages.query.encodeQueryElement
+import com.open200.xesar.connect.messages.query.*
 import com.open200.xesar.connect.util.fixture.EvvaComponentFixture
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.equals.shouldBeEqual
@@ -18,14 +15,7 @@ class EvvaComponentElementTest :
                 EvvaComponentFixture.evvaComponentFixture)
 
         val evvaComponentString =
-            "{\"requestId\":\"d385ab22-0f51-4b97-9ecd-b8ff3fd4fcb6\"," +
-                "\"response\":{" +
-                "\"componentType\":\"WallReader\"," +
-                "\"batteryCondition\":\"Full\"," +
-                "\"id\":\"497f6eca-6276-4993-bfeb-53cbbbba6f08\"," +
-                "\"batteryStatusUpdatedAt\":\"2023-08-24T16:25:52.225991\"," +
-                "\"stateChangedAt\":\"2023-06-15T16:25:52.225991\"," +
-                "\"status\":\"connected\"}}"
+            "{\"requestId\":\"d385ab22-0f51-4b97-9ecd-b8ff3fd4fcb6\",\"response\":{\"componentType\":\"WallReader\",\"serialNumber\":null,\"upgradeMedia\":null,\"batteryCondition\":\"Full\",\"btbFirmwareVersion\":null,\"id\":\"497f6eca-6276-4993-bfeb-53cbbbba6f08\",\"batteryStatusUpdatedAt\":\"2023-08-24T16:25:52.225991\",\"stateChangedAt\":\"2023-06-15T16:25:52.225991\",\"firmwareVersion\":null,\"status\":\"Synced\",\"bleMac\":null}}"
 
         test("encoding QueryElement for an evva component") {
             val evvaComponentEncoded = encodeQueryElement(evvaComponent)
