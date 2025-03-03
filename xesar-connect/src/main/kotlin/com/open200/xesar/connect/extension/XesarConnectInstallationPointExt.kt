@@ -2,11 +2,7 @@ package com.open200.xesar.connect.extension
 
 import com.open200.xesar.connect.Topics
 import com.open200.xesar.connect.XesarConnect
-import com.open200.xesar.connect.messages.AddEvvaComponentResult
-import com.open200.xesar.connect.messages.ComponentType
-import com.open200.xesar.connect.messages.CreateInstallationPointResult
-import com.open200.xesar.connect.messages.PersonalLog
-import com.open200.xesar.connect.messages.SingleEventResult
+import com.open200.xesar.connect.messages.*
 import com.open200.xesar.connect.messages.command.*
 import com.open200.xesar.connect.messages.event.*
 import com.open200.xesar.connect.messages.query.InstallationPoint
@@ -420,7 +416,7 @@ fun XesarConnect.queryStreamInstallationPoint(
  */
 suspend fun XesarConnect.configureBluetoothStateAsync(
     installationPointId: UUID,
-    bluetoothState: String,
+    bluetoothState: BluetoothState,
     requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
 ): SingleEventResult<InstallationPointChanged> {
     return sendCommandAsync<ConfigureBluetoothStateMapi, InstallationPointChanged>(

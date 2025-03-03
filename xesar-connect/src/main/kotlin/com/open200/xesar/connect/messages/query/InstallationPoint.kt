@@ -1,5 +1,6 @@
 package com.open200.xesar.connect.messages.query
 
+import com.open200.xesar.connect.messages.BluetoothState
 import com.open200.xesar.connect.messages.ComponentType
 import com.open200.xesar.connect.utils.UUIDSerializer
 import java.util.*
@@ -58,7 +59,7 @@ data class InstallationPoint(
     val timeProfileId: @Serializable(with = UUIDSerializer::class) UUID? = null,
     val accessId: Long? = null,
     val secure: Boolean? = null,
-    val bluetoothState: String? = null
+    val bluetoothState: BluetoothState? = null
 ) : QueryListResource, QueryElementResource {
     companion object {
         const val QUERY_RESOURCE = "installation-points"

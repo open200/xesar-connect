@@ -5,6 +5,7 @@ import com.open200.xesar.connect.XesarConnect
 import com.open200.xesar.connect.XesarMqttClient
 import com.open200.xesar.connect.extension.configureBluetoothStateAsync
 import com.open200.xesar.connect.it.MosquittoContainer
+import com.open200.xesar.connect.messages.BluetoothState
 import com.open200.xesar.connect.messages.event.ApiEvent
 import com.open200.xesar.connect.messages.event.InstallationPointChanged
 import com.open200.xesar.connect.messages.event.encodeEvent
@@ -56,7 +57,7 @@ class ConfigureBluetoothStateTest :
                                 InstallationPointChanged(
                                     aggregateId =
                                         UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
-                                    bluetoothState = "ENABLED"))
+                                    bluetoothState = BluetoothState.ENABLED))
 
                         client
                             .publishAsync(
@@ -71,9 +72,10 @@ class ConfigureBluetoothStateTest :
                     api.subscribeAsync(Topics(Topics.Event.INSTALLATION_POINT_CHANGED)).await()
                     val result =
                         api.configureBluetoothStateAsync(
-                                UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"), "ENABLED")
+                                UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
+                                BluetoothState.ENABLED)
                             .await()
-                    result.bluetoothState.shouldBe("ENABLED")
+                    result.bluetoothState.shouldBe(BluetoothState.ENABLED)
                 }
             }
         }

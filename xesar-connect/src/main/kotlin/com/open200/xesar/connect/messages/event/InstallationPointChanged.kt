@@ -1,5 +1,6 @@
 package com.open200.xesar.connect.messages.event
 
+import com.open200.xesar.connect.messages.BluetoothState
 import com.open200.xesar.connect.messages.PersonalLog
 import com.open200.xesar.connect.messages.query.TimeProfile
 import com.open200.xesar.connect.utils.UUIDSerializer
@@ -48,5 +49,5 @@ data class InstallationPointChanged(
     val installationId: String? = null,
     val timeProfileData: TimeProfile? = null,
     val openDoor: Boolean? = null,
-    val bluetoothState: String? = null,
+    val bluetoothState: BluetoothState? = null,
 ) : Event
