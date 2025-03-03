@@ -40,14 +40,6 @@ object AccessProtocolEventFixture {
             doorOpening = true,
             mediaUpgrade = true)
 
-    val parameterMap =
-        AccessProtocolEvent.ParameterMap(
-            raw = "0000000000000000",
-            keyType = "type",
-            doorId = "door1",
-            permanentOpeningAllowed = "true",
-            shopModeActivated = "false")
-
     val installationPoint = UUID.fromString("d572db59-64f7-4853-b9f6-d3a218e1f4f4")
 
     val zone = UUID.fromString("dd51e0c8-29df-41e2-a68b-0697a965744d")
@@ -62,7 +54,7 @@ object AccessProtocolEventFixture {
             eventType = EventType.NORMAL_OPENING,
             eventValue = eventValue,
             rawValue = "0000000000000000",
-            parameterMap = parameterMap,
+            parameterMap = emptyMap(),
             installationPointId = installationPoint,
             installationPointName = "Door 1",
             installationPointIdentifier = "A01",

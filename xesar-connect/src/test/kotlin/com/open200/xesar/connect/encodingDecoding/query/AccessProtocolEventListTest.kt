@@ -61,11 +61,7 @@ class AccessProtocolEventListTest :
                 "\"doorOpening\":true," +
                 "\"mediaUpgrade\":true}," +
                 "\"rawValue\":\"0000000000000000\"," +
-                "\"parameterMap\":{\"raw\":\"0000000000000000\"," +
-                "\"keyType\":\"type\"," +
-                "\"doorId\":\"door1\"," +
-                "\"permanentOpeningAllowed\":\"true\"," +
-                "\"shopModeActivated\":\"false\"}," +
+                "\"parameterMap\":{}," +
                 "\"installationPointId\":\"d572db59-64f7-4853-b9f6-d3a218e1f4f4\"," +
                 "\"installationPointName\":\"Door 1\"," +
                 "\"installationPointIdentifier\":\"A01\"," +
@@ -115,11 +111,7 @@ class AccessProtocolEventListTest :
                 "\"doorOpening\":true," +
                 "\"mediaUpgrade\":true}," +
                 "\"rawValue\":\"0000000000000000\"," +
-                "\"parameterMap\":{\"raw\":\"0000000000000000\"," +
-                "\"keyType\":\"type\"," +
-                "\"doorId\":\"door1\"," +
-                "\"permanentOpeningAllowed\":\"true\"," +
-                "\"shopModeActivated\":\"false\"}," +
+                "\"parameterMap\":{}," +
                 "\"installationPointId\":\"d572db59-64f7-4853-b9f6-d3a218e1f4f4\"," +
                 "\"installationPointName\":\"Door 1\"," +
                 "\"installationPointIdentifier\":\"A01\"," +
