@@ -44,6 +44,20 @@ suspend fun XesarConnect.queryPersonById(
     }
 }
 
+suspend fun XesarConnect.queryPersonByExternalId(externalId: String): Person? {
+    return queryPersons(
+            Query.Params(
+                filters =
+                    listOf(
+                        Query.Params.Filter(
+                            field = "externalId",
+                            value = externalId,
+                            type = FilterType.EQ,
+                        ))))
+        .data
+        .firstOrNull()
+}
+
 /**
  * Changes the information of a person asynchronously.
  *
