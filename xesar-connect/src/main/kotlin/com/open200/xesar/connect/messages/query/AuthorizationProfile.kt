@@ -42,6 +42,7 @@ data class AuthorizationProfile(
         @Serializable(with = UUIDSerializer::class) val id: UUID? = null,
         @Serializable(with = UUIDSerializer::class) val timeProfileId: UUID? = null,
     )
+
     /**
      * Represents a zone associated with an authorization profile.
      *
@@ -51,7 +52,7 @@ data class AuthorizationProfile(
     @Serializable
     data class Zone(
         @Serializable(with = UUIDSerializer::class) val id: UUID,
-        @Serializable(with = UUIDSerializer::class) val timeProfileId: UUID? = null
+        @Serializable(with = UUIDSerializer::class) val timeProfileId: UUID? = null,
     )
 
     companion object {

@@ -17,5 +17,5 @@ data class SetMessageLanguageOnSmartphoneMapi(
     override val commandId: @Serializable(with = UUIDSerializer::class) UUID,
     val messageLanguage: String,
     @Serializable(with = UUIDSerializer::class) val id: UUID,
-    val token: String
+    val token: String,
 ) : Command

@@ -13,11 +13,12 @@ class ChangeAuthorizationProfileResult(
     val authorizationProfileInfoChangedDeferred: Deferred<AuthorizationProfileInfoChanged>,
     val authorizationProfileAccessChangedDeferred: Deferred<AuthorizationProfileAccessChanged>,
     val authorizationProfileChangedDeferred: Deferred<AuthorizationProfileChanged>,
-    val apiErrorDeferred: Deferred<Optional<ApiError>>
+    val apiErrorDeferred: Deferred<Optional<ApiError>>,
 ) {
     suspend fun await() =
         awaitAll(
             authorizationProfileInfoChangedDeferred,
             authorizationProfileAccessChangedDeferred,
-            authorizationProfileChangedDeferred)
+            authorizationProfileChangedDeferred,
+        )
 }

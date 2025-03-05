@@ -18,15 +18,19 @@ import java.util.*
  */
 suspend fun XesarConnect.setDefaultSmartphoneValidityDurationAsync(
     validityDuration: Short,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): SingleEventResult<PartitionChanged> {
     return sendCommandAsync<SetDefaultSmartphoneValidityDurationMapi, PartitionChanged>(
         Topics.Command.SET_DEFAULT_SMARTPHONE_VALIDITIY_DURATION,
         Topics.Event.PARTITION_CHANGED,
         true,
         SetDefaultSmartphoneValidityDurationMapi(
-            config.uuidGenerator.generateId(), validityDuration, token),
-        requestConfig)
+            config.uuidGenerator.generateId(),
+            validityDuration,
+            token,
+        ),
+        requestConfig,
+    )
 }
 
 /**
@@ -42,7 +46,7 @@ suspend fun XesarConnect.setDefaultSmartphoneValidityDurationAsync(
 suspend fun XesarConnect.setPhoneNumberOnSmartphoneAsync(
     phoneNumber: String,
     id: UUID,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): SetPhoneNumberOnSmartphoneResult {
     val commandId = config.uuidGenerator.generateId()
     val setPhoneNumberOnSmartPhoneResult =
@@ -53,11 +57,13 @@ suspend fun XesarConnect.setPhoneNumberOnSmartphoneAsync(
             Topics.Event.PHONE_NUMBER_CHANGED,
             false,
             SetPhoneNumberOnSmartphoneMapi(commandId, id, phoneNumber, token),
-            requestConfig)
+            requestConfig,
+        )
     return SetPhoneNumberOnSmartphoneResult(
         setPhoneNumberOnSmartPhoneResult.first,
         setPhoneNumberOnSmartPhoneResult.second,
-        setPhoneNumberOnSmartPhoneResult.third)
+        setPhoneNumberOnSmartPhoneResult.third,
+    )
 }
 
 /**
@@ -99,7 +105,7 @@ suspend fun XesarConnect.addSmartphoneToInstallationAsync(
     validityDuration: Short? = null,
     personId: UUID? = null,
     id: UUID,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): SingleEventResult<SmartphoneAddedToInstallation> {
     return sendCommandAsync<AddSmartphoneToInstallationMapi, SmartphoneAddedToInstallation>(
         Topics.Command.ADD_SMARTPHONE_TO_INSTALLATION,
@@ -119,8 +125,10 @@ suspend fun XesarConnect.addSmartphoneToInstallationAsync(
             validityDuration,
             personId,
             id,
-            token),
-        requestConfig)
+            token,
+        ),
+        requestConfig,
+    )
 }
 
 /**
@@ -131,14 +139,15 @@ suspend fun XesarConnect.addSmartphoneToInstallationAsync(
  */
 suspend fun XesarConnect.requestNewRegistrationCodeAsync(
     id: UUID,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): SingleEventResult<NewRegistrationCodeRequested> {
     return sendCommandAsync<RequestNewRegistrationCodeMapi, NewRegistrationCodeRequested>(
         Topics.Command.REQUEST_NEW_REGISTRATION_CODE,
         Topics.Event.NEW_REGISTRATION_CODE_REQUESTED,
         true,
         RequestNewRegistrationCodeMapi(config.uuidGenerator.generateId(), id, token),
-        requestConfig)
+        requestConfig,
+    )
 }
 
 /**
@@ -151,15 +160,20 @@ suspend fun XesarConnect.requestNewRegistrationCodeAsync(
 suspend fun XesarConnect.setMessageLanguageOnSmartphoneAsync(
     id: UUID,
     messageLanguage: String,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): SingleEventResult<MediumChanged> {
     return sendCommandAsync<SetMessageLanguageOnSmartphoneMapi, MediumChanged>(
         Topics.Command.SET_MESSAGE_LANGUAGE_ON_SMARTPHONE,
         Topics.Event.MEDIUM_CHANGED,
         true,
         SetMessageLanguageOnSmartphoneMapi(
-            config.uuidGenerator.generateId(), messageLanguage, id, token),
-        requestConfig)
+            config.uuidGenerator.generateId(),
+            messageLanguage,
+            id,
+            token,
+        ),
+        requestConfig,
+    )
 }
 
 /**
@@ -170,14 +184,15 @@ suspend fun XesarConnect.setMessageLanguageOnSmartphoneAsync(
  */
 suspend fun XesarConnect.unregisterSmartphoneAsync(
     smartphoneMediaId: UUID,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): SingleEventResult<SmartphoneUnregistered> {
     return sendCommandAsync<UnregisterSmartphoneMapi, SmartphoneUnregistered>(
         Topics.Command.UNREGISTER_SMARTPHONE,
         Topics.Event.SMARTPHONE_UNREGISTERED,
         true,
         UnregisterSmartphoneMapi(config.uuidGenerator.generateId(), smartphoneMediaId, token),
-        requestConfig)
+        requestConfig,
+    )
 }
 
 /**
@@ -188,13 +203,17 @@ suspend fun XesarConnect.unregisterSmartphoneAsync(
  */
 suspend fun XesarConnect.resendSmartphoneAuthorizationsAsync(
     smartphoneMediaId: UUID,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): SingleEventResult<SmartphoneAuthorizationsResent> {
     return sendCommandAsync<ResendSmartphoneAuthorizationsMapi, SmartphoneAuthorizationsResent>(
         Topics.Command.RESEND_SMARTPHONE_AUTHORIZATIONS,
         Topics.Event.SMARTPHONE_AUTHORIZATIONS_RESENT,
         true,
         ResendSmartphoneAuthorizationsMapi(
-            config.uuidGenerator.generateId(), smartphoneMediaId, token),
-        requestConfig)
+            config.uuidGenerator.generateId(),
+            smartphoneMediaId,
+            token,
+        ),
+        requestConfig,
+    )
 }

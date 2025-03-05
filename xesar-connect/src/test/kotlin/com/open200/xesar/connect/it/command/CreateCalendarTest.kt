@@ -48,7 +48,8 @@ class CreateCalendarTest :
                         val commandContent = commandReceived.await()
 
                         commandContent.shouldBeEqual(
-                            "{\"commandId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"name\":\"calendarName\",\"specialDays\":[\"2018-02-25\"],\"id\":\"43edc7cf-80ab-4486-86db-41cda2c7a2cd\",\"token\":\"JDJhJDEwJDFSNEljZ2FaRUNXUXBTQ25XN05KbE9qRzFHQ1VjMzkvWTBVcFpZb1M4Vmt0dnJYZ0tJVFBx\"}")
+                            "{\"commandId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"name\":\"calendarName\",\"specialDays\":[\"2018-02-25\"],\"id\":\"43edc7cf-80ab-4486-86db-41cda2c7a2cd\",\"token\":\"JDJhJDEwJDFSNEljZ2FaRUNXUXBTQ25XN05KbE9qRzFHQ1VjMzkvWTBVcFpZb1M4Vmt0dnJYZ0tJVFBx\"}"
+                        )
 
                         val apiEvent =
                             ApiEvent(
@@ -59,7 +60,8 @@ class CreateCalendarTest :
                                     "calendarName",
                                     listOf(LocalDate.parse("2018-02-25")),
                                     UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
-                                ))
+                                ),
+                            )
 
                         client
                             .publishAsync(Topics.Event.CALENDAR_CREATED, encodeEvent(apiEvent))
@@ -75,7 +77,8 @@ class CreateCalendarTest :
                         api.createCalendarAsync(
                                 "calendarName",
                                 listOf(LocalDate.parse("2018-02-25")),
-                                UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
+                                UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
+                            )
                             .await()
                     result.name.shouldBeEqual("calendarName")
                     result.id.shouldBeEqual(UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))

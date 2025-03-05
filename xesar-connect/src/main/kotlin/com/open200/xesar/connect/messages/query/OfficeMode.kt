@@ -43,7 +43,7 @@ data class OfficeMode(
     val exceptionTimeSeries: List<ExceptionTimeSerie>? = null,
     @Serializable(with = UUIDSerializer::class) val installationPointId: UUID,
     val timePointSeries: List<TimePointSerie>? = null,
-    @Serializable(with = UUIDSerializer::class) val id: UUID
+    @Serializable(with = UUIDSerializer::class) val id: UUID,
 ) : QueryListResource, QueryElementResource {
 
     companion object {

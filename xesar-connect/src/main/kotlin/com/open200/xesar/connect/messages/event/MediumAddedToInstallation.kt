@@ -19,5 +19,5 @@ data class MediumAddedToInstallation(
     var hardwareId: String? = null,
     var nativeId: String? = null,
     var mediumIdentifier: Long? = null,
-    var label: String? = null
+    var label: String? = null,
 ) : Event

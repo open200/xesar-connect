@@ -12,7 +12,8 @@ class EvvaComponentElementTest :
         val evvaComponent =
             QueryElement(
                 UUID.fromString("d385ab22-0f51-4b97-9ecd-b8ff3fd4fcb6"),
-                EvvaComponentFixture.evvaComponentFixture)
+                EvvaComponentFixture.evvaComponentFixture,
+            )
 
         val evvaComponentString =
             "{\"requestId\":\"d385ab22-0f51-4b97-9ecd-b8ff3fd4fcb6\",\"response\":{\"componentType\":\"WallReader\",\"serialNumber\":null,\"upgradeMedia\":null,\"batteryCondition\":\"Full\",\"btbFirmwareVersion\":null,\"id\":\"497f6eca-6276-4993-bfeb-53cbbbba6f08\",\"batteryStatusUpdatedAt\":\"2023-08-24T16:25:52.225991\",\"stateChangedAt\":\"2023-06-15T16:25:52.225991\",\"firmwareVersion\":null,\"status\":\"Synced\",\"bleMac\":null}}"

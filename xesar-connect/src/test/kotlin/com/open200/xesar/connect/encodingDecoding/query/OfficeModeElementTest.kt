@@ -15,7 +15,8 @@ class OfficeModeElementTest :
         val officeMode =
             QueryElement(
                 UUID.fromString("d385ab22-0f51-4b97-9ecd-b8ff3fd4fcb6"),
-                OfficeModeFixture.officeModeFixture)
+                OfficeModeFixture.officeModeFixture,
+            )
 
         val officeModeString =
             "{\"requestId\":\"d385ab22-0f51-4b97-9ecd-b8ff3fd4fcb6\",\"response\":{\"timeProfileDetails\":\"timeProfileDetails\",\"timeProfileName\":\"timeProfileName\",\"exceptionTimePointSeries\":[{\"calendars\":[\"497f6eca-6276-4993-bfeb-53cbbbba6f08\"],\"points\":[\"14:15:00\"]}],\"timeProfileId\":\"6c791d61-3d3c-4f4f-a16f-2a2d2823ab40\",\"installationPointDescription\":\"installationPointDescription\",\"installationPointName\":\"installationPointName\",\"shopMode\":true,\"timeSeries\":[{\"times\":[{\"start\":\"14:15:00\",\"end\":\"14:15:00\"}],\"days\":[\"FRIDAY\"]}],\"installationType\":\"installationType\",\"manualOfficeMode\":true,\"exceptionTimeSeries\":[{\"times\":[{\"start\":\"14:15:00\",\"end\":\"14:15:00\"}],\"calendars\":[\"497f6eca-6276-4993-bfeb-53cbbbba6f08\"]}],\"installationPointId\":\"39b25462-2580-44dc-b0a8-22fd6c03a023\",\"timePointSeries\":[{\"days\":[\"MONDAY\"],\"points\":[\"14:15:00\"]}],\"id\":\"497f6eca-6276-4993-bfeb-53cbbbba6f08\"}}"

@@ -44,5 +44,5 @@ data class AddSmartphoneToInstallationMapi(
     val validityDuration: Short? = null,
     @Serializable(with = UUIDSerializer::class) val personId: UUID? = null,
     @Serializable(with = UUIDSerializer::class) val id: UUID,
-    val token: String
+    val token: String,
 ) : Command

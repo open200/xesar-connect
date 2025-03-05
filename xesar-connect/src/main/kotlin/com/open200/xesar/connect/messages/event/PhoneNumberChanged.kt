@@ -13,5 +13,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class PhoneNumberChanged(
     val id: @Serializable(with = UUIDSerializer::class) UUID,
-    val phoneNumber: String? = null
+    val phoneNumber: String? = null,
 ) : Event

@@ -15,5 +15,5 @@ import kotlinx.serialization.Serializable
 data class ZoneChanged(
     val name: String,
     val description: String,
-    @Serializable(with = UUIDSerializer::class) val id: UUID
+    @Serializable(with = UUIDSerializer::class) val id: UUID,
 ) : Event

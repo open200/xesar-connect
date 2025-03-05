@@ -43,6 +43,7 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) {
      * @property token The token to be included in the request.
      */
     data class RequestConfig(val timeout: Long = 5000L)
+
     internal fun buildRequestConfig(): RequestConfig {
         return RequestConfig()
     }
@@ -101,7 +102,7 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) {
      */
     inline fun <reified E : Event> onEvent(
         messageFilter: MessageFilter,
-        onEventHandler: EventHandler<E>
+        onEventHandler: EventHandler<E>,
     ): Listener {
         return on(messageFilter) {
             val event = decodeEvent<E>(it.message)
@@ -119,7 +120,7 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) {
      */
     fun onAccessProtocolEvent(
         eventTypes: List<EventType>,
-        onAccessProtocolEventHandler: AccessProtocolEventHandler
+        onAccessProtocolEventHandler: AccessProtocolEventHandler,
     ): Listener {
         return on(TopicFilter(eventTypes.map { Topics.Event.accessProtocolEventTopic(it) })) {
             val event = AccessProtocolEvent.decode(it.message)
@@ -182,7 +183,8 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) {
                             deferred.complete(loggedIn.event.token)
                         } catch (e: Exception) {
                             deferred.completeExceptionally(
-                                ConnectionFailedException("Login failed", e))
+                                ConnectionFailedException("Login failed", e)
+                            )
                         }
                     }
                 val unauthorizedListener =
@@ -192,7 +194,9 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) {
                             logger.warn("Login failed.")
                             deferred.completeExceptionally(
                                 UnauthorizedLoginAttemptException(
-                                    "Probably invalid credentials were used"))
+                                    "Probably invalid credentials were used"
+                                )
+                            )
                         }
                     }
                 closeListenerOnCompletion(deferred, successListener, unauthorizedListener)
@@ -200,7 +204,9 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) {
                     .publishAsync(
                         Topics.Command.LOGIN,
                         encodeCommand(
-                            Login(commandId = commandId, username = username, password = password)))
+                            Login(commandId = commandId, username = username, password = password)
+                        ),
+                    )
                     .await()
 
                 token = deferred.await()
@@ -249,7 +255,7 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) {
     internal suspend inline fun <reified T : QueryListResource> queryListAsync(
         resource: String,
         params: Query.Params? = null,
-        requestConfig: RequestConfig = buildRequestConfig()
+        requestConfig: RequestConfig = buildRequestConfig(),
     ): Deferred<QueryList.Response<T>> {
         val deferred = CompletableDeferred<QueryList.Response<T>>()
         val requestId = config.uuidGenerator.generateId()
@@ -275,7 +281,7 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) {
     internal suspend inline fun <reified T : QueryElementResource> queryElementAsync(
         resource: String,
         id: UUID,
-        requestConfig: RequestConfig = buildRequestConfig()
+        requestConfig: RequestConfig = buildRequestConfig(),
     ): Deferred<T> {
         val deferred = CompletableDeferred<T>()
         val requestId = config.uuidGenerator.generateId()
@@ -292,7 +298,8 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) {
                 client
                     .publishAsync(
                         Topics.Query.REQUEST,
-                        encodeCommand(Query(resource, requestId, token, id = id, params = null)))
+                        encodeCommand(Query(resource, requestId, token, id = id, params = null)),
+                    )
                     .await()
                 deferred.await()
             }
@@ -304,7 +311,7 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) {
     internal inline fun <reified T : QueryListResource> queryStream(
         resource: String,
         params: Query.Params? = null,
-        requestConfig: RequestConfig = buildRequestConfig()
+        requestConfig: RequestConfig = buildRequestConfig(),
     ): Flow<T> {
         return flow {
             val firstQueryListResponse = queryListAsync<T>(resource, params, requestConfig).await()
@@ -334,8 +341,11 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) {
                     queryListAsync<T>(
                             resource,
                             paramsIter.copy(
-                                pageOffset = pageOffset, pageLimit = numberOfElementsInAPage),
-                            requestConfig)
+                                pageOffset = pageOffset,
+                                pageLimit = numberOfElementsInAPage,
+                            ),
+                            requestConfig,
+                        )
                         .await()
 
                 queryListResponse.data.forEach { emit(it) }
@@ -345,7 +355,7 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) {
 
     private fun <T> closeListenerOnCompletion(
         deferred: CompletableDeferred<T>,
-        vararg listeners: Listener
+        vararg listeners: Listener,
     ) {
         deferred.invokeOnCompletion { listeners.forEach { it.close() } }
     }
@@ -357,14 +367,15 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) {
     private suspend inline fun <T> handleStandardExceptions(
         deferred: CompletableDeferred<T>,
         messageType: String,
-        block: () -> (Unit)
+        block: () -> (Unit),
     ) {
         try {
             block.invoke()
         } catch (e: TimeoutCancellationException) {
             logger.error("Timeout while waiting for $messageType response", e)
             deferred.completeExceptionally(
-                ConnectionFailedException("$messageType request timed out", e))
+                ConnectionFailedException("$messageType request timed out", e)
+            )
         } catch (e: Exception) {
             logger.error("Error while waiting for $messageType response")
             deferred.completeExceptionally(ConnectionFailedException("$messageType failed", e))
@@ -389,7 +400,7 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) {
         topicEvent: String,
         eventRequired: Boolean,
         command: C,
-        requestConfig: RequestConfig = buildRequestConfig()
+        requestConfig: RequestConfig = buildRequestConfig(),
     ): SingleEventResult<E1> {
         val firstEventDeferred = CompletableDeferred<E1>()
         val apiErrorDeferred = CompletableDeferred<Optional<ApiError>>()
@@ -405,12 +416,18 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) {
                 command,
                 listOf(firstEventDeferred),
                 apiErrorDeferred,
-                listener)
+                listener,
+            )
         sendCommandJob.invokeOnCompletion { commandException ->
             if (commandException == null) {
                 val eventJob =
                     waitingForEventAsync<E1>(
-                        requestConfig, firstEventDeferred, eventRequired, topicEvent, listener[1])
+                        requestConfig,
+                        firstEventDeferred,
+                        eventRequired,
+                        topicEvent,
+                        listener[1],
+                    )
                 registerToCloseResourcesOnCancellation(eventJob, listener[1], firstEventDeferred)
 
                 val apiErrorJob =
@@ -424,7 +441,7 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) {
     private fun <T> registerToCloseResourcesOnCancellation(
         job: Job,
         listener: Listener,
-        deferred: CompletableDeferred<T>
+        deferred: CompletableDeferred<T>,
     ) {
         job.invokeOnCompletion {
             when (it) {
@@ -453,7 +470,10 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) {
      * @param requestConfig The request configuration (optional).
      */
     internal suspend inline fun <
-        reified C : Command, reified E1 : Event, reified E2 : Event> sendCommandAsync(
+        reified C : Command,
+        reified E1 : Event,
+        reified E2 : Event,
+    > sendCommandAsync(
         topicCommand: String,
         firstTopicEvent: String,
         firstEventRequired: Boolean,
@@ -482,7 +502,8 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) {
                 command,
                 listOf(firstEventDeferred, secondEventDeferred),
                 apiErrorDeferred,
-                listener)
+                listener,
+            )
 
         sendCommandJob.invokeOnCompletion { commandException ->
             if (commandException == null) {
@@ -494,9 +515,13 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) {
                         firstEventDeferred,
                         firstEventRequired,
                         firstTopicEvent,
-                        listener[1])
+                        listener[1],
+                    )
                 registerToCloseResourcesOnCancellation(
-                    firstEventJob, listener[1], firstEventDeferred)
+                    firstEventJob,
+                    listener[1],
+                    firstEventDeferred,
+                )
 
                 val secondEventJob =
                     waitingForEventAsync<E2>(
@@ -504,9 +529,13 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) {
                         secondEventDeferred,
                         secondEventRequired,
                         secondTopicEvent,
-                        listener[2])
+                        listener[2],
+                    )
                 registerToCloseResourcesOnCancellation(
-                    secondEventJob, listener[2], secondEventDeferred)
+                    secondEventJob,
+                    listener[2],
+                    secondEventDeferred,
+                )
 
                 val apiErrorJob =
                     waitingForApiErrorAsync(requestConfig, apiErrorDeferred, listener[0])
@@ -538,7 +567,8 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) {
         reified C : Command,
         reified E1 : Event,
         reified E2 : Event,
-        reified E3 : Event> sendCommandAsync(
+        reified E3 : Event,
+    > sendCommandAsync(
         topicCommand: String,
         firstTopicEvent: String,
         firstEventRequired: Boolean,
@@ -568,7 +598,8 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) {
                 errorListener,
                 firstEventListenerDeferred,
                 secondEventListenerDeferred,
-                thirdEventListenerDeferred)
+                thirdEventListenerDeferred,
+            )
 
         val sendCommandJob =
             sendAndWaitForCommandAsync<C>(
@@ -577,7 +608,8 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) {
                 command,
                 listOf(firstEventDeferred, secondEventDeferred, thirdEventDeferred),
                 apiErrorDeferred,
-                listener)
+                listener,
+            )
 
         sendCommandJob.invokeOnCompletion { commandException ->
             if (commandException == null) {
@@ -588,10 +620,14 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) {
                         firstEventDeferred,
                         firstEventRequired,
                         firstTopicEvent,
-                        listener[1])
+                        listener[1],
+                    )
 
                 registerToCloseResourcesOnCancellation(
-                    firstEventJob, listener[1], firstEventDeferred)
+                    firstEventJob,
+                    listener[1],
+                    firstEventDeferred,
+                )
 
                 val secondEventJob =
                     waitingForEventAsync<E2>(
@@ -599,10 +635,14 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) {
                         secondEventDeferred,
                         secondEventRequired,
                         secondTopicEvent,
-                        listener[2])
+                        listener[2],
+                    )
 
                 registerToCloseResourcesOnCancellation(
-                    secondEventJob, listener[2], secondEventDeferred)
+                    secondEventJob,
+                    listener[2],
+                    secondEventDeferred,
+                )
 
                 val thirdEventJob =
                     waitingForEventAsync<E3>(
@@ -610,10 +650,14 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) {
                         thirdEventDeferred,
                         thirdEventRequired,
                         thirdTopicEvent,
-                        listener[3])
+                        listener[3],
+                    )
 
                 registerToCloseResourcesOnCancellation(
-                    thirdEventJob, listener[3], thirdEventDeferred)
+                    thirdEventJob,
+                    listener[3],
+                    thirdEventDeferred,
+                )
 
                 val apiErrorJob =
                     waitingForApiErrorAsync(requestConfig, apiErrorDeferred, listener[0])
@@ -622,7 +666,9 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) {
             }
         }
         return Pair(
-            Triple(firstEventDeferred, secondEventDeferred, thirdEventDeferred), apiErrorDeferred)
+            Triple(firstEventDeferred, secondEventDeferred, thirdEventDeferred),
+            apiErrorDeferred,
+        )
     }
 
     private suspend inline fun <reified C : Command> sendAndWaitForCommandAsync(
@@ -631,7 +677,7 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) {
         command: C,
         listOfEventDeferred: List<CompletableDeferred<out Event>>,
         apiErrorDeferred: CompletableDeferred<Optional<ApiError>>,
-        listeners: List<Listener>
+        listeners: List<Listener>,
     ): Job {
         var publishDeferred = CompletableDeferred<Unit>()
         return coroutineScopeForSendCommand.launch {
@@ -646,13 +692,15 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) {
                 logger.error { "timeout while sending the command" }
                 completeWithSpecificException(
                     ConnectionFailedException("Command Response timed out", e),
-                    listOf(publishDeferred, *listOfEventDeferred.toTypedArray(), apiErrorDeferred))
+                    listOf(publishDeferred, *listOfEventDeferred.toTypedArray(), apiErrorDeferred),
+                )
                 closeListener(listeners)
             } catch (e: Exception) {
                 logger.error { "error while sending the command" }
                 completeWithSpecificException(
                     ConnectionFailedException("Command request was invalid", e),
-                    listOf(publishDeferred, *listOfEventDeferred.toTypedArray(), apiErrorDeferred))
+                    listOf(publishDeferred, *listOfEventDeferred.toTypedArray(), apiErrorDeferred),
+                )
                 closeListener(listeners)
             }
         }
@@ -661,7 +709,7 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) {
     private fun waitingForApiErrorAsync(
         requestConfig: RequestConfig,
         apiErrorDeferred: CompletableDeferred<Optional<ApiError>>,
-        listener: Listener
+        listener: Listener,
     ): Job =
         coroutineScopeForSendCommand.launch {
             logger.debug { "waiting for api error" }
@@ -684,7 +732,7 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) {
         eventDeferred: CompletableDeferred<E>,
         eventRequired: Boolean,
         topicEvent: String,
-        listener: Listener
+        listener: Listener,
     ): Job =
         coroutineScopeForSendCommand.launch {
             logger.debug { "waiting for event $topicEvent" }
@@ -694,7 +742,8 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) {
                 logger.debug { "timeout while waiting for event $topicEvent" }
                 completeWithSpecificException(
                     getTypeOfExceptionDependingOnEventRequired(eventRequired, topicEvent, e),
-                    listOf(eventDeferred))
+                    listOf(eventDeferred),
+                )
             } catch (e: Exception) {
                 logger.error { "exception while waiting for event $topicEvent" }
                 completeWithSpecificException(e, listOf(eventDeferred))
@@ -706,7 +755,7 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) {
 
     private inline fun <reified C : Command> registerApiErrorListener(
         command: C,
-        apiErrorDeferred: CompletableDeferred<Optional<ApiError>>
+        apiErrorDeferred: CompletableDeferred<Optional<ApiError>>,
     ): Listener =
         on(ApiErrorFilter(command.commandId, Topics.Event.error(config.apiProperties.userId))) {
             try {
@@ -722,7 +771,7 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) {
     private inline fun <reified C : Command, reified E : Event> registerCommandEventListenerAsync(
         command: C,
         topicEvent: String,
-        eventDeferred: CompletableDeferred<E>
+        eventDeferred: CompletableDeferred<E>,
     ): Listener =
         on(EventAndCommandIdFilter(command.commandId, topicEvent)) {
             try {
@@ -736,7 +785,7 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) {
 
     private fun <T> registerDefaultApiErrorListener(
         id: UUID,
-        deferred: CompletableDeferred<T>
+        deferred: CompletableDeferred<T>,
     ): Listener =
         on(ApiErrorFilter(id, Topics.Event.error(config.apiProperties.userId))) {
             try {
@@ -744,7 +793,9 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) {
                 deferred.completeExceptionally(
                     HttpErrorException(
                         "HTTP error code: ${apiError.error} ${apiError.reason.orEmpty()}",
-                        apiError.error))
+                        apiError.error,
+                    )
+                )
             } catch (e: Exception) {
                 deferred.completeExceptionally(e)
             }
@@ -752,7 +803,7 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) {
 
     private fun completeWithSpecificException(
         e: Exception,
-        deferreds: List<CompletableDeferred<*>>
+        deferreds: List<CompletableDeferred<*>>,
     ) {
         deferreds.forEach { it.completeExceptionally(e) }
     }
@@ -760,7 +811,7 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) {
     private fun getTypeOfExceptionDependingOnEventRequired(
         eventRequired: Boolean,
         topic: String,
-        e: Throwable
+        e: Throwable,
     ): XesarApiException {
         return if (eventRequired) {
             RequiredEventException("Required $topic event not received within timeout", e)
@@ -888,7 +939,7 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) {
         suspend fun connectAndLoginAsync(
             config: Config,
             userCredentials: UserCredentials? = null,
-            closeUponCoroutineCompletion: Boolean = true
+            closeUponCoroutineCompletion: Boolean = true,
         ): Deferred<XesarConnect> {
             val deferred = CompletableDeferred<XesarConnect>()
 
@@ -905,7 +956,9 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) {
                             Topics.Event.loggedIn(config.apiProperties.userId),
                             Topics.Event.UNAUTHORIZED_LOGIN_ATTEMPT,
                             Topics.Event.LOGGED_OUT,
-                            Topics.Event.error(config.apiProperties.userId)))
+                            Topics.Event.error(config.apiProperties.userId),
+                        )
+                    )
                     .await()
                 if (userCredentials != null) {
                     api.loginAsync(userCredentials.username, userCredentials.password).await()
@@ -915,7 +968,8 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) {
                     deferred.complete(api)
                 } else {
                     deferred.completeExceptionally(
-                        ConnectionFailedException("Neither token nor credentials provided"))
+                        ConnectionFailedException("Neither token nor credentials provided")
+                    )
                 }
             } catch (e: Exception) {
                 deferred.completeExceptionally(e)

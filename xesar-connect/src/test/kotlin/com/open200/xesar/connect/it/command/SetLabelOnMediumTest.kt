@@ -48,7 +48,8 @@ class SetLabelOnMediumTest :
                         val commandContent = commandReceived.await()
 
                         commandContent.shouldBeEqual(
-                            "{\"commandId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"id\":\"43edc7cf-80ab-4486-86db-41cda2c7a2cd\",\"label\":\"label\",\"token\":\"JDJhJDEwJDFSNEljZ2FaRUNXUXBTQ25XN05KbE9qRzFHQ1VjMzkvWTBVcFpZb1M4Vmt0dnJYZ0tJVFBx\"}")
+                            "{\"commandId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"id\":\"43edc7cf-80ab-4486-86db-41cda2c7a2cd\",\"label\":\"label\",\"token\":\"JDJhJDEwJDFSNEljZ2FaRUNXUXBTQ25XN05KbE9qRzFHQ1VjMzkvWTBVcFpZb1M4Vmt0dnJYZ0tJVFBx\"}"
+                        )
 
                         val apiEvent =
                             ApiEvent(
@@ -56,7 +57,9 @@ class SetLabelOnMediumTest :
                                 MediumChanged(
                                     id = UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
                                     changedAt = LocalDateTime.parse("2023-08-23T16:25:52.225991"),
-                                    label = "label"))
+                                    label = "label",
+                                ),
+                            )
 
                         client
                             .publishAsync(Topics.Event.MEDIUM_CHANGED, encodeEvent(apiEvent))
@@ -70,7 +73,9 @@ class SetLabelOnMediumTest :
                     api.subscribeAsync(Topics(Topics.Event.MEDIUM_CHANGED)).await()
                     val result =
                         api.setLabelOnMediumAsync(
-                                UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"), "label")
+                                UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
+                                "label",
+                            )
                             .await()
                     result.id.shouldBeEqual(UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
                     result.label?.shouldBeEqual("label")

@@ -14,10 +14,12 @@ class ErrorEventTest :
             val apiError =
                 ApiError(
                     correlationId = UUID.fromString("00000000-1281-40ae-89d7-5c541d77a757"),
-                    error = HttpStatusCode.Forbidden.value)
+                    error = HttpStatusCode.Forbidden.value,
+                )
 
             encodeError(apiError)
                 .shouldBeEqual(
-                    "{\"reason\":null,\"correlationId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"error\":403}")
+                    "{\"reason\":null,\"correlationId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"error\":403}"
+                )
         }
     })

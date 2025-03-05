@@ -18,5 +18,5 @@ data class EvvaComponentRemovalPrepared(
     val aggregateId: @Serializable(with = UUIDSerializer::class) UUID,
     val stateChangeAt: @Serializable(with = LocalDateTimeSerializer::class) LocalDateTime,
     val linkedInstallationPoints: List<@Serializable(with = UUIDSerializer::class) UUID> =
-        emptyList()
+        emptyList(),
 ) : Event

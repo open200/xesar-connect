@@ -16,7 +16,8 @@ object OfficeModeFixture {
     val exceptionTimepointSerie =
         ExceptionTimepointSerie(
             calendars = listOf(UUID.fromString("497f6eca-6276-4993-bfeb-53cbbbba6f08")),
-            points = listOf(localTime))
+            points = listOf(localTime),
+        )
 
     val timeRange = TimeSerie.TimeRange(start = localTime, end = localTime)
 
@@ -41,7 +42,9 @@ object OfficeModeFixture {
                 listOf(
                     ExceptionTimeSerie(
                         times = listOf(timeRange),
-                        calendars =
-                            listOf(UUID.fromString("497f6eca-6276-4993-bfeb-53cbbbba6f08")))),
-            timePointSeries = listOf(timePointSerie))
+                        calendars = listOf(UUID.fromString("497f6eca-6276-4993-bfeb-53cbbbba6f08")),
+                    )
+                ),
+            timePointSeries = listOf(timePointSerie),
+        )
 }

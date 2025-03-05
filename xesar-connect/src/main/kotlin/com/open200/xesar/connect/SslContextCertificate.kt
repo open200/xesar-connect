@@ -8,7 +8,7 @@ import javax.net.ssl.TrustManagerFactory
 
 class SslContextCertificate(
     private val mqttCertificates: Config.MqttCertificates,
-    private val securityProtocol: String
+    private val securityProtocol: String,
 ) {
     lateinit var ssLContext: SSLContext
 

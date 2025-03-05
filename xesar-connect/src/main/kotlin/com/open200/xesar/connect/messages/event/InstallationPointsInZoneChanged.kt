@@ -19,5 +19,5 @@ data class InstallationPointsInZoneChanged(
         emptyList(),
     @Serializable(with = UUIDSerializer::class) val aggregateId: UUID,
     val removedInstallationPoints: List<@Serializable(with = UUIDSerializer::class) UUID> =
-        emptyList()
+        emptyList(),
 ) : Event

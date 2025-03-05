@@ -5,5 +5,5 @@ enum class ComponentStatus {
     AssembledPrepared,
     Synced,
     NotSynced,
-    RemovePrepared
+    RemovePrepared,
 }

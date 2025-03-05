@@ -49,7 +49,10 @@ class QueryIdentificationMediumTest :
                         val queryContent = queryReceived.await()
                         queryContent.shouldBeEqual(
                             QueryTestHelper.createQueryRequest(
-                                IdentificationMedium.QUERY_RESOURCE, requestId))
+                                IdentificationMedium.QUERY_RESOURCE,
+                                requestId,
+                            )
+                        )
 
                         val identificationMedium =
                             encodeQueryList(
@@ -62,17 +65,22 @@ class QueryIdentificationMediumTest :
                                                 .copy(
                                                     id =
                                                         UUID.fromString(
-                                                            "a4c838a8-f6be-49e0-abee-c1d3b2897279"),
+                                                            "a4c838a8-f6be-49e0-abee-c1d3b2897279"
+                                                        ),
                                                     label = "test door 2",
-                                                )),
+                                                ),
+                                        ),
                                         2,
                                         2,
-                                    )))
+                                    ),
+                                )
+                            )
 
                         client
                             .publishAsync(
                                 Topics.Query.result(config.apiProperties.userId),
-                                identificationMedium)
+                                identificationMedium,
+                            )
                             .await()
                     }
                 }
@@ -91,194 +99,203 @@ class QueryIdentificationMediumTest :
         }
 
         test(
-            "queryIdentificationMediumByMediumIdentifierAsync without params should return an element") {
-                val requestId = UUID.fromString("00000000-1281-40ae-89d7-5c541d77a757")
+            "queryIdentificationMediumByMediumIdentifierAsync without params should return an element"
+        ) {
+            val requestId = UUID.fromString("00000000-1281-40ae-89d7-5c541d77a757")
 
-                coEvery { config.uuidGenerator.generateId() }.returns(requestId)
-                runBlocking {
-                    val simulatedBackendReady = CompletableDeferred<Unit>()
-                    val queryReceived = CompletableDeferred<String>()
-                    launch {
-                        XesarMqttClient.connectAsync(config).await().use { client ->
-                            client.subscribeAsync(arrayOf(Topics.ALL_TOPICS)).await()
+            coEvery { config.uuidGenerator.generateId() }.returns(requestId)
+            runBlocking {
+                val simulatedBackendReady = CompletableDeferred<Unit>()
+                val queryReceived = CompletableDeferred<String>()
+                launch {
+                    XesarMqttClient.connectAsync(config).await().use { client ->
+                        client.subscribeAsync(arrayOf(Topics.ALL_TOPICS)).await()
 
-                            client.onMessage = { topic, payload ->
-                                when (topic) {
-                                    Topics.Query.REQUEST -> {
-                                        queryReceived.complete(payload.decodeToString())
-                                    }
+                        client.onMessage = { topic, payload ->
+                            when (topic) {
+                                Topics.Query.REQUEST -> {
+                                    queryReceived.complete(payload.decodeToString())
                                 }
                             }
-
-                            simulatedBackendReady.complete(Unit)
-
-                            val queryContent = queryReceived.await()
-
-                            queryContent.shouldBeEqual(
-                                "{\"resource\":\"identification-media\",\"requestId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"token\":\"${MosquittoContainer.TOKEN}\",\"id\":null,\"params\":{\"pageOffset\":null,\"pageLimit\":null,\"sort\":null,\"language\":null,\"filters\":[{\"field\":\"mediumIdentifier\",\"type\":\"eq\",\"value\":\"1\"}]}}")
-
-                            val identificationMedium =
-                                encodeQueryList(
-                                    QueryList(
-                                        requestId,
-                                        QueryList.Response(
-                                            listOf(
-                                                IdentificationMediumFixture
-                                                    .identificationMediumFixture),
-                                            1,
-                                            1,
-                                        )))
-
-                            client
-                                .publishAsync(
-                                    Topics.Query.result(config.apiProperties.userId),
-                                    identificationMedium)
-                                .await()
                         }
-                    }
-                    launch {
-                        simulatedBackendReady.await()
 
-                        val api = XesarConnect.connectAndLoginAsync(config).await()
-                        api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
+                        simulatedBackendReady.complete(Unit)
+
+                        val queryContent = queryReceived.await()
+
+                        queryContent.shouldBeEqual(
+                            "{\"resource\":\"identification-media\",\"requestId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"token\":\"${MosquittoContainer.TOKEN}\",\"id\":null,\"params\":{\"pageOffset\":null,\"pageLimit\":null,\"sort\":null,\"language\":null,\"filters\":[{\"field\":\"mediumIdentifier\",\"type\":\"eq\",\"value\":\"1\"}]}}"
+                        )
+
+                        val identificationMedium =
+                            encodeQueryList(
+                                QueryList(
+                                    requestId,
+                                    QueryList.Response(
+                                        listOf(
+                                            IdentificationMediumFixture.identificationMediumFixture
+                                        ),
+                                        1,
+                                        1,
+                                    ),
+                                )
+                            )
+
+                        client
+                            .publishAsync(
+                                Topics.Query.result(config.apiProperties.userId),
+                                identificationMedium,
+                            )
                             .await()
-                        val result =
-                            api.queryIdentificationMediumByMediumIdentifier(
-                                mediumIdentifierValue = 1)
-
-                        result?.label?.shouldBeEqual("test door")
                     }
                 }
+                launch {
+                    simulatedBackendReady.await()
+
+                    val api = XesarConnect.connectAndLoginAsync(config).await()
+                    api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
+                        .await()
+                    val result =
+                        api.queryIdentificationMediumByMediumIdentifier(mediumIdentifierValue = 1)
+
+                    result?.label?.shouldBeEqual("test door")
+                }
             }
+        }
 
         test(
-            "queryIdentificationMediumByMediumIdentifierAsync without params should return null when no result") {
-                val requestId = UUID.fromString("00000000-1281-40ae-89d7-5c541d77a757")
-                coEvery { config.uuidGenerator.generateId() }.returns(requestId)
-                runBlocking {
-                    val simulatedBackendReady = CompletableDeferred<Unit>()
-                    val queryReceived = CompletableDeferred<String?>()
-                    launch {
-                        XesarMqttClient.connectAsync(config).await().use { client ->
-                            client.subscribeAsync(arrayOf(Topics.ALL_TOPICS)).await()
+            "queryIdentificationMediumByMediumIdentifierAsync without params should return null when no result"
+        ) {
+            val requestId = UUID.fromString("00000000-1281-40ae-89d7-5c541d77a757")
+            coEvery { config.uuidGenerator.generateId() }.returns(requestId)
+            runBlocking {
+                val simulatedBackendReady = CompletableDeferred<Unit>()
+                val queryReceived = CompletableDeferred<String?>()
+                launch {
+                    XesarMqttClient.connectAsync(config).await().use { client ->
+                        client.subscribeAsync(arrayOf(Topics.ALL_TOPICS)).await()
 
-                            client.onMessage = { topic, _ ->
-                                when (topic) {
-                                    Topics.Query.REQUEST -> {
-                                        queryReceived.complete(null)
-                                    }
+                        client.onMessage = { topic, _ ->
+                            when (topic) {
+                                Topics.Query.REQUEST -> {
+                                    queryReceived.complete(null)
                                 }
                             }
-
-                            simulatedBackendReady.complete(Unit)
-
-                            val queryContent = queryReceived.await()
-
-                            queryContent.shouldBeNull()
-
-                            val identificationMedium =
-                                encodeQueryList(
-                                    QueryList(
-                                        requestId,
-                                        QueryList.Response(
-                                            listOf(),
-                                            1,
-                                            1,
-                                        )))
-
-                            client
-                                .publishAsync(
-                                    Topics.Query.result(config.apiProperties.userId),
-                                    identificationMedium)
-                                .await()
                         }
-                    }
-                    launch {
-                        simulatedBackendReady.await()
 
-                        val api = XesarConnect.connectAndLoginAsync(config).await()
-                        api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
+                        simulatedBackendReady.complete(Unit)
+
+                        val queryContent = queryReceived.await()
+
+                        queryContent.shouldBeNull()
+
+                        val identificationMedium =
+                            encodeQueryList(
+                                QueryList(requestId, QueryList.Response(listOf(), 1, 1))
+                            )
+
+                        client
+                            .publishAsync(
+                                Topics.Query.result(config.apiProperties.userId),
+                                identificationMedium,
+                            )
                             .await()
-                        val result =
-                            api.queryIdentificationMediumByMediumIdentifier(
-                                mediumIdentifierValue = 9999)
-
-                        result.shouldBeNull()
                     }
                 }
+                launch {
+                    simulatedBackendReady.await()
+
+                    val api = XesarConnect.connectAndLoginAsync(config).await()
+                    api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
+                        .await()
+                    val result =
+                        api.queryIdentificationMediumByMediumIdentifier(
+                            mediumIdentifierValue = 9999
+                        )
+
+                    result.shouldBeNull()
+                }
             }
+        }
 
         test(
-            "queryIdentificationMediumByMediumIdentifierAsync should throw an exception if the results is returning 2 values") {
-                val requestId = UUID.fromString("00000000-1281-40ae-89d7-5c541d77a757")
-                coEvery { config.uuidGenerator.generateId() }.returns(requestId)
-                runBlocking {
-                    val simulatedBackendReady = CompletableDeferred<Unit>()
-                    val queryReceived = CompletableDeferred<String>()
-                    launch {
-                        XesarMqttClient.connectAsync(config).await().use { client ->
-                            client.subscribeAsync(arrayOf(Topics.ALL_TOPICS)).await()
+            "queryIdentificationMediumByMediumIdentifierAsync should throw an exception if the results is returning 2 values"
+        ) {
+            val requestId = UUID.fromString("00000000-1281-40ae-89d7-5c541d77a757")
+            coEvery { config.uuidGenerator.generateId() }.returns(requestId)
+            runBlocking {
+                val simulatedBackendReady = CompletableDeferred<Unit>()
+                val queryReceived = CompletableDeferred<String>()
+                launch {
+                    XesarMqttClient.connectAsync(config).await().use { client ->
+                        client.subscribeAsync(arrayOf(Topics.ALL_TOPICS)).await()
 
-                            client.onMessage = { topic, payload ->
-                                when (topic) {
-                                    Topics.Query.REQUEST -> {
-                                        queryReceived.complete(payload.decodeToString())
-                                    }
+                        client.onMessage = { topic, payload ->
+                            when (topic) {
+                                Topics.Query.REQUEST -> {
+                                    queryReceived.complete(payload.decodeToString())
                                 }
                             }
-
-                            simulatedBackendReady.complete(Unit)
-
-                            val queryContent = queryReceived.await()
-
-                            queryContent.shouldBeEqual(
-                                "{\"resource\":\"identification-media\",\"requestId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"token\":\"${MosquittoContainer.TOKEN}\",\"id\":null,\"params\":{\"pageOffset\":null,\"pageLimit\":null,\"sort\":null,\"language\":null,\"filters\":[{\"field\":\"mediumIdentifier\",\"type\":\"eq\",\"value\":\"1\"}]}}")
-
-                            val identificationMedium =
-                                encodeQueryList(
-                                    QueryList(
-                                        requestId,
-                                        QueryList.Response(
-                                            listOf(
-                                                IdentificationMediumFixture
-                                                    .identificationMediumFixture,
-                                                IdentificationMediumFixture
-                                                    .identificationMediumFixture
-                                                    .copy(
-                                                        id =
-                                                            UUID.fromString(
-                                                                "a4c838a8-f6be-49e0-abee-c1d3b2897279"),
-                                                        label = "test door 2",
-                                                    )),
-                                            2,
-                                            2,
-                                        )))
-
-                            client
-                                .publishAsync(
-                                    Topics.Query.result(config.apiProperties.userId),
-                                    identificationMedium)
-                                .await()
                         }
-                    }
-                    launch {
-                        simulatedBackendReady.await()
 
-                        val api = XesarConnect.connectAndLoginAsync(config).await()
-                        api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
+                        simulatedBackendReady.complete(Unit)
+
+                        val queryContent = queryReceived.await()
+
+                        queryContent.shouldBeEqual(
+                            "{\"resource\":\"identification-media\",\"requestId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"token\":\"${MosquittoContainer.TOKEN}\",\"id\":null,\"params\":{\"pageOffset\":null,\"pageLimit\":null,\"sort\":null,\"language\":null,\"filters\":[{\"field\":\"mediumIdentifier\",\"type\":\"eq\",\"value\":\"1\"}]}}"
+                        )
+
+                        val identificationMedium =
+                            encodeQueryList(
+                                QueryList(
+                                    requestId,
+                                    QueryList.Response(
+                                        listOf(
+                                            IdentificationMediumFixture.identificationMediumFixture,
+                                            IdentificationMediumFixture.identificationMediumFixture
+                                                .copy(
+                                                    id =
+                                                        UUID.fromString(
+                                                            "a4c838a8-f6be-49e0-abee-c1d3b2897279"
+                                                        ),
+                                                    label = "test door 2",
+                                                ),
+                                        ),
+                                        2,
+                                        2,
+                                    ),
+                                )
+                            )
+
+                        client
+                            .publishAsync(
+                                Topics.Query.result(config.apiProperties.userId),
+                                identificationMedium,
+                            )
                             .await()
-
-                        val result =
-                            shouldThrow<MediumListSizeException> {
-                                api.queryIdentificationMediumByMediumIdentifier(
-                                    mediumIdentifierValue = 1)
-                            }
-
-                        result.message?.shouldBeEqual(
-                            "Expected exactly one element in the list with mediumIdentifier 1, but found 2 elements")
                     }
                 }
+                launch {
+                    simulatedBackendReady.await()
+
+                    val api = XesarConnect.connectAndLoginAsync(config).await()
+                    api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
+                        .await()
+
+                    val result =
+                        shouldThrow<MediumListSizeException> {
+                            api.queryIdentificationMediumByMediumIdentifier(
+                                mediumIdentifierValue = 1
+                            )
+                        }
+
+                    result.message?.shouldBeEqual(
+                        "Expected exactly one element in the list with mediumIdentifier 1, but found 2 elements"
+                    )
+                }
             }
+        }
 
         test("queryIdentificationMediumById") {
             val requestId = UUID.fromString("00000000-1281-42c0-9a15-c5844850c748")
@@ -307,18 +324,25 @@ class QueryIdentificationMediumTest :
 
                         queryContent.shouldBeEqual(
                             QueryTestHelper.createQueryRequest(
-                                IdentificationMedium.QUERY_RESOURCE, requestId, id))
+                                IdentificationMedium.QUERY_RESOURCE,
+                                requestId,
+                                id,
+                            )
+                        )
 
                         val identificationMedium =
                             encodeQueryElement(
                                 QueryElement(
                                     requestId,
-                                    IdentificationMediumFixture.identificationMediumFixture))
+                                    IdentificationMediumFixture.identificationMediumFixture,
+                                )
+                            )
 
                         client
                             .publishAsync(
                                 Topics.Query.result(config.apiProperties.userId),
-                                identificationMedium)
+                                identificationMedium,
+                            )
                             .await()
                     }
                 }

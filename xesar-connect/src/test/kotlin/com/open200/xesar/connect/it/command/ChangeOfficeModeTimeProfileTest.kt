@@ -48,7 +48,8 @@ class ChangeOfficeModeTimeProfileTest :
                         val commandContent = commandReceived.await()
                         println(commandContent)
                         commandContent.shouldBe(
-                            "{\"commandId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"id\":\"43edc7cf-80ab-4486-86db-41cda2c7a2cd\",\"name\":\"name\",\"description\":null,\"timeSeries\":[{\"times\":[{\"start\":\"14:15:00\",\"end\":\"14:15:00\"}],\"days\":[\"MONDAY\"]}],\"exceptionTimeSeries\":[],\"exceptionTimePointSeries\":[],\"timePointSeries\":[],\"token\":\"JDJhJDEwJDFSNEljZ2FaRUNXUXBTQ25XN05KbE9qRzFHQ1VjMzkvWTBVcFpZb1M4Vmt0dnJYZ0tJVFBx\"}")
+                            "{\"commandId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"id\":\"43edc7cf-80ab-4486-86db-41cda2c7a2cd\",\"name\":\"name\",\"description\":null,\"timeSeries\":[{\"times\":[{\"start\":\"14:15:00\",\"end\":\"14:15:00\"}],\"days\":[\"MONDAY\"]}],\"exceptionTimeSeries\":[],\"exceptionTimePointSeries\":[],\"timePointSeries\":[],\"token\":\"JDJhJDEwJDFSNEljZ2FaRUNXUXBTQ25XN05KbE9qRzFHQ1VjMzkvWTBVcFpZb1M4Vmt0dnJYZ0tJVFBx\"}"
+                        )
 
                         val apiEvent =
                             ApiEvent(
@@ -56,12 +57,15 @@ class ChangeOfficeModeTimeProfileTest :
                                 OfficeModeTimeProfileChanged(
                                     id = UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
                                     name = "name",
-                                    timeSeries = TimeProfileFixture.timeSeries))
+                                    timeSeries = TimeProfileFixture.timeSeries,
+                                ),
+                            )
 
                         client
                             .publishAsync(
                                 Topics.Event.OFFICE_MODE_TIME_PROFILE_CHANGED,
-                                encodeEvent(apiEvent))
+                                encodeEvent(apiEvent),
+                            )
                             .await()
                     }
                 }
@@ -75,7 +79,8 @@ class ChangeOfficeModeTimeProfileTest :
                         api.changeOfficeModeTimeProfileAsync(
                                 UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
                                 "name",
-                                timeSeries = TimeProfileFixture.timeSeries)
+                                timeSeries = TimeProfileFixture.timeSeries,
+                            )
                             .await()
                     result.id.shouldBe(UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
                     result.timeSeries.shouldBe(TimeProfileFixture.timeSeries)

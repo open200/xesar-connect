@@ -15,7 +15,7 @@ data class TimeProfile(
     val timePointSeries: List<TimePointSerie>? = emptyList(),
     @Serializable(with = UUIDSerializer::class) val id: UUID? = null,
     val type: TimeProfileType? = null,
-    val validStandardTimeProfile: Boolean? = null
+    val validStandardTimeProfile: Boolean? = null,
 ) : QueryListResource, QueryElementResource {
     companion object {
         const val QUERY_RESOURCE = "time-profiles"

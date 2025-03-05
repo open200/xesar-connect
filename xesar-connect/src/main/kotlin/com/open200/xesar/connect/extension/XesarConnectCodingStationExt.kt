@@ -24,7 +24,7 @@ import kotlinx.coroutines.flow.Flow
  */
 suspend fun XesarConnect.queryCodingStations(
     params: Query.Params? = null,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): QueryList.Response<CodingStation> {
     return handleQueryListFunction {
         queryListAsync(CodingStation.QUERY_RESOURCE, params, requestConfig)
@@ -40,7 +40,7 @@ suspend fun XesarConnect.queryCodingStations(
  */
 suspend fun XesarConnect.queryCodingStationById(
     id: UUID,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): CodingStation? {
     return handleQueryElementFunction {
         queryElementAsync(CodingStation.QUERY_RESOURCE, id, requestConfig)
@@ -59,15 +59,21 @@ suspend fun XesarConnect.createCodingStationAsync(
     name: String,
     description: String? = null,
     codingStationId: UUID,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): SingleEventResult<CodingStationCreated> {
     return sendCommandAsync<CreateCodingStationMapi, CodingStationCreated>(
         Topics.Command.CREATE_CODING_STATION,
         Topics.Event.CODING_STATION_CREATED,
         true,
         CreateCodingStationMapi(
-            config.uuidGenerator.generateId(), name, description, codingStationId, token),
-        requestConfig)
+            config.uuidGenerator.generateId(),
+            name,
+            description,
+            codingStationId,
+            token,
+        ),
+        requestConfig,
+    )
 }
 
 /**
@@ -82,15 +88,21 @@ suspend fun XesarConnect.changeCodingStationAsync(
     codingStationId: UUID,
     name: String? = null,
     description: String? = null,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): SingleEventResult<CodingStationChanged> {
     return sendCommandAsync<ChangeCodingStationMapi, CodingStationChanged>(
         Topics.Command.CHANGE_CODING_STATION,
         Topics.Event.CODING_STATION_CHANGED,
         true,
         ChangeCodingStationMapi(
-            config.uuidGenerator.generateId(), codingStationId, name, description, token),
-        requestConfig)
+            config.uuidGenerator.generateId(),
+            codingStationId,
+            name,
+            description,
+            token,
+        ),
+        requestConfig,
+    )
 }
 
 /**
@@ -101,14 +113,15 @@ suspend fun XesarConnect.changeCodingStationAsync(
  */
 suspend fun XesarConnect.deleteCodingStationAsync(
     codingStationId: UUID,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): SingleEventResult<CodingStationDeleted> {
     return sendCommandAsync<DeleteCodingStationMapi, CodingStationDeleted>(
         Topics.Command.DELETE_CODING_STATION,
         Topics.Event.CODING_STATION_DELETED,
         true,
         DeleteCodingStationMapi(config.uuidGenerator.generateId(), codingStationId, token),
-        requestConfig)
+        requestConfig,
+    )
 }
 
 /**
@@ -123,7 +136,7 @@ suspend fun XesarConnect.deleteCodingStationAsync(
  */
 fun XesarConnect.queryStreamCodingStation(
     params: Query.Params? = null,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): Flow<CodingStation> {
     return queryStream(CodingStation.QUERY_RESOURCE, params, requestConfig)
 }

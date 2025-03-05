@@ -48,7 +48,8 @@ class QueryUserTest :
                         val queryContent = queryReceived.await()
 
                         queryContent.shouldBeEqual(
-                            QueryTestHelper.createQueryRequest(User.QUERY_RESOURCE, requestId))
+                            QueryTestHelper.createQueryRequest(User.QUERY_RESOURCE, requestId)
+                        )
 
                         val person =
                             encodeQueryList(
@@ -60,12 +61,16 @@ class QueryUserTest :
                                             userFixture.copy(
                                                 id =
                                                     UUID.fromString(
-                                                        "4509ca29-9fd3-454f-9c98-fc0967fe3f66"),
+                                                        "4509ca29-9fd3-454f-9c98-fc0967fe3f66"
+                                                    ),
                                                 name = "lastname 2 String",
-                                            )),
+                                            ),
+                                        ),
                                         2,
                                         2,
-                                    )))
+                                    ),
+                                )
+                            )
 
                         client
                             .publishAsync(Topics.Query.result(config.apiProperties.userId), person)

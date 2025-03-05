@@ -48,7 +48,8 @@ class CreateOfficeModeTimeProfileTest :
                         val commandContent = commandReceived.await()
 
                         commandContent.shouldBeEqual(
-                            "{\"commandId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"timeSeries\":[{\"times\":[{\"start\":\"14:15:00\",\"end\":\"14:15:00\"}],\"days\":[\"MONDAY\"]}],\"exceptionTimeSeries\":[],\"exceptionTimePointSeries\":[],\"name\":\"timeProfileName\",\"description\":null,\"timePointSeries\":[],\"id\":\"43edc7cf-80ab-4486-86db-41cda2c7a2cd\",\"token\":\"JDJhJDEwJDFSNEljZ2FaRUNXUXBTQ25XN05KbE9qRzFHQ1VjMzkvWTBVcFpZb1M4Vmt0dnJYZ0tJVFBx\"}")
+                            "{\"commandId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"timeSeries\":[{\"times\":[{\"start\":\"14:15:00\",\"end\":\"14:15:00\"}],\"days\":[\"MONDAY\"]}],\"exceptionTimeSeries\":[],\"exceptionTimePointSeries\":[],\"name\":\"timeProfileName\",\"description\":null,\"timePointSeries\":[],\"id\":\"43edc7cf-80ab-4486-86db-41cda2c7a2cd\",\"token\":\"JDJhJDEwJDFSNEljZ2FaRUNXUXBTQ25XN05KbE9qRzFHQ1VjMzkvWTBVcFpZb1M4Vmt0dnJYZ0tJVFBx\"}"
+                        )
 
                         val apiEvent =
                             ApiEvent(
@@ -59,12 +60,15 @@ class CreateOfficeModeTimeProfileTest :
                                     timeSeries = TimeProfileFixture.timeSeries,
                                     exceptionTimeSeries = listOf(),
                                     exceptionTimePointSeries = listOf(),
-                                    timePointSeries = listOf()))
+                                    timePointSeries = listOf(),
+                                ),
+                            )
 
                         client
                             .publishAsync(
                                 Topics.Event.OFFICE_MODE_TIME_PROFILE_CREATED,
-                                encodeEvent(apiEvent))
+                                encodeEvent(apiEvent),
+                            )
                             .await()
                     }
                 }
@@ -79,7 +83,8 @@ class CreateOfficeModeTimeProfileTest :
                                 name = "timeProfileName",
                                 timeSeries = TimeProfileFixture.timeSeries,
                                 timeProfileId =
-                                    UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
+                                    UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
+                            )
                             .await()
                     result.name.shouldBeEqual("timeProfileName")
                     result.timeSeries.shouldBeEqual(TimeProfileFixture.timeSeries)

@@ -13,5 +13,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class CalendarDeleted(
     val calendarIdentifier: Int,
-    @Serializable(with = UUIDSerializer::class) val id: UUID
+    @Serializable(with = UUIDSerializer::class) val id: UUID,
 ) : Event

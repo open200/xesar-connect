@@ -49,7 +49,8 @@ class SetPersonalReferenceDurationForInstallationPointTest :
                         val commandContent = commandReceived.await()
 
                         commandContent.shouldBeEqual(
-                            "{\"commandId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"personalReferenceDuration\":{\"logMode\":\"saveForDays\",\"days\":30},\"id\":\"43edc7cf-80ab-4486-86db-41cda2c7a2cd\",\"token\":\"JDJhJDEwJDFSNEljZ2FaRUNXUXBTQ25XN05KbE9qRzFHQ1VjMzkvWTBVcFpZb1M4Vmt0dnJYZ0tJVFBx\"}")
+                            "{\"commandId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"personalReferenceDuration\":{\"logMode\":\"saveForDays\",\"days\":30},\"id\":\"43edc7cf-80ab-4486-86db-41cda2c7a2cd\",\"token\":\"JDJhJDEwJDFSNEljZ2FaRUNXUXBTQ25XN05KbE9qRzFHQ1VjMzkvWTBVcFpZb1M4Vmt0dnJYZ0tJVFBx\"}"
+                        )
 
                         val apiEvent =
                             ApiEvent(
@@ -60,11 +61,16 @@ class SetPersonalReferenceDurationForInstallationPointTest :
                                     personalReferenceDuration =
                                         PersonalLog(
                                             days = 30,
-                                            logMode = PersonalLog.PersonalLogModes.saveForDays)))
+                                            logMode = PersonalLog.PersonalLogModes.saveForDays,
+                                        ),
+                                ),
+                            )
 
                         client
                             .publishAsync(
-                                Topics.Event.INSTALLATION_POINT_CHANGED, encodeEvent(apiEvent))
+                                Topics.Event.INSTALLATION_POINT_CHANGED,
+                                encodeEvent(apiEvent),
+                            )
                             .await()
                     }
                 }
@@ -77,12 +83,17 @@ class SetPersonalReferenceDurationForInstallationPointTest :
                         api.setPersonalReferenceDurationForInstallationPointAsync(
                                 UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
                                 PersonalLog(
-                                    days = 30, logMode = PersonalLog.PersonalLogModes.saveForDays))
+                                    days = 30,
+                                    logMode = PersonalLog.PersonalLogModes.saveForDays,
+                                ),
+                            )
                             .await()
                     result.aggregateId.shouldBeEqual(
-                        UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
+                        UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd")
+                    )
                     result.personalReferenceDuration?.shouldBeEqual(
-                        PersonalLog(days = 30, logMode = PersonalLog.PersonalLogModes.saveForDays))
+                        PersonalLog(days = 30, logMode = PersonalLog.PersonalLogModes.saveForDays)
+                    )
                 }
             }
         }

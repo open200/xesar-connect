@@ -15,5 +15,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class CodingStationDeleted(
     val deletedAt: @Serializable(with = LocalDateTimeSerializer::class) LocalDateTime,
-    val id: @Serializable(with = UUIDSerializer::class) UUID
+    val id: @Serializable(with = UUIDSerializer::class) UUID,
 ) : Event

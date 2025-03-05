@@ -23,12 +23,15 @@ class QueryCommandTest :
                         1,
                         "sort",
                         "language",
-                        listOf(Query.Params.Filter("field", FilterType.EQ, "value"))))
+                        listOf(Query.Params.Filter("field", FilterType.EQ, "value")),
+                    ),
+                )
 
             encodeCommand(cmd)
                 .shouldBeEqual(
                     "{\"resource\":\"6569fd2f-6f90-4ebd-b734-80ddc5b38f69\",\"requestId\":\"$requestId\",\"token\":\"$token\"," +
                         "\"id\":\"b62ea781-dde6-436c-bdd1-eeea2a8d921a\",\"params\":{\"pageOffset\":1,\"pageLimit\":1,\"sort\":\"sort\",\"language\":\"language\"," +
-                        "\"filters\":[{\"field\":\"field\",\"type\":\"eq\",\"value\":\"value\"}]}}")
+                        "\"filters\":[{\"field\":\"field\",\"type\":\"eq\",\"value\":\"value\"}]}}"
+                )
         }
     })

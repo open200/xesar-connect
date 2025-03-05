@@ -17,5 +17,5 @@ data class AddInstallationPointAuthorizationToMediumMapi(
     override val commandId: @Serializable(with = UUIDSerializer::class) UUID,
     @Serializable(with = UUIDSerializer::class) val id: UUID,
     val authorization: AuthorizationData,
-    val token: String
+    val token: String,
 ) : Command

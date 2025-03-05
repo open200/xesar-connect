@@ -15,6 +15,6 @@ data class TimeSerie(val times: List<TimeRange>, val days: List<Weekday>) {
     @Serializable
     data class TimeRange(
         @Serializable(with = LocalTimeSerializer::class) val start: LocalTime,
-        @Serializable(with = LocalTimeSerializer::class) val end: LocalTime
+        @Serializable(with = LocalTimeSerializer::class) val end: LocalTime,
     )
 }

@@ -17,5 +17,5 @@ import kotlinx.serialization.Serializable
 data class SetDailySchedulerExecutionTimeMapi(
     override val commandId: @Serializable(with = UUIDSerializer::class) UUID,
     @Serializable(with = LocalTimeSerializer::class) val dailySchedulerExecutionTime: LocalTime,
-    val token: String
+    val token: String,
 ) : Command

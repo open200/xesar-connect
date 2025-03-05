@@ -21,5 +21,5 @@ data class ChangePersonInformationMapi(
     val lastName: String? = null,
     val identifier: String? = null,
     val externalId: String? = null,
-    val token: String
+    val token: String,
 ) : Command

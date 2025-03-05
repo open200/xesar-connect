@@ -20,5 +20,5 @@ data class SetDefaultDisengagePeriodForPersonMapi(
     override val commandId: @Serializable(with = UUIDSerializer::class) UUID,
     val disengagePeriod: DisengagePeriod,
     val externalId: String,
-    val token: String
+    val token: String,
 ) : Command

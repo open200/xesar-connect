@@ -49,16 +49,20 @@ class FindComponentTest :
                         val commandContent = commandReceived.await()
 
                         commandContent.shouldBeEqual(
-                            "{\"commandId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"installationPointId\":\"${InstallationPointFixture.installationPointFixture.id}\",\"enable\":true,\"token\":\"${MosquittoContainer.TOKEN}\"}")
+                            "{\"commandId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"installationPointId\":\"${InstallationPointFixture.installationPointFixture.id}\",\"enable\":true,\"token\":\"${MosquittoContainer.TOKEN}\"}"
+                        )
 
                         val apiEvent =
                             ApiEvent(
                                 UUID.fromString("00000000-1281-40ae-89d7-5c541d77a757"),
-                                FindComponentPerformed("ok"))
+                                FindComponentPerformed("ok"),
+                            )
 
                         client
                             .publishAsync(
-                                Topics.Event.FIND_COMPONENT_PERFORMED, encodeEvent(apiEvent))
+                                Topics.Event.FIND_COMPONENT_PERFORMED,
+                                encodeEvent(apiEvent),
+                            )
                             .await()
                     }
                 }
@@ -69,7 +73,9 @@ class FindComponentTest :
                     api.subscribeAsync(Topics(Topics.Event.FIND_COMPONENT_PERFORMED)).await()
                     val result =
                         api.findComponentAsync(
-                                InstallationPointFixture.installationPointFixture.id, true)
+                                InstallationPointFixture.installationPointFixture.id,
+                                true,
+                            )
                             .await()
 
                     result.ok.shouldBeEqual("ok")

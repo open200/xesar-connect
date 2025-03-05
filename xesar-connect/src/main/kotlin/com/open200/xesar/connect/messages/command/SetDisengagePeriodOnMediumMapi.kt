@@ -20,5 +20,5 @@ data class SetDisengagePeriodOnMediumMapi(
     override val commandId: @Serializable(with = UUIDSerializer::class) UUID,
     val disengagePeriod: DisengagePeriod,
     @Serializable(with = UUIDSerializer::class) val id: UUID,
-    val token: String
+    val token: String,
 ) : Command

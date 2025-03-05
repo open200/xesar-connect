@@ -48,7 +48,8 @@ class AddSmartphoneToInstallationTest :
 
                         val commandContent = commandReceived.await()
                         commandContent.shouldBe(
-                            "{\"commandId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"accessBeginAt\":null,\"partitionId\":null,\"disengagePeriod\":null,\"authorizationProfileId\":null,\"individualAuthorizations\":[],\"messageLanguage\":null,\"label\":null,\"accessEndAt\":null,\"phoneNumber\":null,\"validityDuration\":null,\"personId\":null,\"id\":\"43edc7cf-80ab-4486-86db-41cda2c7a2cd\",\"token\":\"JDJhJDEwJDFSNEljZ2FaRUNXUXBTQ25XN05KbE9qRzFHQ1VjMzkvWTBVcFpZb1M4Vmt0dnJYZ0tJVFBx\"}")
+                            "{\"commandId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"accessBeginAt\":null,\"partitionId\":null,\"disengagePeriod\":null,\"authorizationProfileId\":null,\"individualAuthorizations\":[],\"messageLanguage\":null,\"label\":null,\"accessEndAt\":null,\"phoneNumber\":null,\"validityDuration\":null,\"personId\":null,\"id\":\"43edc7cf-80ab-4486-86db-41cda2c7a2cd\",\"token\":\"JDJhJDEwJDFSNEljZ2FaRUNXUXBTQ25XN05KbE9qRzFHQ1VjMzkvWTBVcFpZb1M4Vmt0dnJYZ0tJVFBx\"}"
+                        )
 
                         val apiEvent =
                             ApiEvent(
@@ -71,13 +72,15 @@ class AddSmartphoneToInstallationTest :
                                     validityEndAt = LocalDateTime.parse("2024-12-09T14:20"),
                                     aggregateId =
                                         UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
-                                    issuedAt =
-                                        LocalDateTime.parse("2024-08-08T12:29:55.708239786")))
+                                    issuedAt = LocalDateTime.parse("2024-08-08T12:29:55.708239786"),
+                                ),
+                            )
 
                         client
                             .publishAsync(
                                 Topics.Event.SMARTPHONE_ADDED_TO_INSTALLATION,
-                                encodeEvent(apiEvent))
+                                encodeEvent(apiEvent),
+                            )
                             .await()
                     }
                 }
@@ -89,11 +92,13 @@ class AddSmartphoneToInstallationTest :
                         .await()
                     val result =
                         api.addSmartphoneToInstallationAsync(
-                                id = UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
+                                id = UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd")
+                            )
                             .await()
 
                     result.aggregateId.shouldBe(
-                        UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
+                        UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd")
+                    )
                 }
             }
         }

@@ -16,5 +16,5 @@ import kotlinx.serialization.Serializable
 data class AuthorizationProfileInfoChanged(
     val name: String? = null,
     val description: String? = null,
-    val id: @Serializable(with = UUIDSerializer::class) UUID? = null
+    val id: @Serializable(with = UUIDSerializer::class) UUID? = null,
 ) : Event

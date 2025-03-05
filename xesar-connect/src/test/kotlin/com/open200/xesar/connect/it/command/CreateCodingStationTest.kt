@@ -47,7 +47,8 @@ class CreateCodingStationTest :
                         val commandContent = commandReceived.await()
 
                         commandContent.shouldBeEqual(
-                            "{\"commandId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"name\":\"coding station name\",\"description\":null,\"id\":\"43edc7cf-80ab-4486-86db-41cda2c7a2cd\",\"token\":\"JDJhJDEwJDFSNEljZ2FaRUNXUXBTQ25XN05KbE9qRzFHQ1VjMzkvWTBVcFpZb1M4Vmt0dnJYZ0tJVFBx\"}")
+                            "{\"commandId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"name\":\"coding station name\",\"description\":null,\"id\":\"43edc7cf-80ab-4486-86db-41cda2c7a2cd\",\"token\":\"JDJhJDEwJDFSNEljZ2FaRUNXUXBTQ25XN05KbE9qRzFHQ1VjMzkvWTBVcFpZb1M4Vmt0dnJYZ0tJVFBx\"}"
+                        )
 
                         val apiEvent =
                             ApiEvent(
@@ -56,11 +57,15 @@ class CreateCodingStationTest :
                                     partitionId =
                                         UUID.fromString("5c4d62bb-cdf9-4630-83ff-816ee8166d62"),
                                     id = UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
-                                    name = "coding station name"))
+                                    name = "coding station name",
+                                ),
+                            )
 
                         client
                             .publishAsync(
-                                Topics.Event.CODING_STATION_CREATED, encodeEvent(apiEvent))
+                                Topics.Event.CODING_STATION_CREATED,
+                                encodeEvent(apiEvent),
+                            )
                             .await()
                     }
                 }
@@ -73,7 +78,8 @@ class CreateCodingStationTest :
                         api.createCodingStationAsync(
                                 name = "coding station name",
                                 codingStationId =
-                                    UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
+                                    UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
+                            )
                             .await()
                     result.id.shouldBeEqual(UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
                 }

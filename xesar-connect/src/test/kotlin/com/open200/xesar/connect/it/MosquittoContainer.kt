@@ -17,13 +17,14 @@ object MosquittoContainer {
             withExposedPorts(1883)
             withCopyToContainer(
                 MountableFile.forClasspathResource("mosquitto.conf"),
-                "mosquitto/config/mosquitto.conf")
+                "mosquitto/config/mosquitto.conf",
+            )
             start()
         }
 
     fun config(
         container: GenericContainer<Nothing>,
-        dispatcher: CoroutineDispatcher = Dispatchers.IO
+        dispatcher: CoroutineDispatcher = Dispatchers.IO,
     ) =
         Config(
             apiProperties =
@@ -31,8 +32,10 @@ object MosquittoContainer {
                     hostname = container.host,
                     port = container.firstMappedPort.toString(),
                     userId = UUID.fromString("faf3d0c4-1281-40ae-89d7-5c541d77a757"),
-                    token = TOKEN),
+                    token = TOKEN,
+                ),
             uuidGenerator = mockk(),
             logoutOnClose = false,
-            dispatcherForCommandsAndCleanUp = dispatcher)
+            dispatcherForCommandsAndCleanUp = dispatcher,
+        )
 }

@@ -12,5 +12,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 enum class DisengagePeriod {
     SHORT,
-    LONG
+    LONG,
 }

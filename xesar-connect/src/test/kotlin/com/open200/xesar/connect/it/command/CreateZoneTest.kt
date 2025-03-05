@@ -47,7 +47,8 @@ class CreateZoneTest :
                         val commandContent = commandReceived.await()
 
                         commandContent.shouldBeEqual(
-                            "{\"commandId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"installationPoints\":[\"720eb694-a085-47e8-8f18-512aa1a63bef\",\"c457a028-dd08-4040-a1bb-17767e2b2c28\"],\"name\":\"zoneName\",\"description\":null,\"id\":\"43edc7cf-80ab-4486-86db-41cda2c7a2cd\",\"token\":\"JDJhJDEwJDFSNEljZ2FaRUNXUXBTQ25XN05KbE9qRzFHQ1VjMzkvWTBVcFpZb1M4Vmt0dnJYZ0tJVFBx\"}")
+                            "{\"commandId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"installationPoints\":[\"720eb694-a085-47e8-8f18-512aa1a63bef\",\"c457a028-dd08-4040-a1bb-17767e2b2c28\"],\"name\":\"zoneName\",\"description\":null,\"id\":\"43edc7cf-80ab-4486-86db-41cda2c7a2cd\",\"token\":\"JDJhJDEwJDFSNEljZ2FaRUNXUXBTQ25XN05KbE9qRzFHQ1VjMzkvWTBVcFpZb1M4Vmt0dnJYZ0tJVFBx\"}"
+                        )
 
                         val apiEvent =
                             ApiEvent(
@@ -57,7 +58,9 @@ class CreateZoneTest :
                                     UUID.fromString("dc6f8102-af8f-4e8d-afd4-2d6ed1f5722d"),
                                     "zoneName",
                                     null,
-                                    UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd")))
+                                    UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
+                                ),
+                            )
 
                         client
                             .publishAsync(Topics.Event.ZONE_CREATED, encodeEvent(apiEvent))
@@ -76,7 +79,9 @@ class CreateZoneTest :
                                 installationPoints =
                                     listOf(
                                         UUID.fromString("720eb694-a085-47e8-8f18-512aa1a63bef"),
-                                        UUID.fromString("c457a028-dd08-4040-a1bb-17767e2b2c28")))
+                                        UUID.fromString("c457a028-dd08-4040-a1bb-17767e2b2c28"),
+                                    ),
+                            )
                             .await()
                     result.name.shouldBeEqual("zoneName")
                     result.id.shouldBeEqual(UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))

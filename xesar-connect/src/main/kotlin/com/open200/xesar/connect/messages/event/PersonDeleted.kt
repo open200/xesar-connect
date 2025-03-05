@@ -15,5 +15,5 @@ import kotlinx.serialization.Serializable
 data class PersonDeleted(
     val defaultAuthorizationProfileId: @Serializable(with = UUIDSerializer::class) UUID? = null,
     val id: @Serializable(with = UUIDSerializer::class) UUID,
-    val mediums: List<@Serializable(with = UUIDSerializer::class) UUID> = emptyList()
+    val mediums: List<@Serializable(with = UUIDSerializer::class) UUID> = emptyList(),
 ) : Event

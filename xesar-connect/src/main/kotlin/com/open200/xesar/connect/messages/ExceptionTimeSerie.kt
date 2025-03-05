@@ -13,5 +13,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class ExceptionTimeSerie(
     val times: List<TimeSerie.TimeRange>,
-    val calendars: List<@Serializable(with = UUIDSerializer::class) UUID>
+    val calendars: List<@Serializable(with = UUIDSerializer::class) UUID>,
 )

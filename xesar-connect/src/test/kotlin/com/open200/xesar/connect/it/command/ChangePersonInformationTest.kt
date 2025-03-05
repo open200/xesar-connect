@@ -47,7 +47,8 @@ class ChangePersonInformationTest :
                         val commandContent = commandReceived.await()
 
                         commandContent.shouldBeEqual(
-                            "{\"commandId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"firstName\":\"first name\",\"lastName\":null,\"identifier\":null,\"externalId\":\"EXT-4711\",\"token\":\"JDJhJDEwJDFSNEljZ2FaRUNXUXBTQ25XN05KbE9qRzFHQ1VjMzkvWTBVcFpZb1M4Vmt0dnJYZ0tJVFBx\"}")
+                            "{\"commandId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"firstName\":\"first name\",\"lastName\":null,\"identifier\":null,\"externalId\":\"EXT-4711\",\"token\":\"JDJhJDEwJDFSNEljZ2FaRUNXUXBTQ25XN05KbE9qRzFHQ1VjMzkvWTBVcFpZb1M4Vmt0dnJYZ0tJVFBx\"}"
+                        )
 
                         val apiEvent =
                             ApiEvent(
@@ -55,7 +56,9 @@ class ChangePersonInformationTest :
                                 PersonChanged(
                                     id = UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
                                     firstName = "first name",
-                                    lastName = "last name"))
+                                    lastName = "last name",
+                                ),
+                            )
 
                         client
                             .publishAsync(Topics.Event.PERSON_CHANGED, encodeEvent(apiEvent))
@@ -69,7 +72,9 @@ class ChangePersonInformationTest :
                     api.subscribeAsync(Topics(Topics.Event.PERSON_CHANGED)).await()
                     val result =
                         api.changePersonInformationAsync(
-                                firstName = "first name", externalId = "EXT-4711")
+                                firstName = "first name",
+                                externalId = "EXT-4711",
+                            )
                             .await()
                     result.firstName.shouldBeEqual("first name")
                     result.id.shouldBeEqual(UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))

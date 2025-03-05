@@ -23,5 +23,5 @@ data class AuthorizationData(
     var timeProfileName: String? = null,
     @Serializable(with = UUIDSerializer::class) val authorizationId: UUID? = null,
     var installationPoint: Boolean? = null,
-    @Serializable(with = UUIDSerializer::class) val timeProfileId: UUID? = null
+    @Serializable(with = UUIDSerializer::class) val timeProfileId: UUID? = null,
 )

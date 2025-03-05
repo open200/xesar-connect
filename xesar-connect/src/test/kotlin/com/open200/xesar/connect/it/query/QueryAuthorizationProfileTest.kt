@@ -48,7 +48,10 @@ class QueryAuthorizationProfileTest :
 
                         queryContent.shouldBeEqual(
                             QueryTestHelper.createQueryRequest(
-                                AuthorizationProfile.QUERY_RESOURCE, requestId))
+                                AuthorizationProfile.QUERY_RESOURCE,
+                                requestId,
+                            )
+                        )
 
                         val authorizationProfiles =
                             encodeQueryList(
@@ -60,17 +63,22 @@ class QueryAuthorizationProfileTest :
                                             authorizationProfileFixture.copy(
                                                 id =
                                                     UUID.fromString(
-                                                        "894852cf-ca33-4734-a4a9-008eeeaeb005"),
+                                                        "894852cf-ca33-4734-a4a9-008eeeaeb005"
+                                                    ),
                                                 name = "authorization profile 2",
-                                            )),
+                                            ),
+                                        ),
                                         2,
                                         2,
-                                    )))
+                                    ),
+                                )
+                            )
 
                         client
                             .publishAsync(
                                 Topics.Query.result(config.apiProperties.userId),
-                                authorizationProfiles)
+                                authorizationProfiles,
+                            )
                             .await()
                     }
                 }
@@ -115,13 +123,17 @@ class QueryAuthorizationProfileTest :
                             QueryTestHelper.createQueryRequest(
                                 AuthorizationProfile.QUERY_RESOURCE,
                                 requestId,
-                                authorizationProfileFixture.id))
+                                authorizationProfileFixture.id,
+                            )
+                        )
 
                         val person =
                             encodeQueryElement(
                                 QueryElement(
                                     UUID.fromString("00000000-1281-42c0-9a15-c5844850c748"),
-                                    authorizationProfileFixture))
+                                    authorizationProfileFixture,
+                                )
+                            )
 
                         client
                             .publishAsync(Topics.Query.result(config.apiProperties.userId), person)

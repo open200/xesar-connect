@@ -15,5 +15,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class ExceptionTimepointSerie(
     val calendars: List<@Serializable(with = UUIDSerializer::class) UUID>? = null,
-    val points: List<@Serializable(with = LocalTimeSerializer::class) LocalTime>? = null
+    val points: List<@Serializable(with = LocalTimeSerializer::class) LocalTime>? = null,
 )

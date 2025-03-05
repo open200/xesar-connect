@@ -13,11 +13,11 @@ import kotlinx.serialization.Serializable
 data class UnauthorizedLoginAttempt(
     val username: String,
     val channel: Channel,
-    val ipAddress: String? = null
+    val ipAddress: String? = null,
 ) : Event {
     enum class Channel {
         API,
         WEB,
-        MAINTENANCE_COMPONENT
+        MAINTENANCE_COMPONENT,
     }
 }

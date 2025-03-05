@@ -13,8 +13,9 @@ class AccessProtocolEventTopicTest :
         }
 
         test(
-            "accessProtocolEventTopic should return correct topic for every access protocol event") {
-                Topics.Event.accessProtocolEventTopic(GroupOfEvent.MediumEvents)
-                    .shouldBe("xs3/1/ase/MediumEvents/+")
-            }
+            "accessProtocolEventTopic should return correct topic for every access protocol event"
+        ) {
+            Topics.Event.accessProtocolEventTopic(GroupOfEvent.MediumEvents)
+                .shouldBe("xs3/1/ase/MediumEvents/+")
+        }
     })

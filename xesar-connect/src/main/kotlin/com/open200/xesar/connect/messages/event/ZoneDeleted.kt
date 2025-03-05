@@ -20,5 +20,5 @@ data class ZoneDeleted(
     val deletedAt: @Serializable(with = LocalDateTimeSerializer::class) LocalDateTime,
     val id: @Serializable(with = UUIDSerializer::class) UUID,
     val authorizationProfileIds: List<@Serializable(with = UUIDSerializer::class) UUID> =
-        emptyList()
+        emptyList(),
 ) : Event

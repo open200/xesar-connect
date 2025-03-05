@@ -4,6 +4,7 @@ package com.open200.xesar.connect.messages.query
  * query resource.
  */
 interface QueryResource
+
 /**
  * Marker interface for a query resource that represents a list of elements. Implementing this
  * interface indicates that a class is a query resource for a list response. It extends the

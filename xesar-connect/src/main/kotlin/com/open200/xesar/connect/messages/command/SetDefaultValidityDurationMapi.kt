@@ -15,5 +15,5 @@ import kotlinx.serialization.Serializable
 data class SetDefaultValidityDurationMapi(
     override val commandId: @Serializable(with = UUIDSerializer::class) UUID,
     val validityDuration: Short,
-    val token: String
+    val token: String,
 ) : Command

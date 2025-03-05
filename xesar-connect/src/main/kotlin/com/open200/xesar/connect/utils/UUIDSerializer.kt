@@ -21,6 +21,7 @@ object UUIDSerializer : KSerializer<UUID> {
     override fun deserialize(decoder: Decoder): UUID {
         return UUID.fromString(decoder.decodeString())
     }
+
     /**
      * Serializes the UUID object into a string representation.
      *

@@ -48,7 +48,10 @@ class QueryInstallationPointTest :
 
                         queryContent.shouldBeEqual(
                             QueryTestHelper.createQueryRequest(
-                                InstallationPoint.QUERY_RESOURCE, requestId))
+                                InstallationPoint.QUERY_RESOURCE,
+                                requestId,
+                            )
+                        )
 
                         val installationPoint =
                             encodeQueryList(
@@ -60,20 +63,26 @@ class QueryInstallationPointTest :
                                             installationPointFixture.copy(
                                                 id =
                                                     UUID.fromString(
-                                                        "a4c838a8-f6be-49e0-abee-c1d3b2897279"),
+                                                        "a4c838a8-f6be-49e0-abee-c1d3b2897279"
+                                                    ),
                                                 name = "door 2 entry point",
                                                 description = "door 2",
                                                 installationId =
                                                     "0cefd48b-969e-43eb-aad6-98553288eb4d",
                                                 installationType = "door 2",
-                                            )),
+                                            ),
+                                        ),
                                         2,
                                         2,
-                                    )))
+                                    ),
+                                )
+                            )
 
                         client
                             .publishAsync(
-                                Topics.Query.result(config.apiProperties.userId), installationPoint)
+                                Topics.Query.result(config.apiProperties.userId),
+                                installationPoint,
+                            )
                             .await()
                     }
                 }
@@ -118,14 +127,18 @@ class QueryInstallationPointTest :
                             QueryTestHelper.createQueryRequest(
                                 InstallationPoint.QUERY_RESOURCE,
                                 requestId,
-                                installationPointFixture.id))
+                                installationPointFixture.id,
+                            )
+                        )
 
                         val installationPoint =
                             encodeQueryElement(QueryElement(requestId, installationPointFixture))
 
                         client
                             .publishAsync(
-                                Topics.Query.result(config.apiProperties.userId), installationPoint)
+                                Topics.Query.result(config.apiProperties.userId),
+                                installationPoint,
+                            )
                             .await()
                     }
                 }

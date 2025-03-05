@@ -23,7 +23,7 @@ import kotlinx.coroutines.flow.Flow
  */
 suspend fun XesarConnect.queryPersons(
     params: Query.Params? = null,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): QueryList.Response<Person> {
     return handleQueryListFunction { queryListAsync(Person.QUERY_RESOURCE, params, requestConfig) }
 }
@@ -37,7 +37,7 @@ suspend fun XesarConnect.queryPersons(
  */
 suspend fun XesarConnect.queryPersonById(
     id: UUID,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): Person? {
     return handleQueryElementFunction {
         queryElementAsync(Person.QUERY_RESOURCE, id, requestConfig)
@@ -53,7 +53,10 @@ suspend fun XesarConnect.queryPersonByExternalId(externalId: String): Person? {
                             field = "externalId",
                             value = externalId,
                             type = FilterType.EQ,
-                        ))))
+                        )
+                    )
+            )
+        )
         .data
         .firstOrNull()
 }
@@ -72,16 +75,24 @@ suspend fun XesarConnect.changePersonInformationAsync(
     lastName: String? = null,
     identifier: String? = null,
     externalId: String,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): SingleEventResult<PersonChanged> {
     return sendCommandAsync<ChangePersonInformationMapi, PersonChanged>(
         Topics.Command.CHANGE_PERSON_INFORMATION,
         Topics.Event.PERSON_CHANGED,
         true,
         ChangePersonInformationMapi(
-            config.uuidGenerator.generateId(), firstName, lastName, identifier, externalId, token),
-        requestConfig)
+            config.uuidGenerator.generateId(),
+            firstName,
+            lastName,
+            identifier,
+            externalId,
+            token,
+        ),
+        requestConfig,
+    )
 }
+
 /**
  * Creates a person asynchronously.
  *
@@ -98,7 +109,7 @@ suspend fun XesarConnect.createPersonAsync(
     identifier: String? = null,
     externalId: String? = null,
     personId: UUID,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): SingleEventResult<PersonCreated> {
     return sendCommandAsync<CreatePersonMapi, PersonCreated>(
         Topics.Command.CREATE_PERSON,
@@ -111,9 +122,12 @@ suspend fun XesarConnect.createPersonAsync(
             identifier,
             externalId,
             personId,
-            token),
-        requestConfig)
+            token,
+        ),
+        requestConfig,
+    )
 }
+
 /**
  * Deletes a person asynchronously.
  *
@@ -122,14 +136,15 @@ suspend fun XesarConnect.createPersonAsync(
  */
 suspend fun XesarConnect.deletePersonAsync(
     externalId: String? = null,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): SingleEventResult<PersonDeleted> {
     return sendCommandAsync<DeletePersonMapi, PersonDeleted>(
         Topics.Command.DELETE_PERSON,
         Topics.Event.PERSON_DELETED,
         true,
         DeletePersonMapi(config.uuidGenerator.generateId(), externalId, token),
-        requestConfig)
+        requestConfig,
+    )
 }
 
 /**
@@ -143,16 +158,22 @@ suspend fun XesarConnect.deletePersonAsync(
 suspend fun XesarConnect.setDefaultAuthorizationProfileForPersonAsync(
     externalId: String,
     defaultAuthorizationProfileName: String? = null,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): SingleEventResult<PersonChanged> {
     return sendCommandAsync<SetDefaultAuthorizationProfileForPersonMapi, PersonChanged>(
         Topics.Command.SET_DEFAULT_AUTHORIZATION_PROFILE_FOR_PERSON,
         Topics.Event.PERSON_CHANGED,
         true,
         SetDefaultAuthorizationProfileForPersonMapi(
-            config.uuidGenerator.generateId(), externalId, defaultAuthorizationProfileName, token),
-        requestConfig)
+            config.uuidGenerator.generateId(),
+            externalId,
+            defaultAuthorizationProfileName,
+            token,
+        ),
+        requestConfig,
+    )
 }
+
 /**
  * Sets the default disengage period for a person asynchronously.
  *
@@ -163,15 +184,20 @@ suspend fun XesarConnect.setDefaultAuthorizationProfileForPersonAsync(
 suspend fun XesarConnect.setDefaultDisengagePeriodForPersonAsync(
     externalId: String,
     disengagePeriod: DisengagePeriod,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): SingleEventResult<PersonChanged> {
     return sendCommandAsync<SetDefaultDisengagePeriodForPersonMapi, PersonChanged>(
         Topics.Command.SET_DEFAULT_DISENGAGE_PERIOD_FOR_PERSON,
         Topics.Event.PERSON_CHANGED,
         true,
         SetDefaultDisengagePeriodForPersonMapi(
-            config.uuidGenerator.generateId(), disengagePeriod, externalId, token),
-        requestConfig)
+            config.uuidGenerator.generateId(),
+            disengagePeriod,
+            externalId,
+            token,
+        ),
+        requestConfig,
+    )
 }
 
 /**
@@ -183,15 +209,20 @@ suspend fun XesarConnect.setDefaultDisengagePeriodForPersonAsync(
 suspend fun XesarConnect.setPersonalReferenceDurationInPersonAsync(
     externalId: String,
     personalReferenceDuration: PersonalLog,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): SingleEventResult<PersonChanged> {
     return sendCommandAsync<SetPersonalReferenceDurationInPersonMapi, PersonChanged>(
         Topics.Command.SET_PERSONAL_REFERENCE_DURATION_IN_PERSON,
         Topics.Event.PERSON_CHANGED,
         true,
         SetPersonalReferenceDurationInPersonMapi(
-            config.uuidGenerator.generateId(), personalReferenceDuration, externalId, token),
-        requestConfig)
+            config.uuidGenerator.generateId(),
+            personalReferenceDuration,
+            externalId,
+            token,
+        ),
+        requestConfig,
+    )
 }
 
 /**
@@ -206,7 +237,7 @@ suspend fun XesarConnect.setPersonalReferenceDurationInPersonAsync(
  */
 fun XesarConnect.queryStreamPerson(
     params: Query.Params? = null,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): Flow<Person> {
     return queryStream(Person.QUERY_RESOURCE, params, requestConfig)
 }

@@ -25,13 +25,13 @@ data class CreateInstallationPointMapi(
         Map<@Serializable(with = UUIDSerializer::class) UUID, Properties> =
         emptyMap(),
     override val commandId: @Serializable(with = UUIDSerializer::class) UUID,
-    val token: Token
+    val token: Token,
 ) : Command {
     @Serializable
     data class Properties(
         val name: String,
         val description: String? = null,
         val installationId: String,
-        val installationType: String? = null
+        val installationType: String? = null,
     )
 }

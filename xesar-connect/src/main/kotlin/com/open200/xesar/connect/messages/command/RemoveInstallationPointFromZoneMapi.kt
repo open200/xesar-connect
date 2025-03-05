@@ -17,5 +17,5 @@ data class RemoveInstallationPointFromZoneMapi(
     override val commandId: @Serializable(with = UUIDSerializer::class) UUID,
     @Serializable(with = UUIDSerializer::class) val installationPointId: UUID,
     @Serializable(with = UUIDSerializer::class) val id: UUID,
-    val token: String
+    val token: String,
 ) : Command

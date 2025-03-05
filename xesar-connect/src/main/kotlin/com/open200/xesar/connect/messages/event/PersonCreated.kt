@@ -29,5 +29,5 @@ data class PersonCreated(
     val personalReferenceDuration: PersonalLog,
     val disengagePeriod: DisengagePeriod? = null,
     val externalId: String? = null,
-    @Serializable(with = UUIDSerializer::class) val id: UUID
+    @Serializable(with = UUIDSerializer::class) val id: UUID,
 ) : Event

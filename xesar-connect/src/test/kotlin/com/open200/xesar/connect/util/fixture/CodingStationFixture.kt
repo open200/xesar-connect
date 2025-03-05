@@ -11,5 +11,6 @@ object CodingStationFixture {
             partitionId = UUID.fromString("7b4399a0-21ce-4bee-ba43-e06e291248d2"),
             name = "coding station test",
             description = "a coding station description",
-            online = true)
+            online = true,
+        )
 }

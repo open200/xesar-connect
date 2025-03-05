@@ -48,15 +48,17 @@ class SetPersonPersonalReferenceDurationTest :
                         val commandContent = commandReceived.await()
 
                         commandContent.shouldBeEqual(
-                            "{\"commandId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"personalReferenceDuration\":{\"logMode\":null,\"days\":30},\"token\":\"JDJhJDEwJDFSNEljZ2FaRUNXUXBTQ25XN05KbE9qRzFHQ1VjMzkvWTBVcFpZb1M4Vmt0dnJYZ0tJVFBx\"}")
+                            "{\"commandId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"personalReferenceDuration\":{\"logMode\":null,\"days\":30},\"token\":\"JDJhJDEwJDFSNEljZ2FaRUNXUXBTQ25XN05KbE9qRzFHQ1VjMzkvWTBVcFpZb1M4Vmt0dnJYZ0tJVFBx\"}"
+                        )
 
                         val apiEvent =
                             ApiEvent(
                                 UUID.fromString("00000000-1281-40ae-89d7-5c541d77a757"),
                                 PartitionChanged(
                                     id = UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
-                                    personDefaultPersonalReferenceDuration =
-                                        PersonalLog(days = 30)))
+                                    personDefaultPersonalReferenceDuration = PersonalLog(days = 30),
+                                ),
+                            )
 
                         client
                             .publishAsync(Topics.Event.PARTITION_CHANGED, encodeEvent(apiEvent))

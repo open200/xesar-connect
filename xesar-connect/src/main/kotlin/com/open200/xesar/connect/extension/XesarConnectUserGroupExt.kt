@@ -18,13 +18,18 @@ import java.util.*
 suspend fun XesarConnect.configureAssignableAuthorizationProfilesAsync(
     assignableAuthorizationProfiles: List<UUID>,
     userGroupId: UUID,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): SingleEventResult<UserGroupChanged> {
     return sendCommandAsync<ConfigureAssignableAuthorizationProfilesMapi, UserGroupChanged>(
         Topics.Command.CONFIGURE_ASSIGNABLE_AUTHORIZATION_PROFILES,
         Topics.Event.USER_GROUP_CHANGED,
         true,
         ConfigureAssignableAuthorizationProfilesMapi(
-            config.uuidGenerator.generateId(), assignableAuthorizationProfiles, userGroupId, token),
-        requestConfig)
+            config.uuidGenerator.generateId(),
+            assignableAuthorizationProfiles,
+            userGroupId,
+            token,
+        ),
+        requestConfig,
+    )
 }

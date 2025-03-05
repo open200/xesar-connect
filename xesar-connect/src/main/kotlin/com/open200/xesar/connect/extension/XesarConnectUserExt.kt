@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.Flow
  */
 suspend fun XesarConnect.queryUsers(
     params: Query.Params? = null,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): QueryList.Response<User> {
     return handleQueryListFunction { queryListAsync(User.QUERY_RESOURCE, params, requestConfig) }
 }
@@ -31,7 +31,7 @@ suspend fun XesarConnect.queryUsers(
  */
 fun XesarConnect.queryStreamUser(
     params: Query.Params? = null,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): Flow<User> {
     return queryStream(User.QUERY_RESOURCE, params, requestConfig)
 }

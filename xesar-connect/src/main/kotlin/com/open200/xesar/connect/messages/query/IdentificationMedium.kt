@@ -95,7 +95,7 @@ data class IdentificationMedium(
     val registrationCode: String? = null,
     @Serializable(with = LocalDateTimeSerializer::class)
     val registrationCodeValidUntil: LocalDateTime? = null,
-    val messageLanguage: String? = null
+    val messageLanguage: String? = null,
 ) : QueryListResource, QueryElementResource {
 
     companion object {
@@ -104,14 +104,15 @@ data class IdentificationMedium(
 
     enum class MediumType {
         SMARTPHONE,
-        PASSIVE
+        PASSIVE,
     }
+
     enum class RegistrationState {
         STARTED,
         REGISTRATION_REQUESTED,
         COMPLETED,
         UNREGISTRATION_STARTED,
-        REMOVED
+        REMOVED,
     }
 
     enum class MediumState {
@@ -126,7 +127,7 @@ data class IdentificationMedium(
         INSTALLATION_ALIEN,
         FAULTY,
         REVOKED,
-        UNLINKED
+        UNLINKED,
     }
 
     enum class SoftwareStatus {
@@ -138,7 +139,7 @@ data class IdentificationMedium(
         INACTIVE,
         EMPTY,
         REVOKED,
-        UNLINKED
+        UNLINKED,
     }
 
     enum class HardwareStatus {
@@ -146,6 +147,6 @@ data class IdentificationMedium(
         INACTIVE,
         EMPTY,
         NEW,
-        DEACTIVATED
+        DEACTIVATED,
     }
 }

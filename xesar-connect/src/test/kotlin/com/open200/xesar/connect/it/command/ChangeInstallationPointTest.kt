@@ -48,7 +48,8 @@ class ChangeInstallationPointTest :
                         val commandContent = commandReceived.await()
 
                         commandContent.shouldBe(
-                            "{\"commandId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"aggregateId\":\"43edc7cf-80ab-4486-86db-41cda2c7a2cd\",\"installationType\":\"installation type\",\"name\":null,\"description\":null,\"installationId\":null,\"token\":\"JDJhJDEwJDFSNEljZ2FaRUNXUXBTQ25XN05KbE9qRzFHQ1VjMzkvWTBVcFpZb1M4Vmt0dnJYZ0tJVFBx\"}")
+                            "{\"commandId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"aggregateId\":\"43edc7cf-80ab-4486-86db-41cda2c7a2cd\",\"installationType\":\"installation type\",\"name\":null,\"description\":null,\"installationId\":null,\"token\":\"JDJhJDEwJDFSNEljZ2FaRUNXUXBTQ25XN05KbE9qRzFHQ1VjMzkvWTBVcFpZb1M4Vmt0dnJYZ0tJVFBx\"}"
+                        )
 
                         val apiEvent =
                             ApiEvent(
@@ -56,11 +57,15 @@ class ChangeInstallationPointTest :
                                 InstallationPointChanged(
                                     aggregateId =
                                         UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
-                                    installationType = "installation type"))
+                                    installationType = "installation type",
+                                ),
+                            )
 
                         client
                             .publishAsync(
-                                Topics.Event.INSTALLATION_POINT_CHANGED, encodeEvent(apiEvent))
+                                Topics.Event.INSTALLATION_POINT_CHANGED,
+                                encodeEvent(apiEvent),
+                            )
                             .await()
                     }
                 }
@@ -72,7 +77,8 @@ class ChangeInstallationPointTest :
                     val result =
                         api.changeInstallationPointAsync(
                                 UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
-                                "installation type")
+                                "installation type",
+                            )
                             .await()
                     result.installationType?.shouldBeEqual("installation type")
                 }

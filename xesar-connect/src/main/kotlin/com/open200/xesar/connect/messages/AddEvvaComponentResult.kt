@@ -10,7 +10,7 @@ import kotlinx.coroutines.awaitAll
 data class AddEvvaComponentResult(
     val installationPointChangedDeferred: Deferred<InstallationPointChanged>,
     val evvaComponentAddedDeferred: Deferred<EvvaComponentAdded>,
-    val apiErrorDeferred: Deferred<Optional<ApiError>>
+    val apiErrorDeferred: Deferred<Optional<ApiError>>,
 ) {
     suspend fun await() = awaitAll(installationPointChangedDeferred, evvaComponentAddedDeferred)
 }

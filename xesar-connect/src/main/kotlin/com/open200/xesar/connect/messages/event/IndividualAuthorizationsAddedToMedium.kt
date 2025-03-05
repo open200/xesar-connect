@@ -14,5 +14,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class IndividualAuthorizationsAddedToMedium(
     @Serializable(with = UUIDSerializer::class) val id: UUID,
-    val authorizationProfiles: List<AuthorizationData> = emptyList()
+    val authorizationProfiles: List<AuthorizationData> = emptyList(),
 ) : Event

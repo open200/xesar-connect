@@ -15,5 +15,5 @@ import kotlinx.serialization.Serializable
 data class Login(
     override val commandId: @Serializable(with = UUIDSerializer::class) UUID,
     val username: String,
-    val password: String
+    val password: String,
 ) : Command

@@ -15,5 +15,5 @@ import kotlinx.serialization.Serializable
 data class DeletePersonMapi(
     override val commandId: @Serializable(with = UUIDSerializer::class) UUID,
     val externalId: String? = null,
-    val token: String
+    val token: String,
 ) : Command

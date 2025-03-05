@@ -60,7 +60,7 @@ data class InstallationPointCreated(
     val installationId: String? = null,
     val timeProfileData: TimeProfileData? = null,
     val calendarData: CalendarData? = null,
-    val openDoor: Boolean? = null
+    val openDoor: Boolean? = null,
 ) : Event {
 
     @Serializable
@@ -68,15 +68,16 @@ data class InstallationPointCreated(
         var timeSeries: List<TimeSerie>? = null,
         var exceptionTimeSeries: List<ExceptionTimeSerie>? = emptyList(),
         var timePointSeries: List<TimePointSerie>? = emptyList(),
-        var exceptionTimePointSeries: List<ExceptionTimepointSerie>? = emptyList()
+        var exceptionTimePointSeries: List<ExceptionTimepointSerie>? = emptyList(),
     )
+
     @Serializable
     data class LinkedInstallationPoint(
         val aggregateId: @Serializable(with = UUIDSerializer::class) UUID? = null,
         val accessId: Long? = null,
         val installationPointProperties: InstallationPointProperties? = null,
         val evvaComponentId: @Serializable(with = UUIDSerializer::class) UUID? = null,
-        val componentType: ComponentType? = null
+        val componentType: ComponentType? = null,
     ) {
         @Serializable
         data class InstallationPointProperties(
@@ -95,6 +96,7 @@ data class InstallationPointCreated(
             var upgradeMedia: Boolean? = null,
         )
     }
+
     @Serializable
     data class CalendarData(
         var calendars: Map<Int, List<@Serializable(with = LocalDateSerializer::class) LocalDate>>? =

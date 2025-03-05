@@ -25,5 +25,5 @@ data class ChangeAuthorizationTimeProfileMapi(
     val description: String? = null,
     val timeSeries: List<TimeSerie> = emptyList(),
     val exceptionTimeSeries: List<ExceptionTimeSerie> = emptyList(),
-    val token: String
+    val token: String,
 ) : Command

@@ -14,7 +14,7 @@ import com.open200.xesar.connect.filters.MessageFilter
 class Listener(
     val xesarConnect: XesarConnect,
     val messageHandler: MessageHandler,
-    val filter: MessageFilter
+    val filter: MessageFilter,
 ) : AutoCloseable {
 
     fun unregister() {

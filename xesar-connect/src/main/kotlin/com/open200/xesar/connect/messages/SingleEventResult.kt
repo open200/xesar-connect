@@ -14,7 +14,7 @@ import kotlinx.coroutines.Deferred
  */
 class SingleEventResult<out E : Event>(
     val eventDeferred: Deferred<E>,
-    val apiErrorDeferred: Deferred<Optional<ApiError>>
+    val apiErrorDeferred: Deferred<Optional<ApiError>>,
 ) {
     suspend fun await() = eventDeferred.await()
 }

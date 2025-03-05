@@ -23,5 +23,5 @@ data class CreatePersonMapi(
     val identifier: String? = null,
     val externalId: String? = null,
     @Serializable(with = UUIDSerializer::class) val id: UUID,
-    val token: String
+    val token: String,
 ) : Command

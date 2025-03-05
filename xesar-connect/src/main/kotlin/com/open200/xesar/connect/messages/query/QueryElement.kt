@@ -19,7 +19,7 @@ import mu.KotlinLogging
 @Serializable
 data class QueryElement<out T : QueryResource>(
     @Serializable(with = UUIDSerializer::class) val requestId: UUID,
-    val response: T
+    val response: T,
 ) : Message
 
 val jsonFormat = Json {

@@ -26,5 +26,5 @@ data class ChangeAuthorizationProfileMapi(
     @Serializable(with = UUIDSerializer::class) val id: UUID,
     val zones: List<Authorization>,
     override val commandId: @Serializable(with = UUIDSerializer::class) UUID,
-    val token: String
+    val token: String,
 ) : Command

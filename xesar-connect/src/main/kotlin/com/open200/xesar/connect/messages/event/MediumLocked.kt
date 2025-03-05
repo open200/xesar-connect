@@ -28,5 +28,5 @@ data class MediumLocked(
         emptyList(),
     val validityEnd: @Serializable(with = LocalDateTimeSerializer::class) LocalDateTime? = null,
     val zones: List<@Serializable(with = UUIDSerializer::class) UUID> = emptyList(),
-    val hasMasterKeyAccess: Boolean
+    val hasMasterKeyAccess: Boolean,
 ) : Event

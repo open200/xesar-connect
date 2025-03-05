@@ -47,7 +47,8 @@ class ConfigureReleaseDurationTest :
                         val commandContent = commandReceived.await()
 
                         commandContent.shouldBeEqual(
-                            "{\"commandId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"releaseDurationShort\":10,\"releaseDurationLong\":20,\"id\":\"43edc7cf-80ab-4486-86db-41cda2c7a2cd\",\"token\":\"JDJhJDEwJDFSNEljZ2FaRUNXUXBTQ25XN05KbE9qRzFHQ1VjMzkvWTBVcFpZb1M4Vmt0dnJYZ0tJVFBx\"}")
+                            "{\"commandId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"releaseDurationShort\":10,\"releaseDurationLong\":20,\"id\":\"43edc7cf-80ab-4486-86db-41cda2c7a2cd\",\"token\":\"JDJhJDEwJDFSNEljZ2FaRUNXUXBTQ25XN05KbE9qRzFHQ1VjMzkvWTBVcFpZb1M4Vmt0dnJYZ0tJVFBx\"}"
+                        )
 
                         val apiEvent =
                             ApiEvent(
@@ -56,11 +57,15 @@ class ConfigureReleaseDurationTest :
                                     aggregateId =
                                         UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
                                     releaseDurationShort = 10,
-                                    releaseDurationLong = 20))
+                                    releaseDurationLong = 20,
+                                ),
+                            )
 
                         client
                             .publishAsync(
-                                Topics.Event.INSTALLATION_POINT_CHANGED, encodeEvent(apiEvent))
+                                Topics.Event.INSTALLATION_POINT_CHANGED,
+                                encodeEvent(apiEvent),
+                            )
                             .await()
                     }
                 }
@@ -71,7 +76,10 @@ class ConfigureReleaseDurationTest :
                     api.subscribeAsync(Topics(Topics.Event.INSTALLATION_POINT_CHANGED)).await()
                     val result =
                         api.configureReleaseDurationAsync(
-                                10, 20, UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
+                                10,
+                                20,
+                                UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
+                            )
                             .await()
                     result.releaseDurationShort?.shouldBeEqual(10)
                     result.releaseDurationLong?.shouldBeEqual(20)

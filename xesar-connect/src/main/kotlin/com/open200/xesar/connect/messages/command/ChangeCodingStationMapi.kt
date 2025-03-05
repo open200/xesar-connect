@@ -19,5 +19,5 @@ data class ChangeCodingStationMapi(
     @Serializable(with = UUIDSerializer::class) val id: UUID,
     val name: String? = null,
     val description: String? = null,
-    val token: String
+    val token: String,
 ) : Command

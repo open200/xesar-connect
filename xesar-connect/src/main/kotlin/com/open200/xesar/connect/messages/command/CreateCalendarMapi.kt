@@ -21,5 +21,5 @@ data class CreateCalendarMapi(
     val name: String,
     val specialDays: List<@Serializable(with = LocalDateSerializer::class) LocalDate> = emptyList(),
     @Serializable(with = UUIDSerializer::class) val id: UUID,
-    val token: String
+    val token: String,
 ) : Command

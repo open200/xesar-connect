@@ -47,7 +47,8 @@ class AssignPersonToMediumTest :
 
                         val commandContent = commandReceived.await()
                         commandContent.shouldBe(
-                            "{\"commandId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"id\":\"43edc7cf-80ab-4486-86db-41cda2c7a2cd\",\"personId\":\"2d52bd95-18ba-4e46-8f00-0fc4c1e3f9be\",\"token\":\"JDJhJDEwJDFSNEljZ2FaRUNXUXBTQ25XN05KbE9qRzFHQ1VjMzkvWTBVcFpZb1M4Vmt0dnJYZ0tJVFBx\"}")
+                            "{\"commandId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"id\":\"43edc7cf-80ab-4486-86db-41cda2c7a2cd\",\"personId\":\"2d52bd95-18ba-4e46-8f00-0fc4c1e3f9be\",\"token\":\"JDJhJDEwJDFSNEljZ2FaRUNXUXBTQ25XN05KbE9qRzFHQ1VjMzkvWTBVcFpZb1M4Vmt0dnJYZ0tJVFBx\"}"
+                        )
 
                         val apiEvent =
                             ApiEvent(
@@ -55,7 +56,9 @@ class AssignPersonToMediumTest :
                                 MediumPersonChanged(
                                     oldPersonId =
                                         UUID.fromString("2d52bd95-18ba-4e46-8f00-0fc4c1e3f9be"),
-                                    id = UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd")))
+                                    id = UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
+                                ),
+                            )
 
                         client
                             .publishAsync(Topics.Event.MEDIUM_PERSON_CHANGED, encodeEvent(apiEvent))
@@ -70,12 +73,14 @@ class AssignPersonToMediumTest :
                     val result =
                         api.assignPersonToMediumAsync(
                                 UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
-                                UUID.fromString("2d52bd95-18ba-4e46-8f00-0fc4c1e3f9be"))
+                                UUID.fromString("2d52bd95-18ba-4e46-8f00-0fc4c1e3f9be"),
+                            )
                             .await()
 
                     result.id.shouldBeEqual(UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
                     result.oldPersonId!!.shouldBeEqual(
-                        UUID.fromString("2d52bd95-18ba-4e46-8f00-0fc4c1e3f9be"))
+                        UUID.fromString("2d52bd95-18ba-4e46-8f00-0fc4c1e3f9be")
+                    )
                 }
             }
         }

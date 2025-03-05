@@ -14,6 +14,7 @@ class LoginTest :
 
             encodeCommand(cmd)
                 .shouldBeEqual(
-                    "{\"commandId\":\"6569fd2f-6f90-4ebd-b734-80ddc5b38f69\",\"username\":\"fordprefect\",\"password\":\"foobar\"}")
+                    "{\"commandId\":\"6569fd2f-6f90-4ebd-b734-80ddc5b38f69\",\"username\":\"fordprefect\",\"password\":\"foobar\"}"
+                )
         }
     })

@@ -15,7 +15,8 @@ class CodingStationElementTest :
         val codingStation =
             QueryElement(
                 UUID.fromString("d385ab22-0f51-4b97-9ecd-b8ff3fd4fcb6"),
-                CodingStationFixture.codingStationFixture)
+                CodingStationFixture.codingStationFixture,
+            )
 
         val codingStationString =
             "{\"requestId\":\"d385ab22-0f51-4b97-9ecd-b8ff3fd4fcb6\"," +

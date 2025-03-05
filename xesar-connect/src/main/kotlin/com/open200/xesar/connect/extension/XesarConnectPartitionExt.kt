@@ -16,16 +16,21 @@ import java.time.LocalTime
  */
 suspend fun XesarConnect.setDailySchedulerExecutionTimeAsync(
     dailySchedulerExecutionTime: LocalTime,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): SingleEventResult<PartitionChanged> {
     return sendCommandAsync<SetDailySchedulerExecutionTimeMapi, PartitionChanged>(
         Topics.Command.SET_DAILY_SCHEDULER_EXECUTION_TIME,
         Topics.Event.PARTITION_CHANGED,
         true,
         SetDailySchedulerExecutionTimeMapi(
-            config.uuidGenerator.generateId(), dailySchedulerExecutionTime, token),
-        requestConfig)
+            config.uuidGenerator.generateId(),
+            dailySchedulerExecutionTime,
+            token,
+        ),
+        requestConfig,
+    )
 }
+
 /**
  * Sets the default validity duration in the default partition asynchronously.
  *
@@ -34,14 +39,15 @@ suspend fun XesarConnect.setDailySchedulerExecutionTimeAsync(
  */
 suspend fun XesarConnect.setDefaultValidityDurationAsync(
     validityDuration: Short,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): SingleEventResult<PartitionChanged> {
     return sendCommandAsync<SetDefaultValidityDurationMapi, PartitionChanged>(
         Topics.Command.SET_DEFAULT_VALIDITY_DURATION,
         Topics.Event.PARTITION_CHANGED,
         true,
         SetDefaultValidityDurationMapi(config.uuidGenerator.generateId(), validityDuration, token),
-        requestConfig)
+        requestConfig,
+    )
 }
 
 /**
@@ -53,15 +59,19 @@ suspend fun XesarConnect.setDefaultValidityDurationAsync(
  */
 suspend fun XesarConnect.setInstallationPointPersonalReferenceDurationAsync(
     personalReferenceDuration: PersonalLog,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): SingleEventResult<PartitionChanged> {
     return sendCommandAsync<SetInstallationPointPersonalReferenceDurationMapi, PartitionChanged>(
         Topics.Command.SET_INSTALLATION_POINT_PERSONAL_REFERENCE_DURATION,
         Topics.Event.PARTITION_CHANGED,
         true,
         SetInstallationPointPersonalReferenceDurationMapi(
-            config.uuidGenerator.generateId(), personalReferenceDuration, token),
-        requestConfig)
+            config.uuidGenerator.generateId(),
+            personalReferenceDuration,
+            token,
+        ),
+        requestConfig,
+    )
 }
 
 /**
@@ -72,15 +82,19 @@ suspend fun XesarConnect.setInstallationPointPersonalReferenceDurationAsync(
  */
 suspend fun XesarConnect.setPersonPersonalReferenceDurationAsync(
     personalReferenceDuration: PersonalLog,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): SingleEventResult<PartitionChanged> {
     return sendCommandAsync<SetPersonPersonalReferenceDurationMapi, PartitionChanged>(
         Topics.Command.SET_PERSON_PERSONAL_REFERENCE_DURATION,
         Topics.Event.PARTITION_CHANGED,
         true,
         SetPersonPersonalReferenceDurationMapi(
-            config.uuidGenerator.generateId(), personalReferenceDuration, token),
-        requestConfig)
+            config.uuidGenerator.generateId(),
+            personalReferenceDuration,
+            token,
+        ),
+        requestConfig,
+    )
 }
 
 /**
@@ -91,16 +105,21 @@ suspend fun XesarConnect.setPersonPersonalReferenceDurationAsync(
  */
 suspend fun XesarConnect.setReplacementMediumDurationAsync(
     replacementMediumDuration: Short,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): SingleEventResult<PartitionChanged> {
     return sendCommandAsync<SetReplacementMediumDurationMapi, PartitionChanged>(
         Topics.Command.SET_REPLACEMENT_MEDIUM_DURATION,
         Topics.Event.PARTITION_CHANGED,
         true,
         SetReplacementMediumDurationMapi(
-            config.uuidGenerator.generateId(), replacementMediumDuration, token),
-        requestConfig)
+            config.uuidGenerator.generateId(),
+            replacementMediumDuration,
+            token,
+        ),
+        requestConfig,
+    )
 }
+
 /**
  * Sets the validity duration in the default partition asynchronously.
  *
@@ -109,12 +128,13 @@ suspend fun XesarConnect.setReplacementMediumDurationAsync(
  */
 suspend fun XesarConnect.setValidityThresholdAsync(
     validityThreshold: Short,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): SingleEventResult<PartitionChanged> {
     return sendCommandAsync<SetValidityThresholdMapi, PartitionChanged>(
         Topics.Command.SET_VALIDITY_THRESHOLD,
         Topics.Event.PARTITION_CHANGED,
         true,
         SetValidityThresholdMapi(config.uuidGenerator.generateId(), validityThreshold, token),
-        requestConfig)
+        requestConfig,
+    )
 }

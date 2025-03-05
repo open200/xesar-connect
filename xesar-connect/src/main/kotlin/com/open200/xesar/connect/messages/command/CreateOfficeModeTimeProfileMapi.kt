@@ -33,5 +33,5 @@ data class CreateOfficeModeTimeProfileMapi(
     val description: String? = null,
     val timePointSeries: List<TimePointSerie> = emptyList(),
     @Serializable(with = UUIDSerializer::class) val id: UUID,
-    val token: String
+    val token: String,
 ) : Command

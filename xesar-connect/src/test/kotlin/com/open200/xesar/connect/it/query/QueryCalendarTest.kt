@@ -48,7 +48,8 @@ class QueryCalendarTest :
 
                         val queryContent = queryReceived.await()
                         queryContent.shouldBeEqual(
-                            QueryTestHelper.createQueryRequest(Calendar.QUERY_RESOURCE, requestId))
+                            QueryTestHelper.createQueryRequest(Calendar.QUERY_RESOURCE, requestId)
+                        )
 
                         val calendar =
                             encodeQueryList(
@@ -60,17 +61,25 @@ class QueryCalendarTest :
                                             CalendarFixture.calendarFixture.copy(
                                                 id =
                                                     UUID.fromString(
-                                                        "4509ca29-9fd3-454f-9c98-fc0967fe3f66"),
+                                                        "4509ca29-9fd3-454f-9c98-fc0967fe3f66"
+                                                    ),
                                                 partitionId =
                                                     UUID.fromString(
-                                                        "6b4399a0-21ce-4bee-ba43-e06e291248d2"))),
+                                                        "6b4399a0-21ce-4bee-ba43-e06e291248d2"
+                                                    ),
+                                            ),
+                                        ),
                                         2,
                                         2,
-                                    )))
+                                    ),
+                                )
+                            )
 
                         client
                             .publishAsync(
-                                Topics.Query.result(config.apiProperties.userId), calendar)
+                                Topics.Query.result(config.apiProperties.userId),
+                                calendar,
+                            )
                             .await()
                     }
                 }
@@ -118,15 +127,20 @@ class QueryCalendarTest :
                             QueryTestHelper.createQueryRequest(
                                 Calendar.QUERY_RESOURCE,
                                 requestId,
-                                CalendarFixture.calendarFixture.id))
+                                CalendarFixture.calendarFixture.id,
+                            )
+                        )
 
                         val calendar =
                             encodeQueryElement(
-                                QueryElement(requestId, CalendarFixture.calendarFixture))
+                                QueryElement(requestId, CalendarFixture.calendarFixture)
+                            )
 
                         client
                             .publishAsync(
-                                Topics.Query.result(config.apiProperties.userId), calendar)
+                                Topics.Query.result(config.apiProperties.userId),
+                                calendar,
+                            )
                             .await()
                     }
                 }

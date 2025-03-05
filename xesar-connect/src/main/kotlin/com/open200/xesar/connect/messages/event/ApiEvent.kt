@@ -20,7 +20,7 @@ import mu.KotlinLogging
 @Serializable
 data class ApiEvent<out T : Event>(
     @Serializable(with = UUIDSerializer::class) val commandId: UUID? = null,
-    val event: T
+    val event: T,
 ) : Message
 
 val jsonFormat = Json {

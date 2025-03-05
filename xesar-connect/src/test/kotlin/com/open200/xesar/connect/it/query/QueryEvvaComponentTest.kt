@@ -48,7 +48,10 @@ class QueryEvvaComponentTest :
 
                         queryContent.shouldBeEqual(
                             QueryTestHelper.createQueryRequest(
-                                EvvaComponent.QUERY_RESOURCE, requestId))
+                                EvvaComponent.QUERY_RESOURCE,
+                                requestId,
+                            )
+                        )
 
                         val evvaComponentList =
                             encodeQueryList(
@@ -60,16 +63,22 @@ class QueryEvvaComponentTest :
                                             EvvaComponentFixture.evvaComponentFixture.copy(
                                                 id =
                                                     UUID.fromString(
-                                                        "f7019248-f7f9-4138-9af7-119e2e251408"),
+                                                        "f7019248-f7f9-4138-9af7-119e2e251408"
+                                                    ),
                                                 status = ComponentStatus.NotSynced,
-                                            )),
+                                            ),
+                                        ),
                                         2,
                                         2,
-                                    )))
+                                    ),
+                                )
+                            )
 
                         client
                             .publishAsync(
-                                Topics.Query.result(config.apiProperties.userId), evvaComponentList)
+                                Topics.Query.result(config.apiProperties.userId),
+                                evvaComponentList,
+                            )
                             .await()
                     }
                 }
@@ -115,15 +124,20 @@ class QueryEvvaComponentTest :
                             QueryTestHelper.createQueryRequest(
                                 EvvaComponent.QUERY_RESOURCE,
                                 requestId,
-                                EvvaComponentFixture.evvaComponentFixture.id))
+                                EvvaComponentFixture.evvaComponentFixture.id,
+                            )
+                        )
 
                         val evvaComponent =
                             encodeQueryElement(
-                                QueryElement(requestId, EvvaComponentFixture.evvaComponentFixture))
+                                QueryElement(requestId, EvvaComponentFixture.evvaComponentFixture)
+                            )
 
                         client
                             .publishAsync(
-                                Topics.Query.result(config.apiProperties.userId), evvaComponent)
+                                Topics.Query.result(config.apiProperties.userId),
+                                evvaComponent,
+                            )
                             .await()
                     }
                 }

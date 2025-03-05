@@ -49,7 +49,8 @@ class CreateAuthorizationTimeProfileTest :
                         val commandContent = commandReceived.await()
 
                         commandContent.shouldBeEqual(
-                            "{\"commandId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"timeSeries\":[{\"times\":[{\"start\":\"14:15:00\",\"end\":\"14:15:00\"}],\"days\":[\"MONDAY\"]}],\"exceptionTimeSeries\":[],\"name\":\"timeProfileName\",\"description\":null,\"id\":\"43edc7cf-80ab-4486-86db-41cda2c7a2cd\",\"token\":\"JDJhJDEwJDFSNEljZ2FaRUNXUXBTQ25XN05KbE9qRzFHQ1VjMzkvWTBVcFpZb1M4Vmt0dnJYZ0tJVFBx\"}")
+                            "{\"commandId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"timeSeries\":[{\"times\":[{\"start\":\"14:15:00\",\"end\":\"14:15:00\"}],\"days\":[\"MONDAY\"]}],\"exceptionTimeSeries\":[],\"name\":\"timeProfileName\",\"description\":null,\"id\":\"43edc7cf-80ab-4486-86db-41cda2c7a2cd\",\"token\":\"JDJhJDEwJDFSNEljZ2FaRUNXUXBTQ25XN05KbE9qRzFHQ1VjMzkvWTBVcFpZb1M4Vmt0dnJYZ0tJVFBx\"}"
+                        )
 
                         val apiEvent =
                             ApiEvent(
@@ -59,12 +60,15 @@ class CreateAuthorizationTimeProfileTest :
                                     name = "timeProfileName",
                                     id = UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
                                     type = TimeProfileType.AUTHORIZATION_PROFILE,
-                                    validStandardTimeProfile = true))
+                                    validStandardTimeProfile = true,
+                                ),
+                            )
 
                         client
                             .publishAsync(
                                 Topics.Event.AUTHORIZATION_TIME_PROFILE_CREATED,
-                                encodeEvent(apiEvent))
+                                encodeEvent(apiEvent),
+                            )
                             .await()
                     }
                 }
@@ -79,7 +83,8 @@ class CreateAuthorizationTimeProfileTest :
                                 name = "timeProfileName",
                                 timeProfileId =
                                     UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
-                                timeSeries = TimeProfileFixture.timeSeries)
+                                timeSeries = TimeProfileFixture.timeSeries,
+                            )
                             .await()
                     result.name.shouldBeEqual("timeProfileName")
                     result.type.shouldBeEqual(TimeProfileType.AUTHORIZATION_PROFILE)

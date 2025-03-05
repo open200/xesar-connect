@@ -23,5 +23,5 @@ data class ChangeInstallationPointMapi(
     val name: String? = null,
     val description: String? = null,
     @Serializable(with = UUIDSerializer::class) val installationId: UUID? = null,
-    val token: String
+    val token: String,
 ) : Command

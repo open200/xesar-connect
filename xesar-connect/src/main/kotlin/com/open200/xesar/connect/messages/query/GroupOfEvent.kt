@@ -6,5 +6,5 @@ enum class GroupOfEvent {
     MediumEvents,
     EvvaComponent,
     MaintenanceComponent,
-    AdministrationComponent
+    AdministrationComponent,
 }

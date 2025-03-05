@@ -39,7 +39,8 @@ class XesarMqttClient(private val client: MqttAsyncClient) : IXesarMqttClient {
                         "Received MQTT 'delivery complete' message of topic: ${token?.topics?.joinToString(",")}"
                     }
                 }
-            })
+            }
+        )
     }
 
     /**
@@ -73,7 +74,8 @@ class XesarMqttClient(private val client: MqttAsyncClient) : IXesarMqttClient {
                             result.completeExceptionally(RuntimeException("MQTT connection failed"))
                         }
                     }
-                })
+                },
+            )
             return result
         } catch (e: MqttException) {
             log.error("Can't subscribe", e)
@@ -112,7 +114,8 @@ class XesarMqttClient(private val client: MqttAsyncClient) : IXesarMqttClient {
                         ?.let { ConnectionFailedException("Publishing failed", it) }
                         ?.let { deferredResult.completeExceptionally(it) }
                 }
-            })
+            },
+        )
 
         return deferredResult
     }
@@ -189,7 +192,9 @@ class XesarMqttClient(private val client: MqttAsyncClient) : IXesarMqttClient {
             if (config.mqttCertificates != null) {
                 val sslContextCertificate =
                     SslContextCertificate(
-                        config.mqttCertificates, config.mqttConnectOptions.securityProtocol)
+                        config.mqttCertificates,
+                        config.mqttConnectOptions.securityProtocol,
+                    )
                 options.socketFactory = sslContextCertificate.ssLContext.socketFactory
                 options.isHttpsHostnameVerificationEnabled = false
             }
@@ -211,7 +216,8 @@ class XesarMqttClient(private val client: MqttAsyncClient) : IXesarMqttClient {
                             }
                             ?.let { deferredResult.completeExceptionally(it) }
                     }
-                })
+                },
+            )
 
             deferredResult.invokeOnCompletion {
                 if (deferredResult.isCancelled) {

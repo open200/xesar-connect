@@ -13,7 +13,7 @@ import kotlinx.coroutines.awaitAll
 class RequestAddMediumToInstallationResult(
     val addMediumToInstallationRequestedDeferred: Deferred<AddMediumToInstallationRequested>,
     val mediumAddedToInstallationDeferred: Deferred<MediumAddedToInstallation>,
-    val apiErrorDeferred: Deferred<Optional<ApiError>>
+    val apiErrorDeferred: Deferred<Optional<ApiError>>,
 ) {
     suspend fun await() =
         awaitAll(addMediumToInstallationRequestedDeferred, mediumAddedToInstallationDeferred)

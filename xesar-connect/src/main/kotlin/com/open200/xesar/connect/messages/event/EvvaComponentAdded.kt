@@ -41,7 +41,7 @@ data class EvvaComponentAdded(
     val onlineStatus: OnlineStatus? = null,
     val firmwareVersion: FirmwareVersion? = null,
     val componentParts: List<ComponentPart>? = emptyList(),
-    val serialNumber: String? = null
+    val serialNumber: String? = null,
 ) : Event {
 
     @Serializable

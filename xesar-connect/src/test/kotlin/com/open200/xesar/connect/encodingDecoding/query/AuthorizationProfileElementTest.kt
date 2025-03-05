@@ -15,7 +15,8 @@ class AuthorizationProfileElementTest :
         val authorizationProfileTest =
             QueryElement(
                 UUID.fromString("00000000-1281-40ae-89d7-5c541d77a757"),
-                authorizationProfileFixture)
+                authorizationProfileFixture,
+            )
 
         val authorizationProfileString =
             "{\"requestId\":\"00000000-1281-40ae-89d7-5c541d77a757\"," +
