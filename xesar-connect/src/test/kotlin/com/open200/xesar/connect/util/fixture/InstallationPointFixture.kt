@@ -16,7 +16,8 @@ object InstallationPointFixture {
             linkedInstallationPoints =
                 listOf(
                     UUID.fromString("ed6236d0-a47c-46be-8495-d4755c38f103"),
-                    UUID.fromString("7cbcddaa-50c3-48fb-8e5a-56bab47d8f81")),
+                    UUID.fromString("7cbcddaa-50c3-48fb-8e5a-56bab47d8f81"),
+                ),
             onlineStatus = OnlineStatus.connected,
             componentType = ComponentType.Cylinder,
             releaseDurationShort = 5,

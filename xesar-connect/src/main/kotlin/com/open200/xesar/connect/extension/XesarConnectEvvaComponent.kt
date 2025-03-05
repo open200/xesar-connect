@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.Flow
  */
 suspend fun XesarConnect.queryEvvaComponents(
     params: Query.Params? = null,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): QueryList.Response<EvvaComponent> {
     return handleQueryListFunction {
         queryListAsync(EvvaComponent.QUERY_RESOURCE, params, requestConfig)
@@ -32,7 +32,7 @@ suspend fun XesarConnect.queryEvvaComponents(
  */
 suspend fun XesarConnect.queryEvvaComponentById(
     id: UUID,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): EvvaComponent? {
     return handleQueryElementFunction {
         queryElementAsync(EvvaComponent.QUERY_RESOURCE, id, requestConfig)
@@ -51,7 +51,7 @@ suspend fun XesarConnect.queryEvvaComponentById(
  */
 fun XesarConnect.queryStreamEvvaComponent(
     params: Query.Params? = null,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): Flow<EvvaComponent> {
     return queryStream(EvvaComponent.QUERY_RESOURCE, params, requestConfig)
 }

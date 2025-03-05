@@ -46,7 +46,8 @@ class RequestAddMediumToInstallationTest :
                         val commandContent = commandReceived.await()
 
                         commandContent.shouldBeEqual(
-                            "{\"hardwareId\":\"hardwareId\",\"id\":\"2d52bd95-18ba-4e46-8f00-0fc4c1e3f9be\",\"terminalId\":\"43edc7cf-80ab-4486-86db-41cda2c7a2cd\",\"label\":null,\"commandId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"token\":\"JDJhJDEwJDFSNEljZ2FaRUNXUXBTQ25XN05KbE9qRzFHQ1VjMzkvWTBVcFpZb1M4Vmt0dnJYZ0tJVFBx\"}")
+                            "{\"hardwareId\":\"hardwareId\",\"id\":\"2d52bd95-18ba-4e46-8f00-0fc4c1e3f9be\",\"terminalId\":\"43edc7cf-80ab-4486-86db-41cda2c7a2cd\",\"label\":null,\"commandId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"token\":\"JDJhJDEwJDFSNEljZ2FaRUNXUXBTQ25XN05KbE9qRzFHQ1VjMzkvWTBVcFpZb1M4Vmt0dnJYZ0tJVFBx\"}"
+                        )
 
                         val apiEvent =
                             ApiEvent(
@@ -54,7 +55,9 @@ class RequestAddMediumToInstallationTest :
                                 AddMediumToInstallationRequested(
                                     aggregateId =
                                         UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
-                                    hardwareId = "hardwareId"))
+                                    hardwareId = "hardwareId",
+                                ),
+                            )
 
                         val apiEvent2 =
                             ApiEvent(
@@ -62,17 +65,22 @@ class RequestAddMediumToInstallationTest :
                                 MediumAddedToInstallation(
                                     aggregateId =
                                         UUID.fromString("2d52bd95-18ba-4e46-8f00-0fc4c1e3f9be"),
-                                    "hardwareId"))
+                                    "hardwareId",
+                                ),
+                            )
 
                         client
                             .publishAsync(
                                 Topics.Event.ADD_MEDIUM_TO_INSTALLATION_REQUESTED,
-                                encodeEvent(apiEvent))
+                                encodeEvent(apiEvent),
+                            )
                             .await()
 
                         client
                             .publishAsync(
-                                Topics.Event.MEDIUM_ADDED_TO_INSTALLATION, encodeEvent(apiEvent2))
+                                Topics.Event.MEDIUM_ADDED_TO_INSTALLATION,
+                                encodeEvent(apiEvent2),
+                            )
                             .await()
                     }
                 }
@@ -83,19 +91,23 @@ class RequestAddMediumToInstallationTest :
                     api.subscribeAsync(
                             Topics(
                                 Topics.Event.ADD_MEDIUM_TO_INSTALLATION_REQUESTED,
-                                Topics.Event.MEDIUM_ADDED_TO_INSTALLATION))
+                                Topics.Event.MEDIUM_ADDED_TO_INSTALLATION,
+                            )
+                        )
                         .await()
 
                     val requestToAddMediumToInstallationResult =
                         api.requestToAddMediumToInstallationAsync(
                             UUID.fromString("2d52bd95-18ba-4e46-8f00-0fc4c1e3f9be"),
                             "hardwareId",
-                            UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
+                            UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
+                        )
                     val mediumAddedToInstallation =
                         requestToAddMediumToInstallationResult.mediumAddedToInstallationDeferred
                             .await()
                     mediumAddedToInstallation.aggregateId.shouldBe(
-                        UUID.fromString("2d52bd95-18ba-4e46-8f00-0fc4c1e3f9be"))
+                        UUID.fromString("2d52bd95-18ba-4e46-8f00-0fc4c1e3f9be")
+                    )
                     val addMediumToInstallationRequested =
                         requestToAddMediumToInstallationResult
                             .addMediumToInstallationRequestedDeferred

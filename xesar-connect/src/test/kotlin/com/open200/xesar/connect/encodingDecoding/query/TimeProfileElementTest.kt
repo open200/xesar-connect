@@ -15,7 +15,8 @@ class TimeProfileElementTest :
         val timeProfile =
             QueryElement(
                 UUID.fromString("d385ab22-0f51-4b97-9ecd-b8ff3fd4fcb6"),
-                TimeProfileFixture.timeProfileFixture)
+                TimeProfileFixture.timeProfileFixture,
+            )
 
         val timeProfileString =
             "{\"requestId\":\"d385ab22-0f51-4b97-9ecd-b8ff3fd4fcb6\",\"response\":{\"timeSeries\":[{\"times\":[{\"start\":\"14:15:00\",\"end\":\"14:15:00\"}],\"days\":[\"MONDAY\"]}],\"exceptionTimeSeries\":[{\"times\":[{\"start\":\"14:15:00\",\"end\":\"14:15:00\"}],\"calendars\":[\"497f6eca-6276-4993-bfeb-53cbbbba6f08\"]}],\"exceptionTimePointSeries\":[{\"calendars\":[\"497f6eca-6276-4993-bfeb-53cbbbba6f08\"],\"points\":[\"14:15:00\"]}],\"name\":\"name\",\"description\":\"description\",\"timePointSeries\":[{\"days\":[\"MONDAY\"],\"points\":[\"14:15:00\"]}],\"id\":\"497f6eca-6276-4993-bfeb-53cbbbba6f08\",\"type\":\"OFFICE_MODE\",\"validStandardTimeProfile\":true}}"

@@ -22,7 +22,7 @@ import kotlinx.coroutines.flow.Flow
  */
 suspend fun XesarConnect.queryZones(
     params: Query.Params? = null,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): QueryList.Response<Zone> {
     return handleQueryListFunction { queryListAsync(Zone.QUERY_RESOURCE, params, requestConfig) }
 }
@@ -36,10 +36,11 @@ suspend fun XesarConnect.queryZones(
  */
 suspend fun XesarConnect.queryZoneById(
     id: UUID,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): Zone? {
     return handleQueryElementFunction { queryElementAsync(Zone.QUERY_RESOURCE, id, requestConfig) }
 }
+
 /**
  * Adds an installation point to a zone asynchronously.
  *
@@ -50,16 +51,22 @@ suspend fun XesarConnect.queryZoneById(
 suspend fun XesarConnect.addInstallationPointToZoneAsync(
     installationPointId: UUID,
     zoneId: UUID,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): SingleEventResult<InstallationPointsInZoneChanged> {
     return sendCommandAsync<AddInstallationPointToZoneMapi, InstallationPointsInZoneChanged>(
         Topics.Command.ADD_INSTALLATION_POINT_TO_ZONE,
         Topics.Event.INSTALLATION_POINTS_IN_ZONE_CHANGED,
         true,
         AddInstallationPointToZoneMapi(
-            config.uuidGenerator.generateId(), installationPointId, zoneId, token),
-        requestConfig)
+            config.uuidGenerator.generateId(),
+            installationPointId,
+            zoneId,
+            token,
+        ),
+        requestConfig,
+    )
 }
+
 /**
  * Changes the data of a zone asynchronously.
  *
@@ -72,15 +79,17 @@ suspend fun XesarConnect.changeZoneDataAsync(
     name: String,
     description: String,
     zoneId: UUID,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): SingleEventResult<ZoneChanged> {
     return sendCommandAsync<ChangeZoneDataMapi, ZoneChanged>(
         Topics.Command.CHANGE_ZONE_DATA,
         Topics.Event.ZONE_CHANGED,
         true,
         ChangeZoneDataMapi(config.uuidGenerator.generateId(), name, description, zoneId, token),
-        requestConfig)
+        requestConfig,
+    )
 }
+
 /**
  * Creates a zone asynchronously.
  *
@@ -95,7 +104,7 @@ suspend fun XesarConnect.createZoneAsync(
     name: String,
     description: String? = null,
     zoneId: UUID,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): SingleEventResult<ZoneCreated> {
     return sendCommandAsync<CreateZoneMapi, ZoneCreated>(
         Topics.Command.CREATE_ZONE,
@@ -107,9 +116,12 @@ suspend fun XesarConnect.createZoneAsync(
             name,
             description,
             zoneId,
-            token),
-        requestConfig)
+            token,
+        ),
+        requestConfig,
+    )
 }
+
 /**
  * Deletes a zone asynchronously.
  *
@@ -118,15 +130,17 @@ suspend fun XesarConnect.createZoneAsync(
  */
 suspend fun XesarConnect.deleteZoneAsync(
     zoneId: UUID,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): SingleEventResult<ZoneDeleted> {
     return sendCommandAsync<DeleteZoneMapi, ZoneDeleted>(
         Topics.Command.DELETE_ZONE,
         Topics.Event.ZONE_DELETED,
         true,
         DeleteZoneMapi(config.uuidGenerator.generateId(), zoneId, token),
-        requestConfig)
+        requestConfig,
+    )
 }
+
 /**
  * Removes an installation point from a zone asynchronously.
  *
@@ -137,15 +151,20 @@ suspend fun XesarConnect.deleteZoneAsync(
 suspend fun XesarConnect.removeInstallationPointFromZoneAsync(
     installationPointId: UUID,
     zoneId: UUID,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): SingleEventResult<InstallationPointsInZoneChanged> {
     return sendCommandAsync<RemoveInstallationPointFromZoneMapi, InstallationPointsInZoneChanged>(
         Topics.Command.REMOVE_INSTALLATION_POINT_FROM_ZONE,
         Topics.Event.INSTALLATION_POINTS_IN_ZONE_CHANGED,
         true,
         RemoveInstallationPointFromZoneMapi(
-            config.uuidGenerator.generateId(), installationPointId, zoneId, token),
-        requestConfig)
+            config.uuidGenerator.generateId(),
+            installationPointId,
+            zoneId,
+            token,
+        ),
+        requestConfig,
+    )
 }
 
 /**
@@ -159,7 +178,7 @@ suspend fun XesarConnect.removeInstallationPointFromZoneAsync(
  */
 fun XesarConnect.queryStreamZone(
     params: Query.Params? = null,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): Flow<Zone> {
     return queryStream(Zone.QUERY_RESOURCE, params, requestConfig)
 }

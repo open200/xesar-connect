@@ -35,7 +35,8 @@ class OnAcccessProtocolEventFunctionTest :
                         hostname = "hostname",
                         port = "1883",
                         userId = UUID.fromString("faf3d0c4-1281-40ae-89d7-5c541d77a757"),
-                        token = "aToken")
+                        token = "aToken",
+                    )
                 val api = XesarConnect(xesarMqttClientMock, configMock)
 
                 api.token = configMock.apiProperties.token!!
@@ -44,16 +45,17 @@ class OnAcccessProtocolEventFunctionTest :
                     CompletableDeferred<AccessProtocolEvent>()
 
                 api.onAccessProtocolEvent(
-                    listOf(EventType.NORMAL_OPENING, EventType.OPENING_NORMAL_SWITCH)) {
-                        accessProtocolEvent ->
-                        logger.info { "Received $accessProtocolEvent" }
-                        accessProtocolEventInOnFunctionReceived.complete(accessProtocolEvent)
-                    }
+                    listOf(EventType.NORMAL_OPENING, EventType.OPENING_NORMAL_SWITCH)
+                ) { accessProtocolEvent ->
+                    logger.info { "Received $accessProtocolEvent" }
+                    accessProtocolEventInOnFunctionReceived.complete(accessProtocolEvent)
+                }
 
                 xesarMqttClientMock.onMessage(
                     Topics.Event.accessProtocolEventTopic(EventType.NORMAL_OPENING),
                     AccessProtocolEvent.encode(AccessProtocolEventFixture.accessProtocolEvent)
-                        .encodeToByteArray())
+                        .encodeToByteArray(),
+                )
 
                 val normalOpeningEvent = accessProtocolEventInOnFunctionReceived.await()
                 normalOpeningEvent.eventType.shouldBe(EventType.NORMAL_OPENING)
@@ -64,8 +66,11 @@ class OnAcccessProtocolEventFunctionTest :
                     Topics.Event.accessProtocolEventTopic(EventType.OPENING_NORMAL_SWITCH),
                     AccessProtocolEvent.encode(
                             AccessProtocolEventFixture.accessProtocolEvent.copy(
-                                eventType = EventType.OPENING_NORMAL_SWITCH))
-                        .encodeToByteArray())
+                                eventType = EventType.OPENING_NORMAL_SWITCH
+                            )
+                        )
+                        .encodeToByteArray(),
+                )
 
                 val openingNormalSwitchEvent = accessProtocolEventInOnFunctionReceived.await()
                 openingNormalSwitchEvent.eventType.shouldBe(EventType.OPENING_NORMAL_SWITCH)

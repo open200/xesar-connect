@@ -21,5 +21,5 @@ data class AuthorizationProfileCreated(
     val name: String,
     val description: String,
     @Serializable(with = UUIDSerializer::class) val id: UUID,
-    val assignable: Boolean
+    val assignable: Boolean,
 ) : Event

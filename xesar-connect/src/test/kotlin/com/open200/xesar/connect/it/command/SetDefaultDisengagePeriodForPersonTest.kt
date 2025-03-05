@@ -48,7 +48,8 @@ class SetDefaultDisengagePeriodForPersonTest :
                         val commandContent = commandReceived.await()
 
                         commandContent.shouldBeEqual(
-                            "{\"commandId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"disengagePeriod\":\"SHORT\",\"externalId\":\"EXT-123\",\"token\":\"JDJhJDEwJDFSNEljZ2FaRUNXUXBTQ25XN05KbE9qRzFHQ1VjMzkvWTBVcFpZb1M4Vmt0dnJYZ0tJVFBx\"}")
+                            "{\"commandId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"disengagePeriod\":\"SHORT\",\"externalId\":\"EXT-123\",\"token\":\"JDJhJDEwJDFSNEljZ2FaRUNXUXBTQ25XN05KbE9qRzFHQ1VjMzkvWTBVcFpZb1M4Vmt0dnJYZ0tJVFBx\"}"
+                        )
 
                         val apiEvent =
                             ApiEvent(
@@ -57,7 +58,9 @@ class SetDefaultDisengagePeriodForPersonTest :
                                     id = UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
                                     firstName = "firstName",
                                     lastName = "lastName",
-                                    disengagePeriod = DisengagePeriod.SHORT))
+                                    disengagePeriod = DisengagePeriod.SHORT,
+                                ),
+                            )
 
                         client
                             .publishAsync(Topics.Event.PERSON_CHANGED, encodeEvent(apiEvent))
@@ -71,7 +74,9 @@ class SetDefaultDisengagePeriodForPersonTest :
                     api.subscribeAsync(Topics(Topics.Event.PERSON_CHANGED)).await()
                     val result =
                         api.setDefaultDisengagePeriodForPersonAsync(
-                                "EXT-123", DisengagePeriod.SHORT)
+                                "EXT-123",
+                                DisengagePeriod.SHORT,
+                            )
                             .await()
                     result.id.shouldBeEqual(UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
                     result.disengagePeriod?.shouldBeEqual(DisengagePeriod.SHORT)

@@ -17,5 +17,5 @@ data class FindComponent(
     override val commandId: @Serializable(with = UUIDSerializer::class) UUID,
     @Serializable(with = UUIDSerializer::class) val installationPointId: UUID,
     val enable: Boolean? = null,
-    val token: String
+    val token: String,
 ) : Command

@@ -19,5 +19,5 @@ data class ChangeZoneDataMapi(
     val name: String,
     val description: String,
     @Serializable(with = UUIDSerializer::class) val id: UUID,
-    val token: String
+    val token: String,
 ) : Command

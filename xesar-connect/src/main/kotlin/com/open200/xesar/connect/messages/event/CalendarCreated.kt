@@ -21,5 +21,5 @@ data class CalendarCreated(
     val calendarIdentifier: Int,
     val name: String,
     val specialDays: List<@Serializable(with = LocalDateSerializer::class) LocalDate>,
-    @Serializable(with = UUIDSerializer::class) val id: UUID
+    @Serializable(with = UUIDSerializer::class) val id: UUID,
 ) : Event

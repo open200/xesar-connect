@@ -25,7 +25,7 @@ import kotlinx.coroutines.flow.Flow
  */
 suspend fun XesarConnect.queryCalendars(
     params: Query.Params? = null,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): QueryList.Response<Calendar> {
     return handleQueryListFunction {
         queryListAsync(Calendar.QUERY_RESOURCE, params, requestConfig)
@@ -41,7 +41,7 @@ suspend fun XesarConnect.queryCalendars(
  */
 suspend fun XesarConnect.queryCalendarById(
     id: UUID,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): Calendar? {
     return handleQueryElementFunction {
         queryElementAsync(Calendar.QUERY_RESOURCE, id, requestConfig)
@@ -60,14 +60,15 @@ suspend fun XesarConnect.createCalendarAsync(
     name: String,
     specialDays: List<LocalDate> = emptyList(),
     calendarId: UUID,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): SingleEventResult<CalendarCreated> {
     return sendCommandAsync<CreateCalendarMapi, CalendarCreated>(
         Topics.Command.CREATE_CALENDAR,
         Topics.Event.CALENDAR_CREATED,
         true,
         CreateCalendarMapi(config.uuidGenerator.generateId(), name, specialDays, calendarId, token),
-        requestConfig)
+        requestConfig,
+    )
 }
 
 /**
@@ -82,15 +83,21 @@ suspend fun XesarConnect.changeCalendarAsync(
     calendarId: UUID,
     calendarName: String,
     specialDays: List<LocalDate> = emptyList(),
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): SingleEventResult<CalendarChanged> {
     return sendCommandAsync<ChangeCalendarMapi, CalendarChanged>(
         Topics.Command.CHANGE_CALENDAR,
         Topics.Event.CALENDAR_CHANGED,
         true,
         ChangeCalendarMapi(
-            config.uuidGenerator.generateId(), calendarName, specialDays, calendarId, token),
-        requestConfig)
+            config.uuidGenerator.generateId(),
+            calendarName,
+            specialDays,
+            calendarId,
+            token,
+        ),
+        requestConfig,
+    )
 }
 
 /**
@@ -101,14 +108,15 @@ suspend fun XesarConnect.changeCalendarAsync(
  */
 suspend fun XesarConnect.deleteCalendarAsync(
     calendarId: UUID,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): SingleEventResult<CalendarDeleted> {
     return sendCommandAsync<DeleteCalendarMapi, CalendarDeleted>(
         Topics.Command.DELETE_CALENDAR,
         Topics.Event.CALENDAR_DELETED,
         true,
         DeleteCalendarMapi(config.uuidGenerator.generateId(), calendarId, token),
-        requestConfig)
+        requestConfig,
+    )
 }
 
 /**
@@ -123,7 +131,7 @@ suspend fun XesarConnect.deleteCalendarAsync(
  */
 fun XesarConnect.queryStreamCalendar(
     params: Query.Params? = null,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): Flow<Calendar> {
     return queryStream(Calendar.QUERY_RESOURCE, params, requestConfig)
 }

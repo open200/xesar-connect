@@ -48,7 +48,8 @@ class SetAccessEndAtTest :
                         val commandContent = commandReceived.await()
 
                         commandContent.shouldBeEqual(
-                            "{\"commandId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"accessEndAt\":\"2023-08-24T16:25:52.225991\",\"id\":\"43edc7cf-80ab-4486-86db-41cda2c7a2cd\",\"token\":\"JDJhJDEwJDFSNEljZ2FaRUNXUXBTQ25XN05KbE9qRzFHQ1VjMzkvWTBVcFpZb1M4Vmt0dnJYZ0tJVFBx\"}")
+                            "{\"commandId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"accessEndAt\":\"2023-08-24T16:25:52.225991\",\"id\":\"43edc7cf-80ab-4486-86db-41cda2c7a2cd\",\"token\":\"JDJhJDEwJDFSNEljZ2FaRUNXUXBTQ25XN05KbE9qRzFHQ1VjMzkvWTBVcFpZb1M4Vmt0dnJYZ0tJVFBx\"}"
+                        )
 
                         val apiEvent =
                             ApiEvent(
@@ -57,7 +58,9 @@ class SetAccessEndAtTest :
                                     id = UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
                                     accessBeginAt =
                                         LocalDateTime.parse("2023-08-24T16:25:52.225991"),
-                                    changedAt = LocalDateTime.parse("2023-08-23T16:25:52.225991")))
+                                    changedAt = LocalDateTime.parse("2023-08-23T16:25:52.225991"),
+                                ),
+                            )
 
                         client
                             .publishAsync(Topics.Event.MEDIUM_CHANGED, encodeEvent(apiEvent))
@@ -72,7 +75,8 @@ class SetAccessEndAtTest :
                     val result =
                         api.setAccessEndAtAsync(
                                 UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
-                                LocalDateTime.parse("2023-08-24T16:25:52.225991"))
+                                LocalDateTime.parse("2023-08-24T16:25:52.225991"),
+                            )
                             .await()
                     result.id.shouldBeEqual(UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
                 }

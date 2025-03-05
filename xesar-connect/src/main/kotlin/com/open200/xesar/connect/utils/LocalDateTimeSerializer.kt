@@ -13,6 +13,7 @@ object LocalDateTimeSerializer : KSerializer<LocalDateTime> {
 
     /** The descriptor for LocalDateTime. */
     override val descriptor = PrimitiveSerialDescriptor("LocalDateTime", PrimitiveKind.STRING)
+
     /**
      * Serializes the LocalDateTime object into a string representation.
      *
@@ -21,6 +22,7 @@ object LocalDateTimeSerializer : KSerializer<LocalDateTime> {
      */
     override fun serialize(encoder: Encoder, value: LocalDateTime) =
         encoder.encodeString(value.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
+
     /**
      * Deserializes the string representation into a LocalDateTime object.
      *

@@ -20,7 +20,7 @@ import kotlinx.serialization.encodeToString
 data class ApiError(
     val reason: String? = null,
     @Serializable(with = UUIDSerializer::class) val correlationId: UUID,
-    val error: Int
+    val error: Int,
 ) : Message
 
 /**

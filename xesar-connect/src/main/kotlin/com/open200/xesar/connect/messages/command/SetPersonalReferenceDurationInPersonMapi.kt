@@ -18,5 +18,5 @@ data class SetPersonalReferenceDurationInPersonMapi(
     override val commandId: @Serializable(with = UUIDSerializer::class) UUID,
     val newValue: PersonalLog,
     val externalId: String,
-    val token: String
+    val token: String,
 ) : Command

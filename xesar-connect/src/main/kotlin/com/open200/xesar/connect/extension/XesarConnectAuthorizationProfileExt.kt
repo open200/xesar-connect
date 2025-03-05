@@ -20,11 +20,14 @@ import kotlinx.coroutines.flow.Flow
  */
 suspend fun XesarConnect.queryAuthorizationProfiles(
     params: Query.Params? = null,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): QueryList.Response<AuthorizationProfile> {
     return handleQueryListFunction {
         queryListAsync<AuthorizationProfile>(
-            AuthorizationProfile.QUERY_RESOURCE, params, requestConfig)
+            AuthorizationProfile.QUERY_RESOURCE,
+            params,
+            requestConfig,
+        )
     }
 }
 
@@ -37,11 +40,14 @@ suspend fun XesarConnect.queryAuthorizationProfiles(
  */
 suspend fun XesarConnect.queryAuthorizationProfileById(
     id: UUID,
-    requestConfig: XesarConnect.RequestConfig = XesarConnect.RequestConfig()
+    requestConfig: XesarConnect.RequestConfig = XesarConnect.RequestConfig(),
 ): AuthorizationProfile? {
     return handleQueryElementFunction {
         queryElementAsync<AuthorizationProfile>(
-            AuthorizationProfile.QUERY_RESOURCE, id, requestConfig)
+            AuthorizationProfile.QUERY_RESOURCE,
+            id,
+            requestConfig,
+        )
     }
 }
 
@@ -57,15 +63,21 @@ suspend fun XesarConnect.createAuthorizationProfileAsync(
     name: String,
     description: String? = null,
     authorizationProfileId: UUID,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): SingleEventResult<AuthorizationProfileCreated> {
     return sendCommandAsync<CreateAuthorizationProfileMapi, AuthorizationProfileCreated>(
         Topics.Command.CREATE_AUTHORIZATION_PROFILE,
         Topics.Event.AUTHORIZATION_PROFILE_CREATED,
         true,
         CreateAuthorizationProfileMapi(
-            config.uuidGenerator.generateId(), name, description, authorizationProfileId, token),
-        requestConfig)
+            config.uuidGenerator.generateId(),
+            name,
+            description,
+            authorizationProfileId,
+            token,
+        ),
+        requestConfig,
+    )
 }
 
 /**
@@ -76,16 +88,21 @@ suspend fun XesarConnect.createAuthorizationProfileAsync(
  */
 suspend fun XesarConnect.deleteAuthorizationProfileAsync(
     authorizationProfileId: UUID,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): SingleEventResult<AuthorizationProfileDeleted> {
     return sendCommandAsync<DeleteAuthorizationProfileMapi, AuthorizationProfileDeleted>(
         Topics.Command.DELETE_AUTHORIZATION_PROFILE,
         Topics.Event.AUTHORIZATION_PROFILE_DELETED,
         true,
         DeleteAuthorizationProfileMapi(
-            config.uuidGenerator.generateId(), authorizationProfileId, token),
-        requestConfig)
+            config.uuidGenerator.generateId(),
+            authorizationProfileId,
+            token,
+        ),
+        requestConfig,
+    )
 }
+
 /**
  * Changes an authorization profile asynchronously.
  *
@@ -108,14 +125,15 @@ suspend fun XesarConnect.changeAuthorizationProfileAsync(
     standardTimeProfile: UUID? = null,
     id: UUID,
     zones: List<Authorization>,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): ChangeAuthorizationProfileResult {
     val changeAuthorizationProfileResult =
         sendCommandAsync<
             ChangeAuthorizationProfileMapi,
             AuthorizationProfileInfoChanged,
             AuthorizationProfileAccessChanged,
-            AuthorizationProfileChanged>(
+            AuthorizationProfileChanged,
+        >(
             Topics.Command.CHANGE_AUTHORIZATION_PROFILE,
             Topics.Event.AUTHORIZATION_PROFILE_INFO_CHANGED,
             true,
@@ -132,13 +150,16 @@ suspend fun XesarConnect.changeAuthorizationProfileAsync(
                 id,
                 zones,
                 config.uuidGenerator.generateId(),
-                token),
-            requestConfig)
+                token,
+            ),
+            requestConfig,
+        )
     return ChangeAuthorizationProfileResult(
         changeAuthorizationProfileResult.first.first,
         changeAuthorizationProfileResult.first.second,
         changeAuthorizationProfileResult.first.third,
-        changeAuthorizationProfileResult.second)
+        changeAuthorizationProfileResult.second,
+    )
 }
 
 /**
@@ -153,7 +174,7 @@ suspend fun XesarConnect.changeAuthorizationProfileAsync(
  */
 fun XesarConnect.queryStreamAuthorizationProfile(
     params: Query.Params? = null,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): Flow<AuthorizationProfile> {
     return queryStream(AuthorizationProfile.QUERY_RESOURCE, params, requestConfig)
 }

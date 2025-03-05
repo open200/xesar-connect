@@ -32,5 +32,5 @@ data class ChangeOfficeModeTimeProfileMapi(
     val exceptionTimeSeries: List<ExceptionTimeSerie>? = emptyList(),
     val exceptionTimePointSeries: List<ExceptionTimeSerie>? = emptyList(),
     val timePointSeries: List<TimePointSerie>? = emptyList(),
-    val token: String
+    val token: String,
 ) : Command

@@ -13,5 +13,5 @@ enum class FilterType(val filterString: String? = null) {
     IS_NOT_NULL("isNotNull"),
     LIKE("like"),
     BETWEEN("between"),
-    CUSTOM("custom")
+    CUSTOM("custom"),
 }

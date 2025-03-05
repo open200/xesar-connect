@@ -19,5 +19,5 @@ data class ZoneCreated(
     @Serializable(with = UUIDSerializer::class) val partitionId: UUID,
     val name: String,
     val description: String? = null,
-    @Serializable(with = UUIDSerializer::class) val id: UUID
+    @Serializable(with = UUIDSerializer::class) val id: UUID,
 ) : Event

@@ -17,5 +17,5 @@ data class AssignPersonToMediumMapi(
     override val commandId: @Serializable(with = UUIDSerializer::class) UUID,
     @Serializable(with = UUIDSerializer::class) val id: UUID,
     @Serializable(with = UUIDSerializer::class) val personId: UUID,
-    val token: String
+    val token: String,
 ) : Command

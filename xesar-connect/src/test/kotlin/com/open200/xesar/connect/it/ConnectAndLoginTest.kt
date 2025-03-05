@@ -49,21 +49,25 @@ class ConnectAndLoginTest :
 
                         val loginContent = loginReceived.await()
                         loginContent.shouldBeEqual(
-                            "{\"commandId\":\"a7d184b6-dd9d-4bb8-acb7-0b51ada3e3b7\",\"username\":\"fordprefect\",\"password\":\"foobar\"}")
+                            "{\"commandId\":\"a7d184b6-dd9d-4bb8-acb7-0b51ada3e3b7\",\"username\":\"fordprefect\",\"password\":\"foobar\"}"
+                        )
                         client
                             .publishAsync(
                                 Topics.Event.loggedIn(config.apiProperties.userId),
-                                "{\"commandId\":\"a7d184b6-dd9d-4bb8-acb7-0b51ada3e3b7\",\"event\":{\"token\":\"JDJhJDEwJDFSNEljZ2FaRUNXUXBTQ25XN05KbE9qRzFHQ1VjMzkvWTBVcFpZb1M4Vmt0dnJYZ0tJVFBx\"}}")
+                                "{\"commandId\":\"a7d184b6-dd9d-4bb8-acb7-0b51ada3e3b7\",\"event\":{\"token\":\"JDJhJDEwJDFSNEljZ2FaRUNXUXBTQ25XN05KbE9qRzFHQ1VjMzkvWTBVcFpZb1M4Vmt0dnJYZ0tJVFBx\"}}",
+                            )
                             .await()
 
                         val logoutContent = logoutReceived.await()
                         logoutContent.shouldBeEqual(
-                            "{\"token\":\"JDJhJDEwJDFSNEljZ2FaRUNXUXBTQ25XN05KbE9qRzFHQ1VjMzkvWTBVcFpZb1M4Vmt0dnJYZ0tJVFBx\"}")
+                            "{\"token\":\"JDJhJDEwJDFSNEljZ2FaRUNXUXBTQ25XN05KbE9qRzFHQ1VjMzkvWTBVcFpZb1M4Vmt0dnJYZ0tJVFBx\"}"
+                        )
 
                         client
                             .publishAsync(
                                 Topics.Event.LOGGED_OUT,
-                                "{\"event\": {\"token\":\"JDJhJDEwJDFSNEljZ2FaRUNXUXBTQ25XN05KbE9qRzFHQ1VjMzkvWTBVcFpZb1M4Vmt0dnJYZ0tJVFBx\"}}")
+                                "{\"event\": {\"token\":\"JDJhJDEwJDFSNEljZ2FaRUNXUXBTQ25XN05KbE9qRzFHQ1VjMzkvWTBVcFpZb1M4Vmt0dnJYZ0tJVFBx\"}}",
+                            )
                             .await()
                     }
                 }
@@ -77,10 +81,13 @@ class ConnectAndLoginTest :
                         .shouldBe(
                             listOf(
                                 Topics.Event.loggedIn(
-                                    UUID.fromString("faf3d0c4-1281-40ae-89d7-5c541d77a757")),
+                                    UUID.fromString("faf3d0c4-1281-40ae-89d7-5c541d77a757")
+                                ),
                                 Topics.Event.UNAUTHORIZED_LOGIN_ATTEMPT,
                                 Topics.Event.LOGGED_OUT,
-                                Topics.Event.error(config.apiProperties.userId)))
+                                Topics.Event.error(config.apiProperties.userId),
+                            )
+                        )
 
                     it.shouldBeInstanceOf<XesarConnect>()
                     it.logoutAsync().await()
@@ -89,39 +96,42 @@ class ConnectAndLoginTest :
         }
 
         test(
-            "connect and login with testcontainers should throw Exception when wrong username, password") {
-                coEvery { config.uuidGenerator.generateId() }
-                    .returns(UUID.fromString("a7d184b6-dd9d-4bb8-acb7-0b51ada3e3b7"))
-                runBlocking {
-                    val simulatedBackendReady = CompletableDeferred<Unit>()
-                    val loginReceived = CompletableDeferred<String>()
-                    launch {
-                        XesarMqttClient.connectAsync(config).await().use { client ->
-                            client.subscribeAsync(arrayOf(Topics.ALL_TOPICS)).await()
+            "connect and login with testcontainers should throw Exception when wrong username, password"
+        ) {
+            coEvery { config.uuidGenerator.generateId() }
+                .returns(UUID.fromString("a7d184b6-dd9d-4bb8-acb7-0b51ada3e3b7"))
+            runBlocking {
+                val simulatedBackendReady = CompletableDeferred<Unit>()
+                val loginReceived = CompletableDeferred<String>()
+                launch {
+                    XesarMqttClient.connectAsync(config).await().use { client ->
+                        client.subscribeAsync(arrayOf(Topics.ALL_TOPICS)).await()
 
-                            client.onMessage = { _, payload ->
-                                loginReceived.complete(payload.decodeToString())
-                            }
-
-                            simulatedBackendReady.complete(Unit)
-                            val messageContent = loginReceived.await()
-                            messageContent.shouldBeEqual(
-                                "{\"commandId\":\"a7d184b6-dd9d-4bb8-acb7-0b51ada3e3b7\",\"username\":\"Unauthorized\",\"password\":\"foobar\"}")
-                            client
-                                .publishAsync(
-                                    Topics.Event.UNAUTHORIZED_LOGIN_ATTEMPT,
-                                    "{\"event\":{\"username\":\"Unauthorized\", \"channel\":\"API\"}}")
-                                .await()
+                        client.onMessage = { _, payload ->
+                            loginReceived.complete(payload.decodeToString())
                         }
+
+                        simulatedBackendReady.complete(Unit)
+                        val messageContent = loginReceived.await()
+                        messageContent.shouldBeEqual(
+                            "{\"commandId\":\"a7d184b6-dd9d-4bb8-acb7-0b51ada3e3b7\",\"username\":\"Unauthorized\",\"password\":\"foobar\"}"
+                        )
+                        client
+                            .publishAsync(
+                                Topics.Event.UNAUTHORIZED_LOGIN_ATTEMPT,
+                                "{\"event\":{\"username\":\"Unauthorized\", \"channel\":\"API\"}}",
+                            )
+                            .await()
                     }
-                    launch {
-                        simulatedBackendReady.await()
-                        val wrongUserCredentials = UserCredentials("Unauthorized", "foobar")
+                }
+                launch {
+                    simulatedBackendReady.await()
+                    val wrongUserCredentials = UserCredentials("Unauthorized", "foobar")
 
-                        shouldThrow<UnauthorizedLoginAttemptException> {
-                            XesarConnect.connectAndLoginAsync(config, wrongUserCredentials).await()
-                        }
+                    shouldThrow<UnauthorizedLoginAttemptException> {
+                        XesarConnect.connectAndLoginAsync(config, wrongUserCredentials).await()
                     }
                 }
             }
+        }
     })

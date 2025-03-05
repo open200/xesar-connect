@@ -36,5 +36,5 @@ data class MediumChanged(
     val validFrom: @Serializable(with = LocalDateTimeSerializer::class) LocalDateTime? = null,
     val accessEndAt: @Serializable(with = LocalDateTimeSerializer::class) LocalDateTime? = null,
     val phoneNumber: String? = null,
-    val messageLanguage: String? = null
+    val messageLanguage: String? = null,
 ) : Event

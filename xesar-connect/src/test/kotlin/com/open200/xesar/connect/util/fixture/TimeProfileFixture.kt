@@ -15,12 +15,15 @@ object TimeProfileFixture {
         listOf(
             ExceptionTimeSerie(
                 times = listOf(timeRange),
-                calendars = listOf(UUID.fromString("497f6eca-6276-4993-bfeb-53cbbbba6f08"))))
+                calendars = listOf(UUID.fromString("497f6eca-6276-4993-bfeb-53cbbbba6f08")),
+            )
+        )
 
     val exceptionTimepointSerie =
         ExceptionTimepointSerie(
             calendars = listOf(UUID.fromString("497f6eca-6276-4993-bfeb-53cbbbba6f08")),
-            points = listOf(localTime))
+            points = listOf(localTime),
+        )
 
     val timePointSerie =
         listOf(TimePointSerie(days = listOf(Weekday.MONDAY), points = listOf(localTime)))
@@ -37,5 +40,6 @@ object TimeProfileFixture {
             timePointSeries = timePointSerie,
             id = UUID.fromString("497f6eca-6276-4993-bfeb-53cbbbba6f08"),
             type = TimeProfileType.OFFICE_MODE,
-            validStandardTimeProfile = true)
+            validStandardTimeProfile = true,
+        )
 }

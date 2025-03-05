@@ -14,10 +14,7 @@ object PersonFixture {
             firstName = "firstname String",
             lastName = "lastname String",
             identifier = "1234",
-            PersonalLog(
-                logMode = PersonalLog.PersonalLogModes.dontSave,
-                days = 0,
-            ),
+            PersonalLog(logMode = PersonalLog.PersonalLogModes.dontSave, days = 0),
             disengagePeriod = DisengagePeriod.SHORT,
             identificationMediaCount = 0,
             outdatedMedia = true,

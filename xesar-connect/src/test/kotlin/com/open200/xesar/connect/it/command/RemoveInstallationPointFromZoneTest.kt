@@ -47,7 +47,8 @@ class RemoveInstallationPointFromZoneTest :
                         val commandContent = commandReceived.await()
 
                         commandContent.shouldBeEqual(
-                            "{\"commandId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"installationPointId\":\"43edc7cf-80ab-4486-86db-41cda2c7a2cd\",\"id\":\"8c7128d4-a30f-4aad-b5d2-d7b975c5cf8f\",\"token\":\"JDJhJDEwJDFSNEljZ2FaRUNXUXBTQ25XN05KbE9qRzFHQ1VjMzkvWTBVcFpZb1M4Vmt0dnJYZ0tJVFBx\"}")
+                            "{\"commandId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"installationPointId\":\"43edc7cf-80ab-4486-86db-41cda2c7a2cd\",\"id\":\"8c7128d4-a30f-4aad-b5d2-d7b975c5cf8f\",\"token\":\"JDJhJDEwJDFSNEljZ2FaRUNXUXBTQ25XN05KbE9qRzFHQ1VjMzkvWTBVcFpZb1M4Vmt0dnJYZ0tJVFBx\"}"
+                        )
 
                         val apiEvent =
                             ApiEvent(
@@ -56,15 +57,18 @@ class RemoveInstallationPointFromZoneTest :
                                     accessId = 123,
                                     removedInstallationPoints =
                                         listOf(
-                                            UUID.fromString(
-                                                "43edc7cf-80ab-4486-86db-41cda2c7a2cd")),
+                                            UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd")
+                                        ),
                                     aggregateId =
-                                        UUID.fromString("8c7128d4-a30f-4aad-b5d2-d7b975c5cf8f")))
+                                        UUID.fromString("8c7128d4-a30f-4aad-b5d2-d7b975c5cf8f"),
+                                ),
+                            )
 
                         client
                             .publishAsync(
                                 Topics.Event.INSTALLATION_POINTS_IN_ZONE_CHANGED,
-                                encodeEvent(apiEvent))
+                                encodeEvent(apiEvent),
+                            )
                             .await()
                     }
                 }
@@ -77,12 +81,15 @@ class RemoveInstallationPointFromZoneTest :
                     val result =
                         api.removeInstallationPointFromZoneAsync(
                                 UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
-                                UUID.fromString("8c7128d4-a30f-4aad-b5d2-d7b975c5cf8f"))
+                                UUID.fromString("8c7128d4-a30f-4aad-b5d2-d7b975c5cf8f"),
+                            )
                             .await()
                     result.aggregateId.shouldBeEqual(
-                        UUID.fromString("8c7128d4-a30f-4aad-b5d2-d7b975c5cf8f"))
+                        UUID.fromString("8c7128d4-a30f-4aad-b5d2-d7b975c5cf8f")
+                    )
                     result.removedInstallationPoints.shouldBeEqual(
-                        listOf(UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd")))
+                        listOf(UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
+                    )
                 }
             }
         }

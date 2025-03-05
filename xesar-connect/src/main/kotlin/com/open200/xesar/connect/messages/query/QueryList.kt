@@ -17,7 +17,7 @@ import kotlinx.serialization.encodeToString
 @Serializable
 data class QueryList<out T : QueryResource>(
     @Serializable(with = UUIDSerializer::class) val requestId: UUID,
-    val response: Response<T>
+    val response: Response<T>,
 ) : Message {
     /**
      * Represents the response data of the query list.
@@ -45,6 +45,7 @@ inline fun <reified T : QueryResource> encodeQueryList(message: QueryList<T>): S
         throw ParsingException()
     }
 }
+
 /**
  * Decodes a JSON-encoded [QueryList] message.
  *

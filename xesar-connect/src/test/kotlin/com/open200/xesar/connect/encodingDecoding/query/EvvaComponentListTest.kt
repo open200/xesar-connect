@@ -16,10 +16,13 @@ class EvvaComponentListTest :
                     listOf(
                         EvvaComponentFixture.evvaComponentFixture,
                         EvvaComponentFixture.evvaComponentFixture.copy(
-                            id = UUID.fromString("555e7d1a-54f1-432a-ade7-80d20a63ee2d")),
+                            id = UUID.fromString("555e7d1a-54f1-432a-ade7-80d20a63ee2d")
+                        ),
                     ),
                     2,
-                    2))
+                    2,
+                ),
+            )
 
         val evvaComponentString =
             "{\"requestId\":\"ffcf5e00-83ad-40cb-b37b-e91abb6f75cd\",\"response\":{\"data\":[{\"componentType\":\"WallReader\",\"serialNumber\":null,\"upgradeMedia\":null,\"batteryCondition\":\"Full\",\"btbFirmwareVersion\":null,\"id\":\"497f6eca-6276-4993-bfeb-53cbbbba6f08\",\"batteryStatusUpdatedAt\":\"2023-08-24T16:25:52.225991\",\"stateChangedAt\":\"2023-06-15T16:25:52.225991\",\"firmwareVersion\":null,\"status\":\"Synced\",\"bleMac\":null},{\"componentType\":\"WallReader\",\"serialNumber\":null,\"upgradeMedia\":null,\"batteryCondition\":\"Full\",\"btbFirmwareVersion\":null,\"id\":\"555e7d1a-54f1-432a-ade7-80d20a63ee2d\",\"batteryStatusUpdatedAt\":\"2023-08-24T16:25:52.225991\",\"stateChangedAt\":\"2023-06-15T16:25:52.225991\",\"firmwareVersion\":null,\"status\":\"Synced\",\"bleMac\":null}],\"totalCount\":2,\"filterCount\":2}}"

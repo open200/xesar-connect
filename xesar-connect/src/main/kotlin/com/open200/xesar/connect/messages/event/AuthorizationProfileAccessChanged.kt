@@ -40,5 +40,5 @@ data class AuthorizationProfileAccessChanged(
     var zones: List<Authorization> = emptyList(),
     var addedTimeProfiles: List<@Serializable(with = UUIDSerializer::class) UUID> = emptyList(),
     var removedTimeProfiles: List<@Serializable(with = UUIDSerializer::class) UUID> = emptyList(),
-    var media: List<@Serializable(with = UUIDSerializer::class) UUID> = emptyList()
+    var media: List<@Serializable(with = UUIDSerializer::class) UUID> = emptyList(),
 ) : Event

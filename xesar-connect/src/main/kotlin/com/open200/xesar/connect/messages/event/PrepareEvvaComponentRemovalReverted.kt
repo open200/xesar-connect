@@ -19,5 +19,5 @@ data class PrepareEvvaComponentRemovalReverted(
     val id: @Serializable(with = UUIDSerializer::class) UUID,
     val stateChangedAt: @Serializable(with = LocalDateTimeSerializer::class) LocalDateTime,
     val linkedInstallationPoints: List<@Serializable(with = UUIDSerializer::class) UUID> =
-        emptyList()
+        emptyList(),
 ) : Event

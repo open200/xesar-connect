@@ -50,7 +50,8 @@ class SetPhoneNumberOnSmartphoneTest :
 
                         val commandContent = commandReceived.await()
                         commandContent.shouldBeEqual(
-                            "{\"commandId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"id\":\"7b21f75f-3fa6-41c8-acff-a14839331b25\",\"phoneNumber\":\"+0123456789\",\"token\":\"JDJhJDEwJDFSNEljZ2FaRUNXUXBTQ25XN05KbE9qRzFHQ1VjMzkvWTBVcFpZb1M4Vmt0dnJYZ0tJVFBx\"}")
+                            "{\"commandId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"id\":\"7b21f75f-3fa6-41c8-acff-a14839331b25\",\"phoneNumber\":\"+0123456789\",\"token\":\"JDJhJDEwJDFSNEljZ2FaRUNXUXBTQ25XN05KbE9qRzFHQ1VjMzkvWTBVcFpZb1M4Vmt0dnJYZ0tJVFBx\"}"
+                        )
 
                         val apiEvent =
                             ApiEvent(
@@ -68,7 +69,9 @@ class SetPhoneNumberOnSmartphoneTest :
                                     label = "Test12348",
                                     validFrom = null,
                                     accessEndAt = LocalDateTime.parse("2079-12-31T23:50"),
-                                    phoneNumber = "+0123456789"))
+                                    phoneNumber = "+0123456789",
+                                ),
+                            )
 
                         client
                             .publishAsync(Topics.Event.MEDIUM_CHANGED, encodeEvent(apiEvent))
@@ -80,7 +83,8 @@ class SetPhoneNumberOnSmartphoneTest :
 
                     val api = XesarConnect.connectAndLoginAsync(config).await()
                     api.subscribeAsync(
-                            Topics(Topics.Event.PHONE_NUMBER_CHANGED, Topics.Event.MEDIUM_CHANGED))
+                            Topics(Topics.Event.PHONE_NUMBER_CHANGED, Topics.Event.MEDIUM_CHANGED)
+                        )
                         .await()
                     val result =
                         api.setPhoneNumberOnSmartphoneAsync("+0123456789", smartphoneMediaId)

@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.Flow
  */
 suspend fun XesarConnect.queryOfficeModes(
     params: Query.Params? = null,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): QueryList.Response<OfficeMode> {
     return handleQueryListFunction {
         queryListAsync(OfficeMode.QUERY_RESOURCE, params, requestConfig)
@@ -32,7 +32,7 @@ suspend fun XesarConnect.queryOfficeModes(
  */
 suspend fun XesarConnect.queryOfficeModeById(
     id: UUID,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): OfficeMode? {
     return handleQueryElementFunction {
         queryElementAsync(OfficeMode.QUERY_RESOURCE, id, requestConfig)
@@ -51,7 +51,7 @@ suspend fun XesarConnect.queryOfficeModeById(
  */
 fun XesarConnect.queryStreamOfficeMode(
     params: Query.Params? = null,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): Flow<OfficeMode> {
     return queryStream(OfficeMode.QUERY_RESOURCE, params, requestConfig)
 }

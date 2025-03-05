@@ -19,7 +19,7 @@ import kotlinx.coroutines.flow.Flow
  */
 suspend fun XesarConnect.queryInstallationPoints(
     params: Query.Params? = null,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): QueryList.Response<InstallationPoint> {
     return handleQueryListFunction {
         queryListAsync(InstallationPoint.QUERY_RESOURCE, params, requestConfig)
@@ -35,7 +35,7 @@ suspend fun XesarConnect.queryInstallationPoints(
  */
 suspend fun XesarConnect.queryInstallationPointById(
     id: UUID,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): InstallationPoint? {
     return handleQueryElementFunction {
         queryElementAsync(InstallationPoint.QUERY_RESOURCE, id, requestConfig)
@@ -52,14 +52,15 @@ suspend fun XesarConnect.queryInstallationPointById(
 suspend fun XesarConnect.findComponentAsync(
     installationPointId: UUID,
     enable: Boolean? = null,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): SingleEventResult<FindComponentPerformed> {
     return sendCommandAsync<FindComponent, FindComponentPerformed>(
         Topics.Command.FIND_COMPONENT,
         Topics.Event.FIND_COMPONENT_PERFORMED,
         true,
         FindComponent(config.uuidGenerator.generateId(), installationPointId, enable, token),
-        requestConfig)
+        requestConfig,
+    )
 }
 
 /**
@@ -72,14 +73,15 @@ suspend fun XesarConnect.findComponentAsync(
 suspend fun XesarConnect.executeRemoteDisengageAsync(
     installationPointId: UUID,
     extended: Boolean? = null,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): SingleEventResult<RemoteDisengagePerformed> {
     return sendCommandAsync<RemoteDisengage, RemoteDisengagePerformed>(
         Topics.Command.REMOTE_DISENGAGE,
         Topics.Event.REMOTE_DISENGAGE_PERFORMED,
         true,
         RemoteDisengage(config.uuidGenerator.generateId(), installationPointId, extended, token),
-        requestConfig)
+        requestConfig,
+    )
 }
 
 /**
@@ -92,15 +94,20 @@ suspend fun XesarConnect.executeRemoteDisengageAsync(
 suspend fun XesarConnect.executeRemoteDisengagePermanentAsync(
     installationPointId: UUID,
     enable: Boolean? = null,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): SingleEventResult<RemoteDisengagePermanentPerformed> {
     return sendCommandAsync<RemoteDisengagePermanent, RemoteDisengagePermanentPerformed>(
         Topics.Command.REMOTE_DISENGAGE_PERMANENT,
         Topics.Event.REMOTE_DISENGAGE_PERMANENT_PERFORMED,
         true,
         RemoteDisengagePermanent(
-            config.uuidGenerator.generateId(), installationPointId, enable, token),
-        requestConfig)
+            config.uuidGenerator.generateId(),
+            installationPointId,
+            enable,
+            token,
+        ),
+        requestConfig,
+    )
 }
 
 /**
@@ -119,7 +126,7 @@ suspend fun XesarConnect.changeInstallationPointAsync(
     name: String? = null,
     description: String? = null,
     installationId: UUID? = null,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): SingleEventResult<InstallationPointChanged> {
     return sendCommandAsync<ChangeInstallationPointMapi, InstallationPointChanged>(
         Topics.Command.CHANGE_INSTALLATION_POINT,
@@ -132,8 +139,10 @@ suspend fun XesarConnect.changeInstallationPointAsync(
             name,
             description,
             installationId,
-            token),
-        requestConfig)
+            token,
+        ),
+        requestConfig,
+    )
 }
 
 /**
@@ -148,7 +157,7 @@ suspend fun XesarConnect.configureManualOfficeModeAndShopModeMapiAsync(
     shopMode: Boolean? = null,
     manualOfficeMode: Boolean? = null,
     installationPointId: UUID? = null,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): SingleEventResult<InstallationPointChanged> {
     return sendCommandAsync<ConfigureManualOfficeModeAndShopModeMapi, InstallationPointChanged>(
         Topics.Command.CONFIGURE_MANUAL_OFFICE_MODE_AND_SHOP_MODE,
@@ -159,8 +168,10 @@ suspend fun XesarConnect.configureManualOfficeModeAndShopModeMapiAsync(
             shopMode,
             manualOfficeMode,
             installationPointId,
-            token),
-        requestConfig)
+            token,
+        ),
+        requestConfig,
+    )
 }
 
 /**
@@ -173,16 +184,22 @@ suspend fun XesarConnect.configureManualOfficeModeAndShopModeMapiAsync(
 suspend fun XesarConnect.configureMediaUpgradeMapiAsync(
     upgradeMedia: Boolean? = null,
     installationPointId: UUID,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): SingleEventResult<InstallationPointChanged> {
     return sendCommandAsync<ConfigureMediaUpgradeMapi, InstallationPointChanged>(
         Topics.Command.CONFIGURE_MEDIA_UPGRADE,
         Topics.Event.INSTALLATION_POINT_CHANGED,
         true,
         ConfigureMediaUpgradeMapi(
-            config.uuidGenerator.generateId(), upgradeMedia, installationPointId, token),
-        requestConfig)
+            config.uuidGenerator.generateId(),
+            upgradeMedia,
+            installationPointId,
+            token,
+        ),
+        requestConfig,
+    )
 }
+
 /**
  * Configures the office mode time profile of an installation point asynchronously.
  *
@@ -194,15 +211,20 @@ suspend fun XesarConnect.configureMediaUpgradeMapiAsync(
 suspend fun XesarConnect.configureOfficeModeTimeProfileAsync(
     officeModeTimeProfileId: UUID? = null,
     installationPointId: UUID,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): SingleEventResult<InstallationPointChanged> {
     return sendCommandAsync<ConfigureOfficeModeTimeProfileMapi, InstallationPointChanged>(
         Topics.Command.CONFIGURE_OFFICE_MODE_TIME_PROFILE,
         Topics.Event.INSTALLATION_POINT_CHANGED,
         true,
         ConfigureOfficeModeTimeProfileMapi(
-            config.uuidGenerator.generateId(), installationPointId, officeModeTimeProfileId, token),
-        requestConfig)
+            config.uuidGenerator.generateId(),
+            installationPointId,
+            officeModeTimeProfileId,
+            token,
+        ),
+        requestConfig,
+    )
 }
 
 /**
@@ -219,7 +241,7 @@ suspend fun XesarConnect.configureReleaseDurationAsync(
     releaseDurationShort: Int? = null,
     releaseDurationLong: Int? = null,
     installationPointId: UUID,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): SingleEventResult<InstallationPointChanged> {
     return sendCommandAsync<ConfigureReleaseDurationMapi, InstallationPointChanged>(
         Topics.Command.CONFIGURE_RELEASE_DURATION,
@@ -230,8 +252,10 @@ suspend fun XesarConnect.configureReleaseDurationAsync(
             releaseDurationShort,
             releaseDurationLong,
             installationPointId,
-            token),
-        requestConfig)
+            token,
+        ),
+        requestConfig,
+    )
 }
 
 /**
@@ -242,15 +266,17 @@ suspend fun XesarConnect.configureReleaseDurationAsync(
  */
 suspend fun XesarConnect.deleteInstallationPointAsync(
     installationPointId: UUID,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): SingleEventResult<InstallationPointDeleted> {
     return sendCommandAsync<DeleteInstallationPointMapi, InstallationPointDeleted>(
         Topics.Command.DELETE_INSTALLATION_POINT,
         Topics.Event.INSTALLATION_POINT_DELETED,
         true,
         DeleteInstallationPointMapi(config.uuidGenerator.generateId(), installationPointId, token),
-        requestConfig)
+        requestConfig,
+    )
 }
+
 /**
  * Adds an EVVA component asynchronously.
  *
@@ -261,7 +287,7 @@ suspend fun XesarConnect.deleteInstallationPointAsync(
 suspend fun XesarConnect.addEvvaComponentAsync(
     installationPointId: UUID,
     componentType: ComponentType,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): AddEvvaComponentResult {
     val commandId = config.uuidGenerator.generateId()
     val addEvvaComponentResult =
@@ -272,9 +298,13 @@ suspend fun XesarConnect.addEvvaComponentAsync(
             Topics.Event.EVVA_COMPONENT_ADDED,
             false,
             AddEvvaComponentMapi(commandId, installationPointId, componentType, token),
-            requestConfig)
+            requestConfig,
+        )
     return AddEvvaComponentResult(
-        addEvvaComponentResult.first, addEvvaComponentResult.second, addEvvaComponentResult.third)
+        addEvvaComponentResult.first,
+        addEvvaComponentResult.second,
+        addEvvaComponentResult.third,
+    )
 }
 
 /**
@@ -285,15 +315,17 @@ suspend fun XesarConnect.addEvvaComponentAsync(
  */
 suspend fun XesarConnect.forceRemoveEvvaComponentAsync(
     installationPointId: UUID,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): SingleEventResult<EvvaComponentRemoved> {
     return sendCommandAsync<ForceRemoveEvvaComponentMapi, EvvaComponentRemoved>(
         Topics.Command.FORCE_REMOVE_EVVA_COMPONENT,
         Topics.Event.EVVA_COMPONENT_REMOVED,
         true,
         ForceRemoveEvvaComponentMapi(config.uuidGenerator.generateId(), installationPointId, token),
-        requestConfig)
+        requestConfig,
+    )
 }
+
 /**
  * Prepares the removal of an EVVA component asynchronously.
  *
@@ -302,15 +334,19 @@ suspend fun XesarConnect.forceRemoveEvvaComponentAsync(
  */
 suspend fun XesarConnect.prepareRemovalOfEvvaComponentAsync(
     installationPointId: UUID,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): SingleEventResult<EvvaComponentRemovalPrepared> {
     return sendCommandAsync<PrepareRemovalOfEvvaComponentMapi, EvvaComponentRemovalPrepared>(
         Topics.Command.PREPARE_REMOVAL_OF_EVVA_COMPONENT,
         Topics.Event.EVVA_COMPONENT_REMOVAL_PREPARED,
         true,
         PrepareRemovalOfEvvaComponentMapi(
-            config.uuidGenerator.generateId(), installationPointId, token),
-        requestConfig)
+            config.uuidGenerator.generateId(),
+            installationPointId,
+            token,
+        ),
+        requestConfig,
+    )
 }
 
 /**
@@ -321,17 +357,24 @@ suspend fun XesarConnect.prepareRemovalOfEvvaComponentAsync(
  */
 suspend fun XesarConnect.revertPrepareRemovalOfEvvaComponentAsync(
     installationPointId: UUID,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): SingleEventResult<PrepareEvvaComponentRemovalReverted> {
     return sendCommandAsync<
-        RevertPrepareRemovalOfEvvaComponentMapi, PrepareEvvaComponentRemovalReverted>(
+        RevertPrepareRemovalOfEvvaComponentMapi,
+        PrepareEvvaComponentRemovalReverted,
+    >(
         Topics.Command.REVERT_PREPARE_REMOVAL_OF_EVVA_COMPONENT,
         Topics.Event.PREPARE_EVVA_COMPONENT_REMOVAL_REVERTED,
         true,
         RevertPrepareRemovalOfEvvaComponentMapi(
-            config.uuidGenerator.generateId(), installationPointId, token),
-        requestConfig)
+            config.uuidGenerator.generateId(),
+            installationPointId,
+            token,
+        ),
+        requestConfig,
+    )
 }
+
 /**
  * Sets the personal reference duration for an installation point asynchronously.
  *
@@ -342,10 +385,12 @@ suspend fun XesarConnect.revertPrepareRemovalOfEvvaComponentAsync(
 suspend fun XesarConnect.setPersonalReferenceDurationForInstallationPointAsync(
     installationPointId: UUID,
     personalReferenceDuration: PersonalLog,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): SingleEventResult<InstallationPointChanged> {
     return sendCommandAsync<
-        SetPersonalReferenceDurationForInstallationPointMapi, InstallationPointChanged>(
+        SetPersonalReferenceDurationForInstallationPointMapi,
+        InstallationPointChanged,
+    >(
         Topics.Command.SET_PERSONAL_REFERENCE_DURATION_FOR_INSTALLATION_POINT,
         Topics.Event.INSTALLATION_POINT_CHANGED,
         true,
@@ -353,8 +398,10 @@ suspend fun XesarConnect.setPersonalReferenceDurationForInstallationPointAsync(
             config.uuidGenerator.generateId(),
             personalReferenceDuration,
             installationPointId,
-            token),
-        requestConfig)
+            token,
+        ),
+        requestConfig,
+    )
 }
 
 /**
@@ -371,7 +418,7 @@ suspend fun XesarConnect.createInstallationPointAsync(
     componentType: ComponentType,
     installationPointId: UUID,
     linkedInstallationPoints: Map<UUID, CreateInstallationPointMapi.Properties> = emptyMap(),
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): CreateInstallationPointResult {
     val commandId = config.uuidGenerator.generateId()
     val createInstallationPointResult =
@@ -382,12 +429,19 @@ suspend fun XesarConnect.createInstallationPointAsync(
             Topics.Event.EVVA_COMPONENT_ADDED,
             false,
             CreateInstallationPointMapi(
-                componentType, installationPointId, linkedInstallationPoints, commandId, token),
-            requestConfig)
+                componentType,
+                installationPointId,
+                linkedInstallationPoints,
+                commandId,
+                token,
+            ),
+            requestConfig,
+        )
     return CreateInstallationPointResult(
         createInstallationPointResult.first,
         createInstallationPointResult.second,
-        createInstallationPointResult.third)
+        createInstallationPointResult.third,
+    )
 }
 
 /**
@@ -402,7 +456,7 @@ suspend fun XesarConnect.createInstallationPointAsync(
  */
 fun XesarConnect.queryStreamInstallationPoint(
     params: Query.Params? = null,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): Flow<InstallationPoint> {
     return queryStream(InstallationPoint.QUERY_RESOURCE, params, requestConfig)
 }
@@ -417,13 +471,18 @@ fun XesarConnect.queryStreamInstallationPoint(
 suspend fun XesarConnect.configureBluetoothStateAsync(
     installationPointId: UUID,
     bluetoothState: BluetoothState,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): SingleEventResult<InstallationPointChanged> {
     return sendCommandAsync<ConfigureBluetoothStateMapi, InstallationPointChanged>(
         Topics.Command.CONFIGURE_BLUETOOTH_STATE,
         Topics.Event.INSTALLATION_POINT_CHANGED,
         true,
         ConfigureBluetoothStateMapi(
-            config.uuidGenerator.generateId(), bluetoothState, installationPointId, token),
-        requestConfig)
+            config.uuidGenerator.generateId(),
+            bluetoothState,
+            installationPointId,
+            token,
+        ),
+        requestConfig,
+    )
 }

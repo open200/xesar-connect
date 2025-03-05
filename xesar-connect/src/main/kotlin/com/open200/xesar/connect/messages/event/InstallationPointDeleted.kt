@@ -20,5 +20,5 @@ data class InstallationPointDeleted(
     val authorizationProfiles: List<@Serializable(with = UUIDSerializer::class) UUID> = emptyList(),
     val linkedInstallationPoints: List<@Serializable(with = UUIDSerializer::class) UUID> =
         emptyList(),
-    val timeProfile: @Serializable(with = UUIDSerializer::class) UUID? = null
+    val timeProfile: @Serializable(with = UUIDSerializer::class) UUID? = null,
 ) : Event

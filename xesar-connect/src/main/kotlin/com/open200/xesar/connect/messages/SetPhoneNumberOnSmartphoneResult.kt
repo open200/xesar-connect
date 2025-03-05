@@ -17,7 +17,7 @@ import kotlinx.coroutines.awaitAll
 class SetPhoneNumberOnSmartphoneResult(
     val mediumChangedDeferred: Deferred<MediumChanged>,
     val phoneNumberChangedDeferred: Deferred<PhoneNumberChanged>,
-    val apiErrorDeferred: Deferred<Optional<ApiError>>
+    val apiErrorDeferred: Deferred<Optional<ApiError>>,
 ) {
     suspend fun await() = awaitAll(mediumChangedDeferred, phoneNumberChangedDeferred)
 }

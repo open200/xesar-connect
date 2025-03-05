@@ -21,5 +21,5 @@ data class AuthorizationProfileDeleted(
     val timeProfiles: List<@Serializable(with = UUIDSerializer::class) UUID> = emptyList(),
     @Serializable(with = UUIDSerializer::class) val id: UUID,
     val zones: List<@Serializable(with = UUIDSerializer::class) UUID> = emptyList(),
-    @Serializable(with = UUIDSerializer::class) val standardTimeProfile: UUID? = null
+    @Serializable(with = UUIDSerializer::class) val standardTimeProfile: UUID? = null,
 ) : Event

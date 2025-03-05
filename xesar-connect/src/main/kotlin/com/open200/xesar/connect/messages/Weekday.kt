@@ -7,5 +7,5 @@ enum class Weekday {
     THURSDAY,
     FRIDAY,
     SATURDAY,
-    SUNDAY
+    SUNDAY,
 }

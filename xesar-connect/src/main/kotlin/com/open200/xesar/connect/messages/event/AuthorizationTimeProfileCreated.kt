@@ -26,5 +26,5 @@ data class AuthorizationTimeProfileCreated(
     val description: String? = null,
     @Serializable(with = UUIDSerializer::class) val id: UUID,
     val type: TimeProfileType,
-    val validStandardTimeProfile: Boolean
+    val validStandardTimeProfile: Boolean,
 ) : Event

@@ -21,7 +21,9 @@ enum class EventType(val eventNumber: Int, val groupOfEvent: GroupOfEvent) {
     OPENING_EMERGENCY_PROLONGED_BLACKLISTED(0xA008, GroupOfEvent.MediumEvents),
     OPENING_EMERGENCY_INVALID_BLACKLIST_OR_TIME_BLACKLISTED(0xA009, GroupOfEvent.MediumEvents),
     OPENING_EMERGENCY_PROLONGED_INVALID_BLACKLIST_OR_TIME_BLACKLISTED(
-        0xA00A, GroupOfEvent.MediumEvents),
+        0xA00A,
+        GroupOfEvent.MediumEvents,
+    ),
     OPENING_NORMAL_SWITCH(0xC001, GroupOfEvent.AdministrationComponent),
     OPENING_NORMAL_REMOTE(0xB001, GroupOfEvent.AdministrationComponent),
     MANUAL_OPENING_STARTED_REMOTE(0xB003, GroupOfEvent.AdministrationComponent),
@@ -66,5 +68,5 @@ enum class EventType(val eventNumber: Int, val groupOfEvent: GroupOfEvent) {
     ABC_ADD_DELTABLACKLIST(0x030F, GroupOfEvent.MaintenanceComponent),
     UNEXPECTED_ABC_LOG_RESP(0x0C05, GroupOfEvent.MaintenanceComponent),
     IO_INPUT_CHANGED(0x0601, GroupOfEvent.MaintenanceComponent),
-    UNKNOWN(0xFFFF, GroupOfEvent.NoGroup)
+    UNKNOWN(0xFFFF, GroupOfEvent.NoGroup),
 }

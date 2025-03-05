@@ -48,7 +48,8 @@ class SetValidityDurationTest :
                         val commandContent = commandReceived.await()
 
                         commandContent.shouldBeEqual(
-                            "{\"commandId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"validityDuration\":123,\"id\":\"43edc7cf-80ab-4486-86db-41cda2c7a2cd\",\"token\":\"JDJhJDEwJDFSNEljZ2FaRUNXUXBTQ25XN05KbE9qRzFHQ1VjMzkvWTBVcFpZb1M4Vmt0dnJYZ0tJVFBx\"}")
+                            "{\"commandId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"validityDuration\":123,\"id\":\"43edc7cf-80ab-4486-86db-41cda2c7a2cd\",\"token\":\"JDJhJDEwJDFSNEljZ2FaRUNXUXBTQ25XN05KbE9qRzFHQ1VjMzkvWTBVcFpZb1M4Vmt0dnJYZ0tJVFBx\"}"
+                        )
 
                         val apiEvent =
                             ApiEvent(
@@ -56,7 +57,9 @@ class SetValidityDurationTest :
                                 MediumChanged(
                                     id = UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
                                     changedAt = LocalDateTime.parse("2023-08-23T16:25:52.225991"),
-                                    validityDuration = 123))
+                                    validityDuration = 123,
+                                ),
+                            )
 
                         client
                             .publishAsync(Topics.Event.MEDIUM_CHANGED, encodeEvent(apiEvent))
@@ -70,7 +73,9 @@ class SetValidityDurationTest :
                     api.subscribeAsync(Topics(Topics.Event.MEDIUM_CHANGED)).await()
                     val result =
                         api.setValidityDurationAsync(
-                                UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"), 123)
+                                UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
+                                123,
+                            )
                             .await()
                     result.id.shouldBeEqual(UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
                     result.validityDuration?.shouldBeEqual(123)

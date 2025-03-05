@@ -7,5 +7,5 @@ enum class ComponentType {
     Cylinder,
     WallReader,
     WallReader2x,
-    OnlineWallReader
+    OnlineWallReader,
 }

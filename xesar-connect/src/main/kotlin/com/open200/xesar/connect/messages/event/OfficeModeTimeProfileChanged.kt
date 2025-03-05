@@ -27,5 +27,5 @@ data class OfficeModeTimeProfileChanged(
     val name: String,
     val description: String? = null,
     val timePointSeries: List<TimePointSerie> = emptyList(),
-    @Serializable(with = UUIDSerializer::class) val id: UUID
+    @Serializable(with = UUIDSerializer::class) val id: UUID,
 ) : Event

@@ -48,7 +48,10 @@ class QueryCodingStationTest :
                         val queryContent = queryReceived.await()
                         queryContent.shouldBeEqual(
                             QueryTestHelper.createQueryRequest(
-                                CodingStation.QUERY_RESOURCE, requestId))
+                                CodingStation.QUERY_RESOURCE,
+                                requestId,
+                            )
+                        )
 
                         val codingStation =
                             encodeQueryList(
@@ -60,18 +63,26 @@ class QueryCodingStationTest :
                                             CodingStationFixture.codingStationFixture.copy(
                                                 id =
                                                     UUID.fromString(
-                                                        "4509ca29-9fd3-454f-9c98-fc0967fe3f66"),
+                                                        "4509ca29-9fd3-454f-9c98-fc0967fe3f66"
+                                                    ),
                                                 partitionId =
                                                     UUID.fromString(
-                                                        "6b4399a0-21ce-4bee-ba43-e06e291248d2"),
-                                                online = false)),
+                                                        "6b4399a0-21ce-4bee-ba43-e06e291248d2"
+                                                    ),
+                                                online = false,
+                                            ),
+                                        ),
                                         2,
                                         2,
-                                    )))
+                                    ),
+                                )
+                            )
 
                         client
                             .publishAsync(
-                                Topics.Query.result(config.apiProperties.userId), codingStation)
+                                Topics.Query.result(config.apiProperties.userId),
+                                codingStation,
+                            )
                             .await()
                     }
                 }
@@ -115,15 +126,20 @@ class QueryCodingStationTest :
                             QueryTestHelper.createQueryRequest(
                                 CodingStation.QUERY_RESOURCE,
                                 requestId,
-                                CodingStationFixture.codingStationFixture.id))
+                                CodingStationFixture.codingStationFixture.id,
+                            )
+                        )
 
                         val codingStation =
                             encodeQueryElement(
-                                QueryElement(requestId, CodingStationFixture.codingStationFixture))
+                                QueryElement(requestId, CodingStationFixture.codingStationFixture)
+                            )
 
                         client
                             .publishAsync(
-                                Topics.Query.result(config.apiProperties.userId), codingStation)
+                                Topics.Query.result(config.apiProperties.userId),
+                                codingStation,
+                            )
                             .await()
                     }
                 }

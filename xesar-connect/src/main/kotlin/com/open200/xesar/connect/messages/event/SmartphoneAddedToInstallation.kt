@@ -51,5 +51,5 @@ data class SmartphoneAddedToInstallation(
     val phoneNumber: String? = null,
     val validityDuration: Short? = null,
     @Serializable(with = UUIDSerializer::class) val personId: UUID? = null,
-    @Serializable(with = LocalDateTimeSerializer::class) val issuedAt: LocalDateTime? = null
+    @Serializable(with = LocalDateTimeSerializer::class) val issuedAt: LocalDateTime? = null,
 ) : Event

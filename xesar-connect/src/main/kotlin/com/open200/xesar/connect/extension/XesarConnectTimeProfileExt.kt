@@ -23,7 +23,7 @@ import kotlinx.coroutines.flow.Flow
  */
 suspend fun XesarConnect.queryTimeProfiles(
     params: Query.Params? = null,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): QueryList.Response<TimeProfile> {
     return handleQueryListFunction {
         queryListAsync(TimeProfile.QUERY_RESOURCE, params, requestConfig)
@@ -39,7 +39,7 @@ suspend fun XesarConnect.queryTimeProfiles(
  */
 suspend fun XesarConnect.queryTimeProfileById(
     id: UUID,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): TimeProfile? {
     return handleQueryElementFunction {
         queryElementAsync(TimeProfile.QUERY_RESOURCE, id, requestConfig)
@@ -62,7 +62,7 @@ suspend fun XesarConnect.changeAuthorizationTimeProfileAsync(
     description: String? = null,
     timeSeries: List<TimeSerie> = emptyList(),
     exceptionTimeSeries: List<ExceptionTimeSerie> = emptyList(),
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): SingleEventResult<AuthorizationTimeProfileChanged> {
     return sendCommandAsync<ChangeAuthorizationTimeProfileMapi, AuthorizationTimeProfileChanged>(
         Topics.Command.CHANGE_AUTHORIZATION_TIME_PROFILE,
@@ -75,8 +75,10 @@ suspend fun XesarConnect.changeAuthorizationTimeProfileAsync(
             description,
             timeSeries,
             exceptionTimeSeries,
-            token),
-        requestConfig)
+            token,
+        ),
+        requestConfig,
+    )
 }
 
 /**
@@ -99,7 +101,7 @@ suspend fun XesarConnect.changeOfficeModeTimeProfileAsync(
     exceptionTimeSeries: List<ExceptionTimeSerie>? = emptyList(),
     exceptionTimePointSeries: List<ExceptionTimeSerie>? = emptyList(),
     timePointSeries: List<TimePointSerie>? = emptyList(),
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): SingleEventResult<OfficeModeTimeProfileChanged> {
     return sendCommandAsync<ChangeOfficeModeTimeProfileMapi, OfficeModeTimeProfileChanged>(
         Topics.Command.CHANGE_OFFICE_MODE_TIME_PROFILE,
@@ -114,9 +116,12 @@ suspend fun XesarConnect.changeOfficeModeTimeProfileAsync(
             exceptionTimeSeries,
             exceptionTimePointSeries,
             timePointSeries,
-            token),
-        requestConfig)
+            token,
+        ),
+        requestConfig,
+    )
 }
+
 /**
  * Creates an office mode time profile asynchronously.
  *
@@ -137,7 +142,7 @@ suspend fun XesarConnect.createOfficeModeTimeProfileAsync(
     description: String? = null,
     timePointSeries: List<TimePointSerie> = emptyList(),
     timeProfileId: UUID,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): SingleEventResult<OfficeModeTimeProfileCreated> {
     return sendCommandAsync<CreateOfficeModeTimeProfileMapi, OfficeModeTimeProfileCreated>(
         Topics.Command.CREATE_OFFICE_MODE_TIME_PROFILE,
@@ -152,8 +157,10 @@ suspend fun XesarConnect.createOfficeModeTimeProfileAsync(
             description,
             timePointSeries,
             timeProfileId,
-            token),
-        requestConfig)
+            token,
+        ),
+        requestConfig,
+    )
 }
 
 /**
@@ -164,14 +171,15 @@ suspend fun XesarConnect.createOfficeModeTimeProfileAsync(
  */
 suspend fun XesarConnect.deleteOfficeModeTimeProfileAsync(
     timeProfileId: UUID,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): SingleEventResult<OfficeModeTimeProfileDeleted> {
     return sendCommandAsync<DeleteOfficeModeTimeProfileMapi, OfficeModeTimeProfileDeleted>(
         Topics.Command.DELETE_OFFICE_MODE_TIME_PROFILE,
         Topics.Event.OFFICE_MODE_TIME_PROFILE_DELETED,
         true,
         DeleteOfficeModeTimeProfileMapi(config.uuidGenerator.generateId(), timeProfileId, token),
-        requestConfig)
+        requestConfig,
+    )
 }
 
 /**
@@ -190,7 +198,7 @@ suspend fun XesarConnect.createAuthorizationTimeProfileAsync(
     name: String,
     description: String? = null,
     timeProfileId: UUID,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): SingleEventResult<AuthorizationTimeProfileCreated> {
     return sendCommandAsync<CreateAuthorizationTimeProfileMapi, AuthorizationTimeProfileCreated>(
         Topics.Command.CREATE_AUTHORIZATION_TIME_PROFILE,
@@ -203,9 +211,12 @@ suspend fun XesarConnect.createAuthorizationTimeProfileAsync(
             name,
             description,
             timeProfileId,
-            token),
-        requestConfig)
+            token,
+        ),
+        requestConfig,
+    )
 }
+
 /**
  * Deletes an authorization time profile asynchronously.
  *
@@ -214,14 +225,15 @@ suspend fun XesarConnect.createAuthorizationTimeProfileAsync(
  */
 suspend fun XesarConnect.deleteAuthorizationTimeProfileAsync(
     timeProfileId: UUID,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): SingleEventResult<AuthorizationTimeProfileDeleted> {
     return sendCommandAsync<DeleteAuthorizationTimeProfileMapi, AuthorizationTimeProfileDeleted>(
         Topics.Command.DELETE_AUTHORIZATION_TIME_PROFILE,
         Topics.Event.AUTHORIZATION_TIME_PROFILE_DELETED,
         true,
         DeleteAuthorizationTimeProfileMapi(config.uuidGenerator.generateId(), timeProfileId, token),
-        requestConfig)
+        requestConfig,
+    )
 }
 
 /**
@@ -236,7 +248,7 @@ suspend fun XesarConnect.deleteAuthorizationTimeProfileAsync(
  */
 fun XesarConnect.queryStreamTimeProfile(
     params: Query.Params? = null,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): Flow<TimeProfile> {
     return queryStream(TimeProfile.QUERY_RESOURCE, params, requestConfig)
 }

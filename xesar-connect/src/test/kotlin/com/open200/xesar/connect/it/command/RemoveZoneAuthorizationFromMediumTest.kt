@@ -47,19 +47,23 @@ class RemoveZoneAuthorizationFromMediumTest :
                         val commandContent = commandReceived.await()
 
                         commandContent.shouldBeEqual(
-                            "{\"commandId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"authorization\":\"8c7128d4-a30f-4aad-b5d2-d7b975c5cf8f\",\"id\":\"43edc7cf-80ab-4486-86db-41cda2c7a2cd\",\"token\":\"JDJhJDEwJDFSNEljZ2FaRUNXUXBTQ25XN05KbE9qRzFHQ1VjMzkvWTBVcFpZb1M4Vmt0dnJYZ0tJVFBx\"}")
+                            "{\"commandId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"authorization\":\"8c7128d4-a30f-4aad-b5d2-d7b975c5cf8f\",\"id\":\"43edc7cf-80ab-4486-86db-41cda2c7a2cd\",\"token\":\"JDJhJDEwJDFSNEljZ2FaRUNXUXBTQ25XN05KbE9qRzFHQ1VjMzkvWTBVcFpZb1M4Vmt0dnJYZ0tJVFBx\"}"
+                        )
 
                         val apiEvent =
                             ApiEvent(
                                 UUID.fromString("00000000-1281-40ae-89d7-5c541d77a757"),
                                 IndividualAuthorizationsDeleted(
                                     listOf(UUID.fromString("8c7128d4-a30f-4aad-b5d2-d7b975c5cf8f")),
-                                    UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd")))
+                                    UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
+                                ),
+                            )
 
                         client
                             .publishAsync(
                                 Topics.Event.INDIVIDUAL_AUTHORIZATIONS_DELETED,
-                                encodeEvent(apiEvent))
+                                encodeEvent(apiEvent),
+                            )
                             .await()
                     }
                 }
@@ -72,12 +76,15 @@ class RemoveZoneAuthorizationFromMediumTest :
                     val result =
                         api.removeZoneAuthorizationFromMediumAsync(
                                 UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
-                                UUID.fromString("8c7128d4-a30f-4aad-b5d2-d7b975c5cf8f"))
+                                UUID.fromString("8c7128d4-a30f-4aad-b5d2-d7b975c5cf8f"),
+                            )
                             .await()
                     result.mediumId.shouldBeEqual(
-                        UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
+                        UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd")
+                    )
                     result.individualAuthorizations.shouldBeEqual(
-                        listOf(UUID.fromString("8c7128d4-a30f-4aad-b5d2-d7b975c5cf8f")))
+                        listOf(UUID.fromString("8c7128d4-a30f-4aad-b5d2-d7b975c5cf8f"))
+                    )
                 }
             }
         }

@@ -13,7 +13,7 @@ import kotlinx.coroutines.awaitAll
 class AssignAuthorizationProfileToMediumResult(
     val mediumChangedDeferred: Deferred<MediumChanged>,
     val mediumAuthorizationProfileChangedDeferred: Deferred<MediumAuthorizationProfileChanged>,
-    val apiErrorDeferred: Deferred<Optional<ApiError>>
+    val apiErrorDeferred: Deferred<Optional<ApiError>>,
 ) {
     suspend fun await() = awaitAll(mediumChangedDeferred, mediumAuthorizationProfileChangedDeferred)
 }

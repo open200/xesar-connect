@@ -13,5 +13,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class TimePointSerie(
     val days: List<Weekday>? = null,
-    val points: List<@Serializable(with = LocalTimeSerializer::class) LocalTime>? = null
+    val points: List<@Serializable(with = LocalTimeSerializer::class) LocalTime>? = null,
 )

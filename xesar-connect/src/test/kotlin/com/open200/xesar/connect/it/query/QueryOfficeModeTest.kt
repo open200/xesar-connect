@@ -47,8 +47,8 @@ class QueryOfficeModeTest :
                         val queryContent = queryReceived.await()
 
                         queryContent.shouldBeEqual(
-                            QueryTestHelper.createQueryRequest(
-                                OfficeMode.QUERY_RESOURCE, requestId))
+                            QueryTestHelper.createQueryRequest(OfficeMode.QUERY_RESOURCE, requestId)
+                        )
 
                         val officeModes =
                             encodeQueryList(
@@ -60,16 +60,22 @@ class QueryOfficeModeTest :
                                             OfficeModeFixture.officeModeFixture.copy(
                                                 id =
                                                     UUID.fromString(
-                                                        "894852cf-ca33-4734-a4a9-008eeeaeb005"),
+                                                        "894852cf-ca33-4734-a4a9-008eeeaeb005"
+                                                    ),
                                                 timeProfileName = "timeProfileName2",
-                                            )),
+                                            ),
+                                        ),
                                         2,
                                         2,
-                                    )))
+                                    ),
+                                )
+                            )
 
                         client
                             .publishAsync(
-                                Topics.Query.result(config.apiProperties.userId), officeModes)
+                                Topics.Query.result(config.apiProperties.userId),
+                                officeModes,
+                            )
                             .await()
                     }
                 }
@@ -114,15 +120,20 @@ class QueryOfficeModeTest :
                             QueryTestHelper.createQueryRequest(
                                 OfficeMode.QUERY_RESOURCE,
                                 requestId,
-                                OfficeModeFixture.officeModeFixture.id))
+                                OfficeModeFixture.officeModeFixture.id,
+                            )
+                        )
 
                         val officeMode =
                             encodeQueryElement(
-                                QueryElement(requestId, OfficeModeFixture.officeModeFixture))
+                                QueryElement(requestId, OfficeModeFixture.officeModeFixture)
+                            )
 
                         client
                             .publishAsync(
-                                Topics.Query.result(config.apiProperties.userId), officeMode)
+                                Topics.Query.result(config.apiProperties.userId),
+                                officeMode,
+                            )
                             .await()
                     }
                 }
@@ -134,7 +145,8 @@ class QueryOfficeModeTest :
                     val result = api.queryOfficeModeById(OfficeModeFixture.officeModeFixture.id)
                     result!!.id.shouldBeEqual(OfficeModeFixture.officeModeFixture.id)
                     result.installationPointId.shouldBeEqual(
-                        UUID.fromString("39b25462-2580-44dc-b0a8-22fd6c03a023"))
+                        UUID.fromString("39b25462-2580-44dc-b0a8-22fd6c03a023")
+                    )
                 }
             }
         }

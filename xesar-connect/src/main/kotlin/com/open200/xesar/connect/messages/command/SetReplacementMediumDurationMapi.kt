@@ -15,5 +15,5 @@ import kotlinx.serialization.Serializable
 data class SetReplacementMediumDurationMapi(
     override val commandId: @Serializable(with = UUIDSerializer::class) UUID,
     val replacementMediumDuration: Short,
-    val token: String
+    val token: String,
 ) : Command

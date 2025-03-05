@@ -17,6 +17,7 @@ class Topics(vararg val topics: String) {
          */
         const val ALL_TOPICS = "xs3/1/#"
     }
+
     class Event {
 
         companion object {
@@ -199,13 +200,14 @@ class Topics(vararg val topics: String) {
             fun error(userId: UUID): String {
                 return "xs3/1/$userId/err"
             }
+
             /**
              * MQTT topic string for the "AccessProtocolEvent" event for a specific [GroupOfEvent]
              * and [EventType]
              */
             fun accessProtocolEventTopic(eventType: EventType): String {
-                return "xs3/1/ase/%s/%04X".format(
-                    eventType.groupOfEvent.name, eventType.eventNumber)
+                return "xs3/1/ase/%s/%04X"
+                    .format(eventType.groupOfEvent.name, eventType.eventNumber)
             }
 
             /**

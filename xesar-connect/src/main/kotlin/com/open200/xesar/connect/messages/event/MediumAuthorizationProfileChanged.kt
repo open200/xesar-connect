@@ -18,5 +18,5 @@ import kotlinx.serialization.Serializable
 data class MediumAuthorizationProfileChanged(
     var id: @Serializable(with = UUIDSerializer::class) UUID,
     var newAuthorizationProfileId: @Serializable(with = UUIDSerializer::class) UUID? = null,
-    var oldAuthorizationProfileId: @Serializable(with = UUIDSerializer::class) UUID? = null
+    var oldAuthorizationProfileId: @Serializable(with = UUIDSerializer::class) UUID? = null,
 ) : Event

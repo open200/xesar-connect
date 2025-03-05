@@ -24,7 +24,7 @@ import kotlinx.coroutines.flow.Flow
  */
 suspend fun XesarConnect.queryIdentificationMediums(
     params: Query.Params? = null,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): QueryList.Response<IdentificationMedium> {
     return handleQueryListFunction {
         queryListAsync(IdentificationMedium.QUERY_RESOURCE, params, requestConfig)
@@ -40,7 +40,7 @@ suspend fun XesarConnect.queryIdentificationMediums(
  */
 suspend fun XesarConnect.queryIdentificationMediumById(
     id: UUID,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): IdentificationMedium? {
     return handleQueryElementFunction {
         queryElementAsync(IdentificationMedium.QUERY_RESOURCE, id, requestConfig)
@@ -57,15 +57,15 @@ suspend fun XesarConnect.queryIdentificationMediumById(
 suspend fun XesarConnect.queryIdentificationMediumByMediumIdentifier(
     mediumIdentifierValue: Int,
     params: Query.Params? = null,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): IdentificationMedium? {
     val filters =
-        (params?.filters
-            ?: emptyList()) +
+        (params?.filters ?: emptyList()) +
             Query.Params.Filter(
                 field = "mediumIdentifier",
                 value = mediumIdentifierValue.toString(),
-                type = FilterType.EQ)
+                type = FilterType.EQ,
+            )
 
     val paramsMedium =
         Query.Params(
@@ -73,18 +73,23 @@ suspend fun XesarConnect.queryIdentificationMediumByMediumIdentifier(
             pageOffset = params?.pageOffset,
             language = params?.language,
             sort = params?.sort,
-            filters = filters)
+            filters = filters,
+        )
 
     val queryListMedia = handleQueryListFunction {
         queryListAsync<IdentificationMedium>(
-            IdentificationMedium.QUERY_RESOURCE, paramsMedium, requestConfig)
+            IdentificationMedium.QUERY_RESOURCE,
+            paramsMedium,
+            requestConfig,
+        )
     }
 
     return when {
         queryListMedia.data.isEmpty() -> null
         queryListMedia.data.size > 1 ->
             throw MediumListSizeException(
-                "Expected exactly one element in the list with mediumIdentifier $mediumIdentifierValue, but found ${queryListMedia.data.size} elements")
+                "Expected exactly one element in the list with mediumIdentifier $mediumIdentifierValue, but found ${queryListMedia.data.size} elements"
+            )
         else -> queryListMedia.data.first()
     }
 }
@@ -99,16 +104,23 @@ suspend fun XesarConnect.queryIdentificationMediumByMediumIdentifier(
 suspend fun XesarConnect.addInstallationPointAuthorizationToMediumAsync(
     mediumId: UUID,
     authorization: AuthorizationData,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): SingleEventResult<IndividualAuthorizationsAddedToMedium> {
     return sendCommandAsync<
-        AddInstallationPointAuthorizationToMediumMapi, IndividualAuthorizationsAddedToMedium>(
+        AddInstallationPointAuthorizationToMediumMapi,
+        IndividualAuthorizationsAddedToMedium,
+    >(
         Topics.Command.ADD_INSTALLATION_POINT_AUTHORIZATION_TO_MEDIUM,
         Topics.Event.INDIVIDUAL_AUTHORIZATIONS_ADDED_TO_MEDIUM,
         true,
         AddInstallationPointAuthorizationToMediumMapi(
-            config.uuidGenerator.generateId(), mediumId, authorization, token),
-        requestConfig)
+            config.uuidGenerator.generateId(),
+            mediumId,
+            authorization,
+            token,
+        ),
+        requestConfig,
+    )
 }
 
 /**
@@ -121,17 +133,25 @@ suspend fun XesarConnect.addInstallationPointAuthorizationToMediumAsync(
 suspend fun XesarConnect.addZoneAuthorizationToMediumAsync(
     mediumId: UUID,
     authorizationData: AuthorizationData,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): SingleEventResult<IndividualAuthorizationsAddedToMedium> {
     return sendCommandAsync<
-        AddZoneAuthorizationToMediumMapi, IndividualAuthorizationsAddedToMedium>(
+        AddZoneAuthorizationToMediumMapi,
+        IndividualAuthorizationsAddedToMedium,
+    >(
         Topics.Command.ADD_ZONE_AUTHORIZATION_TO_MEDIUM,
         Topics.Event.INDIVIDUAL_AUTHORIZATIONS_ADDED_TO_MEDIUM,
         true,
         AddZoneAuthorizationToMediumMapi(
-            config.uuidGenerator.generateId(), mediumId, authorizationData, token),
-        requestConfig)
+            config.uuidGenerator.generateId(),
+            mediumId,
+            authorizationData,
+            token,
+        ),
+        requestConfig,
+    )
 }
+
 /**
  * Assigns a person to a medium asynchronously.
  *
@@ -142,14 +162,15 @@ suspend fun XesarConnect.addZoneAuthorizationToMediumAsync(
 suspend fun XesarConnect.assignPersonToMediumAsync(
     mediumId: UUID,
     personId: UUID,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): SingleEventResult<MediumPersonChanged> {
     return sendCommandAsync<AssignPersonToMediumMapi, MediumPersonChanged>(
         Topics.Command.ASSIGN_PERSON_TO_MEDIUM,
         Topics.Event.MEDIUM_PERSON_CHANGED,
         true,
         AssignPersonToMediumMapi(config.uuidGenerator.generateId(), mediumId, personId, token),
-        requestConfig)
+        requestConfig,
+    )
 }
 
 /**
@@ -160,14 +181,15 @@ suspend fun XesarConnect.assignPersonToMediumAsync(
  */
 suspend fun XesarConnect.lockMediumAsync(
     mediumId: UUID,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): SingleEventResult<MediumLocked> {
     return sendCommandAsync<LockMediumMapi, MediumLocked>(
         Topics.Command.LOCK_MEDIUM,
         Topics.Event.MEDIUM_LOCKED,
         true,
         LockMediumMapi(config.uuidGenerator.generateId(), mediumId, token),
-        requestConfig)
+        requestConfig,
+    )
 }
 
 /**
@@ -180,17 +202,25 @@ suspend fun XesarConnect.lockMediumAsync(
 suspend fun XesarConnect.removeInstallationPointAuthorizationFromMediumAsync(
     mediumId: UUID,
     installationPointAuthorization: UUID,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): SingleEventResult<IndividualAuthorizationsDeleted> {
     return sendCommandAsync<
-        RemoveInstallationPointAuthorizationFromMediumMapi, IndividualAuthorizationsDeleted>(
+        RemoveInstallationPointAuthorizationFromMediumMapi,
+        IndividualAuthorizationsDeleted,
+    >(
         Topics.Command.REMOVE_INSTALLATION_POINT_AUTHORIZATION_FROM_MEDIUM,
         Topics.Event.INDIVIDUAL_AUTHORIZATIONS_DELETED,
         true,
         RemoveInstallationPointAuthorizationFromMediumMapi(
-            config.uuidGenerator.generateId(), installationPointAuthorization, mediumId, token),
-        requestConfig)
+            config.uuidGenerator.generateId(),
+            installationPointAuthorization,
+            mediumId,
+            token,
+        ),
+        requestConfig,
+    )
 }
+
 /**
  * Removes an individual authorization for a zone from a medium asynchronously.
  *
@@ -201,15 +231,20 @@ suspend fun XesarConnect.removeInstallationPointAuthorizationFromMediumAsync(
 suspend fun XesarConnect.removeZoneAuthorizationFromMediumAsync(
     mediumId: UUID,
     zoneAuthorization: UUID,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): SingleEventResult<IndividualAuthorizationsDeleted> {
     return sendCommandAsync<RemoveZoneAuthorizationFromMediumMapi, IndividualAuthorizationsDeleted>(
         Topics.Command.REMOVE_ZONE_AUTHORIZATION_FROM_MEDIUM,
         Topics.Event.INDIVIDUAL_AUTHORIZATIONS_DELETED,
         true,
         RemoveZoneAuthorizationFromMediumMapi(
-            config.uuidGenerator.generateId(), zoneAuthorization, mediumId, token),
-        requestConfig)
+            config.uuidGenerator.generateId(),
+            zoneAuthorization,
+            mediumId,
+            token,
+        ),
+        requestConfig,
+    )
 }
 
 /**
@@ -223,15 +258,17 @@ suspend fun XesarConnect.removeZoneAuthorizationFromMediumAsync(
 suspend fun XesarConnect.setAccessBeginAtAsync(
     mediumId: UUID,
     accessBeginAt: LocalDateTime?,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): SingleEventResult<MediumChanged> {
     return sendCommandAsync<SetAccessBeginAtMapi, MediumChanged>(
         Topics.Command.SET_ACCESS_BEGIN_AT,
         Topics.Event.MEDIUM_CHANGED,
         true,
         SetAccessBeginAtMapi(config.uuidGenerator.generateId(), accessBeginAt, mediumId, token),
-        requestConfig)
+        requestConfig,
+    )
 }
+
 /**
  * Sets the access end of an identification medium asynchronously.
  *
@@ -242,14 +279,15 @@ suspend fun XesarConnect.setAccessBeginAtAsync(
 suspend fun XesarConnect.setAccessEndAtAsync(
     mediumId: UUID,
     accessEndAt: LocalDateTime? = null,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): SingleEventResult<MediumChanged> {
     return sendCommandAsync<SetAccessEndAtMapi, MediumChanged>(
         Topics.Command.SET_ACCESS_END_AT,
         Topics.Event.MEDIUM_CHANGED,
         true,
         SetAccessEndAtMapi(config.uuidGenerator.generateId(), accessEndAt, mediumId, token),
-        requestConfig)
+        requestConfig,
+    )
 }
 
 /**
@@ -262,16 +300,22 @@ suspend fun XesarConnect.setAccessEndAtAsync(
 suspend fun XesarConnect.setDisengagePeriodOnMediumAsync(
     mediumId: UUID,
     disengagePeriod: DisengagePeriod,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): SingleEventResult<MediumChanged> {
     return sendCommandAsync<SetDisengagePeriodOnMediumMapi, MediumChanged>(
         Topics.Command.SET_DISENGAGE_PERIOD_ON_MEDIUM,
         Topics.Event.MEDIUM_CHANGED,
         true,
         SetDisengagePeriodOnMediumMapi(
-            config.uuidGenerator.generateId(), disengagePeriod, mediumId, token),
-        requestConfig)
+            config.uuidGenerator.generateId(),
+            disengagePeriod,
+            mediumId,
+            token,
+        ),
+        requestConfig,
+    )
 }
+
 /**
  * Sets the label on a medium asynchronously.
  *
@@ -282,15 +326,17 @@ suspend fun XesarConnect.setDisengagePeriodOnMediumAsync(
 suspend fun XesarConnect.setLabelOnMediumAsync(
     mediumId: UUID,
     label: String,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): SingleEventResult<MediumChanged> {
     return sendCommandAsync<SetLabelOnMediumMapi, MediumChanged>(
         Topics.Command.SET_LABEL_ON_MEDIUM,
         Topics.Event.MEDIUM_CHANGED,
         true,
         SetLabelOnMediumMapi(config.uuidGenerator.generateId(), mediumId, label, token),
-        requestConfig)
+        requestConfig,
+    )
 }
+
 /**
  * Sets the validity duration on a medium asynchronously.
  *
@@ -301,15 +347,20 @@ suspend fun XesarConnect.setLabelOnMediumAsync(
 suspend fun XesarConnect.setValidityDurationAsync(
     mediumId: UUID,
     validityDuration: Short,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): SingleEventResult<MediumChanged> {
     return sendCommandAsync<SetValidityDurationMapi, MediumChanged>(
         Topics.Command.SET_VALIDITY_DURATION,
         Topics.Event.MEDIUM_CHANGED,
         true,
         SetValidityDurationMapi(
-            config.uuidGenerator.generateId(), validityDuration, mediumId, token),
-        requestConfig)
+            config.uuidGenerator.generateId(),
+            validityDuration,
+            mediumId,
+            token,
+        ),
+        requestConfig,
+    )
 }
 
 /**
@@ -325,17 +376,25 @@ suspend fun XesarConnect.setValidityDurationAsync(
 suspend fun XesarConnect.withdrawAuthorizationProfileFromMediumAsync(
     mediumId: UUID,
     authorizationProfileId: UUID? = null,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): SingleEventResult<AuthorizationProfileWithdrawnFromMedium> {
     return sendCommandAsync<
-        WithdrawAuthorizationProfileFromMediumMapi, AuthorizationProfileWithdrawnFromMedium>(
+        WithdrawAuthorizationProfileFromMediumMapi,
+        AuthorizationProfileWithdrawnFromMedium,
+    >(
         Topics.Command.WITHDRAW_AUTHORIZATION_PROFILE_FROM_MEDIUM,
         Topics.Event.AUTHORIZATION_PROFILE_WITHDRAWN_FROM_MEDIUM,
         true,
         WithdrawAuthorizationProfileFromMediumMapi(
-            config.uuidGenerator.generateId(), authorizationProfileId, mediumId, token),
-        requestConfig)
+            config.uuidGenerator.generateId(),
+            authorizationProfileId,
+            mediumId,
+            token,
+        ),
+        requestConfig,
+    )
 }
+
 /**
  * Assigns an authorization profile to a medium asynchronously.
  *
@@ -346,28 +405,36 @@ suspend fun XesarConnect.withdrawAuthorizationProfileFromMediumAsync(
 suspend fun XesarConnect.assignAuthorizationProfileToMediumAsync(
     mediumId: UUID,
     authorizationProfileId: UUID? = null,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): AssignAuthorizationProfileToMediumResult {
     val commandId = config.uuidGenerator.generateId()
     val assignAuthorizationProfileToMediumResult =
         sendCommandAsync<
             AssignAuthorizationProfileToMediumMapi,
             MediumChanged,
-            MediumAuthorizationProfileChanged>(
+            MediumAuthorizationProfileChanged,
+        >(
             Topics.Command.ASSIGN_AUTHORIZATION_PROFILE_TO_MEDIUM,
             Topics.Event.MEDIUM_CHANGED,
             false,
             Topics.Event.MEDIUM_AUTHORIZATION_PROFILE_CHANGED,
             false,
             AssignAuthorizationProfileToMediumMapi(
-                commandId, authorizationProfileId, mediumId, token),
-            requestConfig)
+                commandId,
+                authorizationProfileId,
+                mediumId,
+                token,
+            ),
+            requestConfig,
+        )
 
     return AssignAuthorizationProfileToMediumResult(
         assignAuthorizationProfileToMediumResult.first,
         assignAuthorizationProfileToMediumResult.second,
-        assignAuthorizationProfileToMediumResult.third)
+        assignAuthorizationProfileToMediumResult.third,
+    )
 }
+
 /**
  * Requests to add a medium to an installation asynchronously.
  *
@@ -391,19 +458,28 @@ suspend fun XesarConnect.requestToAddMediumToInstallationAsync(
         sendCommandAsync<
             RequestAddMediumToInstallationMapi,
             AddMediumToInstallationRequested,
-            MediumAddedToInstallation>(
+            MediumAddedToInstallation,
+        >(
             Topics.Command.REQUEST_ADD_MEDIUM_TO_INSTALLATION,
             Topics.Event.ADD_MEDIUM_TO_INSTALLATION_REQUESTED,
             true,
             Topics.Event.MEDIUM_ADDED_TO_INSTALLATION,
             true,
             RequestAddMediumToInstallationMapi(
-                hardwareId, mediumId, terminalId, label, commandId, token),
-            requestConfig)
+                hardwareId,
+                mediumId,
+                terminalId,
+                label,
+                commandId,
+                token,
+            ),
+            requestConfig,
+        )
     return RequestAddMediumToInstallationResult(
         requestAddMediumToInstallationResult.first,
         requestAddMediumToInstallationResult.second,
-        requestAddMediumToInstallationResult.third)
+        requestAddMediumToInstallationResult.third,
+    )
 }
 
 /**
@@ -418,7 +494,7 @@ suspend fun XesarConnect.requestToAddMediumToInstallationAsync(
  */
 fun XesarConnect.queryStreamIdentificationMedium(
     params: Query.Params? = null,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): Flow<IdentificationMedium> {
     return queryStream(IdentificationMedium.QUERY_RESOURCE, params, requestConfig)
 }

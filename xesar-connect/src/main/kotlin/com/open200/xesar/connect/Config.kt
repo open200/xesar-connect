@@ -34,7 +34,7 @@ data class Config(
     val uuidGenerator: IRequestIdGenerator = DefaultRequestIdGenerator(),
     val mqttConnectOptions: MqttConnectOptions = MqttConnectOptions(),
     val logoutOnClose: Boolean = true,
-    val dispatcherForCommandsAndCleanUp: CoroutineDispatcher = Dispatchers.IO
+    val dispatcherForCommandsAndCleanUp: CoroutineDispatcher = Dispatchers.IO,
 ) {
     /**
      * @property hostname The hostname of the API.
@@ -79,7 +79,7 @@ data class Config(
         val isAutomaticReconnect: Boolean = true,
         val maxInflight: Int = 500,
         val keepAliveInterval: Int = 600,
-        val securityProtocol: String = "TLSv1.3"
+        val securityProtocol: String = "TLSv1.3",
     )
 
     companion object {
@@ -107,10 +107,14 @@ data class Config(
 
             val apiProperties =
                 readTokenProperties(
-                    archiveOptions.apiPropertiesFileName, zipFile, port ?: DEFAULT_PORT)
+                    archiveOptions.apiPropertiesFileName,
+                    zipFile,
+                    port ?: DEFAULT_PORT,
+                )
 
             logger.debug(
-                "ApiProperties for host: ${apiProperties.hostname} on port: ${apiProperties.port} loaded.")
+                "ApiProperties for host: ${apiProperties.hostname} on port: ${apiProperties.port} loaded."
+            )
 
             return Config(
                 apiProperties =
@@ -118,22 +122,26 @@ data class Config(
                         hostname = apiProperties.hostname,
                         port = apiProperties.port,
                         userId = apiProperties.userId,
-                        token = apiProperties.token),
+                        token = apiProperties.token,
+                    ),
                 mqttCertificates =
                     MqttCertificates(
                         caCertificate =
                             readX509CertificateFromZip(archiveOptions.caCertificateName, zipFile),
                         clientCertificate =
                             readX509CertificateFromZip(
-                                archiveOptions.clientCertificateName, zipFile),
-                        clientKey = readKeyPairWithZip(archiveOptions.clientKeyName, zipFile)),
+                                archiveOptions.clientCertificateName,
+                                zipFile,
+                            ),
+                        clientKey = readKeyPairWithZip(archiveOptions.clientKeyName, zipFile),
+                    ),
             )
         }
 
         private fun readTokenProperties(
             fileName: String,
             zipFile: ZipFile,
-            port: String
+            port: String,
         ): ApiProperties {
             val fileHeader = zipFile.getEntry(fileName)
 
@@ -167,18 +175,19 @@ data class Config(
         fun configureFromPaths(
             caCertificatePath: Path,
             clientCertificatePath: Path,
-            clientKeyPath: Path
+            clientKeyPath: Path,
         ): MqttCertificates {
 
             return MqttCertificates(
                 caCertificate = readX509CertificateFromPath("$caCertificatePath"),
                 clientCertificate = readX509CertificateFromPath("$clientCertificatePath"),
-                clientKey = readKeyPairWithPath("$clientKeyPath"))
+                clientKey = readKeyPairWithPath("$clientKeyPath"),
+            )
         }
 
         private fun readX509CertificateFromZip(
             fileName: String,
-            zipFile: ZipFile
+            zipFile: ZipFile,
         ): X509Certificate {
 
             val fileHeader = zipFile.getEntry(fileName)

@@ -47,17 +47,21 @@ class RemoteDisengageTest :
                         val commandContent = commandReceived.await()
 
                         commandContent.shouldBeEqual(
-                            "{\"commandId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"installationPointId\":\"${InstallationPointFixture.installationPointFixture.id}\",\"extended\":true,\"token\":\"${MosquittoContainer.TOKEN}\"}")
+                            "{\"commandId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"installationPointId\":\"${InstallationPointFixture.installationPointFixture.id}\",\"extended\":true,\"token\":\"${MosquittoContainer.TOKEN}\"}"
+                        )
 
                         val apiEvent =
                             ApiEvent(
                                 UUID.fromString("00000000-1281-40ae-89d7-5c541d77a757"),
-                                RemoteDisengagePerformed("ok"))
+                                RemoteDisengagePerformed("ok"),
+                            )
                         val remoteDisengagePerformed = encodeEvent(apiEvent)
 
                         client
                             .publishAsync(
-                                Topics.Event.REMOTE_DISENGAGE_PERFORMED, remoteDisengagePerformed)
+                                Topics.Event.REMOTE_DISENGAGE_PERFORMED,
+                                remoteDisengagePerformed,
+                            )
                             .await()
                     }
                 }
@@ -68,7 +72,9 @@ class RemoteDisengageTest :
                     api.subscribeAsync(Topics(Topics.Event.REMOTE_DISENGAGE_PERFORMED)).await()
                     val result =
                         api.executeRemoteDisengageAsync(
-                                InstallationPointFixture.installationPointFixture.id, true)
+                                InstallationPointFixture.installationPointFixture.id,
+                                true,
+                            )
                             .await()
 
                     result.ok.shouldBeEqual("ok")

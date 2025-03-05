@@ -29,5 +29,5 @@ data class AuthorizationProfileWithdrawnFromMedium(
     val validUntil: @Serializable(with = LocalDateTimeSerializer::class) LocalDateTime? = null,
     val id: @Serializable(with = UUIDSerializer::class) UUID,
     val validFrom: @Serializable(with = LocalDateTimeSerializer::class) LocalDateTime? = null,
-    val accessEndAt: @Serializable(with = LocalDateTimeSerializer::class) LocalDateTime? = null
+    val accessEndAt: @Serializable(with = LocalDateTimeSerializer::class) LocalDateTime? = null,
 ) : Event

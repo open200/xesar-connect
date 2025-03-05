@@ -15,6 +15,6 @@ data class PersonalLog(val logMode: PersonalLogModes? = null, val days: Int? = n
     enum class PersonalLogModes {
         dontSave,
         saveUnlimited,
-        saveForDays
+        saveForDays,
     }
 }

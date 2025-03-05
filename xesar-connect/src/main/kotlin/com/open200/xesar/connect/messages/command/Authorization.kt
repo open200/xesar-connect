@@ -13,5 +13,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class Authorization(
     @Serializable(with = UUIDSerializer::class) val id: UUID,
-    @Serializable(with = UUIDSerializer::class) val timeProfileId: UUID? = null
+    @Serializable(with = UUIDSerializer::class) val timeProfileId: UUID? = null,
 )

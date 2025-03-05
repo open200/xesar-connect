@@ -18,5 +18,5 @@ data class ConfigureBluetoothStateMapi(
     override val commandId: @Serializable(with = UUIDSerializer::class) UUID,
     val bluetoothState: BluetoothState,
     val id: @Serializable(with = UUIDSerializer::class) UUID,
-    val token: String
+    val token: String,
 ) : Command

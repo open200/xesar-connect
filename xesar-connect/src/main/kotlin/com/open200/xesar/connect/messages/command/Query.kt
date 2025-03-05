@@ -21,7 +21,7 @@ class Query(
     @Serializable(with = UUIDSerializer::class) val requestId: UUID,
     val token: String,
     @Serializable(with = UUIDSerializer::class) val id: UUID?,
-    val params: Params? = null
+    val params: Params? = null,
 ) : Message {
 
     /**
@@ -39,7 +39,7 @@ class Query(
         val pageLimit: Int? = null,
         val sort: String? = null,
         val language: String? = null,
-        val filters: List<Filter>? = null
+        val filters: List<Filter>? = null,
     ) {
         /**
          * Represents a filter to apply in a query.
@@ -52,7 +52,7 @@ class Query(
         data class Filter(
             val field: String? = null,
             @Serializable(with = FilterTypeSerializer::class) val type: FilterType? = null,
-            val value: String? = null
+            val value: String? = null,
         )
     }
 }

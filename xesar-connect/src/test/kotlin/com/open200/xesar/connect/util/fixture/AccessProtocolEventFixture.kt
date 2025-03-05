@@ -38,7 +38,8 @@ object AccessProtocolEventFixture {
             startingUp = "starting up",
             errorNumber = "123",
             doorOpening = true,
-            mediaUpgrade = true)
+            mediaUpgrade = true,
+        )
 
     val installationPoint = UUID.fromString("d572db59-64f7-4853-b9f6-d3a218e1f4f4")
 
@@ -66,5 +67,6 @@ object AccessProtocolEventFixture {
             identificationMediumLabel = "new Label",
             ttl = LocalDateTime.parse("2023-06-15T16:25:52.225991"),
             personId = UUID.fromString("ffcf5e00-83ad-40cb-b37b-e91abb6f75cd"),
-            person = "a new person")
+            person = "a new person",
+        )
 }

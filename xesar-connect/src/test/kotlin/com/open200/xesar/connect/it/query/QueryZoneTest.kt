@@ -47,7 +47,8 @@ class QueryZoneTest :
                         val queryContent = queryReceived.await()
 
                         queryContent.shouldBeEqual(
-                            QueryTestHelper.createQueryRequest(Zone.QUERY_RESOURCE, requestId))
+                            QueryTestHelper.createQueryRequest(Zone.QUERY_RESOURCE, requestId)
+                        )
 
                         val zones =
                             encodeQueryList(
@@ -59,12 +60,16 @@ class QueryZoneTest :
                                             ZoneFixture.zoneFixture.copy(
                                                 id =
                                                     UUID.fromString(
-                                                        "4509ca29-9fd3-454f-9c98-fc0967fe3f66"),
+                                                        "4509ca29-9fd3-454f-9c98-fc0967fe3f66"
+                                                    ),
                                                 name = "zone name2",
-                                            )),
+                                            ),
+                                        ),
                                         2,
                                         2,
-                                    )))
+                                    ),
+                                )
+                            )
 
                         client
                             .publishAsync(Topics.Query.result(config.apiProperties.userId), zones)
@@ -110,7 +115,11 @@ class QueryZoneTest :
 
                         queryContent.shouldBeEqual(
                             QueryTestHelper.createQueryRequest(
-                                Zone.QUERY_RESOURCE, requestId, ZoneFixture.zoneFixture.id))
+                                Zone.QUERY_RESOURCE,
+                                requestId,
+                                ZoneFixture.zoneFixture.id,
+                            )
+                        )
 
                         val zone =
                             encodeQueryElement(QueryElement(requestId, ZoneFixture.zoneFixture))

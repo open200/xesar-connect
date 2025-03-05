@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.Flow
  */
 suspend fun XesarConnect.queryAccessProtocolEvents(
     params: Query.Params? = null,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): QueryList.Response<AccessProtocolEvent> {
     return handleQueryListFunction {
         queryListAsync(AccessProtocolEvent.QUERY_RESOURCE, params, requestConfig)
@@ -34,7 +34,7 @@ suspend fun XesarConnect.queryAccessProtocolEvents(
  */
 fun XesarConnect.queryStreamAccessProtocolEvent(
     params: Query.Params? = null,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig()
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): Flow<AccessProtocolEvent> {
     return queryStream(AccessProtocolEvent.QUERY_RESOURCE, params, requestConfig)
 }

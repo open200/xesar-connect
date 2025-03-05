@@ -15,5 +15,5 @@ import kotlinx.serialization.Serializable
 data class SetValidityThresholdMapi(
     override val commandId: @Serializable(with = UUIDSerializer::class) UUID,
     val validityThreshold: Short,
-    val token: String
+    val token: String,
 ) : Command

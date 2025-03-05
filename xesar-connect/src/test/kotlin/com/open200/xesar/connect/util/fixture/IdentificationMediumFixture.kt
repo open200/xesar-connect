@@ -19,7 +19,8 @@ object IdentificationMediumFixture {
             individualAuthorizationProfileIds =
                 listOf(
                     UUID.fromString("3dba6935-6904-4bc0-99d3-8115c9bbbedc"),
-                    UUID.fromString("66b9f5d9-5664-4bb9-9546-af315987752b")),
+                    UUID.fromString("66b9f5d9-5664-4bb9-9546-af315987752b"),
+                ),
             mediumState = IdentificationMedium.MediumState.ACTIVE,
             accessBeginAt = LocalDateTime.parse("2021-01-01T00:00:00"),
             accessEndAt = LocalDateTime.parse("2021-01-01T00:00:00"),
@@ -42,5 +43,6 @@ object IdentificationMediumFixture {
             userId = UUID.fromString("91781b22-ebdf-4ada-80cf-91f1fb9a4d96"),
             userName = "test User",
             requiredAction = "UPDATE",
-            mediumType = IdentificationMedium.MediumType.PASSIVE)
+            mediumType = IdentificationMedium.MediumType.PASSIVE,
+        )
 }

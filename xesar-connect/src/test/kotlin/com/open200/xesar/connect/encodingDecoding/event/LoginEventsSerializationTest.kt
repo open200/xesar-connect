@@ -13,7 +13,8 @@ class LoginEventsSerializationTest :
 
             encodeEvent(apiEvent)
                 .shouldBeEqual(
-                    "{\"commandId\":\"faf3d0c4-1281-40ae-89d7-5c541d77a757\",\"event\":{\"token\":\"token\"}}")
+                    "{\"commandId\":\"faf3d0c4-1281-40ae-89d7-5c541d77a757\",\"event\":{\"token\":\"token\"}}"
+                )
         }
 
         test("deserialize LoggedIn") {
@@ -23,7 +24,10 @@ class LoginEventsSerializationTest :
             decodeEvent<LoggedIn>(text)
                 .shouldBeEqual(
                     ApiEvent(
-                        UUID.fromString("faf3d0c4-1281-40ae-89d7-5c541d77a757"), LoggedIn("token")))
+                        UUID.fromString("faf3d0c4-1281-40ae-89d7-5c541d77a757"),
+                        LoggedIn("token"),
+                    )
+                )
         }
 
         test("deserialize UnauthorizedLoginAttempt") {
@@ -34,6 +38,10 @@ class LoginEventsSerializationTest :
                     ApiEvent(
                         event =
                             UnauthorizedLoginAttempt(
-                                "fordprefect", UnauthorizedLoginAttempt.Channel.API)))
+                                "fordprefect",
+                                UnauthorizedLoginAttempt.Channel.API,
+                            )
+                    )
+                )
         }
     })

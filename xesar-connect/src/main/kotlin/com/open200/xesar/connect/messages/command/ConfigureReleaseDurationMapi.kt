@@ -21,5 +21,5 @@ data class ConfigureReleaseDurationMapi(
     val releaseDurationShort: Int? = null,
     val releaseDurationLong: Int? = null,
     @Serializable(with = UUIDSerializer::class) val id: UUID,
-    val token: String
+    val token: String,
 ) : Command

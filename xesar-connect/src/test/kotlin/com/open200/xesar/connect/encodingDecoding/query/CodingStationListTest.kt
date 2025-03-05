@@ -19,10 +19,13 @@ class CodingStationListTest :
                     listOf(
                         CodingStationFixture.codingStationFixture,
                         CodingStationFixture.codingStationFixture.copy(
-                            id = UUID.fromString("555e7d1a-54f1-432a-ade7-80d20a63ee2d")),
+                            id = UUID.fromString("555e7d1a-54f1-432a-ade7-80d20a63ee2d")
+                        ),
                     ),
                     2,
-                    2))
+                    2,
+                ),
+            )
 
         val codingStationString =
             "{\"requestId\":\"ffcf5e00-83ad-40cb-b37b-e91abb6f75cd\",\"response\":{\"data\":[{\"id\":\"ffcf5e00-83ad-40cb-b37b-e91abb6f75cd\",\"name\":\"coding station test\",\"description\":\"a coding station description\",\"partitionId\":\"7b4399a0-21ce-4bee-ba43-e06e291248d2\",\"deleted\":null,\"online\":true},{\"id\":\"555e7d1a-54f1-432a-ade7-80d20a63ee2d\",\"name\":\"coding station test\",\"description\":\"a coding station description\",\"partitionId\":\"7b4399a0-21ce-4bee-ba43-e06e291248d2\",\"deleted\":null,\"online\":true}],\"totalCount\":2,\"filterCount\":2}}"

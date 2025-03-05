@@ -48,7 +48,8 @@ class WithdrawAuthorizationProfileFromMediumTest :
                         val commandContent = commandReceived.await()
 
                         commandContent.shouldBeEqual(
-                            "{\"commandId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"authorizationProfileId\":null,\"id\":\"43edc7cf-80ab-4486-86db-41cda2c7a2cd\",\"token\":\"JDJhJDEwJDFSNEljZ2FaRUNXUXBTQ25XN05KbE9qRzFHQ1VjMzkvWTBVcFpZb1M4Vmt0dnJYZ0tJVFBx\"}")
+                            "{\"commandId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"authorizationProfileId\":null,\"id\":\"43edc7cf-80ab-4486-86db-41cda2c7a2cd\",\"token\":\"JDJhJDEwJDFSNEljZ2FaRUNXUXBTQ25XN05KbE9qRzFHQ1VjMzkvWTBVcFpZb1M4Vmt0dnJYZ0tJVFBx\"}"
+                        )
 
                         val apiEvent =
                             ApiEvent(
@@ -57,12 +58,15 @@ class WithdrawAuthorizationProfileFromMediumTest :
                                     id = UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
                                     withdrawnAt = LocalDateTime.parse("2023-08-24T16:25:52.225991"),
                                     authorizationProfileId =
-                                        UUID.fromString("00000000-0000-0000-0000-000000000001")))
+                                        UUID.fromString("00000000-0000-0000-0000-000000000001"),
+                                ),
+                            )
 
                         client
                             .publishAsync(
                                 Topics.Event.AUTHORIZATION_PROFILE_WITHDRAWN_FROM_MEDIUM,
-                                encodeEvent(apiEvent))
+                                encodeEvent(apiEvent),
+                            )
                             .await()
                     }
                 }
@@ -71,15 +75,19 @@ class WithdrawAuthorizationProfileFromMediumTest :
 
                     val api = XesarConnect.connectAndLoginAsync(config).await()
                     api.subscribeAsync(
-                            Topics(Topics.Event.AUTHORIZATION_PROFILE_WITHDRAWN_FROM_MEDIUM))
+                            Topics(Topics.Event.AUTHORIZATION_PROFILE_WITHDRAWN_FROM_MEDIUM)
+                        )
                         .await()
                     val result =
                         api.withdrawAuthorizationProfileFromMediumAsync(
-                                UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"), null)
+                                UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
+                                null,
+                            )
                             .await()
                     result.id.shouldBeEqual(UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
                     result.authorizationProfileId?.shouldBeEqual(
-                        UUID.fromString("00000000-0000-0000-0000-000000000001"))
+                        UUID.fromString("00000000-0000-0000-0000-000000000001")
+                    )
                 }
             }
         }

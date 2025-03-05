@@ -45,7 +45,8 @@ class QueryStreamTest :
                         val queryContent = queryReceived.await()
 
                         queryContent.shouldBeEqual(
-                            "{\"resource\":\"persons\",\"requestId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"token\":\"JDJhJDEwJDFSNEljZ2FaRUNXUXBTQ25XN05KbE9qRzFHQ1VjMzkvWTBVcFpZb1M4Vmt0dnJYZ0tJVFBx\",\"id\":null,\"params\":{\"pageOffset\":0,\"pageLimit\":2,\"sort\":null,\"language\":null,\"filters\":null}}")
+                            "{\"resource\":\"persons\",\"requestId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"token\":\"JDJhJDEwJDFSNEljZ2FaRUNXUXBTQ25XN05KbE9qRzFHQ1VjMzkvWTBVcFpZb1M4Vmt0dnJYZ0tJVFBx\",\"id\":null,\"params\":{\"pageOffset\":0,\"pageLimit\":2,\"sort\":null,\"language\":null,\"filters\":null}}"
+                        )
 
                         val firstQueryPersonResponse =
                             encodeQueryList(
@@ -57,23 +58,28 @@ class QueryStreamTest :
                                             PersonFixture.personFixture.copy(
                                                 id =
                                                     UUID.fromString(
-                                                        "f7019248-f7f9-4138-9af7-119e2e251408"),
+                                                        "f7019248-f7f9-4138-9af7-119e2e251408"
+                                                    ),
                                                 firstName = "firstname 2 String",
                                             ),
                                         ),
                                         3,
                                         3,
-                                    )))
+                                    ),
+                                )
+                            )
 
                         client
                             .publishAsync(
                                 Topics.Query.result(config.apiProperties.userId),
-                                firstQueryPersonResponse)
+                                firstQueryPersonResponse,
+                            )
                             .await()
 
                         val secondQueryContent = queryReceived.await()
                         secondQueryContent.shouldBe(
-                            "{\"resource\":\"persons\",\"requestId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"token\":\"JDJhJDEwJDFSNEljZ2FaRUNXUXBTQ25XN05KbE9qRzFHQ1VjMzkvWTBVcFpZb1M4Vmt0dnJYZ0tJVFBx\",\"id\":null,\"params\":{\"pageOffset\":2,\"pageLimit\":2,\"sort\":null,\"language\":null,\"filters\":null}}")
+                            "{\"resource\":\"persons\",\"requestId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"token\":\"JDJhJDEwJDFSNEljZ2FaRUNXUXBTQ25XN05KbE9qRzFHQ1VjMzkvWTBVcFpZb1M4Vmt0dnJYZ0tJVFBx\",\"id\":null,\"params\":{\"pageOffset\":2,\"pageLimit\":2,\"sort\":null,\"language\":null,\"filters\":null}}"
+                        )
 
                         val secondQueryPersonResponse =
                             encodeQueryList(
@@ -84,16 +90,22 @@ class QueryStreamTest :
                                             PersonFixture.personFixture.copy(
                                                 id =
                                                     UUID.fromString(
-                                                        "f1177dbd-b8fc-4044-943b-28262e755d15"),
-                                                firstName = "firstname 3 String")),
+                                                        "f1177dbd-b8fc-4044-943b-28262e755d15"
+                                                    ),
+                                                firstName = "firstname 3 String",
+                                            )
+                                        ),
                                         3,
                                         3,
-                                    )))
+                                    ),
+                                )
+                            )
 
                         client
                             .publishAsync(
                                 Topics.Query.result(config.apiProperties.userId),
-                                secondQueryPersonResponse)
+                                secondQueryPersonResponse,
+                            )
                             .await()
                     }
                 }
@@ -138,29 +150,28 @@ class QueryStreamTest :
                         val queryContent = queryReceived.await()
 
                         queryContent.shouldBeEqual(
-                            "{\"resource\":\"persons\",\"requestId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"token\":\"JDJhJDEwJDFSNEljZ2FaRUNXUXBTQ25XN05KbE9qRzFHQ1VjMzkvWTBVcFpZb1M4Vmt0dnJYZ0tJVFBx\",\"id\":null,\"params\":{\"pageOffset\":0,\"pageLimit\":1,\"sort\":null,\"language\":null,\"filters\":null}}")
+                            "{\"resource\":\"persons\",\"requestId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"token\":\"JDJhJDEwJDFSNEljZ2FaRUNXUXBTQ25XN05KbE9qRzFHQ1VjMzkvWTBVcFpZb1M4Vmt0dnJYZ0tJVFBx\",\"id\":null,\"params\":{\"pageOffset\":0,\"pageLimit\":1,\"sort\":null,\"language\":null,\"filters\":null}}"
+                        )
 
                         val firstQueryPersonResponse =
                             encodeQueryList(
                                 QueryList(
                                     UUID.fromString("00000000-1281-40ae-89d7-5c541d77a757"),
-                                    QueryList.Response(
-                                        listOf(
-                                            PersonFixture.personFixture,
-                                        ),
-                                        3,
-                                        3,
-                                    )))
+                                    QueryList.Response(listOf(PersonFixture.personFixture), 3, 3),
+                                )
+                            )
 
                         client
                             .publishAsync(
                                 Topics.Query.result(config.apiProperties.userId),
-                                firstQueryPersonResponse)
+                                firstQueryPersonResponse,
+                            )
                             .await()
 
                         val secondQueryContent = queryReceived.await()
                         secondQueryContent.shouldBe(
-                            "{\"resource\":\"persons\",\"requestId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"token\":\"JDJhJDEwJDFSNEljZ2FaRUNXUXBTQ25XN05KbE9qRzFHQ1VjMzkvWTBVcFpZb1M4Vmt0dnJYZ0tJVFBx\",\"id\":null,\"params\":{\"pageOffset\":1,\"pageLimit\":1,\"sort\":null,\"language\":null,\"filters\":null}}")
+                            "{\"resource\":\"persons\",\"requestId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"token\":\"JDJhJDEwJDFSNEljZ2FaRUNXUXBTQ25XN05KbE9qRzFHQ1VjMzkvWTBVcFpZb1M4Vmt0dnJYZ0tJVFBx\",\"id\":null,\"params\":{\"pageOffset\":1,\"pageLimit\":1,\"sort\":null,\"language\":null,\"filters\":null}}"
+                        )
 
                         val secondQueryPersonResponse =
                             encodeQueryList(
@@ -171,22 +182,28 @@ class QueryStreamTest :
                                             PersonFixture.personFixture.copy(
                                                 id =
                                                     UUID.fromString(
-                                                        "f7019248-f7f9-4138-9af7-119e2e251408"),
+                                                        "f7019248-f7f9-4138-9af7-119e2e251408"
+                                                    ),
                                                 firstName = "firstname 2 String",
-                                            )),
+                                            )
+                                        ),
                                         3,
                                         3,
-                                    )))
+                                    ),
+                                )
+                            )
 
                         client
                             .publishAsync(
                                 Topics.Query.result(config.apiProperties.userId),
-                                secondQueryPersonResponse)
+                                secondQueryPersonResponse,
+                            )
                             .await()
 
                         val thirdQueryContent = queryReceived.await()
                         thirdQueryContent.shouldBe(
-                            "{\"resource\":\"persons\",\"requestId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"token\":\"JDJhJDEwJDFSNEljZ2FaRUNXUXBTQ25XN05KbE9qRzFHQ1VjMzkvWTBVcFpZb1M4Vmt0dnJYZ0tJVFBx\",\"id\":null,\"params\":{\"pageOffset\":2,\"pageLimit\":1,\"sort\":null,\"language\":null,\"filters\":null}}")
+                            "{\"resource\":\"persons\",\"requestId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"token\":\"JDJhJDEwJDFSNEljZ2FaRUNXUXBTQ25XN05KbE9qRzFHQ1VjMzkvWTBVcFpZb1M4Vmt0dnJYZ0tJVFBx\",\"id\":null,\"params\":{\"pageOffset\":2,\"pageLimit\":1,\"sort\":null,\"language\":null,\"filters\":null}}"
+                        )
 
                         val thirdQueryPersonResponse =
                             encodeQueryList(
@@ -197,16 +214,22 @@ class QueryStreamTest :
                                             PersonFixture.personFixture.copy(
                                                 id =
                                                     UUID.fromString(
-                                                        "f1177dbd-b8fc-4044-943b-28262e755d15"),
-                                                firstName = "firstname 3 String")),
+                                                        "f1177dbd-b8fc-4044-943b-28262e755d15"
+                                                    ),
+                                                firstName = "firstname 3 String",
+                                            )
+                                        ),
                                         3,
                                         3,
-                                    )))
+                                    ),
+                                )
+                            )
 
                         client
                             .publishAsync(
                                 Topics.Query.result(config.apiProperties.userId),
-                                thirdQueryPersonResponse)
+                                thirdQueryPersonResponse,
+                            )
                             .await()
                     }
                 }

@@ -48,7 +48,8 @@ class SetPersonalReferenceDurationInPersonTest :
                         val commandContent = commandReceived.await()
 
                         commandContent.shouldBeEqual(
-                            "{\"commandId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"newValue\":{\"logMode\":null,\"days\":30},\"externalId\":\"EXT-123\",\"token\":\"JDJhJDEwJDFSNEljZ2FaRUNXUXBTQ25XN05KbE9qRzFHQ1VjMzkvWTBVcFpZb1M4Vmt0dnJYZ0tJVFBx\"}")
+                            "{\"commandId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"newValue\":{\"logMode\":null,\"days\":30},\"externalId\":\"EXT-123\",\"token\":\"JDJhJDEwJDFSNEljZ2FaRUNXUXBTQ25XN05KbE9qRzFHQ1VjMzkvWTBVcFpZb1M4Vmt0dnJYZ0tJVFBx\"}"
+                        )
 
                         val apiEvent =
                             ApiEvent(
@@ -57,7 +58,9 @@ class SetPersonalReferenceDurationInPersonTest :
                                     firstName = "firstName",
                                     lastName = "lastName",
                                     id = UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
-                                    personalReferenceDuration = PersonalLog(days = 30)))
+                                    personalReferenceDuration = PersonalLog(days = 30),
+                                ),
+                            )
 
                         client
                             .publishAsync(Topics.Event.PERSON_CHANGED, encodeEvent(apiEvent))
@@ -71,7 +74,9 @@ class SetPersonalReferenceDurationInPersonTest :
                     api.subscribeAsync(Topics(Topics.Event.PERSON_CHANGED)).await()
                     val result =
                         api.setPersonalReferenceDurationInPersonAsync(
-                                "EXT-123", PersonalLog(days = 30))
+                                "EXT-123",
+                                PersonalLog(days = 30),
+                            )
                             .await()
                     result.id.shouldBeEqual(UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
                     result.personalReferenceDuration?.shouldBeEqual(PersonalLog(days = 30))

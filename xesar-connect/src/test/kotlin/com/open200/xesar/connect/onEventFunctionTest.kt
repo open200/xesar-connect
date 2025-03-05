@@ -34,7 +34,8 @@ class onEventFunctionTest :
                         hostname = "hostname",
                         port = "1883",
                         userId = UUID.fromString("faf3d0c4-1281-40ae-89d7-5c541d77a757"),
-                        token = "aToken")
+                        token = "aToken",
+                    )
                 val api = XesarConnect(xesarMqttClientMock, configMock)
 
                 api.token = configMock.apiProperties.token!!
@@ -43,10 +44,11 @@ class onEventFunctionTest :
                     CompletableDeferred<ApiEvent<UnauthorizedLoginAttempt>>()
 
                 api.onEvent<UnauthorizedLoginAttempt>(
-                    TopicFilter(Topics.Event.UNAUTHORIZED_LOGIN_ATTEMPT)) { apiEvent ->
-                        logger.info { "Received $apiEvent" }
-                        unauthorizedLoginAttemptEventReceived.complete(apiEvent)
-                    }
+                    TopicFilter(Topics.Event.UNAUTHORIZED_LOGIN_ATTEMPT)
+                ) { apiEvent ->
+                    logger.info { "Received $apiEvent" }
+                    unauthorizedLoginAttemptEventReceived.complete(apiEvent)
+                }
 
                 xesarMqttClientMock.onMessage(
                     Topics.Event.UNAUTHORIZED_LOGIN_ATTEMPT,
@@ -54,8 +56,13 @@ class onEventFunctionTest :
                             ApiEvent(
                                 UUID.randomUUID(),
                                 UnauthorizedLoginAttempt(
-                                    "username", UnauthorizedLoginAttempt.Channel.API)))
-                        .encodeToByteArray())
+                                    "username",
+                                    UnauthorizedLoginAttempt.Channel.API,
+                                ),
+                            )
+                        )
+                        .encodeToByteArray(),
+                )
 
                 val apiEvent = unauthorizedLoginAttemptEventReceived.await()
                 apiEvent.event.username.shouldBe("username")
@@ -65,10 +72,11 @@ class onEventFunctionTest :
 
                 val commandId = UUID.randomUUID()
                 api.onEvent<CodingStationChanged>(
-                    EventAndCommandIdFilter(commandId, Topics.Event.CODING_STATION_CHANGED)) {
-                        logger.info { "Received $it" }
-                        codingStationChangedEvent.complete(it)
-                    }
+                    EventAndCommandIdFilter(commandId, Topics.Event.CODING_STATION_CHANGED)
+                ) {
+                    logger.info { "Received $it" }
+                    codingStationChangedEvent.complete(it)
+                }
 
                 xesarMqttClientMock.onMessage(
                     Topics.Event.CODING_STATION_CHANGED,
@@ -76,8 +84,14 @@ class onEventFunctionTest :
                             ApiEvent(
                                 commandId,
                                 CodingStationChanged(
-                                    "codingstation name", "new description", UUID.randomUUID())))
-                        .encodeToByteArray())
+                                    "codingstation name",
+                                    "new description",
+                                    UUID.randomUUID(),
+                                ),
+                            )
+                        )
+                        .encodeToByteArray(),
+                )
 
                 val codingStationChanged = codingStationChangedEvent.await()
                 codingStationChanged.event.name.shouldBe("codingstation name")

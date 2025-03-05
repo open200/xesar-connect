@@ -48,7 +48,8 @@ class ChangeAuthorizationTimeProfileTest :
                         val commandContent = commandReceived.await()
 
                         commandContent.shouldBeEqual(
-                            "{\"commandId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"id\":\"43edc7cf-80ab-4486-86db-41cda2c7a2cd\",\"name\":\"timeProfileName\",\"description\":null,\"timeSeries\":[{\"times\":[{\"start\":\"14:15:00\",\"end\":\"14:15:00\"}],\"days\":[\"MONDAY\"]}],\"exceptionTimeSeries\":[{\"times\":[{\"start\":\"14:15:00\",\"end\":\"14:15:00\"}],\"calendars\":[\"497f6eca-6276-4993-bfeb-53cbbbba6f08\"]}],\"token\":\"JDJhJDEwJDFSNEljZ2FaRUNXUXBTQ25XN05KbE9qRzFHQ1VjMzkvWTBVcFpZb1M4Vmt0dnJYZ0tJVFBx\"}")
+                            "{\"commandId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"id\":\"43edc7cf-80ab-4486-86db-41cda2c7a2cd\",\"name\":\"timeProfileName\",\"description\":null,\"timeSeries\":[{\"times\":[{\"start\":\"14:15:00\",\"end\":\"14:15:00\"}],\"days\":[\"MONDAY\"]}],\"exceptionTimeSeries\":[{\"times\":[{\"start\":\"14:15:00\",\"end\":\"14:15:00\"}],\"calendars\":[\"497f6eca-6276-4993-bfeb-53cbbbba6f08\"]}],\"token\":\"JDJhJDEwJDFSNEljZ2FaRUNXUXBTQ25XN05KbE9qRzFHQ1VjMzkvWTBVcFpZb1M4Vmt0dnJYZ0tJVFBx\"}"
+                        )
 
                         val apiEvent =
                             ApiEvent(
@@ -58,12 +59,15 @@ class ChangeAuthorizationTimeProfileTest :
                                     exceptionTimeSeries = TimeProfileFixture.exceptionTimeSerie,
                                     name = "timeProfileName",
                                     id = UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
-                                    validStandardTimeProfile = true))
+                                    validStandardTimeProfile = true,
+                                ),
+                            )
 
                         client
                             .publishAsync(
                                 Topics.Event.AUTHORIZATION_TIME_PROFILE_CHANGED,
-                                encodeEvent(apiEvent))
+                                encodeEvent(apiEvent),
+                            )
                             .await()
                     }
                 }
@@ -80,7 +84,8 @@ class ChangeAuthorizationTimeProfileTest :
                                     UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
                                 timeProfileName = "timeProfileName",
                                 timeSeries = TimeProfileFixture.timeSeries,
-                                exceptionTimeSeries = TimeProfileFixture.exceptionTimeSerie)
+                                exceptionTimeSeries = TimeProfileFixture.exceptionTimeSerie,
+                            )
                             .await()
                     result.id.shouldBeEqual(UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
                     result.exceptionTimeSeries.shouldBeEqual(TimeProfileFixture.exceptionTimeSerie)

@@ -19,5 +19,5 @@ data class ConfigureManualOfficeModeAndShopModeMapi(
     val shopMode: Boolean? = null,
     val manualOfficeMode: Boolean? = null,
     @Serializable(with = UUIDSerializer::class) val id: UUID? = null,
-    val token: String
+    val token: String,
 ) : Command

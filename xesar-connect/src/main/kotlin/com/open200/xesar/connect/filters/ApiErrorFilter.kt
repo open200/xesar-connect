@@ -6,7 +6,8 @@ class ApiErrorFilter(correlationId: UUID, private val aTopic: String) : MessageF
 
     private val correlationIdRegex =
         Regex(
-            "\"${UUIDJsonName.correlationId}\":\\s*\"${Regex.fromLiteral(correlationId.toString())}\"")
+            "\"${UUIDJsonName.correlationId}\":\\s*\"${Regex.fromLiteral(correlationId.toString())}\""
+        )
 
     override fun filter(topic: String, message: String): Boolean {
         return message.contains(correlationIdRegex) && aTopic == topic

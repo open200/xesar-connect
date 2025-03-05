@@ -10,6 +10,7 @@ fun interface MessageHandler {
      * @property message The content of the message.
      */
     data class Message(val topic: String, val message: String)
+
     /**
      * Handles the MQTT message.
      *

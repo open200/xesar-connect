@@ -19,10 +19,13 @@ class AccessProtocolEventListTest :
                     listOf(
                         accessProtocolEvent,
                         accessProtocolEvent.copy(
-                            id = UUID.fromString("555e7d1a-54f1-432a-ade7-80d20a63ee2d")),
+                            id = UUID.fromString("555e7d1a-54f1-432a-ade7-80d20a63ee2d")
+                        ),
                     ),
                     2,
-                    2))
+                    2,
+                ),
+            )
 
         val accessProtocolEventString =
             "{\"requestId\":\"ffcf5e00-83ad-40cb-b37b-e91abb6f75cd\"," +

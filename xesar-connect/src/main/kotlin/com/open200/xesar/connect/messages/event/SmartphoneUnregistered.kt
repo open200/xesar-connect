@@ -11,5 +11,5 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class SmartphoneUnregistered(
-    @Serializable(with = UUIDSerializer::class) val id: UUID? = null,
+    @Serializable(with = UUIDSerializer::class) val id: UUID? = null
 ) : Event

@@ -48,7 +48,8 @@ class PrepareRemovalOfEvvaComponentTest :
                         val commandContent = commandReceived.await()
 
                         commandContent.shouldBeEqual(
-                            "{\"commandId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"id\":\"43edc7cf-80ab-4486-86db-41cda2c7a2cd\",\"token\":\"JDJhJDEwJDFSNEljZ2FaRUNXUXBTQ25XN05KbE9qRzFHQ1VjMzkvWTBVcFpZb1M4Vmt0dnJYZ0tJVFBx\"}")
+                            "{\"commandId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"id\":\"43edc7cf-80ab-4486-86db-41cda2c7a2cd\",\"token\":\"JDJhJDEwJDFSNEljZ2FaRUNXUXBTQ25XN05KbE9qRzFHQ1VjMzkvWTBVcFpZb1M4Vmt0dnJYZ0tJVFBx\"}"
+                        )
 
                         val apiEvent =
                             ApiEvent(
@@ -57,11 +58,15 @@ class PrepareRemovalOfEvvaComponentTest :
                                     stateChangeAt =
                                         LocalDateTime.parse("2023-06-15T16:25:52.225991"),
                                     aggregateId =
-                                        UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd")))
+                                        UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
+                                ),
+                            )
 
                         client
                             .publishAsync(
-                                Topics.Event.EVVA_COMPONENT_REMOVAL_PREPARED, encodeEvent(apiEvent))
+                                Topics.Event.EVVA_COMPONENT_REMOVAL_PREPARED,
+                                encodeEvent(apiEvent),
+                            )
                             .await()
                     }
                 }
@@ -73,10 +78,12 @@ class PrepareRemovalOfEvvaComponentTest :
 
                     val result =
                         api.prepareRemovalOfEvvaComponentAsync(
-                                UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
+                                UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd")
+                            )
                             .await()
                     result.aggregateId.shouldBeEqual(
-                        UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
+                        UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd")
+                    )
                 }
             }
         }

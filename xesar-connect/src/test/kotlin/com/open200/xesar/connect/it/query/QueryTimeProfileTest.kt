@@ -48,7 +48,10 @@ class QueryTimeProfileTest :
 
                         queryContent.shouldBeEqual(
                             QueryTestHelper.createQueryRequest(
-                                TimeProfile.QUERY_RESOURCE, requestId))
+                                TimeProfile.QUERY_RESOURCE,
+                                requestId,
+                            )
+                        )
 
                         val person =
                             encodeQueryList(
@@ -60,12 +63,16 @@ class QueryTimeProfileTest :
                                             TimeProfileFixture.timeProfileFixture.copy(
                                                 id =
                                                     UUID.fromString(
-                                                        "4509ca29-9fd3-454f-9c98-fc0967fe3f66"),
+                                                        "4509ca29-9fd3-454f-9c98-fc0967fe3f66"
+                                                    ),
                                                 name = "name 2",
-                                            )),
+                                            ),
+                                        ),
                                         2,
                                         2,
-                                    )))
+                                    ),
+                                )
+                            )
 
                         client
                             .publishAsync(Topics.Query.result(config.apiProperties.userId), person)
@@ -113,11 +120,14 @@ class QueryTimeProfileTest :
                             QueryTestHelper.createQueryRequest(
                                 TimeProfile.QUERY_RESOURCE,
                                 requestId,
-                                TimeProfileFixture.timeProfileFixture.id!!))
+                                TimeProfileFixture.timeProfileFixture.id!!,
+                            )
+                        )
 
                         val person =
                             encodeQueryElement(
-                                QueryElement(requestId, TimeProfileFixture.timeProfileFixture))
+                                QueryElement(requestId, TimeProfileFixture.timeProfileFixture)
+                            )
 
                         client
                             .publishAsync(Topics.Query.result(config.apiProperties.userId), person)

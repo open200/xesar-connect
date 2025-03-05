@@ -59,7 +59,7 @@ data class InstallationPoint(
     val timeProfileId: @Serializable(with = UUIDSerializer::class) UUID? = null,
     val accessId: Long? = null,
     val secure: Boolean? = null,
-    val bluetoothState: BluetoothState? = null
+    val bluetoothState: BluetoothState? = null,
 ) : QueryListResource, QueryElementResource {
     companion object {
         const val QUERY_RESOURCE = "installation-points"

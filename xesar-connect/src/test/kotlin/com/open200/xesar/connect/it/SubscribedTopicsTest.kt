@@ -23,11 +23,14 @@ class SubscribedTopicsTest :
                 .shouldBe(
                     listOf(
                         Topics.Event.loggedIn(
-                            UUID.fromString("faf3d0c4-1281-40ae-89d7-5c541d77a757")),
+                            UUID.fromString("faf3d0c4-1281-40ae-89d7-5c541d77a757")
+                        ),
                         Topics.Event.UNAUTHORIZED_LOGIN_ATTEMPT,
                         Topics.Event.LOGGED_OUT,
                         Topics.Event.error(config.apiProperties.userId),
-                        "new Topic"))
+                        "new Topic",
+                    )
+                )
         }
 
         test("subscribeAsync should not subscribe to an already subscribed topics") {
@@ -39,10 +42,13 @@ class SubscribedTopicsTest :
                 .shouldBe(
                     listOf(
                         Topics.Event.loggedIn(
-                            UUID.fromString("faf3d0c4-1281-40ae-89d7-5c541d77a757")),
+                            UUID.fromString("faf3d0c4-1281-40ae-89d7-5c541d77a757")
+                        ),
                         Topics.Event.UNAUTHORIZED_LOGIN_ATTEMPT,
                         Topics.Event.LOGGED_OUT,
-                        Topics.Event.error(config.apiProperties.userId)))
+                        Topics.Event.error(config.apiProperties.userId),
+                    )
+                )
         }
 
         test("removeSubscribedTopic should remove the topic from the subscribed topics") {
@@ -52,13 +58,17 @@ class SubscribedTopicsTest :
                 .shouldBe(
                     listOf(
                         Topics.Event.loggedIn(
-                            UUID.fromString("faf3d0c4-1281-40ae-89d7-5c541d77a757")),
+                            UUID.fromString("faf3d0c4-1281-40ae-89d7-5c541d77a757")
+                        ),
                         Topics.Event.UNAUTHORIZED_LOGIN_ATTEMPT,
                         Topics.Event.LOGGED_OUT,
-                        Topics.Event.error(config.apiProperties.userId)))
+                        Topics.Event.error(config.apiProperties.userId),
+                    )
+                )
 
             client.unsubscribeTopics(
-                Topics(Topics.Event.LOGGED_OUT, Topics.Event.UNAUTHORIZED_LOGIN_ATTEMPT))
+                Topics(Topics.Event.LOGGED_OUT, Topics.Event.UNAUTHORIZED_LOGIN_ATTEMPT)
+            )
 
             logger.info { "Subscribed topics: ${client.getSubscribedTopics()}" }
 
@@ -67,7 +77,10 @@ class SubscribedTopicsTest :
                 .shouldBe(
                     listOf(
                         Topics.Event.loggedIn(
-                            UUID.fromString("faf3d0c4-1281-40ae-89d7-5c541d77a757")),
-                        Topics.Event.error(config.apiProperties.userId)))
+                            UUID.fromString("faf3d0c4-1281-40ae-89d7-5c541d77a757")
+                        ),
+                        Topics.Event.error(config.apiProperties.userId),
+                    )
+                )
         }
     })

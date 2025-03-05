@@ -18,5 +18,5 @@ data class AddEvvaComponentMapi(
     override val commandId: @Serializable(with = UUIDSerializer::class) UUID,
     @Serializable(with = UUIDSerializer::class) val id: UUID,
     val type: ComponentType,
-    val token: String
+    val token: String,
 ) : Command

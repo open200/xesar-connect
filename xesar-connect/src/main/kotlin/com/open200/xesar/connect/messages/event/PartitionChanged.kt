@@ -36,5 +36,5 @@ data class PartitionChanged(
     val id: @Serializable(with = UUIDSerializer::class) UUID,
     val dailySchedulerExecutionTime: @Serializable(with = LocalTimeSerializer::class) LocalTime? =
         null,
-    val smartphoneValidityDuration: Short? = null
+    val smartphoneValidityDuration: Short? = null,
 ) : Event

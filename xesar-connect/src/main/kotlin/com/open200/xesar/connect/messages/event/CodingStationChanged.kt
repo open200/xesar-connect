@@ -15,5 +15,5 @@ import kotlinx.serialization.Serializable
 data class CodingStationChanged(
     val name: String? = null,
     val description: String? = null,
-    @Serializable(with = UUIDSerializer::class) val id: UUID
+    @Serializable(with = UUIDSerializer::class) val id: UUID,
 ) : Event

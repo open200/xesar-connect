@@ -19,5 +19,5 @@ data class CalendarChanged(
     val name: String,
     val calendarIdentifier: Int? = null,
     val specialDays: List<@Serializable(with = LocalDateSerializer::class) LocalDate>,
-    @Serializable(with = UUIDSerializer::class) val id: UUID
+    @Serializable(with = UUIDSerializer::class) val id: UUID,
 ) : Event

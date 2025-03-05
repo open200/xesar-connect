@@ -52,7 +52,8 @@ class QueryPersonTest :
 
                         queryContent.shouldBeEqual(
                             "{\"resource\":\"persons\",\"requestId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"token\":\"${MosquittoContainer.TOKEN}\",\"id\":null," +
-                                "\"params\":{\"pageOffset\":0,\"pageLimit\":3,\"sort\":\"firstName\",\"language\":null,\"filters\":[{\"field\":\"firstName\",\"type\":\"contains\",\"value\":\"filtered first name\"}]}}")
+                                "\"params\":{\"pageOffset\":0,\"pageLimit\":3,\"sort\":\"firstName\",\"language\":null,\"filters\":[{\"field\":\"firstName\",\"type\":\"contains\",\"value\":\"filtered first name\"}]}}"
+                        )
 
                         val person =
                             encodeQueryList(
@@ -64,12 +65,16 @@ class QueryPersonTest :
                                             personFixture.copy(
                                                 id =
                                                     UUID.fromString(
-                                                        "f7019248-f7f9-4138-9af7-119e2e251408"),
+                                                        "f7019248-f7f9-4138-9af7-119e2e251408"
+                                                    ),
                                                 firstName = "firstname 2 String",
-                                            )),
+                                            ),
+                                        ),
                                         2,
                                         2,
-                                    )))
+                                    ),
+                                )
+                            )
 
                         client
                             .publishAsync(Topics.Query.result(config.apiProperties.userId), person)
@@ -89,7 +94,9 @@ class QueryPersonTest :
                                     "firstName",
                                     FilterType.CONTAINS,
                                     "filtered first name",
-                                )))
+                                )
+                            ),
+                        )
                     val api = XesarConnect.connectAndLoginAsync(config).await()
                     api.subscribeAsync(Topics(Topics.Query.result(config.apiProperties.userId)))
                         .await()
@@ -125,13 +132,16 @@ class QueryPersonTest :
                         val queryContent = queryReceived.await()
 
                         queryContent.shouldBeEqual(
-                            "{\"resource\":\"persons\",\"requestId\":\"00000000-1281-42c0-9a15-c5844850c748\",\"token\":\"${MosquittoContainer.TOKEN}\",\"id\":\"${personFixture.id}\",\"params\":null}")
+                            "{\"resource\":\"persons\",\"requestId\":\"00000000-1281-42c0-9a15-c5844850c748\",\"token\":\"${MosquittoContainer.TOKEN}\",\"id\":\"${personFixture.id}\",\"params\":null}"
+                        )
 
                         val person =
                             encodeQueryElement(
                                 QueryElement(
                                     UUID.fromString("00000000-1281-42c0-9a15-c5844850c748"),
-                                    personFixture))
+                                    personFixture,
+                                )
+                            )
 
                         client
                             .publishAsync(Topics.Query.result(config.apiProperties.userId), person)

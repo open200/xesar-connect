@@ -46,7 +46,8 @@ class QueryAccessProtocolEventTest :
                         val queryContent = queryReceived.await()
 
                         queryContent.shouldBeEqual(
-                            "{\"resource\":\"access-protocol\",\"requestId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"token\":\"${MosquittoContainer.TOKEN}\",\"id\":null,\"params\":null}")
+                            "{\"resource\":\"access-protocol\",\"requestId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"token\":\"${MosquittoContainer.TOKEN}\",\"id\":null,\"params\":null}"
+                        )
 
                         val person =
                             encodeQueryList(
@@ -58,11 +59,15 @@ class QueryAccessProtocolEventTest :
                                             AccessProtocolEventFixture.accessProtocolEvent.copy(
                                                 id =
                                                     UUID.fromString(
-                                                        "4509ca29-9fd3-454f-9c98-fc0967fe3f66"),
-                                            )),
+                                                        "4509ca29-9fd3-454f-9c98-fc0967fe3f66"
+                                                    )
+                                            ),
+                                        ),
                                         2,
                                         2,
-                                    )))
+                                    ),
+                                )
+                            )
 
                         client
                             .publishAsync(Topics.Query.result(config.apiProperties.userId), person)
