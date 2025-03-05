@@ -71,9 +71,9 @@ suspend fun XesarConnect.queryPersonByExternalId(externalId: String): Person? {
  * @param requestConfig The request configuration (optional).
  */
 suspend fun XesarConnect.changePersonInformationAsync(
-    firstName: String? = null,
-    lastName: String? = null,
-    identifier: String? = null,
+    firstName: String,
+    lastName: String,
+    identifier: String,
     externalId: String,
     requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): SingleEventResult<PersonChanged> {
