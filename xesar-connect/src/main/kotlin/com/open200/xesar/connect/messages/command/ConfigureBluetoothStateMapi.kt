@@ -1,5 +1,6 @@
 package com.open200.xesar.connect.messages.command
 
+import com.open200.xesar.connect.messages.BluetoothState
 import com.open200.xesar.connect.utils.UUIDSerializer
 import java.util.*
 import kotlinx.serialization.Serializable
@@ -15,7 +16,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class ConfigureBluetoothStateMapi(
     override val commandId: @Serializable(with = UUIDSerializer::class) UUID,
-    val bluetoothState: String,
+    val bluetoothState: BluetoothState,
     val id: @Serializable(with = UUIDSerializer::class) UUID,
     val token: String
 ) : Command
