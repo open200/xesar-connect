@@ -35,18 +35,13 @@ val mockkVersion: String = "1.13.17"
 val kotestTestcontainersVersion: String = "2.0.2"
 
 dependencies {
-    // This dependency is exported to consumers, that is to say found on their compile classpath.
-    testImplementation(kotlin("test"))
-
-    // This dependency is used internally, and not exposed to consumers on their own compile
-    // classpath.
-
     implementation("org.eclipse.paho:org.eclipse.paho.client.mqttv3:$pahoVersion")
-
     implementation("io.github.microutils:kotlin-logging:$kotlinLoggingVersion")
     implementation("io.ktor:ktor-serialization-kotlinx:$ktorVersion")
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxVersion")
+
+    testImplementation(kotlin("test"))
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$kotlinxVersion")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxVersion")
     testImplementation("io.kotest:kotest-runner-junit5:$kotestVersion")
@@ -124,6 +119,7 @@ tasks.register<Zip>("zipArtifact") {
 }
 
 tasks.register("prepareMavenPublish") {
+    description = "This task prepares the xesar-connect artifact for publishing."
     dependsOn(setOf("publish", "zipArtifact"))
     group = "publishing"
 }
