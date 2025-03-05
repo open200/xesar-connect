@@ -25,7 +25,9 @@ class XesarMqttClient(private val client: MqttAsyncClient) : IXesarMqttClient {
 
                 override fun connectionLost(cause: Throwable?) {
                     log.error(cause) { "lost connection" }
-                    val exception = ConnectionFailedException("lost connection: $cause")
+                    val exception =
+                        cause?.let { ConnectionFailedException("lost connection", it) }
+                            ?: ConnectionFailedException("lost connection")
                     onDisconnect(exception)
                 }
 

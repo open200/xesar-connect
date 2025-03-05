@@ -34,6 +34,9 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) {
     private val coroutineScopeForSendCommand =
         CoroutineScope(config.dispatcherForCommandsAndCleanUp)
     private val coroutineScopeForCleanUp = CoroutineScope(config.dispatcherForCommandsAndCleanUp)
+
+    /** Callback for when the mqtt connection is lost. */
+    var onConnectionLost: ((ConnectionFailedException) -> Unit)? = null
     lateinit var token: Token
 
     /**
@@ -49,7 +52,12 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) {
     }
 
     init {
-        client.onDisconnect = { connectionChannel.trySend(ConnectionEvent.DISCONNECTED) }
+        client.onDisconnect = { ex ->
+            connectionChannel.trySend(ConnectionEvent.DISCONNECTED)
+            if (ex != null) {
+                onConnectionLost?.invoke(ex)
+            }
+        }
         client.onMessage = { topic, message ->
             // call all listeners on the topic
             val decodedMessage = message.decodeToString()
