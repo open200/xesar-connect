@@ -47,7 +47,7 @@ class ChangePersonInformationTest :
                         val commandContent = commandReceived.await()
 
                         commandContent.shouldBeEqual(
-                            "{\"commandId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"firstName\":\"first name\",\"lastName\":null,\"identifier\":null,\"externalId\":\"EXT-4711\",\"token\":\"JDJhJDEwJDFSNEljZ2FaRUNXUXBTQ25XN05KbE9qRzFHQ1VjMzkvWTBVcFpZb1M4Vmt0dnJYZ0tJVFBx\"}"
+                            "{\"commandId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"firstName\":\"first name\",\"lastName\":\"last name\",\"identifier\":\"\",\"externalId\":\"EXT-4711\",\"token\":\"JDJhJDEwJDFSNEljZ2FaRUNXUXBTQ25XN05KbE9qRzFHQ1VjMzkvWTBVcFpZb1M4Vmt0dnJYZ0tJVFBx\"}"
                         )
 
                         val apiEvent =
@@ -57,6 +57,7 @@ class ChangePersonInformationTest :
                                     id = UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"),
                                     firstName = "first name",
                                     lastName = "last name",
+                                    identifier = "",
                                 ),
                             )
 
@@ -73,6 +74,8 @@ class ChangePersonInformationTest :
                     val result =
                         api.changePersonInformationAsync(
                                 firstName = "first name",
+                                lastName = "last name",
+                                identifier = "",
                                 externalId = "EXT-4711",
                             )
                             .await()
