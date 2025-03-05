@@ -51,7 +51,7 @@ data class AccessProtocolEvent(
     val eventType: EventType,
     val eventValue: EventValue,
     val rawValue: String,
-    val parameterMap: ParameterMap,
+    val parameterMap: Map<String, String> = emptyMap(),
     @Serializable(with = UUIDSerializer::class) val installationPointId: UUID? = null,
     val installationPointName: String? = null,
     val installationPointIdentifier: String? = null,
@@ -130,24 +130,6 @@ data class AccessProtocolEvent(
         val errorNumber: String? = null,
         val doorOpening: Boolean? = null,
         val mediaUpgrade: Boolean? = null,
-    )
-
-    /**
-     * Represents the parameter map of the access protocol.
-     *
-     * @param raw The raw value of the parameter map (optional).
-     * @param keyType The key type (optional).
-     * @param doorId The door ID (optional).
-     * @param permanentOpeningAllowed Indicates if permanent opening is allowed (optional).
-     * @param shopModeActivated Indicates if shop mode is activated (optional).
-     */
-    @Serializable
-    data class ParameterMap(
-        val raw: String? = null,
-        val keyType: String? = null,
-        val doorId: String? = null,
-        val permanentOpeningAllowed: String? = null,
-        val shopModeActivated: String? = null
     )
 
     companion object {
