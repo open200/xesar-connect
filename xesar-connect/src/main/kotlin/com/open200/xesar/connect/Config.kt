@@ -34,6 +34,7 @@ data class Config(
     val uuidGenerator: IRequestIdGenerator = DefaultRequestIdGenerator(),
     val mqttConnectOptions: MqttConnectOptions = MqttConnectOptions(),
     val logoutOnClose: Boolean = true,
+    val overrideBrokerUri: String? = null,
     val dispatcherForCommandsAndCleanUp: CoroutineDispatcher = Dispatchers.IO,
 ) {
     /**
@@ -81,6 +82,20 @@ data class Config(
         val keepAliveInterval: Int = 600,
         val securityProtocol: String = "TLSv1.3",
     )
+
+    /**
+     * Retrieves the broker URI either from the [overrideBrokerUri] (if set) or by constructing it
+     * based on the current configuration.
+     *
+     * @return The broker URI.
+     */
+    fun getBrokerUri(): String {
+        return overrideBrokerUri
+            ?: run {
+                val protocol = if (mqttCertificates != null) "ssl" else "tcp"
+                "$protocol://${apiProperties.hostname}:${apiProperties.port}"
+            }
+    }
 
     companion object {
 

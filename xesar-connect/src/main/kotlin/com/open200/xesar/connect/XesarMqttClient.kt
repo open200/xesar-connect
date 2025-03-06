@@ -182,7 +182,7 @@ class XesarMqttClient(private val client: MqttAsyncClient) : IXesarMqttClient {
 
             val deferredResult = CompletableDeferred<XesarMqttClient>()
 
-            val broker = getBrokerUri(config)
+            val broker = config.getBrokerUri()
             val options = MqttConnectOptions()
 
             options.isCleanSession = config.mqttConnectOptions.isCleanSession
@@ -229,20 +229,6 @@ class XesarMqttClient(private val client: MqttAsyncClient) : IXesarMqttClient {
             }
 
             return deferredResult
-        }
-
-        /**
-         * Gets the broker URI based on the configuration.
-         *
-         * @param config The configuration for connecting to the MQTT broker.
-         * @return The broker URI.
-         */
-        private fun getBrokerUri(config: Config): String {
-            return if (config.mqttCertificates != null) {
-                "ssl://${config.apiProperties.hostname}:${config.apiProperties.port}"
-            } else {
-                "tcp://${config.apiProperties.hostname}:${config.apiProperties.port}"
-            }
         }
     }
 }
