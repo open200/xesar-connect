@@ -25,7 +25,7 @@ repositories {
     mavenCentral()
 }
 
-val ktorVersion: String = "3.1.1"
+val ktorVersion: String = "2.3.13"
 val kotlinxVersion: String = "1.10.1"
 val kotlinLoggingVersion: String = "3.0.5"
 val kotestVersion: String = "5.9.1"
