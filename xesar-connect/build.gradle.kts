@@ -9,9 +9,9 @@
 
 plugins {
     // Apply the org.jetbrains.kotlin.jvm Plugin to add support for Kotlin.
-    id("org.jetbrains.kotlin.jvm") version "2.1.10"
+    id("org.jetbrains.kotlin.jvm") version "1.9.25"
     id("com.diffplug.spotless") version "7.0.2"
-    kotlin("plugin.serialization") version "2.1.10"
+    kotlin("plugin.serialization") version "1.9.25"
     id("com.adarshr.test-logger") version "4.0.0"
 
     // Apply the java-library plugin for API and implementation separation.
@@ -26,7 +26,7 @@ repositories {
 }
 
 val ktorVersion: String = "2.3.13"
-val kotlinxVersion: String = "1.10.1"
+val kotlinxVersion: String = "1.7.3"
 val kotlinLoggingVersion: String = "3.0.5"
 val kotestVersion: String = "5.9.1"
 val logbackVersion: String = "1.5.17"
