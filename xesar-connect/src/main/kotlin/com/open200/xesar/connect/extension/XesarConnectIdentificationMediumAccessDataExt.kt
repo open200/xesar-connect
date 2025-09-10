@@ -1,14 +1,18 @@
 package com.open200.xesar.connect.extension
 
 import com.open200.xesar.connect.XesarConnect
-import com.open200.xesar.connect.exception.MediumListSizeException
-import com.open200.xesar.connect.messages.command.FilterType
 import com.open200.xesar.connect.messages.command.Query
-import com.open200.xesar.connect.messages.query.IdentificationMedium
 import com.open200.xesar.connect.messages.query.IdentificationMediumAccessData
 import com.open200.xesar.connect.messages.query.QueryList
-import java.util.UUID
+import java.util.*
 
+/**
+ * Queries the list of identification media access data asynchronously.
+ *
+ * @param params The query parameters (optional).
+ * @param requestConfig The request configuration (optional).
+ * @return A response object containing a list of identification media access data.
+ */
 suspend fun XesarConnect.queryIdentificationMediumAccessData(
     params: Query.Params? = null,
     requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
@@ -18,44 +22,18 @@ suspend fun XesarConnect.queryIdentificationMediumAccessData(
     }
 }
 
-// Filters query list by xsMediumId
+/**
+ * Queries an identification media access data by xsMediumId asynchronously.
+ *
+ * @param xsMediumId The xsMediumId of the identification media access data to query.
+ * @param requestConfig The request configuration (optional).
+ * @return An identification media access data.
+ */
 suspend fun XesarConnect.queryIdentificationMediumAccessDataById(
-    id: UUID,
+    xsMediumId: UUID,
     requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): IdentificationMediumAccessData? {
     return handleQueryElementFunction {
-        queryElementAsync(IdentificationMediumAccessData.QUERY_RESOURCE, id, requestConfig)
-    }
-}
-
-
-suspend fun XesarConnect.queryIdentificationMediumAccessDataByState(
-    state: String,
-    params: Query.Params? = null,
-    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
-): QueryList.Response<IdentificationMediumAccessData> {
-    val filters =
-        (params?.filters ?: emptyList()) +
-            Query.Params.Filter(
-                field = "state",
-                value = state,
-                type = FilterType.EQ,
-            )
-
-    val paramsMedium =
-        Query.Params(
-            pageLimit = params?.pageLimit,
-            pageOffset = params?.pageOffset,
-            language = params?.language,
-            sort = params?.sort,
-            filters = filters,
-        )
-
-    return handleQueryListFunction {
-        queryListAsync<IdentificationMediumAccessData>(
-            IdentificationMediumAccessData.QUERY_RESOURCE,
-            paramsMedium,
-            requestConfig,
-        )
+        queryElementAsync(IdentificationMediumAccessData.QUERY_RESOURCE, xsMediumId, requestConfig)
     }
 }

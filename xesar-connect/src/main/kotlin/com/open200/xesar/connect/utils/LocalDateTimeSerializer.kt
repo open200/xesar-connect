@@ -1,7 +1,6 @@
 package com.open200.xesar.connect.utils
 
 import java.time.LocalDateTime
-import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.descriptors.PrimitiveKind
@@ -30,15 +29,6 @@ object LocalDateTimeSerializer : KSerializer<LocalDateTime> {
      * @param decoder The decoder used for deserialization.
      * @return The deserialized LocalDateTime object.
      */
-    override fun deserialize(decoder: Decoder): LocalDateTime {
-        val input = decoder.decodeString()
-
-        return try {
-            // First try plain local (no offset)
-            LocalDateTime.parse(input, DateTimeFormatter.ISO_LOCAL_DATE_TIME)
-        } catch (e: Exception) {
-            // If there's an offset or 'Z', parse as OffsetDateTime and drop the offset
-            OffsetDateTime.parse(input, DateTimeFormatter.ISO_OFFSET_DATE_TIME).toLocalDateTime()
-        }
-    }
+    override fun deserialize(decoder: Decoder): LocalDateTime =
+        LocalDateTime.parse(decoder.decodeString(), DateTimeFormatter.ISO_LOCAL_DATE_TIME)
 }
