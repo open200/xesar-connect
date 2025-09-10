@@ -7,7 +7,8 @@ import java.util.*
 import kotlinx.serialization.Serializable
 
 /**
- * Represents the container for the access data, mediumType and state of an identification medium in the system.
+ * Represents the container for the access data, mediumType and state of an identification medium in
+ * the system.
  *
  * @param identificationMedium Container for medium metadata and access data.
  * @param mediumType The type of the identification media.
