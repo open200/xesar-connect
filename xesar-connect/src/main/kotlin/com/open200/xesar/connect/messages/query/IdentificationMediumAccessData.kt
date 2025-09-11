@@ -17,7 +17,7 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class IdentificationMediumAccessData(
-    val identificationMedium: MediumDetails,
+    val identificationMedium: IdentificationMedium,
     val mediumType: MediumType,
     val state: State? = null,
 ) : QueryListResource, QueryElementResource {
@@ -48,8 +48,10 @@ data class IdentificationMediumAccessData(
      * @param xsMobileId The unique identifier of the Smartphone, this is not the same as the medium
      *   ID. Only present for Smartphone media (optional).
      */
+
+    // TODO: Rename class because of existing class messages/query/IdentificationMedium.kt
     @Serializable
-    data class MediumDetails(
+    data class IdentificationMedium(
         val masterKey: Boolean,
         val mediumDataFrame: String,
         val metadata: Metadata,
