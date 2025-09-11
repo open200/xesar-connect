@@ -52,12 +52,10 @@ class LocalDateTimeSerializerTest :
             localDateTimeEncoded shouldBeEqual "\"$dateString2\""
         }
 
-        test(
-            "deserialize LocalDateTime for without milliseconds should return correct LocalDateTime"
-        ) {
+        test("deserialize LocalDateTime without milliseconds should return correct LocalDateTime") {
             val localDateTimeDecoded =
                 Json.decodeFromString(localDateTimeSerializer, "\"$dateString2\"")
 
-            localDateTimeDecoded shouldBeEqual localDateTimeDecoded
+            localDateTimeDecoded shouldBeEqual localDateTime2
         }
     })
