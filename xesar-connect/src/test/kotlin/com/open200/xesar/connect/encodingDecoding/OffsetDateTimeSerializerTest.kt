@@ -23,7 +23,9 @@ class OffsetDateTimeSerializerTest :
             offsetDateTimeEncoded shouldBeEqual "\"$dateStringWithMilliSecond\""
         }
 
-        test("deserialize OffsetDateTime with milliseconds and offset should return correct OffsetDateTime") {
+        test(
+            "deserialize OffsetDateTime with milliseconds and offset should return correct OffsetDateTime"
+        ) {
             val localDateTimeDecoded =
                 Json.decodeFromString(offsetDateTimeSerializer, "\"$dateStringWithMilliSecond\"")
 
@@ -45,8 +47,11 @@ class OffsetDateTimeSerializerTest :
         val dateTimeString2 = "2025-08-28T11:20:00+02:00"
         val offsetDateTime2 = OffsetDateTime.parse(dateTimeString2)
 
-        test("serialize OffsetDateTime with offset but without milliseconds should return correct String") {
-            val offsetDateTimeEncoded = Json.encodeToString(offsetDateTimeSerializer, offsetDateTime2)
+        test(
+            "serialize OffsetDateTime with offset but without milliseconds should return correct String"
+        ) {
+            val offsetDateTimeEncoded =
+                Json.encodeToString(offsetDateTimeSerializer, offsetDateTime2)
 
             offsetDateTimeEncoded shouldBeEqual "\"$dateTimeString2\""
         }
@@ -64,14 +69,13 @@ class OffsetDateTimeSerializerTest :
         val offsetDateTime3 = OffsetDateTime.parse(dateTimeString3)
 
         test("serialize OffsetDateTime in UTC format should return correct String") {
-            val offsetDateTimeEncoded = Json.encodeToString(offsetDateTimeSerializer, offsetDateTime3)
+            val offsetDateTimeEncoded =
+                Json.encodeToString(offsetDateTimeSerializer, offsetDateTime3)
 
             offsetDateTimeEncoded shouldBeEqual "\"$dateTimeString3\""
         }
 
-        test(
-            "deserialize OffsetDateTime in UTC format should return correct OffsetDateTime"
-        ) {
+        test("deserialize OffsetDateTime in UTC format should return correct OffsetDateTime") {
             val offsetDateTimeDecoded =
                 Json.decodeFromString(offsetDateTimeSerializer, "\"$dateTimeString3\"")
 
