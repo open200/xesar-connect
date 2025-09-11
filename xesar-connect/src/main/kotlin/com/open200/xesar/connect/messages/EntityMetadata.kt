@@ -8,8 +8,10 @@ import kotlinx.serialization.Serializable
  * Represents the entity metadata.
  *
  * @param id The ID of the metadata definition.
- * @param name The name of the metadata instance. All unicode characters allowed. Size between 1 and 255.
- * @param value The value of the metadata. All unicode characters allowed. Size between 0 and 255 (optional).
+ * @param name The name of the metadata instance. All unicode characters allowed. Size between 1
+ *   and 255.
+ * @param value The value of the metadata. All unicode characters allowed. Size between 0 and 255
+ *   (optional).
  */
 @Serializable
 data class EntityMetadata(
