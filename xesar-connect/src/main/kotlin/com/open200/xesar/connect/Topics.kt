@@ -465,6 +465,15 @@ class Topics(vararg val topics: String) {
 
             /** MQTT topic string for the "ResendSmartphoneAuthorizationsMapi" command. */
             val RESEND_SMARTPHONE_AUTHORIZATIONS = "xs3/1/cmd/ResendSmartphoneAuthorizationsMapi"
+
+            /** MQTT topic string for the "AddEntityMetadataDefinition" command. */
+            val ADD_ENTITY_METADATA_DEFINITION = "xs3/1/cmd/AddEntityMetadataDefinitionMapi"
+
+            /** MQTT topic string for the "DeleteEntityMetadataDefinition" command. */
+            val DELETE_ENTITY_METADATA_DEFINITION = "xs3/1/cmd/DeleteEntityMetadataDefinitionMapi"
+
+            /** MQTT topic string for the "RenameEntityMetadataDefinitionMapi" command. */
+            val RENAME_ENTITY_METADATA_DEFINITION = "xs3/1/cmd/RenameEntityMetadataDefinitionMapi"
         }
     }
 

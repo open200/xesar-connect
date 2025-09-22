@@ -2,11 +2,21 @@ package com.open200.xesar.connect.extension
 
 import com.open200.xesar.connect.Topics
 import com.open200.xesar.connect.XesarConnect
+import com.open200.xesar.connect.messages.EntityType
 import com.open200.xesar.connect.messages.PersonalLog
 import com.open200.xesar.connect.messages.SingleEventResult
-import com.open200.xesar.connect.messages.command.*
+import com.open200.xesar.connect.messages.command.AddEntityMetadataDefinitionMapi
+import com.open200.xesar.connect.messages.command.DeleteEntityMetadataDefinitionMapi
+import com.open200.xesar.connect.messages.command.RenameEntityMetadataDefinitionMapi
+import com.open200.xesar.connect.messages.command.SetDailySchedulerExecutionTimeMapi
+import com.open200.xesar.connect.messages.command.SetDefaultValidityDurationMapi
+import com.open200.xesar.connect.messages.command.SetInstallationPointPersonalReferenceDurationMapi
+import com.open200.xesar.connect.messages.command.SetPersonPersonalReferenceDurationMapi
+import com.open200.xesar.connect.messages.command.SetReplacementMediumDurationMapi
+import com.open200.xesar.connect.messages.command.SetValidityThresholdMapi
 import com.open200.xesar.connect.messages.event.PartitionChanged
 import java.time.LocalTime
+import java.util.*
 
 /**
  * Sets the daily scheduler execution time in the default partition asynchronously.
@@ -135,6 +145,87 @@ suspend fun XesarConnect.setValidityThresholdAsync(
         Topics.Event.PARTITION_CHANGED,
         true,
         SetValidityThresholdMapi(config.uuidGenerator.generateId(), validityThreshold, token),
+        requestConfig,
+    )
+}
+
+/**
+ * Adds one or more metadata definitions to a Xesar entity of the default partition. If any metadata
+ * definition with the same name already exists it will be ignored.
+ *
+ * @param entityType The target entity type to add the metadata definitions to.
+ * @param names The names of the metadata definitions to add. Each name should be unique.
+ */
+suspend fun XesarConnect.addEntityMetadataDefinitionAsync(
+    entityType: EntityType,
+    vararg names: String,
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
+): SingleEventResult<PartitionChanged> {
+    return sendCommandAsync<AddEntityMetadataDefinitionMapi, PartitionChanged>(
+        Topics.Command.ADD_ENTITY_METADATA_DEFINITION,
+        Topics.Event.PARTITION_CHANGED,
+        true,
+        AddEntityMetadataDefinitionMapi(
+            config.uuidGenerator.generateId(),
+            entityType,
+            names = names.toList(),
+            token,
+        ),
+        requestConfig,
+    )
+}
+
+/**
+ * Removes one or more metadata definitions from a Xesar entity on the default partition. If any
+ * provided definition name doesn't exist it will be ignored.
+ *
+ * @param entityType The target entity type to remove the metadata definitions.
+ * @param names The names of the metadata definitions to remove. Each name should be unique.
+ */
+suspend fun XesarConnect.deleteEntityMetadataDefinitionAsync(
+    entityType: EntityType,
+    vararg names: String,
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
+): SingleEventResult<PartitionChanged> {
+    return sendCommandAsync<DeleteEntityMetadataDefinitionMapi, PartitionChanged>(
+        Topics.Command.DELETE_ENTITY_METADATA_DEFINITION,
+        Topics.Event.PARTITION_CHANGED,
+        true,
+        DeleteEntityMetadataDefinitionMapi(
+            config.uuidGenerator.generateId(),
+            entityType,
+            names = names.toList(),
+            token,
+        ),
+        requestConfig,
+    )
+}
+
+/**
+ * Renames a specific metadata definition of a Xesar entity. Will fail if the new name is already in
+ * use or if no metadata exists with the old name.
+ *
+ * @param entityType The target entity type to rename the metadata definition of.
+ * @param metadataDefinitionId The ID of the metadata definition to rename.
+ * @param name The new name to assign to the definition.
+ */
+suspend fun XesarConnect.renameEntityMetadataDefinitionAsync(
+    entityType: EntityType,
+    metadataDefinitionId: String,
+    name: String,
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
+): SingleEventResult<PartitionChanged> {
+    return sendCommandAsync<RenameEntityMetadataDefinitionMapi, PartitionChanged>(
+        Topics.Command.RENAME_ENTITY_METADATA_DEFINITION,
+        Topics.Event.PARTITION_CHANGED,
+        true,
+        RenameEntityMetadataDefinitionMapi(
+            config.uuidGenerator.generateId(),
+            entityType,
+            UUID.fromString(metadataDefinitionId),
+            name,
+            token,
+        ),
         requestConfig,
     )
 }
