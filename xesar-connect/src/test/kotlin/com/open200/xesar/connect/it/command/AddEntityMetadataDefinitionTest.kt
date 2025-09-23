@@ -50,7 +50,8 @@ class AddEntityMetadataDefinitionTest :
                         val commandContent = commandReceived.await()
 
                         commandContent.shouldBeEqual(
-                            "{\"commandId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"entityType\":\"PERSON\",\"names\":[\"nickname\",\"department\"],\"token\":\"JDJhJDEwJDFSNEljZ2FaRUNXUXBTQ25XN05KbE9qRzFHQ1VjMzkvWTBVcFpZb1M4Vmt0dnJYZ0tJVFBx\"}"                        )
+                            "{\"commandId\":\"00000000-1281-40ae-89d7-5c541d77a757\",\"entityType\":\"PERSON\",\"names\":[\"nickname\",\"department\"],\"token\":\"JDJhJDEwJDFSNEljZ2FaRUNXUXBTQ25XN05KbE9qRzFHQ1VjMzkvWTBVcFpZb1M4Vmt0dnJYZ0tJVFBx\"}"
+                        )
 
                         val apiEvent =
                             ApiEvent(
@@ -62,16 +63,23 @@ class AddEntityMetadataDefinitionTest :
                                             authorizationProfiles = emptyList(),
                                             identificationMedia = emptyList(),
                                             installationPoints = emptyList(),
-                                            persons = listOf(
-                                                EntityMetadata(
-                                                    id = UUID.fromString("aaaaaaaa-0000-0000-0000-000000000001"),
-                                                    name = "nickname"
+                                            persons =
+                                                listOf(
+                                                    EntityMetadata(
+                                                        id =
+                                                            UUID.fromString(
+                                                                "aaaaaaaa-0000-0000-0000-000000000001"
+                                                            ),
+                                                        name = "nickname",
+                                                    ),
+                                                    EntityMetadata(
+                                                        id =
+                                                            UUID.fromString(
+                                                                "bbbbbbbb-0000-0000-0000-000000000002"
+                                                            ),
+                                                        name = "department",
+                                                    ),
                                                 ),
-                                                EntityMetadata(
-                                                    id = UUID.fromString("bbbbbbbb-0000-0000-0000-000000000002"),
-                                                    name = "department"
-                                                ),
-                                            ),
                                             zones = emptyList(),
                                         ),
                                 ),
@@ -89,14 +97,18 @@ class AddEntityMetadataDefinitionTest :
                     val api = XesarConnect.connectAndLoginAsync(config).await()
                     api.subscribeAsync(Topics(Topics.Event.PARTITION_CHANGED)).await()
 
-                    val result = api.addEntityMetadataDefinitionAsync(
-                        EntityType.PERSON,
-                        "nickname",
-                        "department",
-                    ).await()
+                    val result =
+                        api.addEntityMetadataDefinitionAsync(
+                                EntityType.PERSON,
+                                "nickname",
+                                "department",
+                            )
+                            .await()
 
                     result.id.shouldBeEqual(UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
-                    result.entityMetadataDefinitions!!.persons.map { it.name }
+                    result.entityMetadataDefinitions!!
+                        .persons
+                        .map { it.name }
                         .shouldBeEqual(listOf("nickname", "department"))
                 }
             }
