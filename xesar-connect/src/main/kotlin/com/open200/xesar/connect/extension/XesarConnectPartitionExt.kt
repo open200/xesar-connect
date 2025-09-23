@@ -150,7 +150,7 @@ suspend fun XesarConnect.setValidityThresholdAsync(
 }
 
 /**
- * Adds one or more metadata definitions to a Xesar entity of the default partition. If any metadata
+ * Adds one or more metadata definitions to a Xesar entity of the default partition asynchronously. If any metadata
  * definition with the same name already exists it will be ignored.
  *
  * @param entityType The target entity type to add the metadata definitions to.
@@ -176,7 +176,7 @@ suspend fun XesarConnect.addEntityMetadataDefinitionAsync(
 }
 
 /**
- * Removes one or more metadata definitions from a Xesar entity on the default partition. If any
+ * Removes one or more metadata definitions from a Xesar entity on the default partition asynchronously. If any
  * provided definition name doesn't exist it will be ignored.
  *
  * @param entityType The target entity type to remove the metadata definitions.
@@ -202,7 +202,7 @@ suspend fun XesarConnect.deleteEntityMetadataDefinitionAsync(
 }
 
 /**
- * Renames a specific metadata definition of a Xesar entity. Will fail if the new name is already in
+ * Renames a specific metadata definition of a Xesar entity asynchronously. Will fail if the new name is already in
  * use or if no metadata exists with the old name.
  *
  * @param entityType The target entity type to rename the metadata definition of.
