@@ -96,7 +96,7 @@ class RenameEntityMetadataDefinitionTest :
                     val result =
                         api.renameEntityMetadataDefinitionAsync(
                                 EntityType.PERSON,
-                                targetId.toString(),
+                                targetId,
                                 "team",
                             )
                             .await()
