@@ -211,7 +211,7 @@ suspend fun XesarConnect.deleteEntityMetadataDefinitionAsync(
  */
 suspend fun XesarConnect.renameEntityMetadataDefinitionAsync(
     entityType: EntityType,
-    metadataDefinitionId: String,
+    metadataDefinitionId: UUID,
     name: String,
     requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): SingleEventResult<PartitionChanged> {
@@ -222,7 +222,7 @@ suspend fun XesarConnect.renameEntityMetadataDefinitionAsync(
         RenameEntityMetadataDefinitionMapi(
             config.uuidGenerator.generateId(),
             entityType,
-            UUID.fromString(metadataDefinitionId),
+            metadataDefinitionId,
             name,
             token,
         ),
