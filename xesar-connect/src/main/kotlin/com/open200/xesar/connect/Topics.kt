@@ -477,6 +477,9 @@ class Topics(vararg val topics: String) {
 
             /** MQTT topic string for the "RenameEntityMetadataDefinitionMapi" command. */
             val RENAME_ENTITY_METADATA_DEFINITION = "xs3/1/cmd/RenameEntityMetadataDefinitionMapi"
+
+            /** MQTT topic string for the "ChangePersonMetadataValueMapi" command. */
+            val CHANGE_PERSON_METADATA_VALUE = "xs3/1/cmd/ChangePersonMetadataValueMapi"
         }
     }
 

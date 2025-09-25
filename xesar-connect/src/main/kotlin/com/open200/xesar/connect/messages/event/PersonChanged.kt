@@ -1,6 +1,7 @@
 package com.open200.xesar.connect.messages.event
 
 import com.open200.xesar.connect.messages.DisengagePeriod
+import com.open200.xesar.connect.messages.EntityMetadata
 import com.open200.xesar.connect.messages.PersonalLog
 import com.open200.xesar.connect.utils.UUIDSerializer
 import java.util.*
@@ -18,6 +19,7 @@ import kotlinx.serialization.Serializable
  * @param personalReferenceDuration The personal reference duration of the person.
  * @param disengagePeriod The disengage period of the person.
  * @param id The id of the person.
+ * @param entityMetadata Contains the information for all defined custom data fields for the person.
  */
 @Serializable
 data class PersonChanged(
@@ -30,4 +32,5 @@ data class PersonChanged(
     val personalReferenceDuration: PersonalLog? = null,
     val disengagePeriod: DisengagePeriod? = null,
     @Serializable(with = UUIDSerializer::class) val id: UUID,
+    val entityMetadata: List<EntityMetadata>,
 ) : Event
