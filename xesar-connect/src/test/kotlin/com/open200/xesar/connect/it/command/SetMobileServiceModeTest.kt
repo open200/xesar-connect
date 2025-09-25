@@ -74,7 +74,8 @@ class SetMobileServiceModeTest :
                     val api = XesarConnect.connectAndLoginAsync(config).await()
                     api.subscribeAsync(Topics(Topics.Event.PARTITION_CHANGED)).await()
 
-                    val result = api.setMobileServiceModeAsync(MobileServiceMode.SELF_SERVICE).await()
+                    val result =
+                        api.setMobileServiceModeAsync(MobileServiceMode.SELF_SERVICE).await()
 
                     result.id.shouldBeEqual(UUID.fromString("43edc7cf-80ab-4486-86db-41cda2c7a2cd"))
                     result.mobileServiceMode?.shouldBeEqual(MobileServiceMode.SELF_SERVICE)
@@ -82,4 +83,3 @@ class SetMobileServiceModeTest :
             }
         }
     })
-
