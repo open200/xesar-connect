@@ -194,6 +194,7 @@ suspend fun XesarConnect.setDefaultDisengagePeriodForPersonAsync(
             config.uuidGenerator.generateId(),
             disengagePeriod,
             externalId,
+            id,
             token,
         ),
         requestConfig,
@@ -219,6 +220,39 @@ suspend fun XesarConnect.setPersonalReferenceDurationInPersonAsync(
             config.uuidGenerator.generateId(),
             personalReferenceDuration,
             externalId,
+            token,
+        ),
+        requestConfig,
+    )
+}
+
+/**
+ * Changes the value of custom data field of a person asynchronously.
+ *
+ * @param externalId The external ID of the person. Either externalId and/or id needs to be filled
+ *   (optional).
+ * @param id The ID of the person. Either externalId and/or id needs to be filled (optional).
+ * @param metadataId The metadataID of the data field.
+ * @param value The new value of the field.
+ * @param requestConfig The request configuration (optional).
+ */
+suspend fun XesarConnect.changePersonMetadataValueAsync(
+    externalId: String? = null,
+    id: UUID? = null,
+    metadataId: UUID,
+    value: String,
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
+): SingleEventResult<PersonChanged> {
+    return sendCommandAsync<ChangePersonMetadataValueMapi, PersonChanged>(
+        Topics.Command.CHANGE_PERSON_METADATA_VALUE,
+        Topics.Event.PERSON_CHANGED,
+        true,
+        ChangePersonMetadataValueMapi(
+            config.uuidGenerator.generateId(),
+            externalId,
+            id,
+            metadataId,
+            value,
             token,
         ),
         requestConfig,
