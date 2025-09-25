@@ -2,9 +2,16 @@ package com.open200.xesar.connect.extension
 
 import com.open200.xesar.connect.Topics
 import com.open200.xesar.connect.XesarConnect
+import com.open200.xesar.connect.messages.MobileServiceMode
 import com.open200.xesar.connect.messages.PersonalLog
 import com.open200.xesar.connect.messages.SingleEventResult
-import com.open200.xesar.connect.messages.command.*
+import com.open200.xesar.connect.messages.command.SetDailySchedulerExecutionTimeMapi
+import com.open200.xesar.connect.messages.command.SetDefaultValidityDurationMapi
+import com.open200.xesar.connect.messages.command.SetInstallationPointPersonalReferenceDurationMapi
+import com.open200.xesar.connect.messages.command.SetMobileServiceModeMapi
+import com.open200.xesar.connect.messages.command.SetPersonPersonalReferenceDurationMapi
+import com.open200.xesar.connect.messages.command.SetReplacementMediumDurationMapi
+import com.open200.xesar.connect.messages.command.SetValidityThresholdMapi
 import com.open200.xesar.connect.messages.event.PartitionChanged
 import java.time.LocalTime
 
@@ -135,6 +142,30 @@ suspend fun XesarConnect.setValidityThresholdAsync(
         Topics.Event.PARTITION_CHANGED,
         true,
         SetValidityThresholdMapi(config.uuidGenerator.generateId(), validityThreshold, token),
+        requestConfig,
+    )
+}
+
+/**
+ * Sets the mobile service mode in the default partition asynchronously.
+ *
+ * @param mobileServiceMode Enum for the Mobile Service mode. Used to describe the application's
+ * method of communication with Smartphones. Allowed values: XMS, SELF_SERVICE.
+ * @param requestConfig The request configuration (optional).
+ */
+suspend fun XesarConnect.setMobileServiceModeAsync(
+    mobileServiceMode: MobileServiceMode,
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
+): SingleEventResult<PartitionChanged> {
+    return sendCommandAsync<SetMobileServiceModeMapi, PartitionChanged>(
+        Topics.Command.SET_MOBILE_SERVICE_MODE,
+        Topics.Event.PARTITION_CHANGED,
+        true,
+        SetMobileServiceModeMapi(
+            config.uuidGenerator.generateId(),
+            mobileServiceMode,
+            token,
+        ),
         requestConfig,
     )
 }
