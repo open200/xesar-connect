@@ -150,7 +150,7 @@ suspend fun XesarConnect.setValidityThresholdAsync(
  * Sets the mobile service mode in the default partition asynchronously.
  *
  * @param mobileServiceMode Enum for the Mobile Service mode. Used to describe the application's
- * method of communication with Smartphones. Allowed values: XMS, SELF_SERVICE.
+ *   method of communication with Smartphones. Allowed values: XMS, SELF_SERVICE.
  * @param requestConfig The request configuration (optional).
  */
 suspend fun XesarConnect.setMobileServiceModeAsync(
@@ -161,11 +161,7 @@ suspend fun XesarConnect.setMobileServiceModeAsync(
         Topics.Command.SET_MOBILE_SERVICE_MODE,
         Topics.Event.PARTITION_CHANGED,
         true,
-        SetMobileServiceModeMapi(
-            config.uuidGenerator.generateId(),
-            mobileServiceMode,
-            token,
-        ),
+        SetMobileServiceModeMapi(config.uuidGenerator.generateId(), mobileServiceMode, token),
         requestConfig,
     )
 }
