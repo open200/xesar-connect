@@ -106,6 +106,7 @@ suspend fun XesarConnect.changePersonInformationAsync(
  * @param identifier The identifier of the person.
  * @param externalId The external ID of the person (optional).
  * @param personId The ID of the person.
+ * @param entityMetadata Contains the information for all custom data values for the person.
  * @param requestConfig The request configuration (optional).
  */
 suspend fun XesarConnect.createPersonAsync(
