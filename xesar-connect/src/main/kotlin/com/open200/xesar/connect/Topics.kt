@@ -465,6 +465,9 @@ class Topics(vararg val topics: String) {
 
             /** MQTT topic string for the "ResendSmartphoneAuthorizationsMapi" command. */
             val RESEND_SMARTPHONE_AUTHORIZATIONS = "xs3/1/cmd/ResendSmartphoneAuthorizationsMapi"
+
+            /** MQTT topic string for the "SetMobileServiceModeMapi" command. */
+            val SET_MOBILE_SERVICE_MODE = "xs3/1/cmd/SetMobileServiceModeMapi"
         }
     }
 
