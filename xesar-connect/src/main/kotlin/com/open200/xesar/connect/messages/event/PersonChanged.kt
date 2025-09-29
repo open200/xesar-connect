@@ -32,5 +32,5 @@ data class PersonChanged(
     val personalReferenceDuration: PersonalLog? = null,
     val disengagePeriod: DisengagePeriod? = null,
     @Serializable(with = UUIDSerializer::class) val id: UUID,
-    val entityMetadata: List<EntityMetadata>,
+    val entityMetadata: List<EntityMetadata>? = null,
 ) : Event

@@ -20,5 +20,6 @@ object PersonFixture {
             outdatedMedia = true,
             externalId = "123",
             external = false,
+            entityMetadata = emptyList(),
         )
 }

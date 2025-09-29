@@ -29,7 +29,8 @@ class PersonElementTest :
                 "\"identificationMediaCount\":0," +
                 "\"outdatedMedia\":true," +
                 "\"externalId\":\"123\"," +
-                "\"external\":false,\"defaultAuthorizationProfile\":null,\"zones\":[],\"installationPoints\":[],\"defaultAuthorizationProfileId\":null}}"
+                "\"external\":false,\"defaultAuthorizationProfile\":null,\"zones\":[],\"installationPoints\":[],\"defaultAuthorizationProfileId\":null," +
+                "\"entityMetadata\":[]}}"
 
         test("encoding QueryResponseElement for a person") {
             val personEncoded = encodeQueryElement(person)
@@ -58,7 +59,8 @@ class PersonElementTest :
                     "\"outdatedMedia\":true," +
                     "\"externalId\":\"123\"," +
                     "\"additionalProperties\":\"additional Information\"," +
-                    "\"external\":false,\"defaultAuthorizationProfile\":null,\"zones\":[],\"installationPoints\":[],\"defaultAuthorizationProfileId\":null}}"
+                    "\"external\":false,\"defaultAuthorizationProfile\":null,\"zones\":[],\"installationPoints\":[],\"defaultAuthorizationProfileId\":null," +
+                    "\"entityMetadata\":[]}}"
 
             val personsDecoded = decodeQueryElement<Person>(personWithAdditionalProperties)
 

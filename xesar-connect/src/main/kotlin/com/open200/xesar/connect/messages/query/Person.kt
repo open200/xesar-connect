@@ -41,7 +41,7 @@ data class Person(
     val zones: List<@Serializable(with = UUIDSerializer::class) UUID>? = emptyList(),
     val installationPoints: List<@Serializable(with = UUIDSerializer::class) UUID>? = emptyList(),
     @Serializable(with = UUIDSerializer::class) val defaultAuthorizationProfileId: UUID? = null,
-    val entityMetadata: List<EntityMetadata>,
+    val entityMetadata: List<EntityMetadata>? = null,
 ) : QueryListResource, QueryElementResource {
 
     companion object {

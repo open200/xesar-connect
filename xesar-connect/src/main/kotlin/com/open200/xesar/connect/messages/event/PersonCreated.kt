@@ -32,5 +32,5 @@ data class PersonCreated(
     val disengagePeriod: DisengagePeriod? = null,
     val externalId: String? = null,
     @Serializable(with = UUIDSerializer::class) val id: UUID,
-    val entityMetadata: List<EntityMetadata>,
+    val entityMetadata: List<EntityMetadata>? = null,
 ) : Event
