@@ -468,6 +468,15 @@ class Topics(vararg val topics: String) {
 
             /** MQTT topic string for the "SetMobileServiceModeMapi" command. */
             val SET_MOBILE_SERVICE_MODE = "xs3/1/cmd/SetMobileServiceModeMapi"
+
+            /** MQTT topic string for the "AddEntityMetadataDefinitionMapi" command. */
+            val ADD_ENTITY_METADATA_DEFINITION = "xs3/1/cmd/AddEntityMetadataDefinitionMapi"
+
+            /** MQTT topic string for the "DeleteEntityMetadataDefinitionMapi" command. */
+            val DELETE_ENTITY_METADATA_DEFINITION = "xs3/1/cmd/DeleteEntityMetadataDefinitionMapi"
+
+            /** MQTT topic string for the "RenameEntityMetadataDefinitionMapi" command. */
+            val RENAME_ENTITY_METADATA_DEFINITION = "xs3/1/cmd/RenameEntityMetadataDefinitionMapi"
         }
     }
 
