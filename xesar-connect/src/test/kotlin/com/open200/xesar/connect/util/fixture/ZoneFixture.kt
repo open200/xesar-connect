@@ -13,5 +13,6 @@ object ZoneFixture {
             description = "zone description",
             id = UUID.fromString("497f6eca-6276-4993-bfeb-53cbbbba6f08"),
             installationPoints = listOf(UUID.fromString("7ca59670-bd30-4ea9-9bd1-2103a9bd2f2a")),
+            entityMetadata = emptyList(),
         )
 }
