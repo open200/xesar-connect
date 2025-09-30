@@ -168,6 +168,35 @@ suspend fun XesarConnect.removeInstallationPointFromZoneAsync(
 }
 
 /**
+ * Changes the value of custom data field of a zone.
+ *
+ * @param id The ID of the zone.
+ * @param metadataId The metadataID of the data field.
+ * @param value The new value of the field.
+ * @param requestConfig The request configuration (optional).
+ */
+suspend fun XesarConnect.changeZoneMetadataValueAsync(
+    id: UUID,
+    metadataId: UUID,
+    value: String,
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
+): SingleEventResult<ZoneChanged> {
+    return sendCommandAsync<ChangeZoneMetadataValueMapi, ZoneChanged>(
+        Topics.Command.CHANGE_ZONE_METADATA_VALUE,
+        Topics.Event.ZONE_CHANGED,
+        true,
+        ChangeZoneMetadataValueMapi(
+            config.uuidGenerator.generateId(),
+            id,
+            metadataId,
+            value,
+            token,
+        ),
+        requestConfig,
+    )
+}
+
+/**
  * Retrieves a cold stream of [Zone] objects, fetching them incrementally in smaller,more manageable
  * chunks rather than retrieving the entire dataset at once. Use [Query.Params.pageLimit] to choose
  * the size of one chunk. Use [Query.Params.pageOffset] to choose at which offset to start.

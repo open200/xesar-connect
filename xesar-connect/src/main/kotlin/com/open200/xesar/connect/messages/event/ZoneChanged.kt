@@ -1,5 +1,6 @@
 package com.open200.xesar.connect.messages.event
 
+import com.open200.xesar.connect.messages.EntityMetadata
 import com.open200.xesar.connect.utils.UUIDSerializer
 import java.util.*
 import kotlinx.serialization.Serializable
@@ -10,10 +11,12 @@ import kotlinx.serialization.Serializable
  * @param name The name of the zone.
  * @param description The description of the zone.
  * @param id The id of the zone.
+ * @param entityMetadata Contains the information for all defined custom data fields for the zone.
  */
 @Serializable
 data class ZoneChanged(
     val name: String,
     val description: String,
     @Serializable(with = UUIDSerializer::class) val id: UUID,
+    val entityMetadata: List<EntityMetadata>? = null,
 ) : Event
