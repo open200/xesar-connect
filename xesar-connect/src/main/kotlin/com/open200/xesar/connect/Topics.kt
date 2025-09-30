@@ -480,6 +480,9 @@ class Topics(vararg val topics: String) {
 
             /** MQTT topic string for the "ChangePersonMetadataValueMapi" command. */
             val CHANGE_PERSON_METADATA_VALUE = "xs3/1/cmd/ChangePersonMetadataValueMapi"
+
+            /** MQTT topic string for the "ChangeMediumMetadataValueMapi" command. */
+            val CHANGE_MEDIUM_METADATA_VALUE = "xs3/1/cmd/ChangeMediumMetadataValueMapi"
         }
     }
 

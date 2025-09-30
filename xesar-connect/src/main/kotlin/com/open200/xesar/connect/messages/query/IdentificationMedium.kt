@@ -1,6 +1,7 @@
 package com.open200.xesar.connect.messages.query
 
 import com.open200.xesar.connect.messages.DisengagePeriod
+import com.open200.xesar.connect.messages.EntityMetadata
 import com.open200.xesar.connect.utils.LocalDateTimeSerializer
 import com.open200.xesar.connect.utils.UUIDSerializer
 import java.time.LocalDateTime
@@ -54,6 +55,7 @@ import kotlinx.serialization.Serializable
  * @param registrationCodeValidUntil The expiration timestamp of the smartphone registration code
  *   (optional).
  * @param messageLanguage The language for correspondence (optional).
+ * @param entityMetadata Contains the information for all defined custom data fields for the medium.
  */
 @Serializable
 data class IdentificationMedium(
@@ -96,6 +98,7 @@ data class IdentificationMedium(
     @Serializable(with = LocalDateTimeSerializer::class)
     val registrationCodeValidUntil: LocalDateTime? = null,
     val messageLanguage: String? = null,
+    val entityMetadata: List<EntityMetadata>? = null,
 ) : QueryListResource, QueryElementResource {
 
     companion object {

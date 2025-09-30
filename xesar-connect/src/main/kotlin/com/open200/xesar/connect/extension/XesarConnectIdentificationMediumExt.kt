@@ -483,6 +483,35 @@ suspend fun XesarConnect.requestToAddMediumToInstallationAsync(
 }
 
 /**
+ * Changes the value of custom data field of a medium asynchronously.
+ *
+ * @param id The ID of the medium.
+ * @param metadataId The metadataID of the data field.
+ * @param value The new value of the field.
+ * @param requestConfig The request configuration (optional).
+ */
+suspend fun XesarConnect.changeMediumMetadataValueAsync(
+    id: UUID,
+    metadataId: UUID,
+    value: String,
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
+): SingleEventResult<MediumChanged> {
+    return sendCommandAsync<ChangeMediumMetadataValueMapi, MediumChanged>(
+        Topics.Command.CHANGE_MEDIUM_METADATA_VALUE,
+        Topics.Event.MEDIUM_CHANGED,
+        true,
+        ChangeMediumMetadataValueMapi(
+            config.uuidGenerator.generateId(),
+            id,
+            metadataId,
+            value,
+            token,
+        ),
+        requestConfig,
+    )
+}
+
+/**
  * Retrieves a cold stream of [IdentificationMedium] objects, fetching them incrementally in
  * smaller,more manageable chunks rather than retrieving the entire dataset at once. Use
  * [Query.Params.pageLimit] to choose the size of one chunk. Use [Query.Params.pageOffset] to choose
