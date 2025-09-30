@@ -44,5 +44,6 @@ object IdentificationMediumFixture {
             userName = "test User",
             requiredAction = "UPDATE",
             mediumType = IdentificationMedium.MediumType.PASSIVE,
+            entityMetadata = emptyList(),
         )
 }

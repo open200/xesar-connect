@@ -1,6 +1,7 @@
 package com.open200.xesar.connect.messages.event
 
 import com.open200.xesar.connect.messages.DisengagePeriod
+import com.open200.xesar.connect.messages.EntityMetadata
 import com.open200.xesar.connect.utils.LocalDateTimeSerializer
 import com.open200.xesar.connect.utils.UUIDSerializer
 import java.time.LocalDateTime
@@ -22,6 +23,7 @@ import kotlinx.serialization.Serializable
  * @param accessEndAt The access end date of the medium.
  * @param phoneNumber The phone number of the medium (smartphone).
  * @param messageLanguage The message language of the medium (smartphone).
+ * @param entityMetadata Contains the information for all defined custom data fields for the medium.
  */
 @Serializable
 data class MediumChanged(
@@ -37,4 +39,5 @@ data class MediumChanged(
     val accessEndAt: @Serializable(with = LocalDateTimeSerializer::class) LocalDateTime? = null,
     val phoneNumber: String? = null,
     val messageLanguage: String? = null,
+    val entityMetadata: List<EntityMetadata>? = null,
 ) : Event
