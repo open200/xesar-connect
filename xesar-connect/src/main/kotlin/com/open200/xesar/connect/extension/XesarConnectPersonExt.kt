@@ -3,6 +3,7 @@ package com.open200.xesar.connect.extension
 import com.open200.xesar.connect.Topics
 import com.open200.xesar.connect.XesarConnect
 import com.open200.xesar.connect.messages.DisengagePeriod
+import com.open200.xesar.connect.messages.EntityMetadata
 import com.open200.xesar.connect.messages.PersonalLog
 import com.open200.xesar.connect.messages.SingleEventResult
 import com.open200.xesar.connect.messages.command.*
@@ -67,14 +68,17 @@ suspend fun XesarConnect.queryPersonByExternalId(externalId: String): Person? {
  * @param firstName The first name of the person.
  * @param lastName The last name of the person.
  * @param identifier The identifier of the person.
- * @param externalId The external ID of the person.
+ * @param externalId The external ID of the person. Either externalId and/or id needs to be filled
+ *   (optional).
+ * @param id The ID of the person. Either externalId and/or id needs to be filled (optional).
  * @param requestConfig The request configuration (optional).
  */
 suspend fun XesarConnect.changePersonInformationAsync(
     firstName: String,
     lastName: String,
     identifier: String,
-    externalId: String,
+    externalId: String? = null,
+    id: UUID? = null,
     requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): SingleEventResult<PersonChanged> {
     return sendCommandAsync<ChangePersonInformationMapi, PersonChanged>(
@@ -87,6 +91,7 @@ suspend fun XesarConnect.changePersonInformationAsync(
             lastName,
             identifier,
             externalId,
+            id,
             token,
         ),
         requestConfig,
@@ -99,8 +104,9 @@ suspend fun XesarConnect.changePersonInformationAsync(
  * @param firstName The first name of the person.
  * @param lastName The last name of the person.
  * @param identifier The identifier of the person.
- * @param externalId The external ID of the person.
+ * @param externalId The external ID of the person (optional).
  * @param personId The ID of the person.
+ * @param entityMetadata Contains the information for all custom data values for the person.
  * @param requestConfig The request configuration (optional).
  */
 suspend fun XesarConnect.createPersonAsync(
@@ -109,6 +115,7 @@ suspend fun XesarConnect.createPersonAsync(
     identifier: String? = null,
     externalId: String? = null,
     personId: UUID,
+    entityMetadata: List<EntityMetadata>? = null,
     requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): SingleEventResult<PersonCreated> {
     return sendCommandAsync<CreatePersonMapi, PersonCreated>(
@@ -122,6 +129,7 @@ suspend fun XesarConnect.createPersonAsync(
             identifier,
             externalId,
             personId,
+            entityMetadata,
             token,
         ),
         requestConfig,
@@ -131,18 +139,21 @@ suspend fun XesarConnect.createPersonAsync(
 /**
  * Deletes a person asynchronously.
  *
- * @param externalId The external ID of the person.
+ * @param externalId The external ID of the person. Either externalId and/or id needs to be filled
+ *   (optional).
+ * @param id The ID of the person. Either externalId and/or id needs to be filled (optional).
  * @param requestConfig The request configuration (optional).
  */
 suspend fun XesarConnect.deletePersonAsync(
     externalId: String? = null,
+    id: UUID? = null,
     requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): SingleEventResult<PersonDeleted> {
     return sendCommandAsync<DeletePersonMapi, PersonDeleted>(
         Topics.Command.DELETE_PERSON,
         Topics.Event.PERSON_DELETED,
         true,
-        DeletePersonMapi(config.uuidGenerator.generateId(), externalId, token),
+        DeletePersonMapi(config.uuidGenerator.generateId(), externalId, id, token),
         requestConfig,
     )
 }
@@ -150,13 +161,16 @@ suspend fun XesarConnect.deletePersonAsync(
 /**
  * Sets the default authorization profile for a person asynchronously.
  *
- * @param externalId The external ID of the person.
+ * @param externalId The external ID of the person. Either externalId and/or id needs to be filled
+ *   (optional).
+ * @param id The ID of the person. Either externalId and/or id needs to be filled (optional).
  * @param defaultAuthorizationProfileName The name of the default authorization profile. Set null to
  *   remove authorization profile from person. Empty string gets ignored.
  * @param requestConfig The request configuration (optional).
  */
 suspend fun XesarConnect.setDefaultAuthorizationProfileForPersonAsync(
-    externalId: String,
+    externalId: String? = null,
+    id: UUID? = null,
     defaultAuthorizationProfileName: String? = null,
     requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): SingleEventResult<PersonChanged> {
@@ -167,6 +181,7 @@ suspend fun XesarConnect.setDefaultAuthorizationProfileForPersonAsync(
         SetDefaultAuthorizationProfileForPersonMapi(
             config.uuidGenerator.generateId(),
             externalId,
+            id,
             defaultAuthorizationProfileName,
             token,
         ),
@@ -177,12 +192,15 @@ suspend fun XesarConnect.setDefaultAuthorizationProfileForPersonAsync(
 /**
  * Sets the default disengage period for a person asynchronously.
  *
- * @param externalId The external ID of the person.
+ * @param externalId The external ID of the person. Either externalId and/or id needs to be filled
+ *   (optional).
+ * @param id The ID of the person. Either externalId and/or id needs to be filled (optional).
  * @param disengagePeriod The disengage period.
  * @param requestConfig The request configuration (optional).
  */
 suspend fun XesarConnect.setDefaultDisengagePeriodForPersonAsync(
-    externalId: String,
+    externalId: String? = null,
+    id: UUID? = null,
     disengagePeriod: DisengagePeriod,
     requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): SingleEventResult<PersonChanged> {
@@ -194,6 +212,7 @@ suspend fun XesarConnect.setDefaultDisengagePeriodForPersonAsync(
             config.uuidGenerator.generateId(),
             disengagePeriod,
             externalId,
+            id,
             token,
         ),
         requestConfig,
@@ -203,11 +222,15 @@ suspend fun XesarConnect.setDefaultDisengagePeriodForPersonAsync(
 /**
  * Sets the default logging of personal data for a person asynchronously.
  *
+ * @param externalId The external ID of the person. Either externalId and/or id needs to be filled
+ *   (optional).
+ * @param id The ID of the person. Either externalId and/or id needs to be filled (optional).
  * @param personalReferenceDuration The default personal reference duration
  * @param requestConfig The request configuration (optional).
  */
 suspend fun XesarConnect.setPersonalReferenceDurationInPersonAsync(
-    externalId: String,
+    externalId: String? = null,
+    id: UUID? = null,
     personalReferenceDuration: PersonalLog,
     requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
 ): SingleEventResult<PersonChanged> {
@@ -219,6 +242,40 @@ suspend fun XesarConnect.setPersonalReferenceDurationInPersonAsync(
             config.uuidGenerator.generateId(),
             personalReferenceDuration,
             externalId,
+            id,
+            token,
+        ),
+        requestConfig,
+    )
+}
+
+/**
+ * Changes the value of custom data field of a person asynchronously.
+ *
+ * @param externalId The external ID of the person. Either externalId and/or id needs to be filled
+ *   (optional).
+ * @param id The ID of the person. Either externalId and/or id needs to be filled (optional).
+ * @param metadataId The metadataID of the data field.
+ * @param value The new value of the field.
+ * @param requestConfig The request configuration (optional).
+ */
+suspend fun XesarConnect.changePersonMetadataValueAsync(
+    externalId: String? = null,
+    id: UUID? = null,
+    metadataId: UUID,
+    value: String,
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
+): SingleEventResult<PersonChanged> {
+    return sendCommandAsync<ChangePersonMetadataValueMapi, PersonChanged>(
+        Topics.Command.CHANGE_PERSON_METADATA_VALUE,
+        Topics.Event.PERSON_CHANGED,
+        true,
+        ChangePersonMetadataValueMapi(
+            config.uuidGenerator.generateId(),
+            externalId,
+            id,
+            metadataId,
+            value,
             token,
         ),
         requestConfig,

@@ -1,5 +1,6 @@
 package com.open200.xesar.connect.messages.command
 
+import com.open200.xesar.connect.messages.EntityMetadata
 import com.open200.xesar.connect.utils.UUIDSerializer
 import java.util.*
 import kotlinx.serialization.Serializable
@@ -13,6 +14,7 @@ import kotlinx.serialization.Serializable
  * @param identifier The identifier of the person.
  * @param externalId The external id of the person.
  * @param id The id of the person.
+ * @param entityMetadata Contains the information for all defined custom data fields for the person.
  * @param token The token of the command.
  */
 @Serializable
@@ -23,5 +25,6 @@ data class CreatePersonMapi(
     val identifier: String? = null,
     val externalId: String? = null,
     @Serializable(with = UUIDSerializer::class) val id: UUID,
+    val entityMetadata: List<EntityMetadata>? = null,
     val token: String,
 ) : Command

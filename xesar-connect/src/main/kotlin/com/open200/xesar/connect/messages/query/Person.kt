@@ -1,6 +1,7 @@
 package com.open200.xesar.connect.messages.query
 
 import com.open200.xesar.connect.messages.DisengagePeriod
+import com.open200.xesar.connect.messages.EntityMetadata
 import com.open200.xesar.connect.messages.PersonalLog
 import com.open200.xesar.connect.utils.UUIDSerializer
 import java.util.*
@@ -21,6 +22,7 @@ import kotlinx.serialization.Serializable
  * @param outdatedMedia Indicates if the person has outdated media (optional).
  * @param externalId The external ID of the person (optional).
  * @param external Indicates if the person is external (optional).
+ * @param entityMetadata Contains the information for all defined custom data fields for the person.
  */
 @Serializable
 data class Person(
@@ -39,6 +41,7 @@ data class Person(
     val zones: List<@Serializable(with = UUIDSerializer::class) UUID>? = emptyList(),
     val installationPoints: List<@Serializable(with = UUIDSerializer::class) UUID>? = emptyList(),
     @Serializable(with = UUIDSerializer::class) val defaultAuthorizationProfileId: UUID? = null,
+    val entityMetadata: List<EntityMetadata>? = null,
 ) : QueryListResource, QueryElementResource {
 
     companion object {

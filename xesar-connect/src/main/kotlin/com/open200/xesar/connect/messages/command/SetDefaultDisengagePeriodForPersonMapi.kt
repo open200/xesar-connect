@@ -13,12 +13,14 @@ import kotlinx.serialization.Serializable
  *   be disengaged. The values for SHORT/LONG in seconds can be changed in the installation
  *   settings.
  * @param externalId The external id of the person.
+ * @param id The id of the person.
  * @param token The token of the command.
  */
 @Serializable
 data class SetDefaultDisengagePeriodForPersonMapi(
     override val commandId: @Serializable(with = UUIDSerializer::class) UUID,
     val disengagePeriod: DisengagePeriod,
-    val externalId: String,
+    val externalId: String? = null,
+    val id: @Serializable(with = UUIDSerializer::class) UUID? = null,
     val token: String,
 ) : Command
