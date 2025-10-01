@@ -1,5 +1,6 @@
 package com.open200.xesar.connect.messages.query
 
+import com.open200.xesar.connect.messages.EntityMetadata
 import com.open200.xesar.connect.utils.UUIDSerializer
 import java.util.*
 import kotlinx.serialization.Serializable
@@ -17,6 +18,8 @@ import kotlinx.serialization.Serializable
  * @param anyAuthorizations Indicates if the authorization profile allows any authorizations.
  * @param standardTimeProfile The used standard time profile id or null for an all-day time profile.
  *   (optional).
+ * @param entityMetadata Contains the information for all defined custom data fields for the
+ *   authorization profile.
  */
 @Serializable
 data class AuthorizationProfile(
@@ -28,6 +31,7 @@ data class AuthorizationProfile(
     val manualOfficeMode: Boolean,
     val anyAuthorizations: Boolean,
     @Serializable(with = UUIDSerializer::class) val standardTimeProfile: UUID? = null,
+    val entityMetadata: List<EntityMetadata>? = null,
 ) : QueryListResource, QueryElementResource {
 
     /**

@@ -163,6 +163,38 @@ suspend fun XesarConnect.changeAuthorizationProfileAsync(
 }
 
 /**
+ * Changes the value of custom data field of an authorization profile asynchronously.
+ *
+ * @param id The ID of the authorization profile
+ * @param metadataId The metadataID of the data field.
+ * @param value The new value of the field.
+ * @param requestConfig The request configuration (optional).
+ */
+suspend fun XesarConnect.changeAuthorizationProfileMetadataValueAsync(
+    id: UUID,
+    metadataId: UUID,
+    value: String,
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
+): SingleEventResult<AuthorizationProfileInfoChanged> {
+    return sendCommandAsync<
+        ChangeAuthorizationProfileMetadataValueMapi,
+        AuthorizationProfileInfoChanged,
+    >(
+        Topics.Command.CHANGE_AUTHORIZATION_PROFILE_METADATA_VALUE,
+        Topics.Event.AUTHORIZATION_PROFILE_INFO_CHANGED,
+        true,
+        ChangeAuthorizationProfileMetadataValueMapi(
+            config.uuidGenerator.generateId(),
+            id,
+            metadataId,
+            value,
+            token,
+        ),
+        requestConfig,
+    )
+}
+
+/**
  * Retrieves a cold stream of [AuthorizationProfile] objects, fetching them incrementally in
  * smaller,more manageable chunks rather than retrieving the entire dataset at once. Use
  * [Query.Params.pageLimit] to choose the size of one chunk. Use [Query.Params.pageOffset] to choose
