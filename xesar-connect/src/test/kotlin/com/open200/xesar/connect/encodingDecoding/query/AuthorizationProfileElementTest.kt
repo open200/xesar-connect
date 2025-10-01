@@ -32,7 +32,8 @@ class AuthorizationProfileElementTest :
                 "\"timeProfileId\":\"532534ef-d5aa-4cca-acfb-e558c623b00a\"}]," +
                 "\"manualOfficeMode\":true," +
                 "\"anyAuthorizations\":true," +
-                "\"standardTimeProfile\":\"a58e45f8-7bff-4b3a-bd0e-a831b3fa8053\"}}"
+                "\"standardTimeProfile\":\"a58e45f8-7bff-4b3a-bd0e-a831b3fa8053\"," +
+                "\"entityMetadata\":[]}}"
 
         test("encoding QueryListElement for an authorization profile") {
             val authorizationProfileEncoded = encodeQueryElement(authorizationProfileTest)

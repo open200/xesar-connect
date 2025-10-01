@@ -27,5 +27,6 @@ object AuthorizationProfileFixture {
             manualOfficeMode = true,
             anyAuthorizations = true,
             standardTimeProfile = UUID.fromString("a58e45f8-7bff-4b3a-bd0e-a831b3fa8053"),
+            entityMetadata = emptyList(),
         )
 }
