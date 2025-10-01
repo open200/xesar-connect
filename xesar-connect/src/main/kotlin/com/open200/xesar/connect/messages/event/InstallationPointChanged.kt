@@ -1,6 +1,7 @@
 package com.open200.xesar.connect.messages.event
 
 import com.open200.xesar.connect.messages.BluetoothState
+import com.open200.xesar.connect.messages.EntityMetadata
 import com.open200.xesar.connect.messages.PersonalLog
 import com.open200.xesar.connect.messages.query.TimeProfile
 import com.open200.xesar.connect.utils.UUIDSerializer
@@ -28,6 +29,8 @@ import kotlinx.serialization.Serializable
  * @param timeProfileData The time profile data.
  * @param openDoor Whether the door is open.
  * @param bluetoothState The Bluetooth state of the installation point (optional).
+ * @param entityMetadata Contains the information for all defined custom data fields for the
+ *   installation point.
  */
 @Serializable
 data class InstallationPointChanged(
@@ -50,4 +53,5 @@ data class InstallationPointChanged(
     val timeProfileData: TimeProfile? = null,
     val openDoor: Boolean? = null,
     val bluetoothState: BluetoothState? = null,
+    val entityMetadata: List<EntityMetadata>? = null,
 ) : Event

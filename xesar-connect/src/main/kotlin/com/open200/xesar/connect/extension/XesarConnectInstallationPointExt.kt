@@ -486,3 +486,32 @@ suspend fun XesarConnect.configureBluetoothStateAsync(
         requestConfig,
     )
 }
+
+/**
+ * Changes the value of custom data field of an installation point.
+ *
+ * @param id The ID of the installation point.
+ * @param metadataId The metadataID of the data field.
+ * @param value The new value of the field.
+ * @param requestConfig The request configuration (optional).
+ */
+suspend fun XesarConnect.changeInstallationPointMetadataValueAsync(
+    id: UUID,
+    metadataId: UUID,
+    value: String,
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
+): SingleEventResult<InstallationPointChanged> {
+    return sendCommandAsync<ChangeInstallationPointMetadataValueMapi, InstallationPointChanged>(
+        Topics.Command.CHANGE_INSTALLATION_POINT_METADATA_VALUE,
+        Topics.Event.INSTALLATION_POINT_CHANGED,
+        true,
+        ChangeInstallationPointMetadataValueMapi(
+            config.uuidGenerator.generateId(),
+            id,
+            metadataId,
+            value,
+            token,
+        ),
+        requestConfig,
+    )
+}

@@ -28,5 +28,6 @@ object InstallationPointFixture {
             shopMode = false,
             openDoor = true,
             bleStatus = "NO_BLE",
+            entityMetadata = emptyList(),
         )
 }
