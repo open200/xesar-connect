@@ -1,6 +1,7 @@
 package com.open200.xesar.connect.util.fixture
 
 import com.open200.xesar.connect.messages.DisengagePeriod
+import com.open200.xesar.connect.messages.EntityMetadata
 import com.open200.xesar.connect.messages.query.IdentificationMedium
 import java.time.LocalDateTime
 import java.util.*
@@ -44,6 +45,18 @@ object IdentificationMediumFixture {
             userName = "test User",
             requiredAction = "UPDATE",
             mediumType = IdentificationMedium.MediumType.PASSIVE,
-            entityMetadata = emptyList(),
+            entityMetadata =
+                listOf(
+                    EntityMetadata(
+                        id = UUID.fromString("123e4567-e89b-12d3-a456-426614174000"),
+                        name = "type",
+                        value = "card",
+                    ),
+                    EntityMetadata(
+                        id = UUID.fromString("0f8fad5b-d9cb-469f-a165-70867728950e"),
+                        name = "amount",
+                        value = null,
+                    ),
+                ),
         )
 }
