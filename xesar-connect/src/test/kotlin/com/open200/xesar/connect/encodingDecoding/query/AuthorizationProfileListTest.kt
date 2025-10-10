@@ -46,7 +46,7 @@ class AuthorizationProfileListTest :
                 "\"manualOfficeMode\":true," +
                 "\"anyAuthorizations\":true," +
                 "\"standardTimeProfile\":\"a58e45f8-7bff-4b3a-bd0e-a831b3fa8053\"," +
-                "\"entityMetadata\":[]}," +
+                "\"entityMetadata\":[{\"id\":\"123e4567-e89b-12d3-a456-426614174000\",\"name\":\"type\",\"value\":\"authorization type 1\"},{\"id\":\"0f8fad5b-d9cb-469f-a165-70867728950e\",\"name\":\"number\",\"value\":null}]}," +
                 "{\"id\":\"555e7d1a-54f1-432a-ade7-80d20a63ee2d\"," +
                 "\"name\":\"authorization profile 2 String\"," +
                 "\"description\":\"description profile 2 String\"," +
@@ -55,7 +55,7 @@ class AuthorizationProfileListTest :
                 "\"manualOfficeMode\":true," +
                 "\"anyAuthorizations\":true," +
                 "\"standardTimeProfile\":\"a58e45f8-7bff-4b3a-bd0e-a831b3fa8053\"," +
-                "\"entityMetadata\":[]}]," +
+                "\"entityMetadata\":[{\"id\":\"123e4567-e89b-12d3-a456-426614174000\",\"name\":\"type\",\"value\":\"authorization type 1\"},{\"id\":\"0f8fad5b-d9cb-469f-a165-70867728950e\",\"name\":\"number\",\"value\":null}]}]," +
                 "\"totalCount\":2," +
                 "\"filterCount\":2}}"
 
