@@ -1,6 +1,7 @@
 package com.open200.xesar.connect.util.fixture
 
 import com.open200.xesar.connect.messages.ComponentType
+import com.open200.xesar.connect.messages.EntityMetadata
 import com.open200.xesar.connect.messages.query.InstallationPoint
 import com.open200.xesar.connect.messages.query.OnlineStatus
 import java.util.*
@@ -28,6 +29,18 @@ object InstallationPointFixture {
             shopMode = false,
             openDoor = true,
             bleStatus = "NO_BLE",
-            entityMetadata = emptyList(),
+            entityMetadata =
+                listOf(
+                    EntityMetadata(
+                        id = UUID.fromString("123e4567-e89b-12d3-a456-426614174000"),
+                        name = "type",
+                        value = "double door",
+                    ),
+                    EntityMetadata(
+                        id = UUID.fromString("0f8fad5b-d9cb-469f-a165-70867728950e"),
+                        name = "color",
+                        value = null,
+                    ),
+                ),
         )
 }
