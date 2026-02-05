@@ -190,6 +190,44 @@ class Topics(vararg val topics: String) {
             /** MQTT topic string for the "SmartphoneAuthorizationsResent" event */
             val SMARTPHONE_AUTHORIZATIONS_RESENT = "xs3/1/ces/SmartphoneAuthorizationsResent"
 
+            /** MQTT topic string for the "MediumRevoked" event */
+            val MEDIUM_REVOKED = "xs3/1/ces/MediumRevoked"
+
+            /** MQTT topic string for the "MobileRegistrationStateUpdated" event */
+            val MOBILE_REGISTRATION_STATE_UPDATED = "xs3/1/ces/MobileRegistrationStateUpdated"
+
+            /** MQTT topic string for the "AuthorizationProfileMetadataDefinitionsUpdated" event */
+            val AUTHORIZATION_PROFILE_METADATA_DEFINITIONS_UPDATED =
+                "xs3/1/ces/AuthorizationProfileMetadataDefinitionsUpdated"
+
+            /** MQTT topic string for the "InstallationPointMetadataDefinitionsUpdated" event */
+            val INSTALLATION_POINT_METADATA_DEFINITIONS_UPDATED =
+                "xs3/1/ces/InstallationPointMetadataDefinitionsUpdated"
+
+            /** MQTT topic string for the "MediumMetadataDefinitionsUpdated" event */
+            val MEDIUM_METADATA_DEFINITIONS_UPDATED = "xs3/1/ces/MediumMetadataDefinitionsUpdated"
+
+            /** MQTT topic string for the "PersonMetadataDefinitionsUpdated" event */
+            val PERSON_METADATA_DEFINITIONS_UPDATED = "xs3/1/ces/PersonMetadataDefinitionsUpdated"
+
+            /** MQTT topic string for the "ZoneMetadataDefinitionsUpdated" event */
+            val ZONE_METADATA_DEFINITIONS_UPDATED = "xs3/1/ces/ZoneMetadataDefinitionsUpdated"
+
+            /** MQTT topic string for the "SmartphoneLocked" event (Self Service Mode) */
+            val SMARTPHONE_LOCKED = "xs3/1/mss/ces/SmartphoneLocked"
+
+            /** MQTT topic string for the "SmartphoneRevokePending" event (Self Service Mode) */
+            val SMARTPHONE_REVOKE_PENDING = "xs3/1/mss/ces/SmartphoneRevokePending"
+
+            /** MQTT topic string for the "SmartphoneRevokeConfirmed" event (Self Service Mode) */
+            val SMARTPHONE_REVOKE_CONFIRMED = "xs3/1/mss/ces/SmartphoneRevokeConfirmed"
+
+            /** MQTT topic string for the "SmartphoneUpdatePending" event (Self Service Mode) */
+            val SMARTPHONE_UPDATE_PENDING = "xs3/1/mss/ces/SmartphoneUpdatePending"
+
+            /** MQTT topic string for the "SmartphoneUpdateConfirmed" event (Self Service Mode) */
+            val SMARTPHONE_UPDATE_CONFIRMED = "xs3/1/mss/ces/SmartphoneUpdateConfirmed"
+
             /**
              * Generates the MQTT topic string which emits errors for previously received queries or
              * commands.
@@ -491,6 +529,22 @@ class Topics(vararg val topics: String) {
             /** MQTT topic string for the "ChangeAuthorizationProfileMetadataValueMapi" command. */
             val CHANGE_AUTHORIZATION_PROFILE_METADATA_VALUE =
                 "xs3/1/cmd/ChangeAuthorizationProfileMetadataValueMapi"
+
+            /** MQTT topic string for the "RevokeSmartphoneMapi" command. */
+            val REVOKE_SMARTPHONE = "xs3/1/cmd/RevokeSmartphoneMapi"
+
+            /** MQTT topic string for the "UnassignPersonFromMediumMapi" command. */
+            val UNASSIGN_PERSON_FROM_MEDIUM = "xs3/1/cmd/UnassignPersonFromMediumMapi"
+
+            /**
+             * MQTT topic string for the "ConfirmSmartphoneRevokeMapi" command (Self Service Mode).
+             */
+            val CONFIRM_SMARTPHONE_REVOKE = "xs3/1/mss/cmd/ConfirmSmartphoneRevokeMapi"
+
+            /**
+             * MQTT topic string for the "ConfirmSmartphoneUpdateMapi" command (Self Service Mode).
+             */
+            val CONFIRM_SMARTPHONE_UPDATE = "xs3/1/mss/cmd/ConfirmSmartphoneUpdateMapi"
         }
     }
 

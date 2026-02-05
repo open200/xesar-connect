@@ -217,3 +217,74 @@ suspend fun XesarConnect.resendSmartphoneAuthorizationsAsync(
         requestConfig,
     )
 }
+
+/**
+ * Revokes a smartphone medium asynchronously.
+ *
+ * @param id The id of the smartphone medium.
+ * @param requestConfig The request configuration (optional).
+ */
+suspend fun XesarConnect.revokeSmartphoneAsync(
+    id: UUID,
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
+): SingleEventResult<MediumRevoked> {
+    return sendCommandAsync<RevokeSmartphoneMapi, MediumRevoked>(
+        Topics.Command.REVOKE_SMARTPHONE,
+        Topics.Event.MEDIUM_REVOKED,
+        true,
+        RevokeSmartphoneMapi(config.uuidGenerator.generateId(), id, token),
+        requestConfig,
+    )
+}
+
+/**
+ * Confirms a smartphone revocation in Self Service Mode asynchronously.
+ *
+ * @param mediumId The id of the smartphone medium.
+ * @param transactionId The id of the transaction.
+ * @param requestConfig The request configuration (optional).
+ */
+suspend fun XesarConnect.confirmSmartphoneRevokeAsync(
+    mediumId: UUID,
+    transactionId: UUID,
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
+): SingleEventResult<SmartphoneRevokeConfirmed> {
+    return sendCommandAsync<ConfirmSmartphoneRevokeMapi, SmartphoneRevokeConfirmed>(
+        Topics.Command.CONFIRM_SMARTPHONE_REVOKE,
+        Topics.Event.SMARTPHONE_REVOKE_CONFIRMED,
+        true,
+        ConfirmSmartphoneRevokeMapi(
+            config.uuidGenerator.generateId(),
+            mediumId,
+            transactionId,
+            token,
+        ),
+        requestConfig,
+    )
+}
+
+/**
+ * Confirms a smartphone update in Self Service Mode asynchronously.
+ *
+ * @param mediumId The id of the smartphone medium.
+ * @param transactionId The id of the transaction.
+ * @param requestConfig The request configuration (optional).
+ */
+suspend fun XesarConnect.confirmSmartphoneUpdateAsync(
+    mediumId: UUID,
+    transactionId: UUID,
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
+): SingleEventResult<SmartphoneUpdateConfirmed> {
+    return sendCommandAsync<ConfirmSmartphoneUpdateMapi, SmartphoneUpdateConfirmed>(
+        Topics.Command.CONFIRM_SMARTPHONE_UPDATE,
+        Topics.Event.SMARTPHONE_UPDATE_CONFIRMED,
+        true,
+        ConfirmSmartphoneUpdateMapi(
+            config.uuidGenerator.generateId(),
+            mediumId,
+            transactionId,
+            token,
+        ),
+        requestConfig,
+    )
+}

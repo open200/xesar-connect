@@ -1,0 +1,70 @@
+package com.open200.xesar.connect.messages.event
+
+import com.open200.xesar.connect.utils.OffsetDateTimeSerializer
+import com.open200.xesar.connect.utils.UUIDSerializer
+import java.time.OffsetDateTime
+import java.util.*
+import kotlinx.serialization.Serializable
+
+/**
+ * Represents an event POJO indicating a smartphone update is pending confirmation in Self Service
+ * Mode.
+ *
+ * @param masterKey Whether the medium is a master key.
+ * @param mediumDataFrame The hex encoded access data for the medium.
+ * @param metadata Container for extra descriptive data.
+ * @param officeMode If this medium is allowed to toggle office mode.
+ * @param t The document type (optional).
+ * @param transactionId The unique identifier for the transaction.
+ * @param ts The ISO8601 timestamp of when this resource was requested.
+ * @param validFrom The ISO8601 time from when the medium is valid.
+ * @param validUntil The ISO8601 time up until the medium is valid.
+ * @param version The version of this specification.
+ * @param xsId A SHA256 hash of the installation ID.
+ * @param xsMOBDK The Mobile Device Key (MOBDK). Only present for Smartphone media (optional).
+ * @param xsMOBGID The Mobile Group Identifier (MOBGID). Only present for Smartphone media
+ *   (optional).
+ * @param xsMediumId The unique identifier of the identification medium.
+ * @param xsMobileId The unique identifier of the Smartphone (optional).
+ */
+@Serializable
+data class SmartphoneUpdatePending(
+    val masterKey: Boolean,
+    val mediumDataFrame: String,
+    val metadata: Metadata,
+    val officeMode: Boolean,
+    val t: String? = null,
+    @Serializable(with = UUIDSerializer::class) val transactionId: UUID,
+    @Serializable(with = OffsetDateTimeSerializer::class) val ts: OffsetDateTime,
+    @Serializable(with = OffsetDateTimeSerializer::class) val validFrom: OffsetDateTime,
+    @Serializable(with = OffsetDateTimeSerializer::class) val validUntil: OffsetDateTime,
+    val version: Int,
+    val xsId: String,
+    val xsMOBDK: String? = null,
+    val xsMOBGID: String? = null,
+    @Serializable(with = UUIDSerializer::class) val xsMediumId: UUID,
+    @Serializable(with = UUIDSerializer::class) val xsMobileId: UUID? = null,
+) : Event {
+
+    /**
+     * Represents the container for extra descriptive data.
+     *
+     * @param accessPoints The list of access points the medium is authorized to disengage
+     *   (optional).
+     */
+    @Serializable data class Metadata(val accessPoints: List<AccessPoint>? = null)
+
+    /**
+     * Represents a single access point within the system.
+     *
+     * @param accessDescription Description of the access point (optional).
+     * @param bleMac The Bluetooth Low Energy (BLE) MAC address of the EVVA component (optional).
+     * @param name The name of the EVVA component.
+     */
+    @Serializable
+    data class AccessPoint(
+        val accessDescription: String? = null,
+        val bleMac: String? = null,
+        val name: String,
+    )
+}
