@@ -33,6 +33,7 @@ val logbackVersion: String = "1.5.17"
 val pahoVersion: String = "1.2.5"
 val mockkVersion: String = "1.13.17"
 val kotestTestcontainersVersion: String = "2.0.2"
+val testcontainersVersion: String = "2.0.2"
 
 dependencies {
     implementation("org.eclipse.paho:org.eclipse.paho.client.mqttv3:$pahoVersion")
@@ -52,6 +53,7 @@ dependencies {
     testImplementation(
         "io.kotest.extensions:kotest-extensions-testcontainers:$kotestTestcontainersVersion"
     )
+    testImplementation("org.testcontainers:testcontainers:$testcontainersVersion")
 }
 
 tasks.test { useJUnitPlatform() }
