@@ -2,6 +2,7 @@ package com.open200.xesar.connect.messages.query
 
 import com.open200.xesar.connect.messages.BluetoothState
 import com.open200.xesar.connect.messages.ComponentType
+import com.open200.xesar.connect.messages.EntityMetadata
 import com.open200.xesar.connect.utils.UUIDSerializer
 import java.util.*
 import kotlinx.serialization.Serializable
@@ -34,6 +35,8 @@ import kotlinx.serialization.Serializable
  * @param accessId The access ID of the installation point (optional).
  * @param secure Indicates if the installation point is secure (optional).
  * @param bluetoothState The Bluetooth state of the installation point (optional).
+ * @param entityMetadata Contains the information for all defined custom data fields for the
+ *   installation point.
  */
 @Serializable
 data class InstallationPoint(
@@ -60,6 +63,7 @@ data class InstallationPoint(
     val accessId: Long? = null,
     val secure: Boolean? = null,
     val bluetoothState: BluetoothState? = null,
+    val entityMetadata: List<EntityMetadata>? = null,
 ) : QueryListResource, QueryElementResource {
     companion object {
         const val QUERY_RESOURCE = "installation-points"
