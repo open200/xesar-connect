@@ -19,12 +19,12 @@ You can add Xesar-Connect to your project by including it as a dependency in you
 
 ## Compatibility
 
-Xesar-Connect is tested with EVVA's Xesar version 3.1 with Mqtt API version 1.2.1 see [EVVA Xesar Mqtt API](https://integrations.api.xesar.evva.com/)
+Xesar-Connect is compatible with EVVA's Xesar version 3.3 with Mqtt API version 1.37.0 see [EVVA Xesar Mqtt API](https://integrations.api.xesar.evva.com/)
 
 
 ```kotlin
 dependencies {
-    implementation("com.open200:xesar-connect:1.0.0")
+    implementation("com.open200:xesar-connect:2.2.0")
 }
 ```
 

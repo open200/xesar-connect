@@ -527,3 +527,22 @@ fun XesarConnect.queryStreamIdentificationMedium(
 ): Flow<IdentificationMedium> {
     return queryStream(IdentificationMedium.QUERY_RESOURCE, params, requestConfig)
 }
+
+/**
+ * Unassigns a person from a medium asynchronously.
+ *
+ * @param mediumId The ID of the medium to unassign the person from.
+ * @param requestConfig The request configuration (optional).
+ */
+suspend fun XesarConnect.unassignPersonFromMediumAsync(
+    mediumId: UUID,
+    requestConfig: XesarConnect.RequestConfig = buildRequestConfig(),
+): SingleEventResult<MediumPersonChanged> {
+    return sendCommandAsync<UnassignPersonFromMediumMapi, MediumPersonChanged>(
+        Topics.Command.UNASSIGN_PERSON_FROM_MEDIUM,
+        Topics.Event.MEDIUM_PERSON_CHANGED,
+        true,
+        UnassignPersonFromMediumMapi(config.uuidGenerator.generateId(), mediumId, token),
+        requestConfig,
+    )
+}
