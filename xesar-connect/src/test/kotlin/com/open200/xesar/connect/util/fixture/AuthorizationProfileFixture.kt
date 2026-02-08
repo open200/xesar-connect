@@ -1,5 +1,6 @@
 package com.open200.xesar.connect.util.fixture
 
+import com.open200.xesar.connect.messages.EntityMetadata
 import com.open200.xesar.connect.messages.query.AuthorizationProfile
 import java.util.*
 
@@ -27,5 +28,18 @@ object AuthorizationProfileFixture {
             manualOfficeMode = true,
             anyAuthorizations = true,
             standardTimeProfile = UUID.fromString("a58e45f8-7bff-4b3a-bd0e-a831b3fa8053"),
+            entityMetadata =
+                listOf(
+                    EntityMetadata(
+                        id = UUID.fromString("123e4567-e89b-12d3-a456-426614174000"),
+                        name = "type",
+                        value = "authorization type 1",
+                    ),
+                    EntityMetadata(
+                        id = UUID.fromString("0f8fad5b-d9cb-469f-a165-70867728950e"),
+                        name = "number",
+                        value = null,
+                    ),
+                ),
         )
 }
