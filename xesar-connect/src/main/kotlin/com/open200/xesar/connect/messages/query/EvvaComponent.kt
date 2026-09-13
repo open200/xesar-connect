@@ -10,7 +10,7 @@ import kotlinx.serialization.Serializable
 /**
  * Represents an EVVA component in the system.
  *
- * @param componentType The type of the component.
+ * @param componentType The type of the component (optional).
  * @param serialNumber The serial number of the component (optional).
  * @param upgradeMedia Indicates if it is allowed to upgrade an access media with this evva
  *   component (e.g. authorisation changes, validity period, blacklist) (optional).
@@ -28,7 +28,7 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class EvvaComponent(
-    val componentType: ComponentType,
+    val componentType: ComponentType? = null,
     val serialNumber: String? = null,
     val upgradeMedia: Boolean? = null,
     val batteryCondition: BatteryCondition? = null,
