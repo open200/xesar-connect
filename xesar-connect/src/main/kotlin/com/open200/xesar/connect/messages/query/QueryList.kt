@@ -42,7 +42,7 @@ inline fun <reified T : QueryResource> encodeQueryList(message: QueryList<T>): S
         return jsonFormat.encodeToString(message)
     } catch (e: Exception) {
         logger.warn("Couldn't parse $message", e)
-        throw ParsingException()
+        throw ParsingException("Couldn't encode QueryList<${T::class.simpleName}>", e)
     }
 }
 
@@ -58,6 +58,6 @@ inline fun <reified T : QueryResource> decodeQueryList(text: String): QueryList<
         return jsonFormat.decodeFromString(text)
     } catch (e: Exception) {
         logger.warn("Couldn't parse $text", e)
-        throw ParsingException()
+        throw ParsingException("Couldn't decode QueryList<${T::class.simpleName}>", e)
     }
 }

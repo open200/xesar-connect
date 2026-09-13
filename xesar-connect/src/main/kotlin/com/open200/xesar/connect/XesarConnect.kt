@@ -787,7 +787,9 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) {
                 val apiEvent = decodeEvent<E>(it.message)
                 eventDeferred.complete(apiEvent.event)
             } catch (e: Exception) {
-                eventDeferred.completeExceptionally(ParsingException())
+                eventDeferred.completeExceptionally(
+                    e as? ParsingException ?: ParsingException("Couldn't handle $topicEvent", e)
+                )
             }
         }
 

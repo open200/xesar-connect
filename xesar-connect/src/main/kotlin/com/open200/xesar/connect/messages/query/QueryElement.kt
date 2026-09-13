@@ -41,7 +41,7 @@ inline fun <reified T : QueryResource> encodeQueryElement(message: QueryElement<
         return jsonFormat.encodeToString(message)
     } catch (e: Exception) {
         logger.warn("Couldn't parse $message", e)
-        throw ParsingException()
+        throw ParsingException("Couldn't encode QueryElement<${T::class.simpleName}>", e)
     }
 }
 
@@ -57,6 +57,6 @@ inline fun <reified T : QueryResource> decodeQueryElement(text: String): QueryEl
         return jsonFormat.decodeFromString(text)
     } catch (e: Exception) {
         logger.warn("Couldn't parse $text", e)
-        throw ParsingException()
+        throw ParsingException("Couldn't decode QueryElement<${T::class.simpleName}>", e)
     }
 }

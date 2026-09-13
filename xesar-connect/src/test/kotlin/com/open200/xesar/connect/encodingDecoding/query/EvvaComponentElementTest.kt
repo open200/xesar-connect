@@ -1,11 +1,15 @@
 package com.open200.xesar.connect.encodingDecoding.query
 
+import com.open200.xesar.connect.exception.ParsingException
 import com.open200.xesar.connect.messages.query.*
 import com.open200.xesar.connect.util.fixture.EvvaComponentFixture
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.equals.shouldBeEqual
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.types.shouldBeInstanceOf
 import java.util.*
+import kotlinx.serialization.SerializationException
 
 class EvvaComponentElementTest :
     FunSpec({
@@ -26,5 +30,12 @@ class EvvaComponentElementTest :
         test("decoding QueryElement for an evva component") {
             val evvaComponentDecoded = decodeQueryElement<EvvaComponent>(evvaComponentString)
             evvaComponentDecoded.shouldBe(evvaComponent)
+        }
+
+        test("decoding QueryElement with an unknown component type keeps the cause") {
+            val json = evvaComponentString.replace("\"WallReader\"", "\"SomeNewComponentType\"")
+            val exception =
+                shouldThrow<ParsingException> { decodeQueryElement<EvvaComponent>(json) }
+            exception.cause.shouldBeInstanceOf<SerializationException>()
         }
     })
