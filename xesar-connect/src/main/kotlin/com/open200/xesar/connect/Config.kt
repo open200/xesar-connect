@@ -1,9 +1,15 @@
 package com.open200.xesar.connect
 
+import com.open200.xesar.connect.exception.ParsingException
 import com.open200.xesar.connect.utils.DefaultRequestIdGenerator
 import com.open200.xesar.connect.utils.IRequestIdGenerator
 import com.open200.xesar.connect.utils.UUIDSerializer
-import java.io.*
+import java.io.BufferedReader
+import java.io.File
+import java.io.FileInputStream
+import java.io.FileReader
+import java.io.InputStream
+import java.io.InputStreamReader
 import java.nio.file.Path
 import java.security.KeyFactory
 import java.security.KeyPair
@@ -100,6 +106,8 @@ data class Config(
     companion object {
 
         private const val DEFAULT_PORT = "1883"
+
+        private val PEM_BOUNDARY_REGEX = Regex("-----(BEGIN|END)[^-]*-----")
 
         /**
          * Creates a [Config] instance by configuring it from a ZIP file containing the necessary
@@ -200,6 +208,56 @@ data class Config(
             )
         }
 
+        /**
+         * Creates an instance of [MqttCertificates] from PEM encoded strings, e.g. as returned by
+         * the Xesar endpoint that provides the MQTT configuration /api/v1/user/mqtt-configuration.
+         *
+         * Loading the configuration from Xesar is the responsibility of the client application;
+         * this function only decodes the returned certificates and key. A security provider that is
+         * able to decode the client key (e.g. BouncyCastle) has to be registered beforehand.
+         *
+         * @param caCertificate The PEM encoded CA certificate.
+         * @param clientCertificate The PEM encoded client certificate.
+         * @param clientKey The PEM encoded RSA private key of the client.
+         * @return An instance of [MqttCertificates] configured from the provided PEM strings.
+         * @throws ParsingException If one of the values is blank or can't be decoded.
+         */
+        fun configureFromPemStrings(
+            caCertificate: String,
+            clientCertificate: String,
+            clientKey: String,
+        ): MqttCertificates {
+            return MqttCertificates(
+                caCertificate = decodeX509CertificateFromPem(caCertificate, "CA certificate"),
+                clientCertificate =
+                    decodeX509CertificateFromPem(clientCertificate, "client certificate"),
+                clientKey = decodeKeyPairFromPem(clientKey),
+            )
+        }
+
+        private fun decodeX509CertificateFromPem(pem: String, name: String): X509Certificate {
+            if (pem.isBlank()) {
+                throw ParsingException("Couldn't decode $name: value is blank")
+            }
+            return try {
+                decodeX509Certificate(pem.trim().byteInputStream(Charsets.UTF_8))
+            } catch (e: Exception) {
+                throw ParsingException("Couldn't decode $name", e)
+            }
+        }
+
+        private fun decodeKeyPairFromPem(pem: String): KeyPair {
+            if (pem.isBlank()) {
+                throw ParsingException("Couldn't decode client key: value is blank")
+            }
+            return try {
+                decodeKeyPair(pem)
+            } catch (e: Exception) {
+                // don't include the key material in the message
+                throw ParsingException("Couldn't decode client key", e)
+            }
+        }
+
         private fun readX509CertificateFromZip(
             fileName: String,
             zipFile: ZipFile,
@@ -244,20 +302,11 @@ data class Config(
         }
 
         private fun decodeKeyPair(bufferedReader: BufferedReader): KeyPair {
-            val sb = StringBuilder()
+            return decodeKeyPair(bufferedReader.use { it.readText() })
+        }
 
-            var line: String? = bufferedReader.readLine()
-            while (line != null) {
-                if (line.startsWith("-----BEGIN") || line.startsWith("-----END")) {
-                    line = bufferedReader.readLine()
-                    continue
-                }
-                sb.append(line)
-                line = bufferedReader.readLine()
-            }
-            bufferedReader.close()
-
-            val base64Key = sb.toString()
+        private fun decodeKeyPair(pem: String): KeyPair {
+            val base64Key = pem.replace(PEM_BOUNDARY_REGEX, "").filterNot { it.isWhitespace() }
             val privateKeyBytes = Base64.getDecoder().decode(base64Key)
 
             val keyFactory = KeyFactory.getInstance("RSA")

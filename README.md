@@ -89,6 +89,23 @@ fun main() {
 }
 ```
 
+### Loading the certificates without a ZIP file
+
+Besides `Config.configureFromZip`, the MQTT certificates can be provided as files
+(`Config.configureFromPaths`) or as PEM encoded strings (`Config.configureFromPemStrings`), e.g. when
+your application loads the MQTT configuration from the Xesar endpoint itself `/api/v1/user/mqtt-configuration`:
+
+```kotlin
+val config = Config(
+    apiProperties = Config.ApiProperties(hostname, port, userId, token),
+    mqttCertificates = Config.configureFromPemStrings(
+        caCertificate = caCertificatePem,
+        clientCertificate = clientCertificatePem,
+        clientKey = clientKeyPem,
+    ),
+)
+```
+
 For more comprehensive information and advanced usage, please refer to the [documentation](https://github.com/open200/xesar-connect/blob/main/docs/usage.md).
 Also see our [Xesar-Connect-Kotlin-Demo](https://github.com/open200/xesar-connect-kotlin-demo) app 
 
