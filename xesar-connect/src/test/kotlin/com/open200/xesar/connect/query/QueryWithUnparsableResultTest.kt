@@ -66,7 +66,7 @@ class QueryWithUnparsableResultTest :
 
                 xesarMqttClientMock.onMessage(
                     Topics.Query.result(userId),
-                    ("{\"requestId\":\"$requestId\",\"response\":{\"data\":[{\"componentType\":\"SomeNewComponentType\",\"id\":\"497f6eca-6276-4993-bfeb-53cbbbba6f08\"}],\"totalCount\":1,\"filterCount\":1}}")
+                    ("{\"requestId\":\"$requestId\",\"response\":{\"data\":[{\"componentType\":\"WallReader\"}],\"totalCount\":1,\"filterCount\":1}}")
                         .encodeToByteArray(),
                 )
 
@@ -96,7 +96,7 @@ class QueryWithUnparsableResultTest :
 
                 xesarMqttClientMock.onMessage(
                     Topics.Query.result(userId),
-                    ("{\"requestId\":\"$requestId\",\"response\":{\"componentType\":\"SomeNewComponentType\",\"id\":\"497f6eca-6276-4993-bfeb-53cbbbba6f08\"}}")
+                    ("{\"requestId\":\"$requestId\",\"response\":{\"componentType\":\"WallReader\"}}")
                         .encodeToByteArray(),
                 )
 

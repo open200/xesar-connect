@@ -90,8 +90,29 @@ class EvvaComponentElementTest :
                 )
         }
 
-        test("decoding QueryElement with an unknown component type keeps the cause") {
+        test(
+            "decoding QueryElement for an evva component coerces an unknown component type to null"
+        ) {
             val json = evvaComponentString.replace("\"WallReader\"", "\"SomeNewComponentType\"")
+            decodeQueryElement<EvvaComponent>(json).response.componentType.shouldBe(null)
+        }
+
+        test("decoding QueryElement for an evva component without a component type") {
+            val json =
+                "{\"requestId\":\"d385ab22-0f51-4b97-9ecd-b8ff3fd4fcb6\",\"response\":{\"id\":\"f12896ef-6f6f-4350-9bce-ed2d8250725d\",\"upgradeMedia\":true}}"
+            decodeQueryElement<EvvaComponent>(json)
+                .response
+                .shouldBe(
+                    EvvaComponent(
+                        id = UUID.fromString("f12896ef-6f6f-4350-9bce-ed2d8250725d"),
+                        upgradeMedia = true,
+                    )
+                )
+        }
+
+        test("decoding QueryElement without an id keeps the cause") {
+            val json =
+                evvaComponentString.replace("\"id\":\"497f6eca-6276-4993-bfeb-53cbbbba6f08\",", "")
             val exception =
                 shouldThrow<ParsingException> { decodeQueryElement<EvvaComponent>(json) }
             exception.cause.shouldBeInstanceOf<SerializationException>()
