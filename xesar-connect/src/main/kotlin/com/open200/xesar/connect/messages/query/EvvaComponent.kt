@@ -22,6 +22,9 @@ import kotlinx.serialization.Serializable
  * @param firmwareVersion The firmware version (optional).
  * @param status The online status of the component (optional).
  * @param bleMac The BLE (Bluetooth Low Energy) MAC address of the component (optional).
+ * @param maintenanceTask The maintenance task of the component, e.g. CONFIG (optional).
+ * @param maintenanceTaskReasons The reasons why a maintenance task is needed for the component,
+ *   e.g. ZONE or DAYLIGHT_SAVING_TIMES (optional).
  */
 @Serializable
 data class EvvaComponent(
@@ -37,6 +40,8 @@ data class EvvaComponent(
     val firmwareVersion: String? = null,
     val status: ComponentStatus? = null,
     val bleMac: String? = null,
+    val maintenanceTask: String? = null,
+    val maintenanceTaskReasons: List<String>? = null,
 ) : QueryListResource, QueryElementResource {
 
     companion object {

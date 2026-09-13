@@ -20,7 +20,16 @@ class EvvaComponentElementTest :
             )
 
         val evvaComponentString =
-            "{\"requestId\":\"d385ab22-0f51-4b97-9ecd-b8ff3fd4fcb6\",\"response\":{\"componentType\":\"WallReader\",\"serialNumber\":null,\"upgradeMedia\":null,\"batteryCondition\":\"Full\",\"btbFirmwareVersion\":null,\"id\":\"497f6eca-6276-4993-bfeb-53cbbbba6f08\",\"batteryStatusUpdatedAt\":\"2023-08-24T16:25:52.225991\",\"stateChangedAt\":\"2023-06-15T16:25:52.225991\",\"firmwareVersion\":null,\"status\":\"Synced\",\"bleMac\":null}}"
+            "{\"requestId\":\"d385ab22-0f51-4b97-9ecd-b8ff3fd4fcb6\",\"response\":{\"componentType\":\"WallReader\",\"serialNumber\":null,\"upgradeMedia\":null,\"batteryCondition\":\"Full\",\"btbFirmwareVersion\":null,\"id\":\"497f6eca-6276-4993-bfeb-53cbbbba6f08\",\"batteryStatusUpdatedAt\":\"2023-08-24T16:25:52.225991\",\"stateChangedAt\":\"2023-06-15T16:25:52.225991\",\"firmwareVersion\":null,\"status\":\"Synced\",\"bleMac\":null,\"maintenanceTask\":null,\"maintenanceTaskReasons\":null}}"
+
+        val evvaComponentWithMaintenanceTask =
+            QueryElement(
+                UUID.fromString("d385ab22-0f51-4b97-9ecd-b8ff3fd4fcb6"),
+                EvvaComponentFixture.evvaComponentWithMaintenanceTaskFixture,
+            )
+
+        val evvaComponentWithMaintenanceTaskString =
+            "{\"requestId\":\"d385ab22-0f51-4b97-9ecd-b8ff3fd4fcb6\",\"response\":{\"componentType\":\"WallReader\",\"serialNumber\":null,\"upgradeMedia\":null,\"batteryCondition\":\"Full\",\"btbFirmwareVersion\":null,\"id\":\"497f6eca-6276-4993-bfeb-53cbbbba6f08\",\"batteryStatusUpdatedAt\":\"2023-08-24T16:25:52.225991\",\"stateChangedAt\":\"2023-06-15T16:25:52.225991\",\"firmwareVersion\":null,\"status\":\"Synced\",\"bleMac\":null,\"maintenanceTask\":\"CONFIG\",\"maintenanceTaskReasons\":[\"ZONE\",\"BLACKLIST_VERSION\"]}}"
 
         test("encoding QueryElement for an evva component") {
             val evvaComponentEncoded = encodeQueryElement(evvaComponent)
@@ -32,6 +41,17 @@ class EvvaComponentElementTest :
             evvaComponentDecoded.shouldBe(evvaComponent)
         }
 
+        test("encoding QueryElement for an evva component with a maintenance task") {
+            val evvaComponentEncoded = encodeQueryElement(evvaComponentWithMaintenanceTask)
+            evvaComponentEncoded.shouldBeEqual(evvaComponentWithMaintenanceTaskString)
+        }
+
+        test("decoding QueryElement for an evva component with a maintenance task") {
+            val evvaComponentDecoded =
+                decodeQueryElement<EvvaComponent>(evvaComponentWithMaintenanceTaskString)
+            evvaComponentDecoded.shouldBe(evvaComponentWithMaintenanceTask)
+        }
+
         test("decoding QueryElement for an evva component ignores unknown fields") {
             val json =
                 evvaComponentString.replace(
@@ -39,6 +59,18 @@ class EvvaComponentElementTest :
                     "\"bleMac\":null,\"someNewField\":{\"someKey\":[1,2]}",
                 )
             decodeQueryElement<EvvaComponent>(json).shouldBe(evvaComponent)
+        }
+
+        test("decoding QueryElement for an evva component keeps unknown maintenance task reasons") {
+            val json =
+                evvaComponentWithMaintenanceTaskString.replace(
+                    "\"BLACKLIST_VERSION\"",
+                    "\"BLACKLIST_VERSION\",\"SOME_NEW_REASON\"",
+                )
+            decodeQueryElement<EvvaComponent>(json)
+                .response
+                .maintenanceTaskReasons
+                .shouldBe(listOf("ZONE", "BLACKLIST_VERSION", "SOME_NEW_REASON"))
         }
 
         test("decoding QueryElement for an evva component coerces unknown optional enums to null") {

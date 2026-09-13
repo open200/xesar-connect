@@ -18,4 +18,10 @@ object EvvaComponentFixture {
             stateChangedAt = LocalDateTime.parse("2023-06-15T16:25:52.225991"),
             status = ComponentStatus.Synced,
         )
+
+    val evvaComponentWithMaintenanceTaskFixture =
+        evvaComponentFixture.copy(
+            maintenanceTask = "CONFIG",
+            maintenanceTaskReasons = listOf("ZONE", "BLACKLIST_VERSION"),
+        )
 }
