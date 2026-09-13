@@ -164,6 +164,10 @@ Add at least one:
 - Unit test for payload parsing/serialization
 - Test for command tracking and response correlation (if applicable)
 
+Tests for extension functions (commands/queries) use `util/MockedXesarConnect` (no MQTT broker)
+and live in `command/` and `query/`. Only a few representative integration tests with
+testcontainers remain in `it/` — don't add new ones for plain commands/queries.
+
 ---
 
 ## Code Style & Formatting
