@@ -32,6 +32,32 @@ class EvvaComponentElementTest :
             evvaComponentDecoded.shouldBe(evvaComponent)
         }
 
+        test("decoding QueryElement for an evva component ignores unknown fields") {
+            val json =
+                evvaComponentString.replace(
+                    "\"bleMac\":null",
+                    "\"bleMac\":null,\"someNewField\":{\"someKey\":[1,2]}",
+                )
+            decodeQueryElement<EvvaComponent>(json).shouldBe(evvaComponent)
+        }
+
+        test("decoding QueryElement for an evva component coerces unknown optional enums to null") {
+            val json =
+                evvaComponentString
+                    .replace("\"Synced\"", "\"SomeNewStatus\"")
+                    .replace("\"Full\"", "\"SomeNewBatteryCondition\"")
+            decodeQueryElement<EvvaComponent>(json)
+                .shouldBe(
+                    evvaComponent.copy(
+                        response =
+                            EvvaComponentFixture.evvaComponentFixture.copy(
+                                status = null,
+                                batteryCondition = null,
+                            )
+                    )
+                )
+        }
+
         test("decoding QueryElement with an unknown component type keeps the cause") {
             val json = evvaComponentString.replace("\"WallReader\"", "\"SomeNewComponentType\"")
             val exception =

@@ -25,6 +25,9 @@ data class QueryElement<out T : QueryResource>(
 val jsonFormat = Json {
     encodeDefaults = true
     ignoreUnknownKeys = true
+    // Unknown enum values of optional properties fall back to their default value instead of
+    // failing, so that values newly added to the Xesar API don't break the whole query.
+    coerceInputValues = true
 }
 
 val logger = KotlinLogging.logger {}
