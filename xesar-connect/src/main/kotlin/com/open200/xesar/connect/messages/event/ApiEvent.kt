@@ -46,7 +46,7 @@ inline fun <reified T : Event> encodeEvent(message: ApiEvent<T>): String {
         return jsonFormat.encodeToString(message)
     } catch (e: Exception) {
         logger.warn("Couldn't encode $message", e)
-        throw ParsingException()
+        throw ParsingException("Couldn't encode ApiEvent<${T::class.simpleName}>", e)
     }
 }
 
@@ -62,6 +62,6 @@ inline fun <reified T : Event> decodeEvent(text: String): ApiEvent<T> {
         return jsonFormat.decodeFromString(text)
     } catch (e: Exception) {
         logger.warn("Couldn't decode $text", e)
-        throw ParsingException()
+        throw ParsingException("Couldn't decode ApiEvent<${T::class.simpleName}>", e)
     }
 }

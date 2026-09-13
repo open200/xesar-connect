@@ -146,7 +146,7 @@ data class AccessProtocolEvent(
                 return jsonFormat.decodeFromString(json)
             } catch (e: Exception) {
                 logger.warn("Couldn't parse $json", e)
-                throw ParsingException()
+                throw ParsingException("Couldn't decode AccessProtocolEvent", e)
             }
         }
 
@@ -161,7 +161,7 @@ data class AccessProtocolEvent(
                 return jsonFormat.encodeToString(accessProtocol)
             } catch (e: Exception) {
                 logger.warn("Couldn't parse $accessProtocol", e)
-                throw ParsingException()
+                throw ParsingException("Couldn't encode AccessProtocolEvent", e)
             }
         }
     }

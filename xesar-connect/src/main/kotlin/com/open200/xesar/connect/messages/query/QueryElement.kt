@@ -25,6 +25,9 @@ data class QueryElement<out T : QueryResource>(
 val jsonFormat = Json {
     encodeDefaults = true
     ignoreUnknownKeys = true
+    // Unknown enum values of optional properties fall back to their default value instead of
+    // failing, so that values newly added to the Xesar API don't break the whole query.
+    coerceInputValues = true
 }
 
 val logger = KotlinLogging.logger {}
@@ -41,7 +44,7 @@ inline fun <reified T : QueryResource> encodeQueryElement(message: QueryElement<
         return jsonFormat.encodeToString(message)
     } catch (e: Exception) {
         logger.warn("Couldn't parse $message", e)
-        throw ParsingException()
+        throw ParsingException("Couldn't encode QueryElement<${T::class.simpleName}>", e)
     }
 }
 
@@ -57,6 +60,6 @@ inline fun <reified T : QueryResource> decodeQueryElement(text: String): QueryEl
         return jsonFormat.decodeFromString(text)
     } catch (e: Exception) {
         logger.warn("Couldn't parse $text", e)
-        throw ParsingException()
+        throw ParsingException("Couldn't decode QueryElement<${T::class.simpleName}>", e)
     }
 }

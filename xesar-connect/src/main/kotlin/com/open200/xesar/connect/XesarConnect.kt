@@ -273,8 +273,12 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) {
             withTimeout(requestConfig.timeout) {
                 val queryIdListener =
                     on(QueryIdFilter(requestId)) {
-                        val decoded = decodeQueryList<T>(it.message)
-                        deferred.complete(decoded.response)
+                        try {
+                            val decoded = decodeQueryList<T>(it.message)
+                            deferred.complete(decoded.response)
+                        } catch (e: Exception) {
+                            deferred.completeExceptionally(e)
+                        }
                     }
                 val apiErrorListener = registerDefaultApiErrorListener(requestId, deferred)
                 closeListenerOnCompletion(deferred, queryIdListener, apiErrorListener)
@@ -298,8 +302,12 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) {
             withTimeout(requestConfig.timeout) {
                 val queryListener =
                     on(QueryIdFilter(requestId)) {
-                        val decoded = decodeQueryElement<T>(it.message)
-                        deferred.complete(decoded.response)
+                        try {
+                            val decoded = decodeQueryElement<T>(it.message)
+                            deferred.complete(decoded.response)
+                        } catch (e: Exception) {
+                            deferred.completeExceptionally(e)
+                        }
                     }
                 val errorListener = registerDefaultApiErrorListener(requestId, deferred)
                 closeListenerOnCompletion(deferred, queryListener, errorListener)
@@ -787,7 +795,9 @@ class XesarConnect(private val client: IXesarMqttClient, val config: Config) {
                 val apiEvent = decodeEvent<E>(it.message)
                 eventDeferred.complete(apiEvent.event)
             } catch (e: Exception) {
-                eventDeferred.completeExceptionally(ParsingException())
+                eventDeferred.completeExceptionally(
+                    e as? ParsingException ?: ParsingException("Couldn't handle $topicEvent", e)
+                )
             }
         }
 

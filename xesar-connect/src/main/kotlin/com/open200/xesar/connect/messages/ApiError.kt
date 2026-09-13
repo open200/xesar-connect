@@ -35,7 +35,7 @@ fun encodeError(message: ApiError): String {
         return jsonFormat.encodeToString(message)
     } catch (e: Exception) {
         logger.warn("Couldn't encode $message", e)
-        throw ParsingException()
+        throw ParsingException("Couldn't encode ApiError", e)
     }
 }
 
@@ -51,6 +51,6 @@ fun decodeError(text: String): ApiError {
         return jsonFormat.decodeFromString(text)
     } catch (e: Exception) {
         logger.warn("Couldn't decode $text", e)
-        throw ParsingException()
+        throw ParsingException("Couldn't decode ApiError", e)
     }
 }
