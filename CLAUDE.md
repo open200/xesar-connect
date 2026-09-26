@@ -16,6 +16,11 @@ It provides bidirectional communication for:
 - Tested with **EVVA Xesar 3.1**
 - Tested with **MQTT API 1.2.1**
 
+**Official API documentation**
+- EVVA Xesar MQTT API (AsyncAPI): https://integrations.api.xesar.evva.com
+- Consult it whenever payloads, topics, query resources/filters, permissions or behavior are unclear
+  (it contains all commands, events, query response schemas and a changelog).
+
 ---
 
 ## Golden Rules (Read First)
@@ -226,6 +231,7 @@ When modifying configuration:
 
 ## When Unsure
 
+- Check the official API docs: https://integrations.api.xesar.evva.com
 - Copy patterns from existing code
 - Prefer **explicitness over cleverness**
 - Avoid introducing new architectural styles
